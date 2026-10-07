@@ -1,0 +1,49 @@
+@* Header para visitantes sin sesión iniciada *@
+@{
+    string accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+}
+
+<header class="encabezadoPrincipal" id="encabezadoPrincipal">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-xl">
+            <partial name="_marcaLogo" />
+
+            <button class="navbar-toggler botonMenuMovil" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuMovilInvitado"
+                    aria-controls="menuMovilInvitado" aria-label="Abrir menú">
+                <span class="lineaMenuMovil"></span>
+                <span class="lineaMenuMovil"></span>
+                <span class="lineaMenuMovil"></span>
+            </button>
+
+            @* En pantallas < lg el menú se convierte en offcanvas lateral *@
+            <div class="offcanvas offcanvas-end menuNavegacion" tabindex="-1" id="menuMovilInvitado" aria-labelledby="tituloMenuMovil">
+                <div class="offcanvas-header d-lg-none">
+                    <span class="marcaLogoTexto" id="tituloMenuMovil">MiProfesor</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="offcanvas-body align-items-lg-center">
+                    <ul class="navbar-nav mx-lg-auto gap-lg-4 listaEnlacesNavegacion">
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion @(accionActual == "Index" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Index" ? "page" : null)" asp-controller="Home" asp-action="Index">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion @(accionActual == "Catalogo" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Catalogo" ? "page" : null)" asp-controller="Home" asp-action="Catalogo">Catálogo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion" asp-controller="Home" asp-action="Index" asp-fragment="seccionComoFunciona">Cómo funciona</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion @(accionActual == "Soporte" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Soporte" ? "page" : null)" asp-controller="Home" asp-action="Soporte">Soporte</a>
+                        </li>
+                    </ul>
+
+                    <div class="accionesSesion d-flex flex-column flex-lg-row gap-2 mt-4 mt-lg-0">
+                        <a class="botonMip botonContorno" asp-controller="Home" asp-action="IniciarSesion">Iniciar sesión</a>
+                        <a class="botonMip botonPrincipal" asp-controller="Home" asp-action="Registrarse">Crear cuenta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

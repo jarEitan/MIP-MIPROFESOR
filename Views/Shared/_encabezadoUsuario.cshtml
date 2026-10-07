@@ -1,0 +1,61 @@
+@* Header para usuarios con sesión iniciada.
+   Esqueleto listo: completar cuando exista el login (Session: "idUsuario", "nombreUsuario", "inicialesUsuario", "cantidadNotificaciones"). *@
+@{
+    string accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    string inicialesUsuario = Context.Session.GetString("inicialesUsuario") ?? "MP";
+    string nombreUsuario = Context.Session.GetString("nombreUsuario") ?? "Mi perfil";
+    string cantidadNotificaciones = Context.Session.GetString("cantidadNotificaciones") ?? "0";
+}
+
+<header class="encabezadoPrincipal" id="encabezadoPrincipal">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-xl">
+            <partial name="_marcaLogo" />
+
+            <button class="navbar-toggler botonMenuMovil" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuMovilUsuario"
+                    aria-controls="menuMovilUsuario" aria-label="Abrir menú">
+                <span class="lineaMenuMovil"></span>
+                <span class="lineaMenuMovil"></span>
+                <span class="lineaMenuMovil"></span>
+            </button>
+
+            <div class="offcanvas offcanvas-end menuNavegacion" tabindex="-1" id="menuMovilUsuario" aria-labelledby="tituloMenuUsuario">
+                <div class="offcanvas-header d-lg-none">
+                    <span class="marcaLogoTexto" id="tituloMenuUsuario">MiProfesor</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="offcanvas-body align-items-lg-center">
+                    <ul class="navbar-nav mx-lg-auto gap-lg-4 listaEnlacesNavegacion">
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion @(accionActual == "Index" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Index" ? "page" : null)" asp-controller="Home" asp-action="Index">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion @(accionActual == "Catalogo" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Catalogo" ? "page" : null)" asp-controller="Home" asp-action="Catalogo">Catálogo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion @(accionActual == "MiColegio" ? "enlaceActivo" : "")" aria-current="@(accionActual == "MiColegio" ? "page" : null)" asp-controller="Home" asp-action="MiColegio">Mi Colegio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link enlaceNavegacion @(accionActual == "Soporte" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Soporte" ? "page" : null)" asp-controller="Home" asp-action="Soporte">Soporte</a>
+                        </li>
+                    </ul>
+
+                    <div class="accionesSesion d-flex flex-column flex-lg-row align-items-lg-center gap-2 gap-lg-3 mt-4 mt-lg-0">
+                        <a class="botonMip botonSecundario botonPanelControl" asp-controller="Home" asp-action="PanelControl">
+                            <i class="bi bi-bar-chart-line" aria-hidden="true"></i> Panel de Control
+                            @if (cantidadNotificaciones != "0")
+                            {
+                                <span class="insigniaNotificaciones" aria-label="@cantidadNotificaciones notificaciones nuevas">
+                                    <span class="pulsoNotificaciones" aria-hidden="true"></span>
+                                    @cantidadNotificaciones
+                                </span>
+                            }
+                        </a>
+                        <span class="avatarUsuario" title="@nombreUsuario">@inicialesUsuario</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

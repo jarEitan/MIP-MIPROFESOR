@@ -15,6 +15,12 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        // TODO BD: reemplazar por BD.ObtenerMateriasDestacadas() cuando esté la base de datos.
+        ViewBag.materiasDestacadas = new List<string>
+        {
+            "Matemática", "Física", "Química", "Biología", "Inglés", "Historia",
+            "Lengua y Literatura", "Programación", "Economía", "Geografía"
+        };
         return View();
     }
 
