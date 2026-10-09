@@ -1,0 +1,104 @@
+@{
+    ViewData["Title"] = "Crear cuenta";
+    string rol = ViewBag.rol ?? "alumno";
+    List<string> colegios = ViewBag.colegios ?? new List<string>();
+}
+
+<!-- ================= REGISTRO ================= -->
+<section class="acceso">
+    <div class="container">
+        <div class="row align-items-center g-4 lg:g-5">
+            <div class="col-12 lg:col-6 xl:col-5 lg:order-2">
+                <div class="card estatica">
+                    <h1>Creá tu cuenta</h1>
+                    <p>Elegí cómo vas a usar MiProfesor. Podés cambiarlo más adelante.</p>
+
+                    @* TODO BD: enviar con method="post" a una acción que llame a BD.crearCuenta(...) *@
+                    <form id="formularioRegistro" onsubmit="return validarRegistro()" novalidate>
+                        <fieldset class="roles">
+                            <legend class="visually-hidden">Tu rol</legend>
+                            <label>
+                                <input type="radio" name="rol" value="alumno" checked="@(rol == "alumno" ? "checked" : null)" />
+                                <i class="bi bi-backpack" aria-hidden="true"></i>
+                                <strong>Alumno</strong>
+                                <span>Busco profesor</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="rol" value="profesor" checked="@(rol == "profesor" ? "checked" : null)" />
+                                <i class="bi bi-person-video3" aria-hidden="true"></i>
+                                <strong>Profesor</strong>
+                                <span>Quiero enseñar</span>
+                            </label>
+                        </fieldset>
+
+                        <div class="form-field">
+                            <label for="registroNombre">Nombre y apellido</label>
+                            <input class="form-control" type="text" id="registroNombre" name="nombre" autocomplete="name" />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="registroCorreo">Correo electrónico</label>
+                            <input class="form-control" type="email" id="registroCorreo" name="correo" autocomplete="email" />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="registroContrasena">Contraseña</label>
+                            <input class="form-control" type="password" id="registroContrasena" name="contrasena" autocomplete="new-password" aria-describedby="ayudaContrasena" />
+                            <small id="ayudaContrasena">Mínimo 8 caracteres.</small>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="registroColegio">Colegio</label>
+                            <select class="form-control" id="registroColegio" name="colegio">
+                                <option value="">Elegí tu colegio</option>
+                                @foreach (string colegio in colegios)
+                                {
+                                    <option value="@colegio">@colegio</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-field" data-solo-rol="alumno">
+                            <label for="registroNivel">Nivel</label>
+                            <select class="form-control" id="registroNivel" name="nivel">
+                                <option value="">Elegí tu nivel</option>
+                                <option value="Primaria">Primaria</option>
+                                <option value="Secundaria">Secundaria</option>
+                                <option value="Universitario">Universitario</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field" data-solo-rol="profesor" hidden>
+                            <label for="registroMaterias">Materias que dictás</label>
+                            <input class="form-control" type="text" id="registroMaterias" name="materias" placeholder="Ej: Matemática, Física" />
+                        </div>
+
+                        <div class="form-field">
+                            <input class="check" type="checkbox" id="registroTerminos" name="terminos" />
+                            <label for="registroTerminos">Acepto los términos y la política de privacidad</label>
+                        </div>
+
+                        <p class="mensajeError" id="mensajeRegistro" role="alert"></p>
+
+                        <button class="boton principal" type="submit">Crear cuenta</button>
+                    </form>
+
+                    <p class="alternativa">¿Ya tenés cuenta? <a asp-controller="Home" asp-action="IniciarSesion">Iniciá sesión</a></p>
+                </div>
+            </div>
+
+            <div class="col-12 lg:col-6 xl:col-7 lg:order-1">
+                <div class="ilustracion">
+                    <img src="~/img/logoChico.png" alt="" width="120" height="120" />
+                    <h2>Aprender nunca debería depender de la suerte</h2>
+                    <ul>
+                        <li>Profesores de tu propio colegio</li>
+                        <li>Clases presenciales o virtuales</li>
+                        <li>Chat directo para coordinar</li>
+                        <li>Sin intermediarios opacos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
