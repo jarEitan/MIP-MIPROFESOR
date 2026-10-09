@@ -61,6 +61,12 @@ Los comentarios explican **por qué** (un bug de Bootstrap, una decisión de dis
 
 Antes de crear una clase nueva: ¿se resuelve con una existente + un selector descendiente? Si sí, no se crea.
 
+### Tipografías (una variable por rol, en `:root`)
+- `--fuenteTitulos` → **Eras Bold ITC**: solo `h1`, `h2`, logo y lema. No se usa en `h3` ni en texto corrido.
+- `--fuenteMarca` → **Fredoka**: botones, etiquetas, cifras y precios.
+- `--fuenteTexto` → **Plus Jakarta Sans**: párrafos, formularios y todo lo demás.
+- Eras tiene un solo peso: el `@font-face` declara `font-weight: 100 900` para que el navegador no la engrose.
+
 ### Bootstrap hace el layout, el CSS propio hace la marca
 - Grilla, espaciado, alineación y visibilidad van **en el HTML** con utilidades de Bootstrap (`row`, `col-*`, `d-flex`, `gap-3`, `md:col-6`).
 - `site.css` no repite lo que Bootstrap ya da: solo color, borde, sombra, tipografía y detalles de marca.

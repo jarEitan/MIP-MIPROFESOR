@@ -40,7 +40,16 @@
     unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-/* Fredoka: la fuente redondeada de la marca para botones, cifras y la firma */
+/* Eras Bold ITC: titulares principales y logotipo (un solo peso; el rango evita que el navegador la engrose) */
+@font-face {
+    font-family: 'Eras Bold ITC';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../fonts/erasBoldItc.woff2') format('woff2');
+}
+
+/* Fredoka: la fuente redondeada de la marca para botones, cifras y etiquetas */
 @font-face {
     font-family: 'Fredoka';
     font-style: normal;
@@ -82,6 +91,7 @@
 
     /* Tipografías */
     --fuenteTexto: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --fuenteTitulos: 'Eras Bold ITC', 'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif;
     --fuenteMarca: 'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif;
 
     /* Forma y profundidad */
@@ -101,7 +111,7 @@
     --duracionMedia: .45s;
 
     /* Medidas fluidas */
-    --espacioSeccion: clamp(3rem, 6vw, 5rem);
+    --espacioSeccion: clamp(1.75rem, 3.5vw, 3rem);
     --alturaEncabezado: 4rem;
 
     /* ---- Bootstrap 6: se pisan sus tokens para que TODOS sus componentes salgan con la paleta de MIP ---- */
@@ -305,10 +315,10 @@ main {
 }
 
 .marcaLogo span {
-    font-family: var(--fuenteMarca);
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -.01em;
+    font-family: var(--fuenteTitulos);
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0;
     color: var(--colorCoral);
 }
 
@@ -530,14 +540,22 @@ h1, h2, h3, h4, h5 {
     color: var(--colorTinta);
 }
 
+/* Eras Bold ITC se reserva para los titulares de mayor jerarquía (h1 y h2) */
+h1, h2 {
+    font-family: var(--fuenteTitulos);
+    font-weight: 400;
+    text-wrap: balance;
+}
+
 h1 {
     font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
-    line-height: 1.08;
-    letter-spacing: -.035em;
+    line-height: 1.1;
+    letter-spacing: -.01em;
 }
 
 h2 {
-    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.125rem);
+    font-size: clamp(1.35rem, 1rem + 1.5vw, 2.125rem);
+    letter-spacing: 0;
 }
 
 h3 {
@@ -595,8 +613,8 @@ mark {
 
 /* Encabezado centrado reutilizable de cada sección */
 .encabezadoSeccion {
-    max-width: 38rem;
-    margin: 0 auto 2.25rem;
+    max-width: 44rem;
+    margin: 0 auto 1.5rem;
     text-align: center;
 }
 
@@ -1077,7 +1095,7 @@ fieldset {
 /* ---------- 3.1 Inicio: portada / buscador ---------- */
 .portada {
     overflow: hidden;
-    padding-block: clamp(3rem, 7vw, 6rem) clamp(4rem, 8vw, 7rem);
+    padding-block: clamp(2rem, 4vw, 3.5rem) clamp(2.5rem, 5vw, 4.25rem);
     background-color: var(--colorSuperficie);
     background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
     background-size: 24px 24px;
@@ -1116,12 +1134,12 @@ fieldset {
 
 .portada h1 {
     margin-block: 1.25rem 1rem;
-    font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+    font-size: clamp(2.1rem, 1.3rem + 3.2vw, 3.6rem);
 }
 
 .portada h1 + p {
     max-width: 34rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
     color: var(--colorTextoSuave);
 }
@@ -1369,7 +1387,7 @@ fieldset {
     align-items: center;
     justify-content: center;
     gap: .6rem;
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
 }
 
 .destacados .colegios > span {
@@ -1615,6 +1633,7 @@ fieldset {
 /* ---------- 3.9 Llamado final (Inicio y Quiénes somos) ---------- */
 .llamadoFinal {
     overflow: hidden;
+    padding-block: clamp(1.5rem, 2.5vw, 2.25rem);
     background-color: var(--colorTinta);
     color: #fff;
 }
@@ -1643,7 +1662,7 @@ fieldset {
 
 .llamadoFinal p {
     max-width: 34rem;
-    margin: .6rem auto 0;
+    margin: .4rem auto 0;
     color: #D1D5DB;
 }
 
@@ -1664,7 +1683,7 @@ fieldset {
 /* ---------- 3.10 Cabecera de página (Catálogo, Soporte, Quiénes somos) ---------- */
 .cabecera {
     overflow: hidden;
-    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+    padding-block: clamp(2rem, 3.5vw, 3rem);
     background-color: var(--colorSuperficie);
     background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
     background-size: 24px 24px;
@@ -1815,7 +1834,7 @@ fieldset {
 
 /* ---------- 3.12 Registro e inicio de sesión ---------- */
 .acceso {
-    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+    padding-block: clamp(2rem, 3.5vw, 3rem);
     background-color: var(--colorFondo);
     background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
     background-size: 24px 24px;
@@ -2497,9 +2516,9 @@ fieldset {
 }
 
 .identidad .tipografias .titulares {
+    font-family: var(--fuenteTitulos);
     font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: -.03em;
+    font-weight: 400;
 }
 
 .identidad .tipografias .cifras {
@@ -2540,7 +2559,7 @@ fieldset {
 .pie {
     position: relative;
     overflow: hidden;
-    padding-block: clamp(2.5rem, 5vw, 4rem) 1.5rem;
+    padding-block: clamp(1.75rem, 3vw, 2.5rem) 1rem;
     border-top: 4px solid var(--colorCoral);
     background-color: var(--colorTinta);
     color: #D1D5DB;
@@ -2552,9 +2571,9 @@ fieldset {
     position: absolute;
     right: -1rem;
     bottom: -.28em;
-    font-family: var(--fuenteMarca);
-    font-size: clamp(8rem, 24vw, 22rem);
-    font-weight: 700;
+    font-family: var(--fuenteTitulos);
+    font-size: clamp(6rem, 18vw, 16rem);
+    font-weight: 400;
     line-height: 1;
     color: transparent;
     -webkit-text-stroke: 2px rgba(255, 255, 255, .07);
@@ -2567,23 +2586,23 @@ fieldset {
 }
 
 .pie .row {
-    row-gap: 2rem;
+    row-gap: 1.25rem;
 }
 
 .pie p {
-    margin-top: 1rem;
+    margin-top: .65rem;
     font-size: .88rem;
 }
 
 .pie .eslogan {
-    font-family: var(--fuenteMarca);
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-family: var(--fuenteTitulos);
+    font-size: 1.1rem;
+    font-weight: 400;
     color: var(--colorCeleste);
 }
 
 .pie h5 {
-    margin-bottom: 1rem;
+    margin-bottom: .65rem;
     font-size: .75rem;
     letter-spacing: .12em;
     text-transform: uppercase;
@@ -2592,7 +2611,7 @@ fieldset {
 
 .pie ul {
     display: grid;
-    gap: .6rem;
+    gap: .4rem;
     font-size: .88rem;
 }
 
@@ -2612,7 +2631,7 @@ fieldset {
 }
 
 .pie ul strong {
-    display: block;
+    margin-right: .4rem;
     color: #fff;
 }
 
@@ -2622,8 +2641,8 @@ fieldset {
 }
 
 .pie .derechos {
-    margin-top: 2.5rem;
-    padding-top: 1.25rem;
+    margin-top: 1.25rem;
+    padding-top: .85rem;
     border-top: 1px solid rgba(255, 255, 255, .15);
     text-align: center;
     font-size: .8rem;

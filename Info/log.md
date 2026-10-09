@@ -38,7 +38,7 @@ Equipo:
 | Vistas | Razor (`.cshtml`) |
 | CSS / layout | **Bootstrap 6.0.0-alpha.1** local (`wwwroot/lib/bootstrap/dist`) + **un solo** CSS propio: `wwwroot/css/site.css` (ver [guiaDeEstilo.md](guiaDeEstilo.md)) |
 | JS | Vanilla JS modular en `wwwroot/js/site.js` + `bootstrap.bundle.min.js` cargado como **módulo ES** (`<script type="module">`). **jQuery quitado del layout** (los archivos siguen en `wwwroot/lib`; si una vista usa `_ValidationScriptsPartial`, agregar jQuery en su `@section Scripts`) |
-| Fuentes | **Plus Jakarta Sans** variable (textos) y **Fredoka** (botones, cifras, logo), ambas **locales** en `wwwroot/fonts/` (`@font-face` al inicio de `site.css`). La tipografía de marca original (Eras Bold ITC) no está disponible: Fredoka la reemplaza |
+| Fuentes | Las tres de la marca, **locales** en `wwwroot/fonts/` (`@font-face` al inicio de `site.css`): **Eras Bold ITC** (`--fuenteTitulos`: h1, h2, logo, lema), **Fredoka** (`--fuenteMarca`: botones, etiquetas, cifras) y **Plus Jakarta Sans** (`--fuenteTexto`: párrafos y formularios) |
 | Íconos | **Bootstrap Icons 1.11.3** local en `wwwroot/lib/bootstrap-icons/` → `<i class="bi bi-nombre" aria-hidden="true"></i>`. Catálogo: https://icons.getbootstrap.com |
 | BD | SQL Server + **Dapper 2.1.89** + `Microsoft.Data.SqlClient 7.1.1`. Todo en `Models/BD.cs` (hoy **vacío**) |
 | Sesión | `Microsoft.AspNetCore.Session` ya configurado en `Program.cs` (`AddDistributedMemoryCache`, `AddSession`, `UseSession`). Cultura `es-AR` por defecto (precios `8.000`, notas `4,9`) |
@@ -182,7 +182,7 @@ Claves: `idUsuario`, `nombreUsuario`, `inicialesUsuario`, `cantidadNotificacione
 - [ ] Login/registro reales guardando las claves de sesión (§8) y proteger `PanelControl` / `MiColegio`.
 - [ ] Contrastar textos y estilo con **Figma y Miro** cuando conecten los MCP (hoy falló el proxy).
 - [ ] Endpoint JSON de sugerencias para el buscador (fetch ya comentado en `site.js`).
-- [ ] Tipografía de marca **Eras Bold ITC** (hoy Fredoka la reemplaza).
+- [ ] Confirmar la **licencia web** de Eras Bold ITC (el `.woff2` se sirve públicamente desde `wwwroot/fonts/erasBoldItc.woff2`).
 - [ ] Imágenes de marca: las originales son de 512px de ancho; pedir las de mayor resolución.
 - [ ] Contraste del texto blanco sobre coral (~3:1): evaluar usar tinta o el magenta en botones chicos.
 - [ ] Los links a Figma/Miro de *Quiénes somos* son privados: decidir si se publican.
@@ -267,3 +267,9 @@ Claves: `idUsuario`, `nombreUsuario`, `inicialesUsuario`, `cantidadNotificacione
 - Fuentes: se suma Fredoka local. **Eras Bold ITC no estaba disponible.**
 - Verificado: revisión visual con Chromium (390, 768, 1024, 1280 y 1920 px) sin scroll horizontal ni errores de consola; prueba de interacciones (drawer, menú de usuario, pestañas, diálogo, carrusel, acordeón, filtros, validaciones, chat); compilación real de las vistas Razor y corrida del servidor con una copia en .NET 10 (el proyecto sigue en .NET 9); flujo ingreso → panel → cerrar sesión.
 - **No se pudo** leer Figma ni Miro (servidores MCP sin conexión por proxy 403): el contenido salió de las imágenes y del documento de conocimiento.
+
+### 2026-10-09 — Eras Bold ITC y espacios más compactos
+- Se incorporó **Eras Bold ITC** (archivo que pasó Jarsou, convertido a `erasBoldItc.woff2`, precargada en el layout). Según el manual de marca se reserva para los titulares de mayor jerarquía: `h1`, `h2`, texto del logo (`.marcaLogo span`), lema del footer (`.pie .eslogan`), sigla MIP del footer y la muestra de *Titulares* en Quiénes somos. Fredoka queda para botones, etiquetas y cifras.
+- Se agregó `text-wrap: balance` a `h1`/`h2` (Eras es más ancha que Plus Jakarta Sans) y se bajó el tamaño mínimo del `h2` para que entre en 390 px.
+- **Menos aire vertical**: `--espacioSeccion` pasó de `clamp(3rem, 6vw, 5rem)` a `clamp(1.75rem, 3.5vw, 3rem)`; `.encabezadoSeccion` baja de 2.25rem a 1.5rem de margen inferior; la portada, las cabeceras de página y `.acceso` también tienen menos padding.
+- **Mensaje final (`.llamadoFinal`) y footer (`.pie`) más compactos**: menos padding, menos separación entre columnas y listas, y el equipo en el footer ahora muestra nombre y rol en una sola línea.
