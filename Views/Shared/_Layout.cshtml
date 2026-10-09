@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,15 +16,20 @@
 
     <link rel="icon" type="image/png" href="~/img/logoChico.png" />
     <link rel="preload" href="~/fonts/plusJakartaSansLatin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="~/fonts/erasBoldItc.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="~/fonts/fredokaLatin.woff2" as="font" type="font/woff2" crossorigin />
 
+    @* Bootstrap 6 (alpha): CSS con @layer, por eso site.css (sin layer) siempre gana sin !important *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <script>document.documentElement.classList.add("jsActivo");</script>
 </head>
 <body>
+    <a class="saltarContenido" href="#contenido">Saltar al contenido</a>
+
     <!-- ================= HEADER ================= -->
-    @* Sin sesión → navegación de invitado. Cuando exista el login, guardar "idUsuario" en Session. *@
+    @* Sin sesión → navegación de invitado. Con sesión (Session "idUsuario") → navegación de usuario. *@
     @if (Context.Session.GetString("idUsuario") == null)
     {
         <partial name="_encabezadoInvitado" />
@@ -35,15 +40,15 @@
     }
 
     <!-- ================= MAIN ================= -->
-    <main role="main" class="contenidoPrincipal">
+    <main role="main" id="contenido">
         @RenderBody()
     </main>
 
     <!-- ================= FOOTER ================= -->
     <partial name="_piePagina" />
 
-    @* jQuery no se usa. Si una vista necesita _ValidationScriptsPartial, agregar jQuery en su sección Scripts. *@
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @* Bootstrap 6 es ESM: se carga como módulo (ya no existe window.bootstrap). jQuery no se usa. *@
+    <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
