@@ -9,7 +9,7 @@
 <!-- ================= SALUDO ================= -->
 <section class="saludo">
     <div class="container">
-        <div class="d-flex flex-column sm:flex-row align-items-sm-center gap-3 gap-sm-4">
+        <div class="d-flex flex-column sm:flex-row sm:align-items-center gap-3 sm:gap-4">
             <span class="avatar avatar-xl theme-primary">@inicialesUsuario</span>
             <div>
                 <span class="pildora">Alumno • Belgrano Day School</span>
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <p class="aviso"><i class="bi bi-bell-fill" aria-hidden="true"></i> La prof. <strong>Sofía Martínez</strong> aceptó tu consulta de Matemática.</p>
+        <p class="aviso"><i class="bi bi-bell-fill" aria-hidden="true"></i> <span>La prof. <strong>Sofía Martínez</strong> aceptó tu consulta de Matemática.</span></p>
     </div>
 </section>
 
@@ -128,7 +128,7 @@
             <!-- Historial de clases -->
             <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
                 <h2>Historial de clases</h2>
-                <div class="card tabla">
+                <div class="card estatica tabla">
                     <table class="table">
                         <thead>
                             <tr>
@@ -168,7 +168,7 @@
             <div class="tab-pane" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
                 <h2>Chat directo</h2>
                 @* TODO BD: conversaciones y mensajes reales (BD.obtenerConversaciones / BD.obtenerMensajes) *@
-                <div class="card chat">
+                <div class="card estatica chat">
                     <ul class="conversaciones">
                         <li class="activa">
                             <span class="avatar theme-primary">SM</span>
@@ -204,7 +204,7 @@
             <div class="tab-pane" id="tabConfiguracion" role="tabpanel" aria-labelledby="botonTabConfiguracion" tabindex="0">
                 <h2>Configuración de la cuenta</h2>
                 @* TODO BD: guardar con BD.actualizarPerfil(...) *@
-                <form class="card" id="formularioConfiguracion" onsubmit="return guardarConfiguracion()" novalidate>
+                <form class="card estatica" id="formularioConfiguracion" onsubmit="return guardarConfiguracion()" novalidate>
                     <div class="row g-3">
                         <div class="col-12 md:col-6 form-field">
                             <label for="configNombre">Nombre completo</label>

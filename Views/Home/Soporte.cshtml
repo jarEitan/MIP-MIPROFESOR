@@ -57,7 +57,7 @@
             <div class="col-12 lg:col-9 xl:col-8">
                 <div class="encabezadoSeccion">
                     <span class="pildora">FAQ</span>
-                    <h2>Preguntas frecuentes</h2>
+                    <h2>Preguntas <mark>frecuentes</mark></h2>
                     <p>Pagos, perfiles y dinámica de las clases.</p>
                 </div>
 
@@ -78,12 +78,12 @@
             <div class="col-12 md:col-10 lg:col-7">
                 <div class="encabezadoSeccion">
                     <span class="pildora">Contacto</span>
-                    <h2>¿No resolviste tu duda?</h2>
+                    <h2>¿No resolviste <mark>tu duda</mark>?</h2>
                     <p>Completá el formulario y el equipo de MIP te responde por correo.</p>
                 </div>
 
                 @* TODO BD: guardar la consulta (BD.guardarConsulta) o enviarla por correo desde el servidor *@
-                <form class="card" id="formularioContacto" onsubmit="return validarContacto()" novalidate>
+                <form class="card estatica" id="formularioContacto" onsubmit="return validarContacto()" novalidate>
                     <div class="row g-3">
                         <div class="col-12 md:col-6 form-field">
                             <label for="contactoNombre">Nombre completo</label>

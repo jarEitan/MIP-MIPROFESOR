@@ -1,4 +1,10 @@
+using System.Globalization;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Formato argentino en todo el sitio: precios "8.000" y calificaciones "4,9"
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es-AR");
+CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es-AR");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

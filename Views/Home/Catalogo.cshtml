@@ -21,80 +21,84 @@
     <div class="container">
         <div class="row g-4">
             <div class="col-12 lg:col-4 xl:col-3">
-                <button class="boton contorno lg:d-none" type="button" data-bs-toggle="drawer" data-bs-target="#panelFiltros" aria-controls="panelFiltros">
-                    <i class="bi bi-funnel" aria-hidden="true"></i> Filtros
-                </button>
+                <aside class="filtros">
+                    <button class="boton contorno" type="button" data-bs-toggle="drawer" data-bs-target="#panelFiltros" aria-controls="panelFiltros">
+                        <i class="bi bi-funnel" aria-hidden="true"></i> Filtros
+                    </button>
 
-                @* En pantallas < lg los filtros son un drawer lateral; desde lg quedan en línea (lg:drawer) *@
-                <dialog class="lg:drawer drawer-start" tabindex="-1" id="panelFiltros" aria-labelledby="tituloFiltros">
-                    <div class="drawer-header">
-                        <span class="drawer-title" id="tituloFiltros">Filtros</span>
-                        <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Cerrar"></button>
-                    </div>
-
-                    <form class="drawer-body" id="formularioFiltros" onsubmit="return false">
-                        <div class="form-field">
-                            <label for="filtroTexto">Buscar</label>
-                            <input class="form-control" type="search" id="filtroTexto" name="busqueda" value="@busqueda" placeholder="Nombre, materia o tema..." autocomplete="off" />
+                    @* En pantallas < lg los filtros son un drawer lateral; desde lg quedan en línea (lg:drawer) *@
+                    <dialog class="lg:drawer drawer-start" tabindex="-1" id="panelFiltros" aria-labelledby="tituloFiltros">
+                        <div class="drawer-header">
+                            <span class="drawer-title" id="tituloFiltros">Filtros</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Cerrar"></button>
                         </div>
 
-                        <div class="form-field">
-                            <label for="filtroMateria">Materia</label>
-                            <select class="form-control" id="filtroMateria" name="materia">
-                                <option value="">Todas las materias</option>
-                                @foreach (string materia in materias)
-                                {
-                                    <option value="@materia">@materia</option>
-                                }
-                            </select>
+                        <div class="drawer-body">
+                            <form id="formularioFiltros" onsubmit="return false">
+                                <div class="form-field">
+                                    <label for="filtroTexto">Buscar</label>
+                                    <input class="form-control" type="search" id="filtroTexto" name="busqueda" value="@busqueda" placeholder="Nombre, materia o tema..." autocomplete="off" />
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="filtroMateria">Materia</label>
+                                    <select class="form-control" id="filtroMateria" name="materia">
+                                        <option value="">Todas las materias</option>
+                                        @foreach (string materia in materias)
+                                        {
+                                            <option value="@materia">@materia</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="filtroColegio">Colegio</label>
+                                    <select class="form-control" id="filtroColegio" name="colegio">
+                                        <option value="">Todos los colegios</option>
+                                        @foreach (string colegio in colegios)
+                                        {
+                                            <option value="@colegio" selected="@(colegio == colegioElegido ? "selected" : null)">@colegio</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <fieldset>
+                                    <legend>Modalidad</legend>
+                                    <div class="form-field">
+                                        <input class="radio" type="radio" id="modalidadTodas" name="modalidad" value="" checked />
+                                        <label for="modalidadTodas">Todas</label>
+                                    </div>
+                                    <div class="form-field">
+                                        <input class="radio" type="radio" id="modalidadPresencial" name="modalidad" value="Presencial" />
+                                        <label for="modalidadPresencial">Presencial</label>
+                                    </div>
+                                    <div class="form-field">
+                                        <input class="radio" type="radio" id="modalidadVirtual" name="modalidad" value="Virtual" />
+                                        <label for="modalidadVirtual">Virtual</label>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <legend>Nivel escolar</legend>
+                                    <div class="form-field">
+                                        <input class="check" type="checkbox" id="nivelPrimaria" name="nivel" value="Primaria" />
+                                        <label for="nivelPrimaria">Primaria</label>
+                                    </div>
+                                    <div class="form-field">
+                                        <input class="check" type="checkbox" id="nivelSecundaria" name="nivel" value="Secundaria" />
+                                        <label for="nivelSecundaria">Secundaria</label>
+                                    </div>
+                                    <div class="form-field">
+                                        <input class="check" type="checkbox" id="nivelUniversitario" name="nivel" value="Universitario" />
+                                        <label for="nivelUniversitario">Universitario</label>
+                                    </div>
+                                </fieldset>
+
+                                <button class="boton contorno chico" type="reset" id="botonLimpiarFiltros">Limpiar filtros</button>
+                            </form>
                         </div>
-
-                        <div class="form-field">
-                            <label for="filtroColegio">Colegio</label>
-                            <select class="form-control" id="filtroColegio" name="colegio">
-                                <option value="">Todos los colegios</option>
-                                @foreach (string colegio in colegios)
-                                {
-                                    <option value="@colegio" selected="@(colegio == colegioElegido ? "selected" : null)">@colegio</option>
-                                }
-                            </select>
-                        </div>
-
-                        <fieldset>
-                            <legend>Modalidad</legend>
-                            <div class="form-field">
-                                <input class="radio" type="radio" id="modalidadTodas" name="modalidad" value="" checked />
-                                <label for="modalidadTodas">Todas</label>
-                            </div>
-                            <div class="form-field">
-                                <input class="radio" type="radio" id="modalidadPresencial" name="modalidad" value="Presencial" />
-                                <label for="modalidadPresencial">Presencial</label>
-                            </div>
-                            <div class="form-field">
-                                <input class="radio" type="radio" id="modalidadVirtual" name="modalidad" value="Virtual" />
-                                <label for="modalidadVirtual">Virtual</label>
-                            </div>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Nivel escolar</legend>
-                            <div class="form-field">
-                                <input class="check" type="checkbox" id="nivelPrimaria" name="nivel" value="Primaria" />
-                                <label for="nivelPrimaria">Primaria</label>
-                            </div>
-                            <div class="form-field">
-                                <input class="check" type="checkbox" id="nivelSecundaria" name="nivel" value="Secundaria" />
-                                <label for="nivelSecundaria">Secundaria</label>
-                            </div>
-                            <div class="form-field">
-                                <input class="check" type="checkbox" id="nivelUniversitario" name="nivel" value="Universitario" />
-                                <label for="nivelUniversitario">Universitario</label>
-                            </div>
-                        </fieldset>
-
-                        <button class="boton contorno chico" type="reset" id="botonLimpiarFiltros">Limpiar filtros</button>
-                    </form>
-                </dialog>
+                    </dialog>
+                </aside>
             </div>
 
             <div class="col-12 lg:col-8 xl:col-9">
@@ -109,7 +113,7 @@
                     }
                 </div>
 
-                <div class="card sinResultados" id="sinResultados" hidden>
+                <div class="card estatica sinResultados" id="sinResultados" hidden>
                     <span class="icono"><i class="bi bi-emoji-neutral" aria-hidden="true"></i></span>
                     <h3>No encontramos profesores con esos filtros</h3>
                     <p>Probá quitando algún filtro o buscando otra materia.</p>
