@@ -1,5 +1,5 @@
 @* Header para usuarios con sesión iniciada.
-   Esqueleto listo: completar cuando exista el login (Session: "idUsuario", "nombreUsuario", "inicialesUsuario", "cantidadNotificaciones"). *@
+   Claves de sesión: "idUsuario", "nombreUsuario", "inicialesUsuario", "cantidadNotificaciones". *@
 @{
     string accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
     string inicialesUsuario = Context.Session.GetString("inicialesUsuario") ?? "MP";
@@ -7,55 +7,61 @@
     string cantidadNotificaciones = Context.Session.GetString("cantidadNotificaciones") ?? "0";
 }
 
-<header class="encabezadoPrincipal" id="encabezadoPrincipal">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-xl">
+<header class="encabezado" id="encabezado">
+    <nav class="navbar lg:navbar-expand">
+        <div class="container">
             <partial name="_marcaLogo" />
 
-            <button class="navbar-toggler botonMenuMovil" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuMovilUsuario"
-                    aria-controls="menuMovilUsuario" aria-label="Abrir menú">
-                <span class="lineaMenuMovil"></span>
-                <span class="lineaMenuMovil"></span>
-                <span class="lineaMenuMovil"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#menuUsuario"
+                    aria-controls="menuUsuario" aria-expanded="false" aria-label="Abrir menú">
+                <span class="navbar-toggler-icon" aria-hidden="true"></span>
             </button>
 
-            <div class="offcanvas offcanvas-end menuNavegacion" tabindex="-1" id="menuMovilUsuario" aria-labelledby="tituloMenuUsuario">
-                <div class="offcanvas-header d-lg-none">
-                    <span class="marcaLogoTexto" id="tituloMenuUsuario">MiProfesor</span>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+            <dialog class="drawer drawer-end" tabindex="-1" id="menuUsuario" aria-labelledby="tituloMenuUsuario">
+                <div class="drawer-header">
+                    <span class="drawer-title" id="tituloMenuUsuario">Menú</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Cerrar"></button>
                 </div>
 
-                <div class="offcanvas-body align-items-lg-center">
-                    <ul class="navbar-nav mx-lg-auto gap-lg-4 listaEnlacesNavegacion">
+                <div class="drawer-body">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link enlaceNavegacion @(accionActual == "Index" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Index" ? "page" : null)" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link @(accionActual == "Index" ? "active" : "")" aria-current="@(accionActual == "Index" ? "page" : null)" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link enlaceNavegacion @(accionActual == "Catalogo" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Catalogo" ? "page" : null)" asp-controller="Home" asp-action="Catalogo">Catálogo</a>
+                            <a class="nav-link @(accionActual == "Catalogo" ? "active" : "")" aria-current="@(accionActual == "Catalogo" ? "page" : null)" asp-controller="Home" asp-action="Catalogo">Catálogo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link enlaceNavegacion @(accionActual == "MiColegio" ? "enlaceActivo" : "")" aria-current="@(accionActual == "MiColegio" ? "page" : null)" asp-controller="Home" asp-action="MiColegio">Mi Colegio</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="MiColegio">Mi Colegio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link enlaceNavegacion @(accionActual == "Soporte" ? "enlaceActivo" : "")" aria-current="@(accionActual == "Soporte" ? "page" : null)" asp-controller="Home" asp-action="Soporte">Soporte</a>
+                            <a class="nav-link @(accionActual == "Soporte" ? "active" : "")" aria-current="@(accionActual == "Soporte" ? "page" : null)" asp-controller="Home" asp-action="Soporte">Soporte</a>
                         </li>
                     </ul>
 
-                    <div class="accionesSesion d-flex flex-column flex-lg-row align-items-lg-center gap-2 gap-lg-3 mt-4 mt-lg-0">
-                        <a class="botonMip botonSecundario botonPanelControl" asp-controller="Home" asp-action="PanelControl">
+                    <div class="acciones">
+                        <a class="boton secundario" asp-controller="Home" asp-action="PanelControl">
                             <i class="bi bi-bar-chart-line" aria-hidden="true"></i> Panel de Control
                             @if (cantidadNotificaciones != "0")
                             {
-                                <span class="insigniaNotificaciones" aria-label="@cantidadNotificaciones notificaciones nuevas">
-                                    <span class="pulsoNotificaciones" aria-hidden="true"></span>
-                                    @cantidadNotificaciones
-                                </span>
+                                <span class="badge theme-primary" aria-label="@cantidadNotificaciones notificaciones nuevas">@cantidadNotificaciones</span>
                             }
                         </a>
-                        <span class="avatarUsuario" title="@nombreUsuario">@inicialesUsuario</span>
+
+                        @* Menú del usuario (componente Menu de Bootstrap 6: el botón y .menu son hermanos) *@
+                        <div class="usuario">
+                            <button type="button" class="avatar theme-primary" data-bs-toggle="menu" aria-expanded="false" aria-label="Menú de @nombreUsuario">@inicialesUsuario</button>
+                            <div class="menu">
+                                <span class="menu-header">@nombreUsuario</span>
+                                <a class="menu-item" asp-controller="Home" asp-action="PanelControl">Panel de Control</a>
+                                <a class="menu-item" asp-controller="Home" asp-action="Soporte">Soporte</a>
+                                <hr class="menu-divider" />
+                                <a class="menu-item" asp-controller="Home" asp-action="CerrarSesion">Cerrar sesión</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </dialog>
         </div>
     </nav>
 </header>

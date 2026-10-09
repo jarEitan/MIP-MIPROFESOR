@@ -1,0 +1,260 @@
+@{
+    ViewData["Title"] = "Panel de Control";
+    List<Clase> clasesProgramadas = ViewBag.clasesProgramadas ?? new List<Clase>();
+    List<Clase> clasesHistorial = ViewBag.clasesHistorial ?? new List<Clase>();
+    string nombreUsuario = Context.Session.GetString("nombreUsuario") ?? "Mateo Gómez";
+    string inicialesUsuario = Context.Session.GetString("inicialesUsuario") ?? "MG";
+}
+
+<!-- ================= SALUDO ================= -->
+<section class="saludo">
+    <div class="container">
+        <div class="d-flex flex-column sm:flex-row align-items-sm-center gap-3 gap-sm-4">
+            <span class="avatar avatar-xl theme-primary">@inicialesUsuario</span>
+            <div>
+                <span class="pildora">Alumno • Belgrano Day School</span>
+                <h1>¡Hola, @nombreUsuario! 👋</h1>
+                <p>Gestioná tus tutorías programadas, tus mensajes con profesores y la configuración de tu cuenta.</p>
+            </div>
+        </div>
+
+        <p class="aviso"><i class="bi bi-bell-fill" aria-hidden="true"></i> La prof. <strong>Sofía Martínez</strong> aceptó tu consulta de Matemática.</p>
+    </div>
+</section>
+
+<!-- ================= MÉTRICAS Y ACCESOS RÁPIDOS ================= -->
+<section class="metricas">
+    <div class="container">
+        <div class="row g-3 lg:g-4">
+            <div class="col-12 lg:col-4">
+                <div class="row g-3 lg:g-4">
+                    <div class="col-6 lg:col-12">
+                        <div class="card">
+                            <strong>@clasesProgramadas.Count</strong>
+                            <span>Clases activas</span>
+                        </div>
+                    </div>
+                    <div class="col-6 lg:col-12">
+                        <div class="card oscura">
+                            <strong>12</strong>
+                            <span>Clases completadas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 lg:col-8">
+                <div class="row row-cols-2 g-3 lg:g-4 accesos">
+                    <div class="col">
+                        <a class="card" href="#panelTabs" data-abrir-tab="tabClases">
+                            <span class="icono"><i class="bi bi-calendar-check" aria-hidden="true"></i></span>
+                            <h3>Administrar clases</h3>
+                            <p>Reubicá o cancelá tus clases.</p>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="card" href="#panelTabs" data-abrir-tab="tabHistorial">
+                            <span class="icono celeste"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
+                            <h3>Historial</h3>
+                            <p>Mirá tus clases pasadas.</p>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="card" href="#panelTabs" data-abrir-tab="tabChat">
+                            <span class="icono oscuro"><i class="bi bi-chat-dots" aria-hidden="true"></i></span>
+                            <h3>Chat directo <span class="badge theme-primary">1</span></h3>
+                            <p>Hablá con tus profesores.</p>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="card" href="#panelTabs" data-abrir-tab="tabConfiguracion">
+                            <span class="icono"><i class="bi bi-gear" aria-hidden="true"></i></span>
+                            <h3>Configuración</h3>
+                            <p>Actualizá tus datos.</p>
+                        </a>
+                    </div>
+                </div>
+
+                <p class="ayudaExtra">
+                    ¿Necesitás ayuda con algo? <a asp-controller="Home" asp-action="Soporte">Ir a Soporte <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= PANEL CON PESTAÑAS ================= -->
+<section class="panel" id="panelTabs">
+    <div class="container">
+        <nav>
+            <div class="nav nav-pills" role="tablist">
+                <button class="nav-link active" id="botonTabClases" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabClases" aria-controls="tabClases" aria-selected="true"><i class="bi bi-calendar-check" aria-hidden="true"></i> Mis clases</button>
+                <button class="nav-link" id="botonTabHistorial" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabHistorial" aria-controls="tabHistorial" aria-selected="false"><i class="bi bi-clock-history" aria-hidden="true"></i> Historial</button>
+                <button class="nav-link" id="botonTabChat" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabChat" aria-controls="tabChat" aria-selected="false"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chat directo</button>
+                <button class="nav-link" id="botonTabConfiguracion" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabConfiguracion" aria-controls="tabConfiguracion" aria-selected="false"><i class="bi bi-gear" aria-hidden="true"></i> Configuración</button>
+            </div>
+        </nav>
+
+        <div class="tab-content">
+            <!-- Mis clases programadas -->
+            <div class="tab-pane show active" id="tabClases" role="tabpanel" aria-labelledby="botonTabClases" tabindex="0">
+                <h2>Mis clases programadas</h2>
+                <div class="row row-cols-1 lg:row-cols-2 g-3 lg:g-4">
+                    @foreach (var clase in clasesProgramadas)
+                    {
+                        <div class="col">
+                            <article class="card clase">
+                                <header>
+                                    <span class="icono @(clase.estado == "Confirmada" ? "celeste" : "")"><i class="bi @clase.icono" aria-hidden="true"></i></span>
+                                    <span class="badge badge-subtle @(clase.estado == "Confirmada" ? "theme-success" : "theme-warning")">@(clase.estado == "Confirmada" ? "Confirmada" : "Pendiente de confirmación")</span>
+                                </header>
+                                <h3>@clase.materia</h3>
+                                <p>Prof. @clase.profesor</p>
+                                <ul>
+                                    <li><i class="bi bi-building" aria-hidden="true"></i> @clase.colegio</li>
+                                    <li><i class="bi bi-calendar-event" aria-hidden="true"></i> @clase.fecha</li>
+                                    <li><i class="bi @(clase.modalidad == "Virtual" ? "bi-laptop" : "bi-geo-alt")" aria-hidden="true"></i> @clase.lugar</li>
+                                </ul>
+                                <footer>
+                                    <button class="boton contorno chico" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Reubicar</button>
+                                    <button class="boton oscuro chico" type="button" data-bs-toggle="dialog" data-bs-target="#dialogoCancelarClase"><i class="bi bi-x-circle" aria-hidden="true"></i> Cancelar</button>
+                                </footer>
+                            </article>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Historial de clases -->
+            <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
+                <h2>Historial de clases</h2>
+                <div class="card tabla">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Materia</th>
+                                <th scope="col">Profesor</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var clase in clasesHistorial)
+                            {
+                                <tr>
+                                    <td data-etiqueta="Materia"><strong>@clase.materia</strong></td>
+                                    <td data-etiqueta="Profesor">@clase.profesor</td>
+                                    <td data-etiqueta="Fecha">@clase.fecha</td>
+                                    <td data-etiqueta="Estado"><span class="badge badge-subtle @(clase.estado == "Completada" ? "theme-success" : "theme-danger")">@clase.estado</span></td>
+                                    <td data-etiqueta="Acción">
+                                        @if (clase.estado == "Completada")
+                                        {
+                                            <a class="boton contorno chico" asp-controller="Home" asp-action="Catalogo"><i class="bi bi-star" aria-hidden="true"></i> Reseñar</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="boton contorno chico" asp-controller="Home" asp-action="Catalogo"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Reservar de nuevo</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Chat directo -->
+            <div class="tab-pane" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
+                <h2>Chat directo</h2>
+                @* TODO BD: conversaciones y mensajes reales (BD.obtenerConversaciones / BD.obtenerMensajes) *@
+                <div class="card chat">
+                    <ul class="conversaciones">
+                        <li class="activa">
+                            <span class="avatar theme-primary">SM</span>
+                            <div><strong>Sofía Martínez</strong><span>¡Perfecto, nos vemos mañana!</span></div>
+                            <span class="badge theme-primary">1</span>
+                        </li>
+                        <li>
+                            <span class="avatar theme-accent">LG</span>
+                            <div><strong>Lucas Gómez</strong><span>Te confirmo el horario del jueves.</span></div>
+                        </li>
+                    </ul>
+
+                    <div class="hilo">
+                        <header>
+                            <span class="avatar theme-primary">SM</span>
+                            <div><strong>Sofía Martínez</strong><span class="enLinea">En línea</span></div>
+                        </header>
+                        <div class="mensajes" id="mensajesChat" aria-live="polite">
+                            <p class="burbuja">Hola Mateo, vi tu consulta de Matemática Discreta. ¿Te sirve mañana a las 16?</p>
+                            <p class="burbuja propia">¡Sí! ¿Podemos en la biblioteca del colegio?</p>
+                            <p class="burbuja">Perfecto, nos vemos mañana. Llevá los ejercicios de la guía 3.</p>
+                        </div>
+                        <form class="redactar" id="formularioChat" onsubmit="return enviarMensajeChat()">
+                            <label for="campoMensajeChat" class="visually-hidden">Escribí tu mensaje</label>
+                            <input class="form-control" type="text" id="campoMensajeChat" placeholder="Escribí un mensaje..." autocomplete="off" />
+                            <button class="boton principal chico" type="submit"><i class="bi bi-send" aria-hidden="true"></i> Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="tab-pane" id="tabConfiguracion" role="tabpanel" aria-labelledby="botonTabConfiguracion" tabindex="0">
+                <h2>Configuración de la cuenta</h2>
+                @* TODO BD: guardar con BD.actualizarPerfil(...) *@
+                <form class="card" id="formularioConfiguracion" onsubmit="return guardarConfiguracion()" novalidate>
+                    <div class="row g-3">
+                        <div class="col-12 md:col-6 form-field">
+                            <label for="configNombre">Nombre completo</label>
+                            <input class="form-control" type="text" id="configNombre" value="@nombreUsuario" autocomplete="name" />
+                        </div>
+                        <div class="col-12 md:col-6 form-field">
+                            <label for="configCorreo">Correo electrónico</label>
+                            <input class="form-control" type="email" id="configCorreo" value="mateo.gomez@ejemplo.com" autocomplete="email" />
+                        </div>
+                        <div class="col-12 md:col-6 form-field">
+                            <label for="configColegio">Colegio vinculado</label>
+                            <select class="form-control" id="configColegio">
+                                <option selected>Belgrano Day School</option>
+                                <option>Colegio San Martín</option>
+                                <option>Nacional Buenos Aires</option>
+                            </select>
+                        </div>
+                        <div class="col-12 md:col-6 form-field">
+                            <label for="configNivel">Año / nivel</label>
+                            <select class="form-control" id="configNivel">
+                                <option>Primaria</option>
+                                <option selected>Secundaria</option>
+                                <option>Universitario</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p class="mensajeError" id="mensajeConfiguracion" role="alert"></p>
+                    <p class="mensajeExito" id="exitoConfiguracion" role="status" hidden>
+                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i> Cambios guardados.
+                    </p>
+
+                    <button class="boton principal" type="submit">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= DIÁLOGO: CANCELAR CLASE (componente Dialog de Bootstrap 6) ================= -->
+<dialog class="dialog" id="dialogoCancelarClase" aria-labelledby="tituloCancelarClase">
+    <div class="dialog-header">
+        <h2 class="dialog-title" id="tituloCancelarClase">¿Cancelar esta clase?</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+    </div>
+    <div class="dialog-body">
+        <p>Si cancelás con anticipación se cancela automáticamente. Si la clase está próxima, se abre un chat con el profesor para acordarlo.</p>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Volver</button>
+        <button type="button" class="boton principal chico" data-bs-dismiss="dialog">Sí, cancelar</button>
+    </div>
+</dialog>

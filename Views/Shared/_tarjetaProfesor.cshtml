@@ -1,0 +1,39 @@
+@* Tarjeta de profesor reutilizable (Inicio y Catálogo). Recibe un Profesor.
+   Los data-* son los que lee site.js para filtrar el catálogo en el navegador. *@
+@model Profesor
+
+<article class="card profesor" data-materia="@Model.materia" data-colegio="@Model.colegio" data-modalidad="@Model.modalidad" data-nivel="@Model.nivel"
+         data-texto="@(Model.nombre + " " + Model.materia + " " + Model.colegio + " " + string.Join(" ", Model.temas))">
+    <header>
+        <span class="avatar theme-primary">@Model.iniciales</span>
+        <div>
+            <h3>@Model.nombre</h3>
+            <p><i class="bi bi-building" aria-hidden="true"></i> @Model.colegio</p>
+        </div>
+        @if (Model.verificado)
+        {
+            <span class="badge badge-subtle theme-success" title="Credenciales revisadas por el equipo de MIP"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verificado</span>
+        }
+    </header>
+
+    <div class="etiquetas">
+        <span class="badge theme-accent">@Model.materia</span>
+        @foreach (string tema in Model.temas)
+        {
+            <span class="badge badge-subtle theme-inverse">@tema</span>
+        }
+    </div>
+
+    <p>@Model.resumen</p>
+
+    <ul class="datos">
+        <li><i class="bi bi-star-fill" aria-hidden="true"></i> <strong>@Model.calificacion.ToString("0.0")</strong> (@Model.cantidadResenas)</li>
+        <li><i class="bi bi-laptop" aria-hidden="true"></i> @Model.modalidad</li>
+        <li><i class="bi bi-mortarboard" aria-hidden="true"></i> @Model.nivel</li>
+    </ul>
+
+    <footer>
+        <p><strong>$ @Model.precioHora.ToString("N0")</strong> <span>/ hora</span></p>
+        <a class="boton principal chico" asp-controller="Home" asp-action="Registrarse" asp-route-rol="alumno">Contactar</a>
+    </footer>
+</article>
