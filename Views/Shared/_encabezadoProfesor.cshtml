@@ -42,9 +42,13 @@
                         </a>
 
                         @* Nombre y foto llevan al perfil (ahí está el botón Cerrar sesión) *@
-                        <a class="usuario" asp-controller="Sesion" asp-action="Perfil" aria-label="Ir a mi perfil">
+                        <a class="usuario" asp-controller="Home" asp-action="Perfil" aria-label="Ir a mi perfil">
                             <partial name="_avatarUsuario" model='""' />
                             <span class="nombreUsuario">@nombreUsuario</span>
+                            @if (Context.Session.GetString("verificado") == "true")
+                            {
+                                <i class="bi bi-patch-check-fill tickVerificado" title="Cuenta verificada" aria-label="Cuenta verificada"></i>
+                            }
                         </a>
                     </div>
                 </div>

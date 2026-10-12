@@ -42,7 +42,7 @@
 
                                 <div class="form-field">
                                     <label for="filtroMateria">Materia</label>
-                                    <select class="form-control" id="filtroMateria" name="materia">
+                                    <select class="form-control" id="filtroMateria" name="materia" data-buscable data-placeholder="Buscá una materia">
                                         <option value="">Todas las materias</option>
                                         @foreach (string materia in materias)
                                         {
@@ -53,7 +53,7 @@
 
                                 <div class="form-field">
                                     <label for="filtroColegio">Colegio</label>
-                                    <select class="form-control" id="filtroColegio" name="colegio">
+                                    <select class="form-control" id="filtroColegio" name="colegio" data-buscable data-placeholder="Buscá un colegio">
                                         <option value="">Todos los colegios</option>
                                         @foreach (string colegio in colegios)
                                         {
@@ -62,37 +62,23 @@
                                     </select>
                                 </div>
 
-                                <fieldset>
-                                    <legend>Modalidad</legend>
-                                    <div class="form-field">
-                                        <input class="radio" type="radio" id="modalidadTodas" name="modalidad" value="" checked />
-                                        <label for="modalidadTodas">Todas</label>
-                                    </div>
-                                    <div class="form-field">
-                                        <input class="radio" type="radio" id="modalidadPresencial" name="modalidad" value="Presencial" />
-                                        <label for="modalidadPresencial">Presencial</label>
-                                    </div>
-                                    <div class="form-field">
-                                        <input class="radio" type="radio" id="modalidadVirtual" name="modalidad" value="Virtual" />
-                                        <label for="modalidadVirtual">Virtual</label>
-                                    </div>
-                                </fieldset>
+                                <div class="form-field">
+                                    <label for="filtroModalidad">Modalidad</label>
+                                    <select class="form-control" id="filtroModalidad" name="modalidad" data-buscable data-placeholder="Presencial o virtual">
+                                        <option value="">Todas las modalidades</option>
+                                        <option value="Presencial">Presencial</option>
+                                        <option value="Virtual">Virtual</option>
+                                    </select>
+                                </div>
 
-                                <fieldset>
-                                    <legend>Nivel escolar</legend>
-                                    <div class="form-field">
-                                        <input class="check" type="checkbox" id="nivelPrimaria" name="nivel" value="Primaria" />
-                                        <label for="nivelPrimaria">Primaria</label>
-                                    </div>
-                                    <div class="form-field">
-                                        <input class="check" type="checkbox" id="nivelSecundaria" name="nivel" value="Secundaria" />
-                                        <label for="nivelSecundaria">Secundaria</label>
-                                    </div>
-                                    <div class="form-field">
-                                        <input class="check" type="checkbox" id="nivelUniversitario" name="nivel" value="Universitario" />
-                                        <label for="nivelUniversitario">Universitario</label>
-                                    </div>
-                                </fieldset>
+                                <div class="form-field">
+                                    <label for="filtroNivel">Nivel escolar</label>
+                                    <select class="form-control" id="filtroNivel" name="nivel" data-buscable data-placeholder="Todos los niveles" multiple>
+                                        <option value="Primaria">Primaria</option>
+                                        <option value="Secundaria">Secundaria</option>
+                                        <option value="Universitario">Universitario</option>
+                                    </select>
+                                </div>
 
                                 <button class="boton contorno chico" type="reset" id="botonLimpiarFiltros">Limpiar filtros</button>
                             </form>

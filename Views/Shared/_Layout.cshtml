@@ -50,6 +50,8 @@
         <partial name="_encabezadoInvitado" />
     }
 
+    <partial name="_avisoVerificacion" />
+
     <!-- ================= MAIN ================= -->
     <main role="main" id="contenido">
         @RenderBody()
@@ -57,6 +59,9 @@
 
     <!-- ================= FOOTER ================= -->
     <partial name="_piePagina" />
+
+    @* Snackbar del UI Kit: avisos cortos abajo de la pantalla (mostrarSnackbar en site.js) *@
+    <div class="snackbar" id="snackbar" role="status" aria-live="polite" hidden></div>
 
     @* Bootstrap 6 es ESM: se carga como módulo (ya no existe window.bootstrap). jQuery no se usa. *@
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

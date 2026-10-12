@@ -48,6 +48,25 @@ public class HomeController : Controller
         return View();
     }
 
+    // /Home/Perfil/5 → perfil de cualquier usuario (se puede compartir la URL).
+    // /Home/Perfil sin ID → el perfil propio. Los datos los trae site.js con fetch a PerfilesController.
+    // /Home/Perfil?editar=true → el perfil propio con el modal "Editar perfil" ya abierto
+    // (lo usa el botón "Completar mis datos" del aviso de cuenta no verificada).
+    public IActionResult Perfil(int? id, bool editar = false)
+    {
+        string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
+        if (id == null && idUsuarioSesion == null) return RedirectToAction("IniciarSesion", "Sesion");
+
+        int idPerfil = id ?? int.Parse(idUsuarioSesion!);
+        bool esPerfilPropio = idUsuarioSesion == idPerfil.ToString();
+        ViewBag.idPerfil = idPerfil;
+        ViewBag.esPerfilPropio = esPerfilPropio;
+        ViewBag.abrirEdicion = esPerfilPropio && editar;
+        // En el perfil propio el aviso de verificación está dentro de la página, con más detalle
+        ViewBag.ocultarAvisoVerificacion = esPerfilPropio;
+        return View();
+    }
+
     // ================= ÁREA CON SESIÓN =================
 
     public IActionResult PanelControl()

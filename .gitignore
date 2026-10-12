@@ -273,3 +273,6 @@ __pycache__/
 # tools/
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
+# Archivos que suben los usuarios (fotos de perfil y fotos del DNI): no van al repositorio
+wwwroot/uploads/
+App_Data/

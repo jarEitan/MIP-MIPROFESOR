@@ -1059,6 +1059,205 @@ fieldset {
     color: var(--colorTextoSuave);
 }
 
+/* ---------- Selector con búsqueda (select[data-buscable], ver site.js) ---------- */
+/* La lista va dentro del flujo (no flota): así nunca queda cortada dentro de un diálogo o del drawer */
+.selectorBuscable {
+    position: relative;
+    display: grid;
+    gap: .4rem;
+}
+
+.selectorBuscable .campoSelector {
+    position: relative;
+}
+
+.selectorBuscable .campoSelector .form-control {
+    padding-right: 2.6rem;
+    cursor: pointer;
+}
+
+.selectorBuscable .campoSelector .form-control:focus {
+    cursor: text;
+}
+
+.selectorBuscable .desplegar {
+    position: absolute;
+    top: 50%;
+    right: .35rem;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: var(--radioChico);
+    background: transparent;
+    color: var(--colorTextoSuave);
+    cursor: pointer;
+}
+
+.selectorBuscable .desplegar .bi {
+    transition: transform var(--duracionRapida) var(--curvaSuave);
+}
+
+.selectorBuscable.abierto .desplegar .bi {
+    transform: rotate(180deg);
+}
+
+.selectorBuscable .listaOpciones {
+    max-height: 14rem;
+    margin: 0;
+    padding: .3rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: var(--bordeMarcado);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    box-shadow: 3px 3px 0 var(--colorTinta);
+    list-style: none;
+}
+
+.selectorBuscable .listaOpciones li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .5rem .7rem;
+    border-radius: .55rem;
+    font-size: .92rem;
+    cursor: pointer;
+}
+
+.selectorBuscable .listaOpciones li.activa {
+    background-color: var(--colorCelesteSuave);
+}
+
+.selectorBuscable .listaOpciones li[aria-selected="true"] {
+    font-weight: 700;
+}
+
+.selectorBuscable .listaOpciones li .bi {
+    color: var(--colorCoralOscuro);
+}
+
+/* "Todas las materias", "Sin elegir": la opción que borra la elección */
+.selectorBuscable .listaOpciones li.vacia {
+    font-style: italic;
+    color: var(--colorTextoSuave);
+}
+
+.selectorBuscable .listaOpciones .sinCoincidencias {
+    color: var(--colorTextoSuave);
+    cursor: default;
+}
+
+/* Etiquetas de lo elegido (selector múltiple) */
+.selectorBuscable .etiquetasElegidas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+
+.selectorBuscable .etiquetasElegidas .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .2rem;
+    padding: .3em .35em .3em .75em;
+    border: 1.5px solid var(--colorTinta);
+    color: var(--colorTinta);
+    font-size: .8rem;
+}
+
+.selectorBuscable .etiquetasElegidas button {
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.selectorBuscable .etiquetasElegidas button:hover {
+    background-color: rgba(17, 24, 39, .12);
+}
+
+/* ---------- Tick de cuenta verificada ---------- */
+.tickVerificado {
+    color: var(--colorCelesteOscuro);
+}
+
+/* ---------- Snackbar (UI Kit): aviso corto abajo de la pantalla ---------- */
+.snackbar {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    z-index: 1100;
+    max-width: min(30rem, calc(100vw - 2rem));
+    padding: .75rem 1.1rem;
+    translate: -50% 1rem;
+    opacity: 0;
+    border: var(--bordeMarcado);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorTinta);
+    box-shadow: 4px 4px 0 var(--colorCeleste);
+    color: #fff;
+    font-size: .92rem;
+    font-weight: 600;
+    text-align: center;
+    transition: opacity var(--duracionRapida) ease, translate var(--duracionRapida) var(--curvaSuave);
+}
+
+.snackbar.visible {
+    translate: -50% 0;
+    opacity: 1;
+}
+
+.snackbar[data-tipo="exito"] {
+    background-color: var(--colorExito);
+    box-shadow: 4px 4px 0 var(--colorTinta);
+}
+
+.snackbar[data-tipo="error"] {
+    background-color: var(--colorCoralOscuro);
+    box-shadow: 4px 4px 0 var(--colorTinta);
+}
+
+/* ---------- Aviso "Cuenta no verificada" (Pop up del UI Kit, debajo del header) ---------- */
+.avisoVerificacion {
+    padding-block: .75rem;
+    background-color: var(--colorAlertaSuave);
+    border-bottom: var(--bordeMarcado);
+}
+
+.avisoVerificacion .contenidoAviso {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem 1rem;
+}
+
+.avisoVerificacion .icono {
+    width: 2.25rem;
+    height: 2.25rem;
+    background-color: #FDE68A;
+    color: var(--colorAlerta);
+}
+
+.avisoVerificacion p {
+    flex: 1 1 16rem;
+    font-size: .9rem;
+    color: var(--colorTinta);
+}
+
+.avisoVerificacion p strong {
+    margin-right: .25rem;
+}
+
+
 /* ---------- Animaciones reutilizables ---------- */
 .animarEntrada {
     animation: aparecerDesdeAbajo .8s var(--curvaSuave) both;
@@ -2758,6 +2957,636 @@ fieldset {
 }
 
 
+/* ---------- 3.16 Perfil (propio y de otros usuarios) ---------- */
+.perfil {
+    position: relative;
+    padding-top: 0;
+    background-color: var(--colorFondo);
+    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .06) 1px, transparent 0);
+    background-size: 24px 24px;
+}
+
+/* Franja de color arriba: la tarjeta del encabezado se monta encima */
+.perfil .portadaPerfil {
+    height: clamp(6.5rem, 4rem + 8vw, 10rem);
+    border-bottom: var(--bordeMarcado);
+    background-color: var(--colorCoral);
+    background-image:
+        radial-gradient(circle at 1px 1px, rgba(255, 255, 255, .28) 1.5px, transparent 0),
+        linear-gradient(120deg, var(--colorCoral) 0%, #FF7A7A 45%, var(--colorCeleste) 140%);
+    background-size: 22px 22px, 100% 100%;
+}
+
+.perfil > .container {
+    position: relative;
+    margin-top: clamp(-5rem, -2.5rem - 4vw, -3rem);
+}
+
+.perfil .estadoPerfil {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding-block: 3rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.perfil .estadoPerfil .bi {
+    animation: girarCarga 1s linear infinite;
+}
+
+@keyframes girarCarga {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* El primer estado ("Cargando…") queda sobre la franja de color */
+.perfil > .container > .estadoPerfil {
+    color: #fff;
+}
+
+.perfil .contenidoPerfil {
+    display: grid;
+    gap: 1rem;
+}
+
+@media (width >= 1024px) {
+    .perfil .contenidoPerfil {
+        gap: 1.5rem;
+    }
+}
+
+/* Perfil inexistente */
+.perfil .sinPerfil {
+    align-items: center;
+    max-width: 32rem;
+    margin-inline: auto;
+    padding-block: 2.5rem;
+    border-color: var(--colorTinta);
+    box-shadow: var(--sombraMarcada);
+    text-align: center;
+}
+
+.perfil .sinPerfil h1 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+}
+
+.perfil .sinPerfil .boton {
+    align-self: center;
+}
+
+/* Aviso de verificación del perfil propio */
+.perfil .avisoPerfil {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: .9rem 1rem;
+    border-color: var(--colorTinta);
+    background-color: var(--colorAlertaSuave);
+    box-shadow: var(--sombraMarcada);
+}
+
+.perfil .avisoPerfil .icono {
+    background-color: #FDE68A;
+    color: var(--colorAlerta);
+}
+
+.perfil .avisoPerfil h2 {
+    font-size: clamp(1.1rem, 1rem + .5vw, 1.3rem);
+}
+
+.perfil .avisoPerfil p {
+    margin-top: .3rem;
+    color: var(--colorTinta);
+}
+
+.perfil .avisoPerfil .boton {
+    grid-column: 1 / -1;
+    justify-self: start;
+}
+
+@media (width >= 768px) {
+    .perfil .avisoPerfil {
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+    }
+
+    .perfil .avisoPerfil .boton {
+        grid-column: auto;
+    }
+}
+
+/* Lo que falta: etiquetas chicas */
+.perfil .faltantes,
+.dialogoEdicion .progresoVerificacion ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin-top: .65rem;
+    padding: 0;
+    list-style: none;
+}
+
+.perfil .faltantes li,
+.dialogoEdicion .progresoVerificacion li {
+    padding: .2rem .65rem;
+    border: 1.5px solid var(--colorAlerta);
+    border-radius: 999px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorAlerta);
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+/* Encabezado del perfil: foto, nombre y acciones */
+.perfil .cabeceraPerfil {
+    gap: 1.25rem;
+    border-color: var(--colorTinta);
+    box-shadow: var(--sombraMarcadaElevada);
+}
+
+.perfil .filaCabecera {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (width >= 768px) {
+    .perfil .filaCabecera {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+    }
+}
+
+.perfil .cabeceraPerfil .avatar {
+    --bs-avatar-size: clamp(5.5rem, 4.5rem + 3vw, 7.5rem);
+    --bs-avatar-font-size: clamp(1.8rem, 1.4rem + 1.4vw, 2.6rem);
+    border-width: 3px;
+    box-shadow: var(--sombraMarcada);
+}
+
+.perfil .titularPerfil {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.perfil .etiquetasTitular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.perfil .titularPerfil h1 {
+    margin-block: .5rem .35rem;
+    font-size: clamp(1.7rem, 1.2rem + 2vw, 2.6rem);
+    overflow-wrap: anywhere;
+}
+
+.perfil .titularPerfil h1 .tickVerificado {
+    margin-left: .15em;
+    font-size: .7em;
+    vertical-align: .1em;
+}
+
+.perfil .datosTitular {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+    font-size: .88rem;
+}
+
+.perfil .accionesPerfil {
+    gap: .6rem;
+}
+
+.perfil .accionesPerfil form {
+    display: contents;
+}
+
+/* En celulares el botón principal ocupa toda la fila y el resto se reparte abajo */
+@media (width < 768px) {
+    .perfil .accionesPerfil .boton {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .perfil .accionesPerfil .boton.principal {
+        flex-basis: 100%;
+    }
+
+    .perfil .accionesPerfil .boton.botonIcono {
+        flex: 1 1 2.75rem;
+    }
+}
+
+/* Botones solo con ícono (Me gusta, Reseña, Copiar enlace) */
+.boton.botonIcono {
+    width: 2.75rem;
+    padding-inline: 0;
+    justify-content: center;
+}
+
+/* Cifras: calificación, me gusta y precio por hora */
+.perfil .cifras {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin: 0;
+    padding: 1.25rem 0 0;
+    border-top: 2px dashed var(--colorBorde);
+    list-style: none;
+}
+
+.perfil .cifras li {
+    display: flex;
+    align-items: baseline;
+    gap: .4rem;
+    padding: .55rem .9rem;
+    border: var(--bordeMarcado);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorPapel);
+}
+
+.perfil .cifras .bi {
+    align-self: center;
+    color: var(--colorCoral);
+}
+
+.perfil .cifras strong {
+    font-family: var(--fuenteMarca);
+    font-size: 1.15rem;
+}
+
+.perfil .cifras span {
+    font-size: .82rem;
+    color: var(--colorTextoSuave);
+}
+
+/* Tarjetas de contenido: Sobre mí, Reseñas y Datos */
+.perfil .card h2 {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1.25rem;
+}
+
+.perfil .card h2 .bi {
+    color: var(--colorCoral);
+}
+
+/* "Sobre mí" es HTML del editor: se le da formato a lo que permite Quill */
+.perfil .descripcion {
+    font-size: .95rem;
+    line-height: 1.7;
+    color: var(--colorTexto);
+    overflow-wrap: anywhere;
+}
+
+.perfil .descripcion > * + * {
+    margin-top: .6rem;
+}
+
+/* ".card p" pone gris y achica los párrafos: la descripción conserva su texto */
+.perfil .descripcion p {
+    font-size: inherit;
+    color: inherit;
+}
+
+.perfil .descripcion ul,
+.perfil .descripcion ol {
+    padding-left: 1.4rem;
+}
+
+.perfil .descripcion ul {
+    list-style: disc;
+}
+
+.perfil .descripcion ol {
+    list-style: decimal;
+}
+
+.perfil .descripcion.vacio {
+    font-size: .92rem;
+}
+
+.perfil .descripcion blockquote {
+    padding: .4rem .9rem;
+    border-left: 4px solid var(--colorCeleste);
+    background-color: var(--colorCelesteSuave);
+    border-radius: 0 .5rem .5rem 0;
+}
+
+.perfil .descripcion a {
+    color: var(--colorCoralOscuro);
+    font-weight: 600;
+}
+
+/* Texto de "todavía no hay nada" en descripción, reseñas y datos */
+.perfil .vacio {
+    font-style: italic;
+    color: var(--colorTextoSuave);
+}
+
+.perfil .resenas {
+    display: grid;
+    gap: .75rem;
+}
+
+.perfil .resena {
+    padding: .9rem 1rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioMedio);
+}
+
+.perfil .resena header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .35rem .75rem;
+}
+
+.perfil .resena a {
+    font-weight: 700;
+    color: var(--colorTinta);
+}
+
+.perfil .resena a:hover {
+    color: var(--colorCoralOscuro);
+}
+
+.perfil .estrellas {
+    display: inline-flex;
+    gap: .1rem;
+    color: #F59E0B;
+}
+
+.perfil .resena p {
+    margin-top: .4rem;
+    overflow-wrap: anywhere;
+}
+
+.perfil .datosPerfil .grupo + .grupo {
+    margin-top: 1rem;
+}
+
+.perfil .datosPerfil h3 {
+    margin-bottom: .45rem;
+    font-size: .78rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--colorTextoSuave);
+}
+
+.perfil .datosPerfil h3 .bi {
+    color: var(--colorCoral);
+}
+
+.perfil .datosPerfil .etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.perfil .reportarPerfil {
+    align-self: center;
+    font-size: .85rem;
+    color: var(--colorTextoSuave);
+}
+
+.perfil .reportarPerfil:hover {
+    color: var(--colorCoralOscuro);
+}
+
+/* ---------- Modal "Editar perfil" ---------- */
+.dialog.dialogoEdicion {
+    --bs-dialog-width: min(42rem, 94vw);
+}
+
+/* El cuerpo scrollea y el encabezado y los botones quedan fijos */
+.dialogoEdicion form {
+    display: flex;
+    flex-direction: column;
+    max-height: min(88vh, 54rem);
+}
+
+.dialogoEdicion .dialog-body {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.dialogoEdicion .estadoPerfil {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding-block: 1.5rem;
+    color: var(--colorTextoSuave);
+}
+
+.dialogoEdicion .estadoPerfil .bi {
+    animation: girarCarga 1s linear infinite;
+}
+
+.dialogoEdicion .contenidoEdicion {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
+}
+
+/* Progreso de la verificación: amarillo si falta algo, verde si ya está */
+.dialogoEdicion .progresoVerificacion {
+    padding: .8rem 1rem;
+    border: 2px solid var(--colorAlerta);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorAlertaSuave);
+}
+
+.dialogoEdicion .progresoVerificacion p {
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--colorTinta);
+}
+
+.dialogoEdicion .progresoVerificacion ul {
+    margin-top: .5rem;
+}
+
+.dialogoEdicion .progresoVerificacion.verificada {
+    border-color: var(--colorExito);
+    background-color: var(--colorExitoSuave);
+}
+
+/* Pestañas: Modificar perfil / Modificar cuenta */
+.dialogoEdicion .pestanasEdicion {
+    --bs-nav-pills-bg: var(--colorSuperficie);
+    --bs-nav-pills-padding: .3rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .25rem;
+    border: var(--bordeMarcado);
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 var(--colorTinta);
+}
+
+.dialogoEdicion .pestanasEdicion .nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    min-width: 0;
+    padding: .55rem .5rem;
+    font-family: var(--fuenteMarca);
+    font-size: clamp(.82rem, .75rem + .4vw, .95rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--colorTinta);
+}
+
+/* En celulares el ícono de la pestaña sobra: queda solo el texto */
+@media (width < 480px) {
+    .dialogoEdicion .pestanasEdicion .nav-link .bi {
+        display: none;
+    }
+}
+
+.dialogoEdicion .pestanasEdicion .nav-link:hover {
+    background-color: var(--colorCelesteSuave);
+}
+
+.dialogoEdicion .pestanasEdicion .nav-link.active {
+    background-color: var(--colorCoral);
+    color: #fff;
+}
+
+/* Campos en vertical */
+.dialogoEdicion .tab-pane {
+    display: none;
+    gap: 1rem;
+}
+
+.dialogoEdicion .tab-pane.active {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.dialogoEdicion .form-field {
+    display: grid;
+    gap: .35rem;
+}
+
+.dialogoEdicion .form-field small.excedido {
+    font-weight: 700;
+    color: var(--colorCoralOscuro);
+}
+
+/* Editor de texto enriquecido (Quill) con el borde del sitio */
+.dialogoEdicion .ql-toolbar.ql-snow {
+    border: 2px solid #D1D5DB;
+    border-bottom: 0;
+    border-radius: var(--radioChico) var(--radioChico) 0 0;
+    font-family: var(--fuenteTexto);
+}
+
+.dialogoEdicion .ql-container.ql-snow {
+    border: 2px solid #D1D5DB;
+    border-radius: 0 0 var(--radioChico) var(--radioChico);
+    font-family: var(--fuenteTexto);
+    font-size: .95rem;
+}
+
+.dialogoEdicion .editorTexto .ql-editor {
+    min-height: 9rem;
+    max-height: 18rem;
+}
+
+/* ".dialog .dialog-body p" pone gris los párrafos: el texto del editor queda oscuro */
+.dialogoEdicion .ql-editor p {
+    color: var(--colorTexto);
+}
+
+.dialogoEdicion .editorTexto:focus-within,
+.dialogoEdicion .ql-toolbar.ql-snow:has(+ .editorTexto:focus-within) {
+    border-color: var(--colorTinta);
+}
+
+/* Foto de perfil: vista previa en círculo (componente "Change profile picture" del UI Kit) */
+.dialogoEdicion .vistaPreviaFoto {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dialogoEdicion .vistaPreviaFoto .avatar {
+    --bs-avatar-size: 5.5rem;
+    --bs-avatar-font-size: 1.8rem;
+    border-width: 3px;
+    box-shadow: var(--sombraMarcada);
+}
+
+.dialogoEdicion .vistaPreviaFoto > div {
+    display: grid;
+    justify-items: start;
+    gap: .4rem;
+}
+
+.dialogoEdicion .vistaPreviaFoto label.boton {
+    cursor: pointer;
+}
+
+.dialogoEdicion .vistaPreviaFoto:has(input:focus-visible) label.boton {
+    outline: 3px solid var(--colorCeleste);
+    outline-offset: 2px;
+}
+
+.dialogoEdicion .estadoFotoDni {
+    font-size: .85rem;
+    color: var(--colorTextoSuave);
+}
+
+.dialogoEdicion .estadoFotoDni.cargada {
+    font-weight: 600;
+    color: var(--colorExito);
+}
+
+/* Títulos del profesor */
+.dialogoEdicion .listaTitulos {
+    display: grid;
+    gap: .35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dialogoEdicion .listaTitulos:empty {
+    display: none;
+}
+
+.dialogoEdicion .listaTitulos li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .45rem .5rem .45rem .8rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    font-size: .9rem;
+}
+
+.dialogoEdicion .agregarTitulo {
+    display: flex;
+    gap: .5rem;
+}
+
+.dialogoEdicion .agregarTitulo .form-control {
+    flex: 1;
+    min-width: 0;
+}
+
+
 /* =========================================================
    4) FOOTER
    ========================================================= */
@@ -2872,15 +3701,4 @@ fieldset {
         opacity: 1;
         transform: none;
     }
-}
-
-
-/* ---------- Perfil del usuario ---------- */
-.perfilUsuario {
-    padding-block: clamp(2rem, 3.5vw, 3rem);
-}
-
-.perfilUsuario .cerrarSesion .boton {
-    padding: .9rem 1.75rem;
-    font-size: 1.05rem;
 }

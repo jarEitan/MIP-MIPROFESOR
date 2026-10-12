@@ -9,7 +9,7 @@ public class SesionController : Controller
 
     public IActionResult IniciarSesion()
     {
-        if (HttpContext.Session.GetString("idUsuario") != null) return RedirectToAction("Perfil");
+        if (HttpContext.Session.GetString("idUsuario") != null) return RedirectToAction("Perfil", "Home");
         return View();
     }
 
@@ -52,7 +52,7 @@ public class SesionController : Controller
 
     public IActionResult Registrarse(string? rol)
     {
-        if (HttpContext.Session.GetString("idUsuario") != null) return RedirectToAction("Perfil");
+        if (HttpContext.Session.GetString("idUsuario") != null) return RedirectToAction("Perfil", "Home");
         ViewBag.rol = (rol == "profesor" ? "profesor" : "alumno");
         return View();
     }
@@ -118,16 +118,11 @@ public class SesionController : Controller
         }
 
         guardarSesion(cuenta);
-        return RedirectToAction("Perfil");
+        return RedirectToAction("Perfil", "Home");
     }
 
-    // ================= PERFIL Y CIERRE DE SESIÓN =================
-
-    public IActionResult Perfil()
-    {
-        if (HttpContext.Session.GetString("idUsuario") == null) return RedirectToAction("IniciarSesion");
-        return View();
-    }
+    // ================= CIERRE DE SESIÓN =================
+    // El perfil (propio y de otros usuarios) está en HomeController.Perfil
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -138,7 +133,8 @@ public class SesionController : Controller
     }
 
     // ================= SESIÓN =================
-    // Claves: idUsuario, nombre, apellido, tipoUsuario (y fotoPerfil si tiene)
+    // Claves: idUsuario, nombre, apellido, tipoUsuario, fotoPerfil (si tiene),
+    // verificado ("true"/"false") y datosFaltantes (texto del aviso "Cuenta no verificada")
 
     private void guardarSesion(ResultadoSesion cuenta)
     {
@@ -147,5 +143,16 @@ public class SesionController : Controller
         HttpContext.Session.SetString("apellido", cuenta.apellido);
         HttpContext.Session.SetString("tipoUsuario", cuenta.tipoUsuario);
         HttpContext.Session.SetString("fotoPerfil", cuenta.fotoPerfil ?? "");
+
+        // Si la base no responde acá, el aviso simplemente no muestra el detalle de lo que falta
+        List<string> faltantes = new List<string>();
+        try
+        {
+            faltantes = new BD().obtenerFaltantesVerificacion(cuenta.id);
+        }
+        catch (Exception)
+        {
+        }
+        VerificacionCuenta.guardarEnSesion(HttpContext.Session, cuenta.verificado, faltantes);
     }
 }

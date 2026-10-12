@@ -1,0 +1,290 @@
+@* Perfil de un usuario. La página es el esqueleto: inicializarPerfil() (site.js) trae los datos con
+   fetch a /Perfiles/ObtenerPerfil/{id} y completa cada parte.
+   - Perfil propio: aviso de verificación, "Editar perfil" (modal), "Copiar enlace" y "Cerrar sesión".
+   - Perfil de otro: botones sociales (todavía sin funcionalidad) y "Copiar enlace". *@
+@{
+    int idPerfil = ViewBag.idPerfil;
+    bool esPerfilPropio = ViewBag.esPerfilPropio;
+    bool abrirEdicion = ViewBag.abrirEdicion ?? false;
+    bool haySesion = Context.Session.GetString("idUsuario") != null;
+    bool esProfesor = Context.Session.GetString("tipoUsuario") == "profesor";
+    ViewData["Title"] = esPerfilPropio ? "Mi perfil" : "Perfil";
+}
+
+@* Editor de texto enriquecido (Quill 2, local en wwwroot/lib/quill): solo en el perfil propio *@
+@section Scripts {
+    @if (esPerfilPropio)
+    {
+        <link rel="stylesheet" href="~/lib/quill/quill.snow.css" />
+        <script src="~/lib/quill/quill.js"></script>
+    }
+}
+
+<!-- ================= PERFIL ================= -->
+<section class="perfil" id="perfil" data-id-perfil="@idPerfil" data-perfil-propio="@(esPerfilPropio ? "true" : "false")"
+         data-hay-sesion="@(haySesion ? "true" : "false")" data-editar-al-cargar="@(abrirEdicion ? "true" : "false")">
+    <div class="portadaPerfil" aria-hidden="true"></div>
+
+    <div class="container">
+        <p class="estadoPerfil" id="estadoPerfil" role="status">
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando perfil…
+        </p>
+
+        @* Se muestra si el ID de la URL no corresponde a ningún alumno o profesor *@
+        <div class="card estatica sinPerfil" id="perfilInexistente" hidden>
+            <span class="icono"><i class="bi bi-person-x" aria-hidden="true"></i></span>
+            <h1>Este perfil no existe</h1>
+            <p>Revisá que el enlace esté completo. Puede que la cuenta se haya dado de baja.</p>
+            <a class="boton principal" asp-controller="Home" asp-action="Index">Volver al inicio</a>
+        </div>
+
+        <div class="contenidoPerfil" id="contenidoPerfil" hidden>
+            @if (esPerfilPropio)
+            {
+                @* Aviso de cuenta no verificada (Pop up del UI Kit) con todo lo que falta *@
+                <div class="card estatica avisoPerfil" id="avisoVerificacionPerfil" hidden>
+                    <span class="icono"><i class="bi bi-shield-exclamation" aria-hidden="true"></i></span>
+                    <div>
+                        <h2>Tu cuenta todavía no está verificada</h2>
+                        <p>Completá estos datos y se verifica sola. Las cuentas verificadas llevan el tick <i class="bi bi-patch-check-fill tickVerificado" aria-hidden="true"></i> al lado del nombre.</p>
+                        <ul class="faltantes" id="faltantesPerfil"></ul>
+                    </div>
+                    <button class="boton principal" type="button" data-abrir-edicion data-bs-toggle="dialog" data-bs-target="#dialogoEditarPerfil">
+                        <i class="bi bi-pencil-square" aria-hidden="true"></i> Completar mis datos
+                    </button>
+                </div>
+            }
+
+            <!-- Encabezado: foto, nombre, tipo de usuario, acciones y cifras -->
+            <div class="card estatica cabeceraPerfil">
+                <div class="filaCabecera">
+                    <span class="avatar theme-primary" id="avatarPerfil" aria-hidden="true"></span>
+
+                    <div class="titularPerfil">
+                        <div class="etiquetasTitular">
+                            <span class="pildora" id="tipoPerfil"></span>
+                            <span class="badge badge-subtle theme-success" id="estadoVerificadoPerfil" hidden>
+                                <i class="bi bi-patch-check-fill" aria-hidden="true"></i> Cuenta verificada
+                            </span>
+                        </div>
+                        <h1>
+                            <span id="nombrePerfil"></span>
+                            <i class="bi bi-patch-check-fill tickVerificado" id="tickPerfil" title="Cuenta verificada" aria-label="Cuenta verificada" hidden></i>
+                        </h1>
+                        <p class="datosTitular" id="datosTitularPerfil"></p>
+                    </div>
+                </div>
+
+                <div class="acciones accionesPerfil">
+                    @if (esPerfilPropio)
+                    {
+                        <button class="boton principal" type="button" data-abrir-edicion data-bs-toggle="dialog" data-bs-target="#dialogoEditarPerfil">
+                            <i class="bi bi-pencil-square" aria-hidden="true"></i> Editar perfil
+                        </button>
+                        <button class="boton contorno" type="button" id="botonCopiarEnlace">
+                            <i class="bi bi-link-45deg" aria-hidden="true"></i> <span>Copiar enlace</span>
+                        </button>
+                        <form method="post" asp-controller="Sesion" asp-action="CerrarSesion">
+                            <button class="boton oscuro" type="submit"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Cerrar sesión</button>
+                        </form>
+                    }
+                    else
+                    {
+                        @* Botones sociales: salen de las tablas Likes, Amigos, Chats/Mensajes, Resenas, Clases y
+                           Consultas_Soporte. Por ahora muestran "Muy pronto" (sin sesión llevan a Iniciar sesión). *@
+                        <button class="boton principal" type="button" data-proximamente="Pedir clase" data-solo-profesor hidden>
+                            <i class="bi bi-calendar-plus" aria-hidden="true"></i> Pedir clase
+                        </button>
+                        <button class="boton contorno" type="button" data-proximamente="Enviar mensaje">
+                            <i class="bi bi-chat-dots" aria-hidden="true"></i> Mensaje
+                        </button>
+                        <button class="boton contorno" type="button" data-proximamente="Agregar amigo">
+                            <i class="bi bi-person-plus" aria-hidden="true"></i> Agregar amigo
+                        </button>
+                        <button class="boton contorno botonIcono" type="button" data-proximamente="Me gusta" aria-label="Me gusta" title="Me gusta">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                        </button>
+                        <button class="boton contorno botonIcono" type="button" data-proximamente="Dejar reseña" aria-label="Dejar reseña" title="Dejar reseña">
+                            <i class="bi bi-star" aria-hidden="true"></i>
+                        </button>
+                        <button class="boton contorno botonIcono" type="button" id="botonCopiarEnlace" aria-label="Copiar enlace" title="Copiar enlace">
+                            <i class="bi bi-link-45deg" aria-hidden="true"></i> <span class="visually-hidden">Copiar enlace</span>
+                        </button>
+                    }
+                </div>
+
+                <ul class="cifras" id="cifrasPerfil"></ul>
+            </div>
+
+            <div class="row g-3 lg:g-4">
+                <div class="col-12 lg:col-8 d-flex flex-column gap-3 lg:gap-4">
+                    <article class="card estatica">
+                        <h2><i class="bi bi-person-lines-fill" aria-hidden="true"></i> Sobre mí</h2>
+                        <div class="descripcion" id="descripcionPerfil"></div>
+                    </article>
+
+                    <article class="card estatica">
+                        <h2><i class="bi bi-star" aria-hidden="true"></i> Reseñas</h2>
+                        <div class="resenas" id="resenasPerfil"></div>
+                    </article>
+                </div>
+
+                <div class="col-12 lg:col-4 d-flex flex-column gap-3 lg:gap-4">
+                    <aside class="card estatica datosPerfil">
+                        <h2><i class="bi bi-card-checklist" aria-hidden="true"></i> Datos</h2>
+                        <div id="datosPerfil"></div>
+                    </aside>
+
+                    @if (!esPerfilPropio)
+                    {
+                        <a class="reportarPerfil" href="#" data-proximamente="Reportar perfil">
+                            <i class="bi bi-flag" aria-hidden="true"></i> Reportar este perfil
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (esPerfilPropio)
+{
+    <!-- ================= MODAL: EDITAR PERFIL (Dialog de Bootstrap 6) ================= -->
+    @* Dos pestañas y un solo botón Guardar: todo se guarda junto con el SP guardarPerfilCompleto.
+       Las opciones (materias, niveles, modalidades, colegios) y los datos llegan por fetch al abrirlo. *@
+    <dialog class="dialog dialogoEdicion" id="dialogoEditarPerfil" aria-labelledby="tituloEditarPerfil">
+        <form id="formularioEditarPerfil" method="post" asp-controller="Perfiles" asp-action="GuardarPerfil" enctype="multipart/form-data" onsubmit="return guardarPerfil()" novalidate>
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="tituloEditarPerfil">Editar perfil</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="dialog-body">
+                <p class="estadoPerfil" id="estadoEdicion" role="status"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tus datos…</p>
+
+                <div class="contenidoEdicion" id="contenidoEdicion" hidden>
+                    <!-- Progreso de la verificación -->
+                    <div class="progresoVerificacion" id="progresoVerificacion"></div>
+
+                    <div class="nav nav-pills pestanasEdicion" role="tablist">
+                        <button class="nav-link active" id="botonPestanaPerfil" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#pestanaPerfil" aria-controls="pestanaPerfil" aria-selected="true">
+                            <i class="bi bi-person-badge" aria-hidden="true"></i> Modificar perfil
+                        </button>
+                        <button class="nav-link" id="botonPestanaCuenta" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#pestanaCuenta" aria-controls="pestanaCuenta" aria-selected="false">
+                            <i class="bi bi-person-gear" aria-hidden="true"></i> Modificar cuenta
+                        </button>
+                    </div>
+
+                    <div class="tab-content">
+                        <!-- ===== Pestaña: Modificar perfil (lo que ven los demás) ===== -->
+                        <div class="tab-pane active" id="pestanaPerfil" role="tabpanel" aria-labelledby="botonPestanaPerfil" tabindex="0">
+                            <div class="form-field">
+                                <label id="etiquetaDescripcion">Sobre mí</label>
+                                <div class="editorTexto" id="editorDescripcion" aria-labelledby="etiquetaDescripcion"></div>
+                                <input type="hidden" id="edicionDescripcion" name="descripcion" />
+                                <small id="contadorDescripcion">0 / 1000</small>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="edicionEscuelas">@(esProfesor ? "Colegios en los que das clase" : "Tu colegio")</label>
+                                <select class="form-control" id="edicionEscuelas" data-buscable data-nombre-ids="idsEscuelas"
+                                        data-placeholder="@(esProfesor ? "Buscá y elegí colegios" : "Buscá tu colegio")" multiple="@(esProfesor ? "multiple" : null)"></select>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="edicionNiveles">@(esProfesor ? "Niveles en los que enseñás" : "Tu nivel")</label>
+                                <select class="form-control" id="edicionNiveles" data-buscable data-nombre-ids="idsNiveles"
+                                        data-placeholder="@(esProfesor ? "Elegí uno o más niveles" : "Elegí tu nivel")" multiple="@(esProfesor ? "multiple" : null)"></select>
+                            </div>
+
+                            @if (esProfesor)
+                            {
+                                <div class="form-field">
+                                    <label for="edicionMaterias">Materias que enseñás</label>
+                                    <select class="form-control" id="edicionMaterias" data-buscable data-nombre-ids="idsMaterias" data-placeholder="Buscá y elegí materias" multiple></select>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="edicionModalidades">Modalidad</label>
+                                    <select class="form-control" id="edicionModalidades" data-buscable data-nombre-ids="idsModalidades" data-placeholder="Presencial, virtual o las dos" multiple></select>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="edicionPrecioHora">Precio por hora ($)</label>
+                                    <input class="form-control" type="number" id="edicionPrecioHora" name="precioHora" min="0" max="10000000" step="100" inputmode="numeric" placeholder="Ej: 8000" />
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="nuevoTitulo">Títulos y estudios</label>
+                                    <ul class="listaTitulos" id="listaTitulos"></ul>
+                                    <div class="agregarTitulo">
+                                        <input class="form-control" type="text" id="nuevoTitulo" maxlength="100" placeholder="Ej: Profesorado de Matemática (UBA)" />
+                                        <button class="boton contorno chico" type="button" id="botonAgregarTitulo"><i class="bi bi-plus-lg" aria-hidden="true"></i> Agregar</button>
+                                    </div>
+                                    <small>Hasta 10 títulos.</small>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- ===== Pestaña: Modificar cuenta (datos personales y documentación) ===== -->
+                        <div class="tab-pane" id="pestanaCuenta" role="tabpanel" aria-labelledby="botonPestanaCuenta" tabindex="0">
+                            @* "Change profile picture" del UI Kit: vista previa en círculo. Se guarda como WEBP 100x100. *@
+                            <div class="form-field fotoPerfilEdicion">
+                                <label for="edicionFotoPerfil">Foto de perfil</label>
+                                <div class="vistaPreviaFoto">
+                                    <span class="avatar theme-primary" id="vistaPreviaFotoPerfil" aria-hidden="true"></span>
+                                    <div>
+                                        <label class="boton contorno chico" for="edicionFotoPerfil"><i class="bi bi-camera" aria-hidden="true"></i> Elegir foto</label>
+                                        <input class="visually-hidden" type="file" id="edicionFotoPerfil" name="archivoFotoPerfil" accept="image/jpeg,image/png,image/webp" />
+                                        <small>JPG, PNG o WEBP de hasta 5 MB. Se recorta al centro y se guarda en 100 × 100.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="edicionNombre">Nombre</label>
+                                <input class="form-control" type="text" id="edicionNombre" name="nombre" maxlength="50" autocomplete="given-name" />
+                            </div>
+                            <div class="form-field">
+                                <label for="edicionApellido">Apellido</label>
+                                <input class="form-control" type="text" id="edicionApellido" name="apellido" maxlength="50" autocomplete="family-name" />
+                            </div>
+                            <div class="form-field">
+                                <label for="edicionMail">Correo electrónico</label>
+                                <input class="form-control" type="email" id="edicionMail" name="mail" maxlength="150" autocomplete="email" />
+                                <small>Es el que usás para iniciar sesión.</small>
+                            </div>
+                            <div class="form-field">
+                                <label for="edicionFechaNacimiento">Fecha de nacimiento</label>
+                                <input class="form-control" type="date" id="edicionFechaNacimiento" name="fechaNacimiento" min="1900-01-01" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            </div>
+                            <div class="form-field">
+                                <label for="edicionDni">DNI</label>
+                                <input class="form-control" type="text" id="edicionDni" name="dni" maxlength="12" inputmode="numeric" placeholder="Ej: 45123456" />
+                                <small>Solo lo ve el equipo de MiProfesor.</small>
+                            </div>
+                            <div class="form-field">
+                                <label for="edicionDireccion">Dirección</label>
+                                <input class="form-control" type="text" id="edicionDireccion" name="direccion" maxlength="200" autocomplete="street-address" />
+                                <small>No se muestra en tu perfil.</small>
+                            </div>
+                            <div class="form-field">
+                                <label for="edicionFotoDni">Foto del DNI</label>
+                                <p class="estadoFotoDni" id="estadoFotoDni"></p>
+                                <input class="form-control" type="file" id="edicionFotoDni" name="archivoFotoDni" accept="image/jpeg,image/png,image/webp" />
+                                <small>Se guarda en privado: nadie más puede verla.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="mensajeError" id="mensajeEditarPerfil" role="alert"></p>
+            </div>
+
+            <div class="dialog-footer">
+                <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Cancelar</button>
+                <button type="submit" class="boton principal chico" id="botonGuardarPerfil"><i class="bi bi-check2" aria-hidden="true"></i> Guardar</button>
+            </div>
+        </form>
+    </dialog>
+}
