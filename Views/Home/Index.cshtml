@@ -36,8 +36,8 @@
                 <p class="mensajeError" id="mensajeErrorBusqueda" role="alert"></p>
 
                 <div class="acciones animarEntrada" style="--retraso: .4s">
-                    <a class="boton secundario" asp-controller="Home" asp-action="Registrarse" asp-route-rol="alumno">Soy alumno</a>
-                    <a class="boton contorno" asp-controller="Home" asp-action="Registrarse" asp-route-rol="profesor">Quiero enseñar</a>
+                    <a class="boton secundario" asp-controller="Sesion" asp-action="Registrarse" asp-route-rol="alumno">Soy alumno</a>
+                    <a class="boton contorno" asp-controller="Sesion" asp-action="Registrarse" asp-route-rol="profesor">Quiero enseñar</a>
                 </div>
             </div>
 
@@ -146,7 +146,7 @@
                         <li>Chat directo para coordinar horarios</li>
                         <li>Historial de todas tus clases</li>
                     </ul>
-                    <a class="boton principal" asp-controller="Home" asp-action="Registrarse" asp-route-rol="alumno">Registrarme como alumno</a>
+                    <a class="boton principal" asp-controller="Sesion" asp-action="Registrarse" asp-route-rol="alumno">Registrarme como alumno</a>
                 </div>
             </div>
             <div class="col-12 lg:col-6">
@@ -160,7 +160,7 @@
                         <li>Administrá clases, cancelaciones y reubicaciones</li>
                         <li>Recibí reseñas de tus alumnos</li>
                     </ul>
-                    <a class="boton secundario" asp-controller="Home" asp-action="Registrarse" asp-route-rol="profesor">Registrarme como profesor</a>
+                    <a class="boton secundario" asp-controller="Sesion" asp-action="Registrarse" asp-route-rol="profesor">Registrarme como profesor</a>
                 </div>
             </div>
         </div>
@@ -335,7 +335,7 @@
                 <p>Sumate a MiProfesor y empezá a aprender con docentes de tu propia comunidad educativa.</p>
             </div>
             <div class="col-12 lg:col-4 acciones">
-                <a class="boton secundario" asp-controller="Home" asp-action="Registrarse">Crear cuenta gratis</a>
+                <a class="boton secundario" asp-controller="Sesion" asp-action="Registrarse">Crear cuenta gratis</a>
                 <a class="boton claro" asp-controller="Home" asp-action="Catalogo">Ver catálogo</a>
             </div>
         </div>

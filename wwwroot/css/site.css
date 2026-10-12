@@ -412,9 +412,21 @@ main {
     animation: pulsoExpansivo 1.4s cubic-bezier(0, 0, .2, 1) infinite;
 }
 
-/* Menú del usuario */
+/* Nombre y foto del usuario: llevan al perfil */
 .encabezado .usuario {
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--colorTinta);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.encabezado .usuario .nombreUsuario {
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .encabezado .usuario .avatar {
@@ -866,6 +878,13 @@ mark {
     --bs-avatar-font-weight: 800;
     border: 2px solid var(--colorTinta);
     flex-shrink: 0;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
 }
 
 .avatar.avatar-xl {
@@ -1866,8 +1885,164 @@ fieldset {
     font-size: .9rem;
 }
 
-/* Elección de rol: dos tarjetas-radio */
+/* Encabezado de las pantallas de acceso */
+.acceso .encabezadoAcceso {
+    display: grid;
+    gap: .6rem;
+}
+
+.acceso .encabezadoAcceso .pildora {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    justify-self: start;
+}
+
+.acceso .encabezadoAcceso p {
+    color: var(--colorTextoSuave);
+}
+
+/* Campo con ícono a la izquierda (y botón de ver contraseña a la derecha) */
+.acceso .campoConIcono {
+    position: relative;
+}
+
+.acceso .campoConIcono > .bi {
+    position: absolute;
+    top: 50%;
+    left: .95rem;
+    transform: translateY(-50%);
+    font-size: 1.05rem;
+    color: var(--colorTextoSuave);
+    pointer-events: none;
+}
+
+.acceso .campoConIcono .form-control {
+    padding-left: 2.6rem;
+}
+
+.acceso .campoConIcono:focus-within > .bi {
+    color: var(--colorCoralOscuro);
+}
+
+.acceso .campoConIcono .verContrasena {
+    position: absolute;
+    top: 50%;
+    right: .4rem;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: var(--radioChico);
+    background: transparent;
+    color: var(--colorTextoSuave);
+    cursor: pointer;
+}
+
+.acceso .campoConIcono .verContrasena:hover {
+    background-color: var(--colorCelesteSuave);
+    color: var(--colorTinta);
+}
+
+.acceso .campoConIcono:has(.verContrasena) .form-control {
+    padding-right: 2.9rem;
+}
+
+/* Nombre y apellido lado a lado */
+.acceso .filaDoble {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+}
+
+@media (width < 480px) {
+    .acceso .filaDoble {
+        grid-template-columns: 1fr;
+    }
+}
+
+.acceso .paso {
+    display: grid;
+    gap: .75rem;
+}
+
+.acceso .datosCuenta {
+    gap: .9rem;
+}
+
+.acceso .datosCuenta .tituloPaso {
+    margin-bottom: 0;
+}
+
+/* Botón de ancho completo */
+.acceso .boton.completo {
+    width: 100%;
+    padding-block: .8rem;
+    font-size: 1.05rem;
+}
+
+/* Pasos numerados del registro */
+.acceso .tituloPaso {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-family: var(--fuenteMarca);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--colorTinta);
+}
+
+.acceso .numeroPaso {
+    display: inline-grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: var(--bordeMarcado);
+    border-radius: 50%;
+    background-color: var(--colorCeleste);
+    font-size: .8rem;
+    font-weight: 800;
+}
+
+.acceso .terminos {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.acceso .terminos label {
+    font-weight: 600;
+}
+
+/* Separador "¿Primera vez...?" y accesos al registro */
+.acceso .separador {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.acceso .separador::before,
+.acceso .separador::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background-color: #E5E7EB;
+}
+
+.acceso .opcionesRegistro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+}
+
+/* Elección de rol: dos tarjetas grandes */
 .acceso .roles {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     gap: .75rem;
 }
@@ -1876,13 +2051,13 @@ fieldset {
     position: relative;
     display: grid;
     justify-items: center;
-    gap: .15rem;
-    padding: .9rem .5rem;
+    gap: .2rem;
+    padding: 1.1rem .5rem;
     border: 2px solid #D1D5DB;
     border-radius: var(--radioMedio);
     text-align: center;
     cursor: pointer;
-    transition: border-color var(--duracionRapida) ease, background-color var(--duracionRapida) ease, box-shadow var(--duracionRapida) var(--curvaSuave);
+    transition: border-color var(--duracionRapida) ease, background-color var(--duracionRapida) ease, box-shadow var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaSuave);
 }
 
 .acceso .roles input {
@@ -1892,17 +2067,24 @@ fieldset {
 }
 
 .acceso .roles .bi {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     color: var(--colorCoralOscuro);
 }
 
+.acceso .roles strong {
+    font-family: var(--fuenteMarca);
+    font-size: 1rem;
+}
+
 .acceso .roles span {
-    font-size: .78rem;
+    font-size: .8rem;
+    font-weight: 500;
     color: var(--colorTextoSuave);
 }
 
 .acceso .roles label:hover {
     border-color: var(--colorTinta);
+    transform: translateY(-2px);
 }
 
 .acceso .roles label:has(input:checked) {
@@ -1911,9 +2093,32 @@ fieldset {
     box-shadow: 3px 3px 0 var(--colorTinta);
 }
 
+/* Tilde en la tarjeta elegida */
+.acceso .roles label:has(input:checked)::after {
+    content: "✓";
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    display: grid;
+    place-items: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: var(--bordeMarcado);
+    border-radius: 50%;
+    background-color: var(--colorCoral);
+    font-size: .75rem;
+    font-weight: 800;
+    color: #fff;
+}
+
 .acceso .roles label:has(input:focus-visible) {
     outline: 3px solid var(--colorCeleste);
     outline-offset: 3px;
+}
+
+/* El panel ilustrado del registro cambia según el rol (atributo hidden) */
+.acceso .ilustracion[hidden] {
+    display: none;
 }
 
 /* Panel ilustrado (se oculta en pantallas muy chicas para ir directo al formulario) */
@@ -2667,4 +2872,15 @@ fieldset {
         opacity: 1;
         transform: none;
     }
+}
+
+
+/* ---------- Perfil del usuario ---------- */
+.perfilUsuario {
+    padding-block: clamp(2rem, 3.5vw, 3rem);
+}
+
+.perfilUsuario .cerrarSesion .boton {
+    padding: .9rem 1.75rem;
+    font-size: 1.05rem;
 }

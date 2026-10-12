@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Mi perfil";
+    string nombre = Context.Session.GetString("nombre") ?? "";
+    string apellido = Context.Session.GetString("apellido") ?? "";
+    string tipoUsuario = Context.Session.GetString("tipoUsuario") ?? "";
+    string nombreDelTipo = tipoUsuario == "profesor" ? "Profesor" : tipoUsuario == "admin" ? "Administrador" : "Alumno";
+}
+
+<!-- ================= PERFIL ================= -->
+<section class="perfilUsuario">
+    <div class="container">
+        <div class="d-flex flex-column sm:flex-row sm:align-items-start justify-content-between gap-3">
+            <div class="d-flex flex-column sm:flex-row sm:align-items-center gap-3 sm:gap-4">
+                <partial name="_avatarUsuario" model='"avatar-xl"' />
+                <div>
+                    <span class="pildora">@nombreDelTipo</span>
+                    <h1>@nombre @apellido</h1>
+                    <p>Tu cuenta está creada. Para verificarla vamos a pedirte algunos datos más adelante.</p>
+                </div>
+            </div>
+
+            @* Botón grande arriba a la derecha del main *@
+            <form method="post" asp-controller="Sesion" asp-action="CerrarSesion" class="cerrarSesion">
+                <button class="boton principal" type="submit"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Cerrar sesión</button>
+            </form>
+        </div>
+    </div>
+</section>

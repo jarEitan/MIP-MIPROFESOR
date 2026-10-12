@@ -48,33 +48,11 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Registrarse(string? rol)
-    {
-        // TODO BD: al enviar el formulario, crear la cuenta con BD.crearCuenta(...) y guardar las claves de sesión.
-        ViewBag.rol = rol == "profesor" ? "profesor" : "alumno";
-        ViewBag.colegios = new List<string> { "Belgrano Day School", "Colegio San Martín", "Nacional Buenos Aires" };
-        return View();
-    }
-
-    public IActionResult IniciarSesion()
-    {
-        // TODO BD: al enviar el formulario, validar con BD.iniciarSesion(...) y guardar las claves de sesión.
-        return View();
-    }
-
     // ================= ÁREA CON SESIÓN =================
 
     public IActionResult PanelControl()
     {
-        // TODO BD: sin sesión → redirigir a IniciarSesion. Mientras no exista el login se simula un alumno de ejemplo
-        // para poder ver el header con sesión y el panel.
-        if (HttpContext.Session.GetString("idUsuario") == null)
-        {
-            HttpContext.Session.SetString("idUsuario", "1");
-            HttpContext.Session.SetString("nombreUsuario", "Mateo Gómez");
-            HttpContext.Session.SetString("inicialesUsuario", "MG");
-            HttpContext.Session.SetString("cantidadNotificaciones", "1");
-        }
+        if (HttpContext.Session.GetString("idUsuario") == null) return RedirectToAction("IniciarSesion", "Sesion");
 
         // TODO BD: reemplazar por BD.obtenerClasesDelUsuario(idUsuario).
         ViewBag.clasesProgramadas = obtenerClasesProgramadasDemo();
@@ -86,12 +64,6 @@ public class HomeController : Controller
     {
         // TODO BD: tomar el colegio del usuario desde la sesión.
         return RedirectToAction("Catalogo", new { colegio = "Belgrano Day School" });
-    }
-
-    public IActionResult CerrarSesion()
-    {
-        HttpContext.Session.Clear();
-        return RedirectToAction("Index");
     }
 
     public IActionResult Privacy()

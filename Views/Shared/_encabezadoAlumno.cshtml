@@ -1,9 +1,8 @@
-@* Header para usuarios con sesión iniciada.
-   Claves de sesión: "idUsuario", "nombreUsuario", "inicialesUsuario", "cantidadNotificaciones". *@
+@* Header para alumnos con sesión iniciada.
+   Claves de sesión: "idUsuario", "nombre", "apellido", "tipoUsuario", "fotoPerfil". *@
 @{
     string accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
-    string inicialesUsuario = Context.Session.GetString("inicialesUsuario") ?? "MP";
-    string nombreUsuario = Context.Session.GetString("nombreUsuario") ?? "Mi perfil";
+    string nombreUsuario = (Context.Session.GetString("nombre") + " " + Context.Session.GetString("apellido")).Trim();
     string cantidadNotificaciones = Context.Session.GetString("cantidadNotificaciones") ?? "0";
 }
 
@@ -48,17 +47,11 @@
                             }
                         </a>
 
-                        @* Menú del usuario (componente Menu de Bootstrap 6: el botón y .menu son hermanos) *@
-                        <div class="usuario">
-                            <button type="button" class="avatar theme-primary" data-bs-toggle="menu" aria-expanded="false" aria-label="Menú de @nombreUsuario">@inicialesUsuario</button>
-                            <div class="menu">
-                                <span class="menu-header">@nombreUsuario</span>
-                                <a class="menu-item" asp-controller="Home" asp-action="PanelControl">Panel de Control</a>
-                                <a class="menu-item" asp-controller="Home" asp-action="Soporte">Soporte</a>
-                                <hr class="menu-divider" />
-                                <a class="menu-item" asp-controller="Home" asp-action="CerrarSesion">Cerrar sesión</a>
-                            </div>
-                        </div>
+                        @* Nombre y foto llevan al perfil (ahí está el botón Cerrar sesión) *@
+                        <a class="usuario" asp-controller="Sesion" asp-action="Perfil" aria-label="Ir a mi perfil">
+                            <partial name="_avatarUsuario" model='""' />
+                            <span class="nombreUsuario">@nombreUsuario</span>
+                        </a>
                     </div>
                 </div>
             </dialog>

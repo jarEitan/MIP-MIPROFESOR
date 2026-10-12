@@ -30,12 +30,6 @@ function correoValido(correo) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo);
 }
 
-// TODO BD: mientras no exista BD.cs, un formulario válido lleva al Panel de Control (que simula una sesión de ejemplo)
-function irAlPanelDeControl() {
-    window.location.href = "/Home/PanelControl";
-}
-
-
 // ================= HEADER: sombra al hacer scroll =================
 function inicializarEncabezadoConScroll() {
     const encabezado = document.getElementById("encabezado");
@@ -160,39 +154,57 @@ function inicializarFiltrosCatalogo() {
 
 
 // ================= REGISTRO =================
+// Muestra el panel ilustrado que corresponde al rol elegido (data-solo-rol)
 function inicializarRolesDeRegistro() {
     const formularioRegistro = document.getElementById("formularioRegistro");
     if (!formularioRegistro) return;
 
-    // Muestra solo los campos que corresponden al rol elegido (data-solo-rol)
-    const mostrarCamposDelRol = () => {
-        const rolElegido = formularioRegistro.querySelector("input[name='rol']:checked").value;
-        formularioRegistro.querySelectorAll("[data-solo-rol]").forEach(campo => {
-            campo.hidden = campo.dataset.soloRol !== rolElegido;
+    const mostrarPanelDelRol = () => {
+        const rolElegido = formularioRegistro.querySelector("input[name='tipoUsuario']:checked").value;
+        document.querySelectorAll("[data-solo-rol]").forEach(panel => {
+            panel.hidden = panel.dataset.soloRol !== rolElegido;
         });
     };
 
-    formularioRegistro.querySelectorAll("input[name='rol']").forEach(radio => radio.addEventListener("change", mostrarCamposDelRol));
-    mostrarCamposDelRol();
+    formularioRegistro.querySelectorAll("input[name='tipoUsuario']").forEach(radio => radio.addEventListener("change", mostrarPanelDelRol));
+    mostrarPanelDelRol();
+}
+
+// Botón del ojo: alterna entre ocultar y mostrar la contraseña
+function inicializarVerContrasena() {
+    document.querySelectorAll("[data-ver-contrasena]").forEach(boton => {
+        const campo = document.getElementById(boton.dataset.verContrasena);
+        if (!campo) return;
+
+        boton.addEventListener("click", () => {
+            const seMuestra = campo.type === "password";
+            campo.type = seMuestra ? "text" : "password";
+            boton.setAttribute("aria-pressed", String(seMuestra));
+            boton.setAttribute("aria-label", seMuestra ? "Ocultar contraseña" : "Mostrar contraseña");
+            boton.querySelector(".bi").className = seMuestra ? "bi bi-eye-slash" : "bi bi-eye";
+        });
+    });
 }
 
 function validarRegistro() {
     const mensajeRegistro = document.getElementById("mensajeRegistro");
     const campo = id => document.getElementById(id);
-    const rol = document.querySelector("#formularioRegistro input[name='rol']:checked").value;
 
-    if (campo("registroNombre").value.trim().length < 3) return mostrarErrorEnCampo(mensajeRegistro, campo("registroNombre"), "Ingresá tu nombre y apellido.");
+    if (campo("registroNombre").value.trim().length < 2) return mostrarErrorEnCampo(mensajeRegistro, campo("registroNombre"), "Ingresá tu nombre.");
+    if (campo("registroApellido").value.trim().length < 2) return mostrarErrorEnCampo(mensajeRegistro, campo("registroApellido"), "Ingresá tu apellido.");
     if (!correoValido(campo("registroCorreo").value.trim())) return mostrarErrorEnCampo(mensajeRegistro, campo("registroCorreo"), "Ingresá un correo electrónico válido.");
     if (campo("registroContrasena").value.length < 8) return mostrarErrorEnCampo(mensajeRegistro, campo("registroContrasena"), "La contraseña debe tener al menos 8 caracteres.");
-    if (campo("registroColegio").value === "") return mostrarErrorEnCampo(mensajeRegistro, campo("registroColegio"), "Elegí tu colegio.");
-    if (rol === "alumno" && campo("registroNivel").value === "") return mostrarErrorEnCampo(mensajeRegistro, campo("registroNivel"), "Elegí tu nivel.");
-    if (rol === "profesor" && campo("registroMaterias").value.trim() === "") return mostrarErrorEnCampo(mensajeRegistro, campo("registroMaterias"), "Contanos qué materias dictás.");
+    if (!fechaNacimientoValida(campo("registroFechaNacimiento").value)) return mostrarErrorEnCampo(mensajeRegistro, campo("registroFechaNacimiento"), "Ingresá una fecha de nacimiento válida.");
     if (!campo("registroTerminos").checked) return mostrarErrorEnCampo(mensajeRegistro, campo("registroTerminos"), "Tenés que aceptar los términos para continuar.");
 
     mostrarMensaje(mensajeRegistro, "");
-    // TODO BD: enviar el formulario (method="post") para crear la cuenta con BD.crearCuenta(...)
-    irAlPanelDeControl();
-    return false;
+    return true;
+}
+
+function fechaNacimientoValida(valor) {
+    if (valor === "") return false;
+    const fecha = new Date(valor + "T00:00:00");
+    return !isNaN(fecha) && fecha <= new Date() && fecha.getFullYear() >= 1900;
 }
 
 
@@ -206,9 +218,7 @@ function validarIngreso() {
     if (campoContrasena.value === "") return mostrarErrorEnCampo(mensajeIngreso, campoContrasena, "Ingresá tu contraseña.");
 
     mostrarMensaje(mensajeIngreso, "");
-    // TODO BD: validar con BD.iniciarSesion(...) y guardar las claves de sesión
-    irAlPanelDeControl();
-    return false;
+    return true;
 }
 
 
@@ -305,9 +315,10 @@ function guardarConfiguracion() {
 function inicializarSitio() {
     inicializarEncabezadoConScroll();
     inicializarRevelarAlScroll();
+    inicializarRolesDeRegistro();
+    inicializarVerContrasena();
     inicializarBuscador();
     inicializarFiltrosCatalogo();
-    inicializarRolesDeRegistro();
     inicializarBuscadorDeAyuda();
     inicializarAccesosDelPanel();
 }

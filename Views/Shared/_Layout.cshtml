@@ -29,14 +29,25 @@
     <a class="saltarContenido" href="#contenido">Saltar al contenido</a>
 
     <!-- ================= HEADER ================= -->
-    @* Sin sesión → navegación de invitado. Con sesión (Session "idUsuario") → navegación de usuario. *@
-    @if (Context.Session.GetString("idUsuario") == null)
+    @* El header depende del tipo de usuario de la sesión ("tipoUsuario"): sin sesión → invitado. *@
+    @{
+        string tipoUsuarioSesion = Context.Session.GetString("tipoUsuario") ?? "";
+    }
+    @if (tipoUsuarioSesion == "alumno")
     {
-        <partial name="_encabezadoInvitado" />
+        <partial name="_encabezadoAlumno" />
+    }
+    else if (tipoUsuarioSesion == "profesor")
+    {
+        <partial name="_encabezadoProfesor" />
+    }
+    else if (tipoUsuarioSesion == "admin")
+    {
+        <partial name="_encabezadoAdmin" />
     }
     else
     {
-        <partial name="_encabezadoUsuario" />
+        <partial name="_encabezadoInvitado" />
     }
 
     <!-- ================= MAIN ================= -->
