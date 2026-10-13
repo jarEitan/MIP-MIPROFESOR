@@ -312,3 +312,9 @@ Claves: `idUsuario`, `nombreUsuario`, `inicialesUsuario`, `cantidadNotificacione
 - Sin verificar con `dotnet build` (no había .NET donde se escribió): compilar y probar en la PC.
 - **Datos (misma fecha)**: niveles nuevos (Secundario 1 a 6, Terciario, Universitario; reemplazan Primaria/Secundaria/Universitario), ~66 colegios, institutos y universidades de **Ciudad de Buenos Aires** (una entrada por institución aunque tenga varias sedes), 35 materias unificadas (Historia, Geografía, Lengua y Literatura, Programación e Informática, Contabilidad y Administración...) y 48 profesores + 6 alumnos de prueba con reseñas. El sistema es solo para CABA: se sacaron Northlands y St. George's (fuera de la Ciudad). Todo en `MIP-catalogo.sql`.
 
+
+### 2026-10-13 — Sistema de likes (Me gusta en los perfiles)
+- Enfoque tomado del TP de Red Social: el botón hace un `fetch` POST, el servidor alterna el like y devuelve `leGusta` y `cantidadLikes`; la pantalla se actualiza con esa respuesta.
+- **BD**: `likes/MIP-likes.sql` (usa la tabla `Likes` existente): SP `obtenerLike` (estado del botón + total) y `alternarLike` (da o saca el like; resultado `ok | mismoUsuario | usuarioInexistente`). Ejecutar en la base antes de probar.
+- **Controller propio**: `LikesController` con `GET /Likes/ObtenerLike/{id}` y `POST /Likes/AlternarLike` (con `[ValidateAntiForgeryToken]`; el emisor sale de la sesión, nunca del pedido). `BD.obtenerLike`/`alternarLike` y el modelo `ResultadoLike`.
+- **Vista/JS/CSS**: el botón de corazón del perfil de otro usuario (`inicializarMeGusta` en `site.js`); sin sesión lleva a Iniciar sesión. Animación: el corazón salta, suelta corazoncitos coral/celeste/magenta y el contador rebota (se desactiva con `prefers-reduced-motion`).

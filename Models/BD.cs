@@ -8,6 +8,7 @@ namespace MIP_MIPROFESOR.Models;
 // Perfiles: stored procedures obtenerPerfil, obtenerOpcionesPerfil, obtenerDatosEdicion,
 // obtenerFaltantesVerificacion y guardarPerfilCompleto de la base MIP.
 // Catálogo: stored procedure obtenerCatalogo (MIP-catalogo.sql).
+// Likes: stored procedures obtenerLike y alternarLike (MIP-likes.sql).
 public class BD
 {
     private static string connectionString = @"Server=localhost;Database=MIP;Integrated Security=True;TrustServerCertificate=True;";
@@ -33,6 +34,26 @@ public class BD
                 perfil.resenas = tablas.Read<ResenaPerfil>().ToList();
                 return perfil;
             }
+        }
+    }
+
+    // ================= LIKES =================
+
+    // Si idEmisor (null = visitante sin sesión) le dio me gusta al perfil idReceptor, y cuántos tiene
+    public ResultadoLike obtenerLike(int? idEmisor, int idReceptor)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoLike>("obtenerLike", new { idEmisor = idEmisor, idReceptor = idReceptor }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    // Da o saca el me gusta y devuelve cómo quedó. resultado: ok | mismoUsuario | usuarioInexistente
+    public ResultadoLike alternarLike(int idEmisor, int idReceptor)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoLike>("alternarLike", new { idEmisor = idEmisor, idReceptor = idReceptor }, commandType: CommandType.StoredProcedure);
         }
     }
 

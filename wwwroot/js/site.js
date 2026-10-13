@@ -640,6 +640,7 @@ function inicializarPerfil() {
     cargarPerfil();
     inicializarCopiarEnlacePerfil();
     inicializarBotonesProximamente();
+    inicializarMeGusta();
     inicializarEdicionPerfil();
 }
 
@@ -745,7 +746,7 @@ function mostrarCifrasPerfil(perfil) {
         : "–";
     const textoResenas = perfil.cantidadResenas === 1 ? "1 reseña" : `${perfil.cantidadResenas} reseñas`;
     cifrasPerfil.append(crearCifraPerfil("bi-star-fill", calificacion, textoResenas));
-    cifrasPerfil.append(crearCifraPerfil("bi-heart-fill", perfil.cantidadLikes, "me gusta"));
+    cifrasPerfil.append(crearCifraPerfil("bi-heart-fill", perfil.cantidadLikes, "me gusta", "cantidadLikesPerfil"));
 
     // En la base, un profesor sin precio queda con 0
     if (perfil.tipoUsuario === "profesor") {
@@ -754,13 +755,14 @@ function mostrarCifrasPerfil(perfil) {
     }
 }
 
-function crearCifraPerfil(icono, valor, detalle) {
+function crearCifraPerfil(icono, valor, detalle, idValor) {
     const cifra = document.createElement("li");
     const iconoCifra = document.createElement("i");
     iconoCifra.className = `bi ${icono}`;
     iconoCifra.setAttribute("aria-hidden", "true");
     const valorCifra = document.createElement("strong");
     valorCifra.textContent = valor;
+    if (idValor) valorCifra.id = idValor;
     const detalleCifra = document.createElement("span");
     detalleCifra.textContent = detalle;
     cifra.append(iconoCifra, valorCifra, detalleCifra);
@@ -912,7 +914,7 @@ function inicializarCopiarEnlacePerfil() {
     });
 }
 
-// Me gusta, Agregar amigo, Mensaje, Reseña, Pedir clase y Reportar todavía no hacen nada
+// Agregar amigo, Mensaje, Reseña, Pedir clase y Reportar todavía no hacen nada
 function inicializarBotonesProximamente() {
     const haySesion = document.getElementById("perfil").dataset.haySesion === "true";
 
@@ -926,6 +928,98 @@ function inicializarBotonesProximamente() {
             mostrarSnackbar(`«${boton.dataset.proximamente}» va a estar disponible muy pronto.`);
         });
     });
+}
+
+// ----- Me gusta (LikesController: fetch) -----
+const coloresExplosionLike = ["#FF5757", "#5CE1E6", "#D51F47", "#FFB4B4"];
+
+function inicializarMeGusta() {
+    const botonMeGusta = document.getElementById("botonMeGusta");
+    if (!botonMeGusta) return;
+
+    const seccionPerfil = document.getElementById("perfil");
+    const idPerfil = seccionPerfil.dataset.idPerfil;
+    const haySesion = seccionPerfil.dataset.haySesion === "true";
+
+    // Si ya le diste me gusta, el corazón arranca lleno (sin sesión no hay nada que averiguar)
+    if (haySesion) {
+        pedirJson(`/Likes/ObtenerLike/${idPerfil}`)
+            .then(resultado => pintarEstadoMeGusta(botonMeGusta, resultado.leGusta))
+            .catch(error => console.error(error));
+    }
+
+    botonMeGusta.addEventListener("click", () => {
+        if (!haySesion) {
+            window.location.href = "/Sesion/IniciarSesion";
+            return;
+        }
+        alternarMeGusta(botonMeGusta, idPerfil);
+    });
+}
+
+function alternarMeGusta(botonMeGusta, idPerfil) {
+    // Mientras viaja el pedido el botón queda bloqueado: dos clics seguidos no se pisan
+    botonMeGusta.disabled = true;
+    const token = document.querySelector("#perfil input[name='__RequestVerificationToken']");
+    const datos = new URLSearchParams({ idReceptor: idPerfil });
+
+    pedirJson("/Likes/AlternarLike", {
+        method: "POST",
+        headers: { "RequestVerificationToken": token ? token.value : "" },
+        body: datos
+    })
+        .then(resultado => {
+            pintarEstadoMeGusta(botonMeGusta, resultado.leGusta);
+            actualizarCantidadLikes(resultado.cantidadLikes);
+            animarMeGusta(botonMeGusta, resultado.leGusta);
+        })
+        .catch(error => {
+            console.error(error);
+            mostrarSnackbar("No pudimos guardar tu me gusta. Probá de nuevo.", "error");
+        })
+        .finally(() => { botonMeGusta.disabled = false; });
+}
+
+function pintarEstadoMeGusta(botonMeGusta, leGusta) {
+    botonMeGusta.classList.toggle("activo", leGusta);
+    botonMeGusta.setAttribute("aria-pressed", leGusta ? "true" : "false");
+    const icono = botonMeGusta.querySelector(".bi");
+    icono.classList.toggle("bi-heart-fill", leGusta);
+    icono.classList.toggle("bi-heart", !leGusta);
+}
+
+function actualizarCantidadLikes(cantidadLikes) {
+    const cantidad = document.getElementById("cantidadLikesPerfil");
+    if (!cantidad) return;
+    cantidad.textContent = cantidadLikes;
+    cantidad.classList.remove("rebote");
+    void cantidad.offsetWidth;
+    cantidad.classList.add("rebote");
+}
+
+// El corazón "salta" y, al dar me gusta, suelta una explosión de corazoncitos con los colores de la marca
+function animarMeGusta(botonMeGusta, leGusta) {
+    const icono = botonMeGusta.querySelector(".bi");
+    icono.classList.remove("saltoCorazon");
+    void icono.offsetWidth;
+    icono.classList.add("saltoCorazon");
+
+    if (!leGusta || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const cantidadCorazones = 10;
+    for (let i = 0; i < cantidadCorazones; i++) {
+        const angulo = (i / cantidadCorazones) * 2 * Math.PI + Math.random() * 0.4;
+        const distancia = 40 + Math.random() * 30;
+        const corazon = document.createElement("i");
+        corazon.className = "bi bi-heart-fill corazonVolador";
+        corazon.setAttribute("aria-hidden", "true");
+        corazon.style.setProperty("--destinoX", `${Math.cos(angulo) * distancia}px`);
+        corazon.style.setProperty("--destinoY", `${Math.sin(angulo) * distancia}px`);
+        corazon.style.color = coloresExplosionLike[i % coloresExplosionLike.length];
+        corazon.style.fontSize = `${.6 + Math.random() * .5}rem`;
+        corazon.addEventListener("animationend", () => corazon.remove());
+        botonMeGusta.append(corazon);
+    }
 }
 
 // ----- Modal "Editar perfil" -----
