@@ -337,9 +337,9 @@ GO
 -- Sofía Martínez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Sofía', N'Martínez', N'sofia.martinez@prueba.mip', N'pbkdf2$100000$h6jG7fmaYV0L+i29N59EtA==$L+dn+bnPssbmc3y5MCQY6HXH83GghYOXjUqYpz+kRTA=', N'30111001', N'Av. Corrientes 1010, CABA', N'privado/dni/prueba1.webp', N'profesor', '1975-01-01', 1);
+VALUES (N'Sofía', N'Martínez', N'sofia.martinez@prueba.mip', N'pbkdf2$100000$6DIid88bSjkgjijbFeqiog==$fNi6n40swcUiHiWHVCZnzgrw5EgiwAuI/Mg5bJ5rSWo=', N'30111001', N'Av. Corrientes 1010, CABA', N'privado/dni/prueba1.webp', N'profesor', '1975-01-01', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>6 años preparando exámenes de ingreso y finales. Explico paso a paso, sin apuro.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Te ayudo a perderle el miedo a la matemática: partimos de lo que ya sabés y vamos paso a paso hasta resolver los problemas de examen.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 3 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Matemática (UBA)');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Matemática', N'Álgebra y Análisis');
@@ -351,9 +351,9 @@ GO
 -- Lucas Gómez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Lucas', N'Gómez', N'lucas.gomez@prueba.mip', N'pbkdf2$100000$3vu5YrSN6LMMNprP8FeUVA==$khMNko7KGEVfnnDIZHj94xx/GcVI9MJ59IOB2JRG79w=', N'30111002', N'Av. Corrientes 1020, CABA', N'privado/dni/prueba2.webp', N'profesor', '1978-02-08', 1);
+VALUES (N'Lucas', N'Gómez', N'lucas.gomez@prueba.mip', N'pbkdf2$100000$33dGiXkvZeQsOgJVCewi9w==$Hg0Nv2yr4o78I2210HMB/1Gdk/yR+30wWRxJVY+xe/M=', N'30111002', N'Av. Corrientes 1020, CABA', N'privado/dni/prueba2.webp', N'profesor', '1978-02-08', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Ingeniero y docente. Problemas resueltos en vivo y apuntes alineados al programa del colegio.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Entender la física es pasar de las fórmulas de memoria a saber por qué funcionan. Resolvemos problemas juntos, con ejemplos de la vida diaria.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4, Secundario 5, Secundario 6, Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Ingeniero Industrial (UTN)');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Física', N'Matemática');
@@ -365,9 +365,9 @@ GO
 -- Camila Rossi (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Camila', N'Rossi', N'camila.rossi@prueba.mip', N'pbkdf2$100000$A83Ixi2FPtA7uQiqM+iDpQ==$JWPxrAMGscUyeUp92HA6KzKTvvL3wDuL6TT5eYbQtZw=', N'30111003', N'Av. Corrientes 1030, CABA', N'privado/dni/prueba3.webp', N'profesor', '1981-03-15', 0);
+VALUES (N'Camila', N'Rossi', N'camila.rossi@prueba.mip', N'pbkdf2$100000$NkaIK/zCNm0aY9aKuyvB2A==$UvlaKF9pm/bKJImATDhfirIjg/BTNDJezzZj3+OO2Pg=', N'30111003', N'Av. Corrientes 1030, CABA', N'privado/dni/prueba3.webp', N'profesor', '1981-03-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Conversación, gramática y preparación de exámenes internacionales en un solo lugar.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases de inglés centradas en lo que necesitás: el colegio, los exámenes internacionales o animarte a hablar.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 3</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 6500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Traductora Pública de Inglés');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Inglés');
@@ -379,9 +379,9 @@ GO
 -- Joaquín Fernández (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Joaquín', N'Fernández', N'joaquin.fernandez@prueba.mip', N'pbkdf2$100000$nmGeglXKhWs6PofbQ9BTAw==$v4Ozsp27SpENG/r9ItQiBHnA8CROIHidqTRTphT3qhk=', N'30111004', N'Av. Corrientes 1040, CABA', N'privado/dni/prueba4.webp', N'profesor', '1984-04-22', 0);
+VALUES (N'Joaquín', N'Fernández', N'joaquin.fernandez@prueba.mip', N'pbkdf2$100000$rr3oP7st3+cnNQglgzMJ4w==$WnjfwqVgxLiwAd2OfGKYzC7HdGc+S0L/lzBgLyXPUmM=', N'30111004', N'Av. Corrientes 1040, CABA', N'privado/dni/prueba4.webp', N'profesor', '1984-04-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Laboratorio y teoría sin miedo: estequiometría, soluciones y química orgánica.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Química sin vueltas: teoría clara, ejercicios guiados y práctica de los temas que más se toman en los exámenes.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciado en Química');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Química');
@@ -393,9 +393,9 @@ GO
 -- Valentina Paz (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Valentina', N'Paz', N'valentina.paz@prueba.mip', N'pbkdf2$100000$c/bdzVkHwuf9o+AT4ypvMA==$VFvr/Z5UZinsIR8uTATsQi6kZONAKMnfFUn1erDgfpk=', N'30111005', N'Av. Corrientes 1050, CABA', N'privado/dni/prueba5.webp', N'profesor', '1987-05-01', 1);
+VALUES (N'Valentina', N'Paz', N'valentina.paz@prueba.mip', N'pbkdf2$100000$3to73CG/2ABNb/Ve2hWRXg==$niOzRq23ZH/CSx6pKkZVUuILyZ0I0+i2050ENa0JzU0=', N'30111005', N'Av. Corrientes 1050, CABA', N'privado/dni/prueba5.webp', N'profesor', '1987-05-01', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Esquemas, mapas conceptuales y mucha práctica para llegar tranquilo al examen.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Biología con esquemas, mapas conceptuales y repaso activo para llegar con los temas bien ordenados.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 3 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 6800);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Biología');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Biología', N'Química');
@@ -407,9 +407,9 @@ GO
 -- Martín Acosta (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Martín', N'Acosta', N'martin.acosta@prueba.mip', N'pbkdf2$100000$a9KIgHZjf1AupemNbEdEdg==$0+w96GvfppY6Q3cFVMyRnuAehshhXhP2CB4A/EA9mjA=', N'30111006', N'Av. Corrientes 1060, CABA', N'privado/dni/prueba6.webp', N'profesor', '1990-06-08', 1);
+VALUES (N'Martín', N'Acosta', N'martin.acosta@prueba.mip', N'pbkdf2$100000$pA4tuz0y7WkV16WUNXBMHQ==$aRHl6DqyNZhtYTW6kVo1YKxttSDNnZnTQu/PJP3UN50=', N'30111006', N'Av. Corrientes 1060, CABA', N'privado/dni/prueba6.webp', N'profesor', '1990-06-08', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Desarrollador back-end. De tu primer algoritmo a tu proyecto final de la facultad.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Aprendé a programar desde cero o avanzá con tus trabajos prácticos: lógica, buenas prácticas y proyectos reales.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 5, Secundario 6, Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Analista de Sistemas');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Programación e Informática');
@@ -421,9 +421,9 @@ GO
 -- Lucía Benítez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Lucía', N'Benítez', N'lucia.benitez@prueba.mip', N'pbkdf2$100000$oVtrNceT2L0B1zI7hx6SMA==$SQsi2blGZ9NPVPDABL+vjAwQ2DPJvL57tCfujIOzuj0=', N'30111007', N'Av. Corrientes 1070, CABA', N'privado/dni/prueba7.webp', N'profesor', '1993-07-15', 0);
+VALUES (N'Lucía', N'Benítez', N'lucia.benitez@prueba.mip', N'pbkdf2$100000$kY0f/tKXJKMbGqwzcYBojQ==$mmlXz+Zpbl8w5u+OpOfdswiaGLQzP+JFdnBx2xiJJ+c=', N'30111007', N'Av. Corrientes 1070, CABA', N'privado/dni/prueba7.webp', N'profesor', '1993-07-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Comprensión lectora y escritura con juegos, lecturas cortas y mucha paciencia.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Trabajamos la lectura, la escritura y el análisis de textos para que puedas expresarte con claridad y rendir bien.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 2</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Letras');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Lengua y Literatura');
@@ -435,9 +435,9 @@ GO
 -- Tomás Herrera (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Tomás', N'Herrera', N'tomas.herrera@prueba.mip', N'pbkdf2$100000$aYdPLBXbmjqnQHIVz/30Nw==$WfxYSbSRsdaWuPD9Avmzbw9Lu+sQQ7LZFvalGttqgp4=', N'30111008', N'Av. Corrientes 1080, CABA', N'privado/dni/prueba8.webp', N'profesor', '1996-08-22', 0);
+VALUES (N'Tomás', N'Herrera', N'tomas.herrera@prueba.mip', N'pbkdf2$100000$0WrMNA7akQbVKyB7ze19gw==$hSTg/UU6JBquq+YJTVEgl2QetxmkykbMn9egS78l+rc=', N'30111008', N'Av. Corrientes 1080, CABA', N'privado/dni/prueba8.webp', N'profesor', '1996-08-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Líneas de tiempo y resúmenes claros para entender los procesos, no solo memorizar fechas.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>La historia se entiende mejor como una trama de causas y consecuencias. Armamos líneas de tiempo y resúmenes claros.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 3 a Secundario 4</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5800);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Historia');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Historia', N'Geografía');
@@ -449,9 +449,9 @@ GO
 -- Agustina Lombardi (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Agustina', N'Lombardi', N'agustina.lombardi@prueba.mip', N'pbkdf2$100000$cYuF86S4YvusS/jQ2MTcSg==$aGUs6sM55IQqgE2u7gbm3PAANV7VzGWpfLngzeDn0C0=', N'30111009', N'Av. Corrientes 1090, CABA', N'privado/dni/prueba9.webp', N'profesor', '1999-09-01', 1);
+VALUES (N'Agustina', N'Lombardi', N'agustina.lombardi@prueba.mip', N'pbkdf2$100000$g7lpWo3Kad2mCN/yHRmQ0w==$0Sn2ar3c3toFo5FEYjOhLylIkGw0Yk1z1Xts/caFW3A=', N'30111009', N'Av. Corrientes 1090, CABA', N'privado/dni/prueba9.webp', N'profesor', '1999-09-01', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Contadora. Te explico economía y contabilidad con casos reales y ejercicios de examen.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Economía y administración explicadas con casos reales, para que los conceptos dejen de ser abstractos.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 5, Secundario 6, Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Contadora Pública (UBA)');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Economía', N'Contabilidad y Administración');
@@ -463,9 +463,9 @@ GO
 -- Federico Salazar (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Federico', N'Salazar', N'federico.salazar@prueba.mip', N'pbkdf2$100000$6QrgLSHJP4pwGD1A2AJP6A==$HydWNOeHgkZImCRdDe82EDsrujv8Fsr1DObr3HZTCNU=', N'30111010', N'Av. Corrientes 1100, CABA', N'privado/dni/prueba10.webp', N'profesor', '1977-10-08', 1);
+VALUES (N'Federico', N'Salazar', N'federico.salazar@prueba.mip', N'pbkdf2$100000$2tg9asyBhj2uSW4o52o5Tw==$Zh5dKzYk7ltW8DZwusf4uJ5+I/ZKs66h5MbRPbR8VZ0=', N'30111010', N'Av. Corrientes 1100, CABA', N'privado/dni/prueba10.webp', N'profesor', '1977-10-08', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Análisis, álgebra y estadística para el CBC y primeros años de facultad.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Te ayudo a perderle el miedo a la matemática: partimos de lo que ya sabés y vamos paso a paso hasta resolver los problemas de examen.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciado en Matemática');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Matemática', N'Estadística');
@@ -477,9 +477,9 @@ GO
 -- Micaela Duarte (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Micaela', N'Duarte', N'micaela.duarte@prueba.mip', N'pbkdf2$100000$xGbmbd8S5/5MDf0GbdT+kg==$P0xZwtKGtMNMoVsMZUAzQ3hqFBcvl+14YdBlz7+OZGU=', N'30111011', N'Av. Corrientes 1110, CABA', N'privado/dni/prueba11.webp', N'profesor', '1980-11-15', 0);
+VALUES (N'Micaela', N'Duarte', N'micaela.duarte@prueba.mip', N'pbkdf2$100000$+Sy/LRXMKHRURv7BJcaM1g==$r1mGHehl4y3wUlZRkm3pireNGVTyHWD+rqPUctoYJCs=', N'30111011', N'Av. Corrientes 1110, CABA', N'privado/dni/prueba11.webp', N'profesor', '1980-11-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Idiomas con canciones, videos y conversación desde la primera clase.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Francés con conversación, canciones y preparación para exámenes como el DELF.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 3</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 6000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Idiomas');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Francés', N'Portugués');
@@ -491,9 +491,9 @@ GO
 -- Nicolás Ibarra (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Nicolás', N'Ibarra', N'nicolas.ibarra@prueba.mip', N'pbkdf2$100000$rMnaE+iC3CWe/+HG5b43OA==$CMCmv3Mb3MD4A7WxCTQyFHeag/ToD61QLHlz8WLSjsI=', N'30111012', N'Av. Corrientes 1120, CABA', N'privado/dni/prueba12.webp', N'profesor', '1983-12-22', 1);
+VALUES (N'Nicolás', N'Ibarra', N'nicolas.ibarra@prueba.mip', N'pbkdf2$100000$6Cg7u+z3QiqKMz5XkYxaGQ==$UdRvmg+3tlUcWiP5jk3o8G0eemyWkNMjtD9FvoZsfis=', N'30111012', N'Av. Corrientes 1120, CABA', N'privado/dni/prueba12.webp', N'profesor', '1983-12-22', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Física del secundario sin fórmulas de memoria: entender primero, calcular después.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Entender la física es pasar de las fórmulas de memoria a saber por qué funcionan. Resolvemos problemas juntos, con ejemplos de la vida diaria.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7200);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Física');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Física');
@@ -505,9 +505,9 @@ GO
 -- Brenda Quiroga (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Brenda', N'Quiroga', N'brenda.quiroga@prueba.mip', N'pbkdf2$100000$v5hJU7jyaCcdGnCbBDpk/g==$Y3o5knsZ0C3e6Q/UOPuwnw/6UgTUtNoYkmpNolrZVLo=', N'30111013', N'Av. Corrientes 1130, CABA', N'privado/dni/prueba13.webp', N'profesor', '1986-01-01', 0);
+VALUES (N'Brenda', N'Quiroga', N'brenda.quiroga@prueba.mip', N'pbkdf2$100000$X/hfDpVe/UGMtmi/q5UqDQ==$oVEFLkim7ZVCfAMHGnVQyoKsW7suw6WNfzPEWpBe8b8=', N'30111013', N'Av. Corrientes 1130, CABA', N'privado/dni/prueba13.webp', N'profesor', '1986-01-01', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Ayudo a armar trabajos prácticos y a estudiar para los orales de Filosofía y Ética.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Filosofía para entender y discutir las ideas, no solo para memorizar autores.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 5 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5200);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Filosofía');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Filosofía', N'Formación Ética y Ciudadana');
@@ -519,9 +519,9 @@ GO
 -- Gonzalo Ferrari (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Gonzalo', N'Ferrari', N'gonzalo.ferrari@prueba.mip', N'pbkdf2$100000$psJ76D8GnGBQquRhdi/vyg==$hbod6NsFdXOQW4PI2elMQd5MsWM7wAZbqoatfxS8elo=', N'30111014', N'Av. Corrientes 1140, CABA', N'privado/dni/prueba14.webp', N'profesor', '1989-02-08', 0);
+VALUES (N'Gonzalo', N'Ferrari', N'gonzalo.ferrari@prueba.mip', N'pbkdf2$100000$63l/d0FZ5D+C6WxkUTzEHQ==$LY7KRXdDZ59wWPkY+V4EzfFtWRKFUl8mzQ4x80J0O98=', N'30111014', N'Av. Corrientes 1140, CABA', N'privado/dni/prueba14.webp', N'profesor', '1989-02-08', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Guitarra, teoría musical y dibujo para los que quieren aprender haciendo.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Música y teoría musical con práctica desde la primera clase, a tu ritmo.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1, Secundario 2, Terciario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Música');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Música', N'Dibujo y Arte');
@@ -533,9 +533,9 @@ GO
 -- Julieta Navarro (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Julieta', N'Navarro', N'julieta.navarro@prueba.mip', N'pbkdf2$100000$YQKF91eIYEIt9m8rntzwaQ==$ksXVOpTi41H24GnhKbNj/Fr3B+Tc4jwkyoMbf5VHpt0=', N'30111015', N'Av. Corrientes 1150, CABA', N'privado/dni/prueba15.webp', N'profesor', '1992-03-15', 1);
+VALUES (N'Julieta', N'Navarro', N'julieta.navarro@prueba.mip', N'pbkdf2$100000$NeJOgVAP+Z4lVs4qdCLt6w==$ao+OXud9d7FzdtOGX/fyccsyBD5bX9REpBMUCVivUdo=', N'30111015', N'Av. Corrientes 1150, CABA', N'privado/dni/prueba15.webp', N'profesor', '1992-03-15', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Maestra de grado. Matemática de los primeros años con material concreto y mucho juego.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Te ayudo a perderle el miedo a la matemática: partimos de lo que ya sabés y vamos paso a paso hasta resolver los problemas de examen.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 2</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Maestra Normal Superior');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Matemática');
@@ -547,9 +547,9 @@ GO
 -- Ramiro Vega (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Ramiro', N'Vega', N'ramiro.vega@prueba.mip', N'pbkdf2$100000$toqt1vV8atO7oV7x2qg9yA==$zgk41cgfd8AKMJrn2Jj7YEPGF7HOjQbTTzaCqMNpMGk=', N'30111016', N'Av. Corrientes 1160, CABA', N'privado/dni/prueba16.webp', N'profesor', '1995-04-22', 0);
+VALUES (N'Ramiro', N'Vega', N'ramiro.vega@prueba.mip', N'pbkdf2$100000$R04Fe3+SvbaUEvJ+VhoKSg==$HkrTW8wiBvPoUWiqHYrTqNd0pzo15m0ZAE+XKgDi4Nc=', N'30111016', N'Av. Corrientes 1160, CABA', N'privado/dni/prueba16.webp', N'profesor', '1995-04-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estudiante avanzado de sistemas. Te ayudo con HTML, Python y trabajos prácticos.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Aprendé a programar desde cero o avanzá con tus trabajos prácticos: lógica, buenas prácticas y proyectos reales.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 6200);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Técnico en Programación');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Programación e Informática');
@@ -561,9 +561,9 @@ GO
 -- Anabela Domínguez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Anabela', N'Domínguez', N'anabela.dominguez@prueba.mip', N'pbkdf2$100000$QWRyfmqvX6NrlG4R7n25dQ==$Kyw4lpHpWfNXoE5j0jk16j81KlpTuy2CMkoKvL0cy0g=', N'30111017', N'Av. Corrientes 1170, CABA', N'privado/dni/prueba17.webp', N'profesor', '1998-05-01', 1);
+VALUES (N'Anabela', N'Domínguez', N'anabela.dominguez@prueba.mip', N'pbkdf2$100000$Yf7bewp4rU7G7S2crccjag==$Ltgfrdpwqa1d0IhjdtBKjhdVRrqK3G9cN3RoYFPNq2w=', N'30111017', N'Av. Corrientes 1170, CABA', N'privado/dni/prueba17.webp', N'profesor', '1998-05-01', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Matemática con ejercicios graduados: de lo básico a los problemas de examen.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Te ayudo a perderle el miedo a la matemática: partimos de lo que ya sabés y vamos paso a paso hasta resolver los problemas de examen.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 3 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Matemática');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Matemática');
@@ -575,9 +575,9 @@ GO
 -- Bruno Ibáñez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Bruno', N'Ibáñez', N'bruno.ibanez@prueba.mip', N'pbkdf2$100000$Djydxh7soy2yGpyl4WpVAA==$yLM5pTL4fEcDQROePq4KTgOKuYvu772Cwmle9UZ8zto=', N'30111018', N'Av. Corrientes 1180, CABA', N'privado/dni/prueba18.webp', N'profesor', '1976-06-08', 0);
+VALUES (N'Bruno', N'Ibáñez', N'bruno.ibanez@prueba.mip', N'pbkdf2$100000$JOlqlAtuAFvr/tshcotLSw==$zToJgJXmQTLG/Za2S768blg91ooQkpEeQecCMM7K0cg=', N'30111018', N'Av. Corrientes 1180, CABA', N'privado/dni/prueba18.webp', N'profesor', '1976-06-08', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Física y matemática con experimentos caseros y problemas resueltos.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Entender la física es pasar de las fórmulas de memoria a saber por qué funcionan. Resolvemos problemas juntos, con ejemplos de la vida diaria.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 5, Secundario 6, Terciario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciado en Física');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Física', N'Matemática');
@@ -589,9 +589,9 @@ GO
 -- Cecilia Núñez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Cecilia', N'Núñez', N'cecilia.nunez@prueba.mip', N'pbkdf2$100000$07txnEU86POtXaTssvp/og==$1kpHsGvXrTRs/51iNGUnk8jLPtzhvInsE5lMlBZyess=', N'30111019', N'Av. Corrientes 1190, CABA', N'privado/dni/prueba19.webp', N'profesor', '1979-07-15', 0);
+VALUES (N'Cecilia', N'Núñez', N'cecilia.nunez@prueba.mip', N'pbkdf2$100000$d2rLhSC7DIzjGa7lzIr0XQ==$O+h0XPLkPRfWOBKpbUadKWtK6E7mqTh/PJNukfOl9+s=', N'30111019', N'Av. Corrientes 1190, CABA', N'privado/dni/prueba19.webp', N'profesor', '1979-07-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Ciencias naturales con esquemas y repaso antes de cada prueba.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Química sin vueltas: teoría clara, ejercicios guiados y práctica de los temas que más se toman en los exámenes.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 6000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Ciencias Naturales');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Química', N'Biología');
@@ -603,9 +603,9 @@ GO
 -- Damián Sosa (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Damián', N'Sosa', N'damian.sosa@prueba.mip', N'pbkdf2$100000$0DWgFHwQBOWvMgcei2Ioow==$QmgDxO+/LXXQURL9hIDpYgzvg2+Xtgtb/6UqYF05bsQ=', N'30111020', N'Av. Corrientes 1200, CABA', N'privado/dni/prueba20.webp', N'profesor', '1982-08-22', 1);
+VALUES (N'Damián', N'Sosa', N'damian.sosa@prueba.mip', N'pbkdf2$100000$Uz3djf+PWcT0ODFdeNTECg==$HNiArey4zduX6ow67knvH1Pjf09Y+zl0dabvraN+Cwc=', N'30111020', N'Av. Corrientes 1200, CABA', N'privado/dni/prueba20.webp', N'profesor', '1982-08-22', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Inglés para el colegio, exámenes internacionales y conversación.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases de inglés centradas en lo que necesitás: el colegio, los exámenes internacionales o animarte a hablar.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Inglés');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Inglés');
@@ -617,9 +617,9 @@ GO
 -- Elena Yáñez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Elena', N'Yáñez', N'elena.yanez@prueba.mip', N'pbkdf2$100000$KT8mELhXZhnOpjQ+7cJ18A==$jb392uxZz9LxG4fFVcKXWdt2pRb2XJh5wXk5Oxkj+lM=', N'30111021', N'Av. Corrientes 1210, CABA', N'privado/dni/prueba21.webp', N'profesor', '1985-09-01', 0);
+VALUES (N'Elena', N'Yáñez', N'elena.yanez@prueba.mip', N'pbkdf2$100000$ydYEWFaIZP4nwAvFNM7IDg==$6qhc3Aestg0DpP+WdOJ2ZykKLuPXruWqGAGc8EPrCpA=', N'30111021', N'Av. Corrientes 1210, CABA', N'privado/dni/prueba21.webp', N'profesor', '1985-09-01', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Lectura, escritura y comprensión de textos, con foco en los trabajos del colegio.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Trabajamos la lectura, la escritura y el análisis de textos para que puedas expresarte con claridad y rendir bien.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Terciario, Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Letras');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Lengua y Literatura');
@@ -631,9 +631,9 @@ GO
 -- Fabricio Delgado (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Fabricio', N'Delgado', N'fabricio.delgado@prueba.mip', N'pbkdf2$100000$ElEsxhK7edGXaUjk8JHunA==$LaaBuhLnv9+Nvviw5+niwnuc3/xH4Jg8pSpPKjoA8wQ=', N'30111022', N'Av. Corrientes 1220, CABA', N'privado/dni/prueba22.webp', N'profesor', '1988-10-08', 0);
+VALUES (N'Fabricio', N'Delgado', N'fabricio.delgado@prueba.mip', N'pbkdf2$100000$kiM6o2Iy+Cn03H4uCQTMag==$tULwQc+pGRiB2bmHMLLCewv1oppR0lcosKMtEAMyMsY=', N'30111022', N'Av. Corrientes 1220, CABA', N'privado/dni/prueba22.webp', N'profesor', '1988-10-08', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Historia y geografía con mapas, líneas de tiempo y resúmenes claros.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>La historia se entiende mejor como una trama de causas y consecuencias. Armamos líneas de tiempo y resúmenes claros.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 3</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Historia');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Historia', N'Geografía');
@@ -645,9 +645,9 @@ GO
 -- Gimena Bustos (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Gimena', N'Bustos', N'gimena.bustos@prueba.mip', N'pbkdf2$100000$3KT0yBAopmq3FewzwJ0jvA==$sLfCURY6gYjclLxAJuK6eTBgmC+dSkIxKk/arKmbNiQ=', N'30111023', N'Av. Corrientes 1230, CABA', N'privado/dni/prueba23.webp', N'profesor', '1991-11-15', 1);
+VALUES (N'Gimena', N'Bustos', N'gimena.bustos@prueba.mip', N'pbkdf2$100000$75jsXuie/TX6tZJOwnzCMg==$pSlD6JmOVdcNeBnoOGsL+HYyU++rb0zhLrUEWusHAaI=', N'30111023', N'Av. Corrientes 1230, CABA', N'privado/dni/prueba23.webp', N'profesor', '1991-11-15', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Programación desde cero: lógica, Python y proyectos pequeños.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Aprendé a programar desde cero o avanzá con tus trabajos prácticos: lógica, buenas prácticas y proyectos reales.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 2</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Técnico Universitario en Programación');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Programación e Informática');
@@ -659,9 +659,9 @@ GO
 -- Hernán Giménez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Hernán', N'Giménez', N'hernan.gimenez@prueba.mip', N'pbkdf2$100000$8zrNdGQzAcOxzRhAO0FD8Q==$WMJJWyJDQdqVip0GZIU98BqSCgm2VteNe/6UHDRqFWA=', N'30111024', N'Av. Corrientes 1240, CABA', N'privado/dni/prueba24.webp', N'profesor', '1994-12-22', 0);
+VALUES (N'Hernán', N'Giménez', N'hernan.gimenez@prueba.mip', N'pbkdf2$100000$slQYKMSISE+SuMQVtiFOCA==$OWt3dd8lm8zMiU0ZFW6W7RcaY4JwQ7fQAvw+c614bo0=', N'30111024', N'Av. Corrientes 1240, CABA', N'privado/dni/prueba24.webp', N'profesor', '1994-12-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Economía y contabilidad explicadas con ejemplos de la vida diaria.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Economía y administración explicadas con casos reales, para que los conceptos dejen de ser abstractos.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciado en Administración');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Economía', N'Contabilidad y Administración');
@@ -673,9 +673,9 @@ GO
 -- Irina Luna (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Irina', N'Luna', N'irina.luna@prueba.mip', N'pbkdf2$100000$UG6dWh4ydWE/38yrUvmGPg==$xPLKM8zwKLCjdWMMIFk6gke3Njm64HEm+grzrMZF0+k=', N'30111025', N'Av. Corrientes 1250, CABA', N'privado/dni/prueba25.webp', N'profesor', '1997-01-01', 0);
+VALUES (N'Irina', N'Luna', N'irina.luna@prueba.mip', N'pbkdf2$100000$Oc3xXETLL02P8EWlMok93Q==$z92VScAWrDwgOjRi6iE3M3FSv/r8F5cHGwOe/sru12Y=', N'30111025', N'Av. Corrientes 1250, CABA', N'privado/dni/prueba25.webp', N'profesor', '1997-01-01', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estadística y análisis para los primeros años de facultad.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estadística y análisis para los primeros años de facultad, con ejercicios resueltos y explicaciones sin vueltas.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 3 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciada en Estadística');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Estadística', N'Álgebra y Análisis');
@@ -687,9 +687,9 @@ GO
 -- Julián Quintana (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Julián', N'Quintana', N'julian.quintana@prueba.mip', N'pbkdf2$100000$GZQXjG1n1GoSPlCS8/urjg==$d4zXkpBsj7OoR74eQrTzQDWuuMej7kQI71q0IgZrclM=', N'30111026', N'Av. Corrientes 1260, CABA', N'privado/dni/prueba26.webp', N'profesor', '1975-02-08', 1);
+VALUES (N'Julián', N'Quintana', N'julian.quintana@prueba.mip', N'pbkdf2$100000$efVwm8P7TDLDKIyy+uuaPA==$3q97a/BCidemiCFW/j0GS8+KZ1ejF6V4t0kfl3QlNuI=', N'30111026', N'Av. Corrientes 1260, CABA', N'privado/dni/prueba26.webp', N'profesor', '1975-02-08', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Psicología y sociología para el secundario y el CBC, con casos y resúmenes.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 5, Secundario 6, Terciario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciada en Psicología');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Psicología', N'Sociología');
@@ -701,9 +701,9 @@ GO
 -- Karina Villalba (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Karina', N'Villalba', N'karina.villalba@prueba.mip', N'pbkdf2$100000$KGCy8X1EJb6HWFkf5mPNXA==$HcnrA0T2vCtmInBxfI76vJqQbm9Vb4ETkwlXfxuUvDk=', N'30111027', N'Av. Corrientes 1270, CABA', N'privado/dni/prueba27.webp', N'profesor', '1978-03-15', 0);
+VALUES (N'Karina', N'Villalba', N'karina.villalba@prueba.mip', N'pbkdf2$100000$4lgm0Ze2mqHC6GfCrDNjxw==$ypbLjNVvdT5vwiQxizVR+8bq6HHZrvhfIZjAuZf64PY=', N'30111027', N'Av. Corrientes 1270, CABA', N'privado/dni/prueba27.webp', N'profesor', '1978-03-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Derecho y ciencias políticas para el secundario y primeros años de facultad.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Abogado (UBA)');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Derecho', N'Ciencias Políticas');
@@ -715,9 +715,9 @@ GO
 -- Leandro Benavídez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Leandro', N'Benavídez', N'leandro.benavidez@prueba.mip', N'pbkdf2$100000$dPrwRQzzAebA4UAOjjkFDQ==$TbKlBBu6+TFSpAv6hl6XW3jkwNjJeMqg3cz3HexhQs4=', N'30111028', N'Av. Corrientes 1280, CABA', N'privado/dni/prueba28.webp', N'profesor', '1981-04-22', 0);
+VALUES (N'Leandro', N'Benavídez', N'leandro.benavidez@prueba.mip', N'pbkdf2$100000$GtgkU8MoPNVul5c0hSjHZw==$LNrx4LbidkYgsSqcJaEL5At8iVRVZauB2VT/v11Q/ws=', N'30111028', N'Av. Corrientes 1280, CABA', N'privado/dni/prueba28.webp', N'profesor', '1981-04-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Italiano y alemán desde cero, con conversación y gramática.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Idiomas');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Italiano', N'Alemán');
@@ -729,9 +729,9 @@ GO
 -- Marina Godoy (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Marina', N'Godoy', N'marina.godoy@prueba.mip', N'pbkdf2$100000$7laH10iy9ivj2Ra3n/YIlQ==$A2AyloKM9J911qMyq/AccOUqAMUKXCC2vJ4/OHf9Nro=', N'30111029', N'Av. Corrientes 1290, CABA', N'privado/dni/prueba29.webp', N'profesor', '1984-05-01', 1);
+VALUES (N'Marina', N'Godoy', N'marina.godoy@prueba.mip', N'pbkdf2$100000$c6Ef5vAO58RDtZMG1f4Qqw==$75H22OrTUPisFva6vwexeAUBNA1PD2EW/Si8vgpcTSo=', N'30111029', N'Av. Corrientes 1290, CABA', N'privado/dni/prueba29.webp', N'profesor', '1984-05-01', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Tecnología, electrónica y robótica con proyectos que se arman en clase.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Terciario, Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Ingeniero Electrónico');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Tecnología y Robótica');
@@ -743,9 +743,9 @@ GO
 -- Nahuel Escobar (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Nahuel', N'Escobar', N'nahuel.escobar@prueba.mip', N'pbkdf2$100000$hwqMD99dVjzx5BWC4XgISw==$RXcM5T0BsvKGKjRuH1RvelVCmu9cSf80RdadNkNEhGs=', N'30111030', N'Av. Corrientes 1300, CABA', N'privado/dni/prueba30.webp', N'profesor', '1987-06-08', 0);
+VALUES (N'Nahuel', N'Escobar', N'nahuel.escobar@prueba.mip', N'pbkdf2$100000$jvEEo6ZPxmksbJ8Zsz/j+w==$GK4OvoC6UZebkrm2LJNzwyqKqKcWL+nocAsa5bB/MMI=', N'30111030', N'Av. Corrientes 1300, CABA', N'privado/dni/prueba30.webp', N'profesor', '1987-06-08', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Educación física, anatomía y apoyo para exámenes de ingreso a profesorados.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 3</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Educación Física');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Educación Física', N'Anatomía y Fisiología');
@@ -757,9 +757,9 @@ GO
 -- Olivia Juárez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Olivia', N'Juárez', N'olivia.juarez@prueba.mip', N'pbkdf2$100000$moiDd1t+laK6J+NDqPup7A==$CnR/rYBCsHzqk3LHHb3AGl5+p7ogDUSDbIwW1Vr8XFY=', N'30111031', N'Av. Corrientes 1310, CABA', N'privado/dni/prueba31.webp', N'profesor', '1990-07-15', 0);
+VALUES (N'Olivia', N'Juárez', N'olivia.juarez@prueba.mip', N'pbkdf2$100000$GmvvaGr2RGD0qx0SGo5A4w==$bHxgFbA465MbW8Ma84cjzMSXLlzzjOCL7wp19j4yfnM=', N'30111031', N'Av. Corrientes 1310, CABA', N'privado/dni/prueba31.webp', N'profesor', '1990-07-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Ciencias naturales de los primeros años con experimentos y esquemas.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 2</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 6000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Ciencias Naturales');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Ciencias Naturales', N'Biología');
@@ -771,9 +771,9 @@ GO
 -- Pablo Ortega (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Pablo', N'Ortega', N'pablo.ortega@prueba.mip', N'pbkdf2$100000$Bc9pwg3ax7ubecHdbu/NHQ==$GWPXfmkYfVql75JStmtHegYEFV5UkBt834stKPNVj7w=', N'30111032', N'Av. Corrientes 1320, CABA', N'privado/dni/prueba32.webp', N'profesor', '1993-08-22', 1);
+VALUES (N'Pablo', N'Ortega', N'pablo.ortega@prueba.mip', N'pbkdf2$100000$YEmQDXHYPlMLnWfXzIxxwg==$e25xHoaXf0M722uS02+reekKT6DloTHZNrYGaF/TZFc=', N'30111032', N'Av. Corrientes 1320, CABA', N'privado/dni/prueba32.webp', N'profesor', '1993-08-22', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Latín y literatura con análisis de textos paso a paso.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Letras Clásicas');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Latín', N'Lengua y Literatura');
@@ -785,9 +785,9 @@ GO
 -- Romina Torres (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Romina', N'Torres', N'romina.torres@prueba.mip', N'pbkdf2$100000$0dhP9kvlHHbFMcKwaSTnsQ==$NCrdy8vD7yxiTyCyGyegHMCqvA4ikLAzHeXFMbU/VXQ=', N'30111033', N'Av. Corrientes 1330, CABA', N'privado/dni/prueba33.webp', N'profesor', '1996-09-01', 0);
+VALUES (N'Romina', N'Torres', N'romina.torres@prueba.mip', N'pbkdf2$100000$dfoy7F7fE8YvJgHlg6ZM8w==$3CMKytsva+pO5fg+WarewkllCd698FuQh8o+ei0/8kA=', N'30111033', N'Av. Corrientes 1330, CABA', N'privado/dni/prueba33.webp', N'profesor', '1996-09-01', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Filosofía para entender y discutir, no solo memorizar.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Filosofía para entender y discutir las ideas, no solo para memorizar autores.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 3 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Filosofía');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Filosofía');
@@ -799,9 +799,9 @@ GO
 -- Santiago Zárate (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Santiago', N'Zárate', N'santiago.zarate@prueba.mip', N'pbkdf2$100000$1MHPym7OV/MezLBZ4/BjgQ==$7+C0Wa+W0V7sLZEjQuDatuOx0Ra34u2eznwp0zymvmM=', N'30111034', N'Av. Corrientes 1340, CABA', N'privado/dni/prueba34.webp', N'profesor', '1999-10-08', 0);
+VALUES (N'Santiago', N'Zárate', N'santiago.zarate@prueba.mip', N'pbkdf2$100000$ON1lgXMF6baniDa4Q78pvA==$PlxMfK6C2hkMrlf8tda70RU6Lth+DdgJM0lxlskbnkw=', N'30111034', N'Av. Corrientes 1340, CABA', N'privado/dni/prueba34.webp', N'profesor', '1999-10-08', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Francés con conversación y preparación para el DELF.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Francés con conversación, canciones y preparación para exámenes como el DELF.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 5, Secundario 6, Terciario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Francés');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Francés');
@@ -813,9 +813,9 @@ GO
 -- Tamara Esposito (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Tamara', N'Esposito', N'tamara.esposito@prueba.mip', N'pbkdf2$100000$E3+CgCmo8XSZqNHz0PQgAw==$AhhD0IbHBgwQ8mWyiwgPM51GWwYaYKVOqyIIxDA7Rto=', N'30111035', N'Av. Corrientes 1350, CABA', N'privado/dni/prueba35.webp', N'profesor', '1977-11-15', 1);
+VALUES (N'Tamara', N'Esposito', N'tamara.esposito@prueba.mip', N'pbkdf2$100000$OqbG76Git5EH8dDQwRny0A==$8jYv/qUW+1HtTP7woGW8IIt8Ul2nkX3u37lbA3KITC4=', N'30111035', N'Av. Corrientes 1350, CABA', N'privado/dni/prueba35.webp', N'profesor', '1977-11-15', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Dibujo y arte para trabajos prácticos y carpetas de arte.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Dibujo y arte para trabajos prácticos, carpetas y el desarrollo de tu propio estilo.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Artes Visuales');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Dibujo y Arte');
@@ -827,9 +827,9 @@ GO
 -- Ulises Castro (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Ulises', N'Castro', N'ulises.castro@prueba.mip', N'pbkdf2$100000$vpBtXTnVwTxVUlLiAuonkg==$IK0TV0pu8Et2BGkCw3EoXncO76l4gcdVTklhNg5k1FQ=', N'30111036', N'Av. Corrientes 1360, CABA', N'privado/dni/prueba36.webp', N'profesor', '1980-12-22', 0);
+VALUES (N'Ulises', N'Castro', N'ulises.castro@prueba.mip', N'pbkdf2$100000$quudBsuXELqsmliO0rfMJQ==$slcO75V2KGxp/51ONN1nBh0+0PiNtMxwkfyvXLUqyX4=', N'30111036', N'Av. Corrientes 1360, CABA', N'privado/dni/prueba36.webp', N'profesor', '1980-12-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Matemática con ejercicios graduados: de lo básico a los problemas de examen.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Te ayudo a perderle el miedo a la matemática: partimos de lo que ya sabés y vamos paso a paso hasta resolver los problemas de examen.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Matemática');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Matemática');
@@ -841,9 +841,9 @@ GO
 -- Vanesa Herrero (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Vanesa', N'Herrero', N'vanesa.herrero@prueba.mip', N'pbkdf2$100000$aUElwd2W3xa94eNuueDehw==$Qt7Ru8TQB8qHjK8JEh4maMwy/lbrGhaOF7RuxQt+TwM=', N'30111037', N'Av. Corrientes 1370, CABA', N'privado/dni/prueba37.webp', N'profesor', '1983-01-01', 0);
+VALUES (N'Vanesa', N'Herrero', N'vanesa.herrero@prueba.mip', N'pbkdf2$100000$CLqwObK8bSQ+zQHDrDEsxA==$UfJJNrZMKOYj9rmjbFQ/Olww1E7CDA6EdtPplCwxass=', N'30111037', N'Av. Corrientes 1370, CABA', N'privado/dni/prueba37.webp', N'profesor', '1983-01-01', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Física y matemática con experimentos caseros y problemas resueltos.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Entender la física es pasar de las fórmulas de memoria a saber por qué funcionan. Resolvemos problemas juntos, con ejemplos de la vida diaria.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Terciario, Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciado en Física');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Física', N'Matemática');
@@ -855,9 +855,9 @@ GO
 -- Walter Medina (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Walter', N'Medina', N'walter.medina@prueba.mip', N'pbkdf2$100000$+omyNpkw58tCwUXvmk7/Gw==$1Sl60hKczrSa2vyYRe1d9q1vlyEXXM4T3B9L7E+blbw=', N'30111038', N'Av. Corrientes 1380, CABA', N'privado/dni/prueba38.webp', N'profesor', '1986-02-08', 1);
+VALUES (N'Walter', N'Medina', N'walter.medina@prueba.mip', N'pbkdf2$100000$r8Vr3F/zxcQzwJyUSQ/LpQ==$uyzm0ibl3bqlRcsz/Y4yw6aASecj0qq5siWbDWhD270=', N'30111038', N'Av. Corrientes 1380, CABA', N'privado/dni/prueba38.webp', N'profesor', '1986-02-08', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Ciencias naturales con esquemas y repaso antes de cada prueba.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Química sin vueltas: teoría clara, ejercicios guiados y práctica de los temas que más se toman en los exámenes.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 3</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Ciencias Naturales');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Química', N'Biología');
@@ -869,9 +869,9 @@ GO
 -- Ximena Ramos (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Ximena', N'Ramos', N'ximena.ramos@prueba.mip', N'pbkdf2$100000$wVp8Dyy50roq6B0dumZG6A==$8/OiJPuDP9xO5IiyWxKx/DwVop3L6iJ1uS2MUqBSrXg=', N'30111039', N'Av. Corrientes 1390, CABA', N'privado/dni/prueba39.webp', N'profesor', '1989-03-15', 0);
+VALUES (N'Ximena', N'Ramos', N'ximena.ramos@prueba.mip', N'pbkdf2$100000$OAHOpbH9XDN3vDMXfSBd5w==$WViGNXrsuZMfgIGby2lxgCtspoFXzoyzfjuy8RR/znE=', N'30111039', N'Av. Corrientes 1390, CABA', N'privado/dni/prueba39.webp', N'profesor', '1989-03-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Inglés para el colegio, exámenes internacionales y conversación.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases de inglés centradas en lo que necesitás: el colegio, los exámenes internacionales o animarte a hablar.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 2</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Inglés');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Inglés');
@@ -883,9 +883,9 @@ GO
 -- Yamila Weiss (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Yamila', N'Weiss', N'yamila.weiss@prueba.mip', N'pbkdf2$100000$XRTPVp+xf8pyURFIzasYNw==$HTVgnkPmTahMxAY+FXmb9qENkJP3w63Vr3Cc529GHw8=', N'30111040', N'Av. Corrientes 1400, CABA', N'privado/dni/prueba40.webp', N'profesor', '1992-04-22', 0);
+VALUES (N'Yamila', N'Weiss', N'yamila.weiss@prueba.mip', N'pbkdf2$100000$52HXd83g73mzrTe52P+1XA==$Q4rfTcWsNuWyQEEh4NiIuSDOLlcG0KQHtxXJneG0gCw=', N'30111040', N'Av. Corrientes 1400, CABA', N'privado/dni/prueba40.webp', N'profesor', '1992-04-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Lectura, escritura y comprensión de textos, con foco en los trabajos del colegio.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Trabajamos la lectura, la escritura y el análisis de textos para que puedas expresarte con claridad y rendir bien.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Letras');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Lengua y Literatura');
@@ -897,9 +897,9 @@ GO
 -- Zoe Cabrera (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Zoe', N'Cabrera', N'zoe.cabrera@prueba.mip', N'pbkdf2$100000$xhpT7QpleiuxEleMT7QMaA==$m9zJDNb+n8Nd+ASp4n56ffi7wq2XfXNo011oEIsdWuI=', N'30111041', N'Av. Corrientes 1410, CABA', N'privado/dni/prueba41.webp', N'profesor', '1995-05-01', 1);
+VALUES (N'Zoe', N'Cabrera', N'zoe.cabrera@prueba.mip', N'pbkdf2$100000$ksm7ofKkSodgttFraDopBA==$PYYcA2ChFkjfzdetiYPxmPmplbEfmpYlG7A06zHb4XY=', N'30111041', N'Av. Corrientes 1410, CABA', N'privado/dni/prueba41.webp', N'profesor', '1995-05-01', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Historia y geografía con mapas, líneas de tiempo y resúmenes claros.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>La historia se entiende mejor como una trama de causas y consecuencias. Armamos líneas de tiempo y resúmenes claros.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 3 a Secundario 5</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesor de Historia');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Historia', N'Geografía');
@@ -911,9 +911,9 @@ GO
 -- Axel Álvarez (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Axel', N'Álvarez', N'axel.alvarez@prueba.mip', N'pbkdf2$100000$s+63hMGNhE3DXhd/5zkh6A==$JI3dnUWLsF47JMFZZooLtOsEMaslPLlmGvrt4jU00XE=', N'30111042', N'Av. Corrientes 1420, CABA', N'privado/dni/prueba42.webp', N'profesor', '1998-06-08', 0);
+VALUES (N'Axel', N'Álvarez', N'axel.alvarez@prueba.mip', N'pbkdf2$100000$6RAEBWCWoaKC/OhxFrhEIg==$4gWEG26eEJUKzhhd/ZdOMBt7XE3OLhUEUi+px54milg=', N'30111042', N'Av. Corrientes 1420, CABA', N'privado/dni/prueba42.webp', N'profesor', '1998-06-08', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Programación desde cero: lógica, Python y proyectos pequeños.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Aprendé a programar desde cero o avanzá con tus trabajos prácticos: lógica, buenas prácticas y proyectos reales.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 5, Secundario 6, Terciario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Técnico Universitario en Programación');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Programación e Informática');
@@ -925,9 +925,9 @@ GO
 -- Bianca Figueroa (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Bianca', N'Figueroa', N'bianca.figueroa@prueba.mip', N'pbkdf2$100000$EWCQR5Cx77HiLP+OoILxWQ==$+IZXTFfcH0ZI+EhNqRLoTwbmhNUbjYWcTKagYnk2OCA=', N'30111043', N'Av. Corrientes 1430, CABA', N'privado/dni/prueba43.webp', N'profesor', '1976-07-15', 0);
+VALUES (N'Bianca', N'Figueroa', N'bianca.figueroa@prueba.mip', N'pbkdf2$100000$bly+BwnIgU3sRWlOlvrEXA==$ZfI2mWFL7P7PT4/Gcj9xV97Dfjrr5CENIHjTHIMW2G0=', N'30111043', N'Av. Corrientes 1430, CABA', N'privado/dni/prueba43.webp', N'profesor', '1976-07-15', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Economía y contabilidad explicadas con ejemplos de la vida diaria.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Economía y administración explicadas con casos reales, para que los conceptos dejen de ser abstractos.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 6000);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciado en Administración');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Economía', N'Contabilidad y Administración');
@@ -939,9 +939,9 @@ GO
 -- Candela Katz (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Candela', N'Katz', N'candela.katz@prueba.mip', N'pbkdf2$100000$msItVXPK6xt1k5+FA30FZg==$b79dFarDnyLEsCMmLl/mRQep78sheS5ahkBK2JiieKo=', N'30111044', N'Av. Corrientes 1440, CABA', N'privado/dni/prueba44.webp', N'profesor', '1979-08-22', 1);
+VALUES (N'Candela', N'Katz', N'candela.katz@prueba.mip', N'pbkdf2$100000$prRA2FWD4cspcF3Zrv/3hQ==$1m4IPsTW4/zBfsi/y4N53by1cRDN9n6B6tfSIRdc8nM=', N'30111044', N'Av. Corrientes 1440, CABA', N'privado/dni/prueba44.webp', N'profesor', '1979-08-22', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estadística y análisis para los primeros años de facultad.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estadística y análisis para los primeros años de facultad, con ejercicios resueltos y explicaciones sin vueltas.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 4 a Secundario 6</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciada en Estadística');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Estadística', N'Álgebra y Análisis');
@@ -953,9 +953,9 @@ GO
 -- Dante Peralta (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Dante', N'Peralta', N'dante.peralta@prueba.mip', N'pbkdf2$100000$vSaMkzdmX815lPWANkNItA==$OZOZrFVuIO+fnJpNASQo3hHJHw44oadhxhNA+U7M6LE=', N'30111045', N'Av. Corrientes 1450, CABA', N'privado/dni/prueba45.webp', N'profesor', '1982-09-01', 0);
+VALUES (N'Dante', N'Peralta', N'dante.peralta@prueba.mip', N'pbkdf2$100000$N+wisaNNtJCSOCvhqOcAog==$lSjQP6Zb6F+vx9dFTm4NRYrL/k3/bjyHmSqLmUJ58vo=', N'30111045', N'Av. Corrientes 1450, CABA', N'privado/dni/prueba45.webp', N'profesor', '1982-09-01', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Psicología y sociología para el secundario y el CBC, con casos y resúmenes.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Terciario, Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 7500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Licenciada en Psicología');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Psicología', N'Sociología');
@@ -967,9 +967,9 @@ GO
 -- Emilia Urquiza (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Emilia', N'Urquiza', N'emilia.urquiza@prueba.mip', N'pbkdf2$100000$+f4KaJ9Nawa9WOLCflr7MA==$UXsn2IDg8IUbslSVurniAJ9CgHcCkmzVomQUOdGsUf8=', N'30111046', N'Av. Corrientes 1460, CABA', N'privado/dni/prueba46.webp', N'profesor', '1985-10-08', 0);
+VALUES (N'Emilia', N'Urquiza', N'emilia.urquiza@prueba.mip', N'pbkdf2$100000$fzO4LoUVJSD0PH+f2ULGWQ==$LFGJ4v/OHBiQLRePbWhto6vRty3gqQrbO6zYn0O9y/A=', N'30111046', N'Av. Corrientes 1460, CABA', N'privado/dni/prueba46.webp', N'profesor', '1985-10-08', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Derecho y ciencias políticas para el secundario y primeros años de facultad.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 3</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 8500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Abogado (UBA)');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Derecho', N'Ciencias Políticas');
@@ -981,9 +981,9 @@ GO
 -- Franco Aguirre (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Franco', N'Aguirre', N'franco.aguirre@prueba.mip', N'pbkdf2$100000$TqPOvAc+lvrqwS19Q61m8Q==$IBCvgo9oyhR6U5NLW7DiJyWT5Ch7zoOuRstiCKrzLiw=', N'30111047', N'Av. Corrientes 1470, CABA', N'privado/dni/prueba47.webp', N'profesor', '1988-11-15', 1);
+VALUES (N'Franco', N'Aguirre', N'franco.aguirre@prueba.mip', N'pbkdf2$100000$vqB0dtfb6pmK9JoW/yHPQw==$RHkXeW801K2j1p6A8UG/KDcP41EgxLdCK1jf00q5BXo=', N'30111047', N'Av. Corrientes 1470, CABA', N'privado/dni/prueba47.webp', N'profesor', '1988-11-15', 1);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Italiano y alemán desde cero, con conversación y gramática.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Secundario 1 a Secundario 2</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 9500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Profesora de Idiomas');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Italiano', N'Alemán');
@@ -995,9 +995,9 @@ GO
 -- Guadalupe Funes (profesor)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Guadalupe', N'Funes', N'guadalupe.funes@prueba.mip', N'pbkdf2$100000$h607EIAB62lsGsRWenjWhg==$Tj9PPofPsCNbAmXrUyh4dPhLNfTqWiiP/CrEKt8BB50=', N'30111048', N'Av. Corrientes 1480, CABA', N'privado/dni/prueba48.webp', N'profesor', '1991-12-22', 0);
+VALUES (N'Guadalupe', N'Funes', N'guadalupe.funes@prueba.mip', N'pbkdf2$100000$iUO7GPSg13zzXKnPUNBJDg==$n9Kn5vnHl7cf/f5jUZ4HKyDKYduz2bcZXTgVfGmo8L8=', N'30111048', N'Av. Corrientes 1480, CABA', N'privado/dni/prueba48.webp', N'profesor', '1991-12-22', 0);
 SET @id = SCOPE_IDENTITY();
-INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Tecnología, electrónica y robótica con proyectos que se arman en clase.</p>');
+INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Clases personalizadas y claras, adaptadas a lo que necesitás y al programa de tu colegio.</p><p><strong>Cómo trabajo:</strong> repasamos lo que ya sabés, practicamos con ejercicios parecidos a los de tus evaluaciones y cerramos cada clase con un resumen para estudiar solo.</p><ul><li>Nivel: Universitario</li><li>Material de práctica incluido</li><li>Seguimiento por mensaje entre clases</li></ul><p>Escribime y armamos un plan según tus fechas de examen.</p>');
 INSERT INTO InfoProfesores (idUsuario, precioHora) VALUES (@id, 5500);
 INSERT INTO Titulos (idUsuario, titulo) VALUES (@id, N'Ingeniero Electrónico');
 INSERT INTO Usuarios_Materias (idUsuario, idMateria) SELECT @id, ID FROM Materias WHERE nombre IN (N'Tecnología y Robótica');
@@ -1009,7 +1009,7 @@ GO
 -- Mateo Gómez (alumno)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Mateo', N'Gómez', N'mateo.gomez@prueba.mip', N'pbkdf2$100000$jx4qikVTD7wV1gZyM1wLkw==$qw5TDD043U6iqPQy9YYvgYg68J89Mu+eM8gTSsR8SVU=', N'40111001', N'Av. Corrientes 2000, CABA', N'privado/dni/prueba100.webp', N'alumno', '2005-01-10', 1);
+VALUES (N'Mateo', N'Gómez', N'mateo.gomez@prueba.mip', N'pbkdf2$100000$yR4wOQk/bW4CPZ4DFYZF5w==$74Rx7vnEggTcibjCtOjpq9H8F+l4ILnniILgjxFZUUw=', N'40111001', N'Av. Corrientes 2000, CABA', N'privado/dni/prueba100.webp', N'alumno', '2005-01-10', 1);
 SET @id = SCOPE_IDENTITY();
 INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estudiante que busca ayuda para rendir bien.</p>');
 INSERT INTO Usuarios_Niveles (idUsuario, idNivel) SELECT @id, ID FROM Niveles WHERE nombre IN (N'Secundario 3');
@@ -1019,7 +1019,7 @@ GO
 -- Carolina Suárez (alumno)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Carolina', N'Suárez', N'carolina.suarez@prueba.mip', N'pbkdf2$100000$2+mu2SQGWZYjp0xT0BdgUQ==$FslM7xMy8B04J1DFvHCxKAvqcnc73njpEfv/6KY4VUw=', N'40111002', N'Av. Corrientes 2010, CABA', N'privado/dni/prueba101.webp', N'alumno', '2006-02-11', 1);
+VALUES (N'Carolina', N'Suárez', N'carolina.suarez@prueba.mip', N'pbkdf2$100000$Q84OzGHAJBP0cjBlSX55QQ==$KqNgeb3UiLS/HmKYGDtc74vQmsE9P5dl4YetZdpWkV8=', N'40111002', N'Av. Corrientes 2010, CABA', N'privado/dni/prueba101.webp', N'alumno', '2006-02-11', 1);
 SET @id = SCOPE_IDENTITY();
 INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estudiante que busca ayuda para rendir bien.</p>');
 INSERT INTO Usuarios_Niveles (idUsuario, idNivel) SELECT @id, ID FROM Niveles WHERE nombre IN (N'Secundario 4');
@@ -1029,7 +1029,7 @@ GO
 -- Tomás Pereyra (alumno)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Tomás', N'Pereyra', N'tomas.pereyra@prueba.mip', N'pbkdf2$100000$iOOVXwWBM6pxWCDmwhaNcw==$1z+cCNCy+1rkGR3nUEizNZN6Ik+RgXmQmhutgq7ifMg=', N'40111003', N'Av. Corrientes 2020, CABA', N'privado/dni/prueba102.webp', N'alumno', '2007-03-12', 1);
+VALUES (N'Tomás', N'Pereyra', N'tomas.pereyra@prueba.mip', N'pbkdf2$100000$YX/TolW3bHmbXLjrsSF72A==$12AZPxd2mznRqfbYeqhTFxax3PjZGrnzQmAPr9aDNx0=', N'40111003', N'Av. Corrientes 2020, CABA', N'privado/dni/prueba102.webp', N'alumno', '2007-03-12', 1);
 SET @id = SCOPE_IDENTITY();
 INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estudiante que busca ayuda para rendir bien.</p>');
 INSERT INTO Usuarios_Niveles (idUsuario, idNivel) SELECT @id, ID FROM Niveles WHERE nombre IN (N'Secundario 5');
@@ -1039,7 +1039,7 @@ GO
 -- Lara Giménez (alumno)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Lara', N'Giménez', N'lara.gimenez@prueba.mip', N'pbkdf2$100000$VFxCZWTIGivoSG1UaImeMg==$uaBT20HC9nk+Pa2pbwNLUk4Dhr6CdlYgwSt8Oc3Cbic=', N'40111004', N'Av. Corrientes 2030, CABA', N'privado/dni/prueba103.webp', N'alumno', '2008-04-13', 1);
+VALUES (N'Lara', N'Giménez', N'lara.gimenez@prueba.mip', N'pbkdf2$100000$QzFJ8+8CaDx9Q4zEFfMqdw==$/DqhRt1zdPfCBMniRcny4SiL6hrW9W/ozMWmLgZRsjQ=', N'40111004', N'Av. Corrientes 2030, CABA', N'privado/dni/prueba103.webp', N'alumno', '2008-04-13', 1);
 SET @id = SCOPE_IDENTITY();
 INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estudiante que busca ayuda para rendir bien.</p>');
 INSERT INTO Usuarios_Niveles (idUsuario, idNivel) SELECT @id, ID FROM Niveles WHERE nombre IN (N'Secundario 2');
@@ -1049,7 +1049,7 @@ GO
 -- Bautista Romero (alumno)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Bautista', N'Romero', N'bautista.romero@prueba.mip', N'pbkdf2$100000$0tsAn1jddzhMi5BPFrYuYA==$FinGcO9zMH6DOs2LWfZriZi76sNzOqU69bqkSEP+s48=', N'40111005', N'Av. Corrientes 2040, CABA', N'privado/dni/prueba104.webp', N'alumno', '2005-05-14', 1);
+VALUES (N'Bautista', N'Romero', N'bautista.romero@prueba.mip', N'pbkdf2$100000$ewqkGMj1Wtdi/DG2I0nBfA==$F4+h0OxKsKULRo+V/P3+SkW3RcXAny0OVUu+jy3AVL0=', N'40111005', N'Av. Corrientes 2040, CABA', N'privado/dni/prueba104.webp', N'alumno', '2005-05-14', 1);
 SET @id = SCOPE_IDENTITY();
 INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estudiante que busca ayuda para rendir bien.</p>');
 INSERT INTO Usuarios_Niveles (idUsuario, idNivel) SELECT @id, ID FROM Niveles WHERE nombre IN (N'Universitario');
@@ -1059,7 +1059,7 @@ GO
 -- Martina Ledesma (alumno)
 DECLARE @id INT;
 INSERT INTO Usuarios (nombre, apellido, mail, contrasena, dni, direccion, fotoDni, tipoUsuario, fechaNacimiento, verificado)
-VALUES (N'Martina', N'Ledesma', N'martina.ledesma@prueba.mip', N'pbkdf2$100000$tVg5QKodal894JfocHemug==$O56jYghcuWgRdUtCfvhj9A5OCEHidT4BP7lqN7y/Qu0=', N'40111006', N'Av. Corrientes 2050, CABA', N'privado/dni/prueba105.webp', N'alumno', '2006-06-15', 1);
+VALUES (N'Martina', N'Ledesma', N'martina.ledesma@prueba.mip', N'pbkdf2$100000$r96Jtr0/RnNYw0fRFzKhBA==$9L9OG77559pN/c0+Y2Izkfa8h5Y+z7+tAt3TFHlDIoI=', N'40111006', N'Av. Corrientes 2050, CABA', N'privado/dni/prueba105.webp', N'alumno', '2006-06-15', 1);
 SET @id = SCOPE_IDENTITY();
 INSERT INTO Perfiles (idUsuario, descripcion) VALUES (@id, N'<p>Estudiante que busca ayuda para rendir bien.</p>');
 INSERT INTO Usuarios_Niveles (idUsuario, idNivel) SELECT @id, ID FROM Niveles WHERE nombre IN (N'Universitario');
