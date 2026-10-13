@@ -2059,6 +2059,206 @@ fieldset {
     text-align: center;
 }
 
+/* Lista del catálogo: una tarjeta horizontal por profesor (la arma catalogo.js) */
+.catalogo .listaProfesores {
+    display: grid;
+    gap: 1rem;
+}
+
+.profesorFila {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem 1.25rem;
+    align-items: start;
+}
+
+.profesorFila .avatar {
+    --bs-avatar-size: 3.5rem;
+    --bs-avatar-border-radius: .9rem;
+    border-radius: .9rem;
+}
+
+.profesorFila .cuerpo {
+    display: grid;
+    gap: .55rem;
+    min-width: 0;
+}
+
+.profesorFila .nombre {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.profesorFila h3 {
+    font-size: 1.1rem;
+}
+
+.profesorFila h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.profesorFila h3 a:hover {
+    text-decoration: underline;
+}
+
+.profesorFila .colegios {
+    font-size: .8rem;
+    color: var(--colorTextoSuave);
+}
+
+.profesorFila .etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.profesorFila .resumen {
+    font-size: .85rem;
+}
+
+.profesorFila .datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--colorTexto);
+}
+
+.profesorFila .datos .bi-star-fill {
+    color: #F59E0B;
+}
+
+.profesorFila .datos .bi {
+    margin-right: .15rem;
+}
+
+/* Columna derecha: modalidad, precio y botones */
+.profesorFila .lateral {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: .6rem;
+    padding-top: .9rem;
+    border-top: 2px dashed var(--colorBorde);
+}
+
+.profesorFila .etiquetaModalidad {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--colorTextoSuave);
+}
+
+.profesorFila .modalidades {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+
+.profesorFila .importe {
+    font-size: .8rem;
+}
+
+.profesorFila .importe strong {
+    font-family: var(--fuenteMarca);
+    font-size: 1.3rem;
+    color: var(--colorTinta);
+}
+
+@media (width >= 768px) {
+    .profesorFila {
+        grid-template-columns: auto 1fr 11rem;
+        align-items: start;
+    }
+
+    .profesorFila .lateral {
+        grid-column: auto;
+        justify-items: end;
+        padding: 0;
+        border-top: 0;
+        text-align: right;
+    }
+
+    .profesorFila .modalidades {
+        justify-content: flex-end;
+    }
+
+    .profesorFila .lateral .boton {
+        width: 100%;
+    }
+}
+
+/* Paginación del catálogo: flechas, número de página y tarjetas por página */
+.catalogo .paginador {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.catalogo .paginador[hidden] {
+    display: none;
+}
+
+.catalogo .paginador .paginas,
+.catalogo .paginador .porPagina {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    font-weight: 700;
+}
+
+.catalogo .paginador .numerosPagina {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+}
+
+.catalogo .paginador .numero {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 .5rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: .6rem;
+    background-color: var(--colorSuperficie);
+    font-weight: 700;
+    color: var(--colorTinta);
+}
+
+.catalogo .paginador .numero:hover {
+    border-color: var(--colorCoral);
+}
+
+.catalogo .paginador .numero.activo {
+    border-color: var(--colorCoral);
+    background-color: var(--colorCoral);
+    color: #fff;
+}
+
+.catalogo .paginador .puntos {
+    color: var(--colorTextoSuave);
+}
+
+.catalogo .paginador button:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.catalogo .paginador .porPagina label {
+    font-size: .85rem;
+    color: var(--colorTextoSuave);
+}
+
+.catalogo .paginador .porPagina select {
+    width: auto;
+}
+
 /* ---------- 3.12 Registro e inicio de sesión ---------- */
 .acceso {
     padding-block: clamp(2rem, 3.5vw, 3rem);

@@ -87,7 +87,7 @@ Aparición al scroll (`.revelar` → `.visible`, escalonada con `--retraso`), ci
 ## 5. Mapa de archivos (estado actual)
 
 ```
-Controllers/HomeController.cs      Index, Catalogo, Soporte, QuienesSomos, Registrarse, IniciarSesion,
+Controllers/HomeController.cs      Index, Soporte, QuienesSomos, Registrarse, IniciarSesion,
                                    PanelControl, MiColegio, CerrarSesion, Privacy, Error (datos de ejemplo con TODO BD)
 Models/BD.cs                       VACÍO — acá van todas las consultas Dapper
 Models/Profesor.cs, Clase.cs       Modelos de ejemplo (propiedades auto-implementadas)
@@ -300,3 +300,13 @@ Claves: `idUsuario`, `nombreUsuario`, `inicialesUsuario`, `cantidadNotificacione
 - **Componente reutilizable: selector con búsqueda** (`select[data-buscable]`, simple o `multiple`): click → lista scrolleable que se filtra mientras se escribe (sin tildes ni mayúsculas, primero las que empiezan con lo escrito), teclado (flechas, Enter, Esc, Backspace), etiquetas con ✕ en el múltiple. El `<select>` queda oculto y sigue mandando (value / selectedOptions / evento change). Se usa en el modal, en los filtros del Catálogo (materia, colegio, modalidad, nivel — modalidad y nivel dejaron de ser radios/checkboxes), en la Configuración del Panel y en el tipo de consulta de Soporte.
 - Otros: `mostrarSnackbar()` (Snackbar del UI Kit), `pedirJson()`, `VerificacionCuenta` (texto "el DNI, la dirección y tu colegio"), `.gitignore` ignora `wwwroot/uploads/` y `App_Data/`. NuGet nuevos: `HtmlSanitizer` y `SkiaSharp`.
 - Verificado: `dotnet build` sin errores ni advertencias; profesor y alumno completando todo hasta quedar verificados (tick en perfil y header sin recargar), mail y DNI repetidos, selector (filtrar, elegir, quitar, teclado, Esc dentro del modal), filtros del catálogo y "Limpiar filtros", foto WEBP 100×100 real, foto del DNI devuelve 404 por URL, HTML peligroso eliminado; 1280 px y 390 px sin scroll horizontal. Cuentas y archivos de prueba borrados al final.
+
+### 2026-10-13 — Sistema de catálogo (con fetch, controller y JS propios)
+- **Controller propio**: `CatalogoController` con `GET /Catalogo` (página con los selectores, preselecciona los filtros de la URL) y `GET /Catalogo/Buscar` (JSON: `total`, `pagina`, `porPagina`, `totalPaginas` y los profesores de la página). Se sacó la acción `Catalogo` de `HomeController`; todos los links del sitio ahora van a `Catalogo/Index`.
+- **JS propio**: `wwwroot/js/catalogo.js` (se carga solo en el catálogo con `@section Scripts`). Lee los filtros, llama a `Catalogo/Buscar` con `fetch`, dibuja las tarjetas con `textContent` y la paginación, y guarda los filtros en la URL. Se borró `inicializarFiltrosCatalogo` de `site.js`.
+- **Filtros**: búsqueda (nombre, materia, colegio o título, sin importar tildes), materia, colegio, modalidad y nivel (varios). Al cambiar un selector se busca desde la página 1; al escribir se espera 400 ms.
+- **Tarjetas horizontales** (forma de la captura del Miro): avatar con foto o iniciales de color, nombre con sello "Verificado" (y "Popular" si tiene 4,8 o más con 2 reseñas o más), colegios, materias, resumen, calificación y niveles; a la derecha modalidad, precio por hora y botones *Ver perfil* y *Enviar pedido* (por ahora los dos llevan al perfil; cuando existan las clases, el segundo abre el pedido).
+- **Paginación**: de a 10 por defecto, con Anterior / números / Siguiente y un selector de 5, 10, 15 o 20 por página.
+- **BD**: SP `obtenerCatalogo` (filtros + `OFFSET/FETCH`, orden: verificados, calificación, reseñas) en `MIP-catalogo.sql`, junto con **16 profesores y 2 alumnos de prueba** (contraseña `Prueba123`, mails `@prueba.mip`) y reseñas. Borrarlos antes de publicar. `BD.obtenerCatalogo` devuelve `ResultadoCatalogo`.
+- Inicio muestra los 3 primeros del catálogo; "Mi Colegio" filtra por el colegio del usuario.
+- Sin verificar con `dotnet build` (no había .NET donde se escribió): compilar y probar en la PC.

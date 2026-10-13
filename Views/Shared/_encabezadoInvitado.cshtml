@@ -1,6 +1,7 @@
 @* Header para visitantes sin sesión iniciada *@
 @{
     string accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    string controladorActual = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
 }
 
 <header class="encabezado" id="encabezado">
@@ -23,10 +24,10 @@
                 <div class="drawer-body">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link @(accionActual == "Index" ? "active" : "")" aria-current="@(accionActual == "Index" ? "page" : null)" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link @((controladorActual == "Home" && accionActual == "Index") ? "active" : "")" aria-current="@((controladorActual == "Home" && accionActual == "Index") ? "page" : null)" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(accionActual == "Catalogo" ? "active" : "")" aria-current="@(accionActual == "Catalogo" ? "page" : null)" asp-controller="Home" asp-action="Catalogo">Catálogo</a>
+                            <a class="nav-link @(controladorActual == "Catalogo" ? "active" : "")" aria-current="@(controladorActual == "Catalogo" ? "page" : null)" asp-controller="Catalogo" asp-action="Index">Catálogo</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(accionActual == "QuienesSomos" ? "active" : "")" aria-current="@(accionActual == "QuienesSomos" ? "page" : null)" asp-controller="Home" asp-action="QuienesSomos">Quiénes somos</a>

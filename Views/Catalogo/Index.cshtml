@@ -1,16 +1,14 @@
 @{
     ViewData["Title"] = "Catálogo";
-    List<Profesor> profesores = ViewBag.profesores ?? new List<Profesor>();
-    List<string> materias = ViewBag.materias ?? new List<string>();
-    List<string> colegios = ViewBag.colegios ?? new List<string>();
-    List<string> niveles = ViewBag.niveles ?? new List<string>();
-    List<string> modalidades = ViewBag.modalidades ?? new List<string>();
-    string busqueda = ViewBag.busqueda ?? "";
-    string materiaElegida = ViewBag.materia ?? "";
-    string colegioElegido = ViewBag.colegio ?? "";
-    string modalidadElegida = ViewBag.modalidad ?? "";
-    List<string> nivelesElegidos = ViewBag.nivelesElegidos ?? new List<string>();
-    string? errorCatalogo = ViewBag.errorCatalogo;
+    List<string> materias = ViewBag.materias;
+    List<string> colegios = ViewBag.colegios;
+    List<string> niveles = ViewBag.niveles;
+    List<string> modalidades = ViewBag.modalidades;
+    string busqueda = ViewBag.busqueda;
+    string materiaElegida = ViewBag.materia;
+    string colegioElegido = ViewBag.colegio;
+    string modalidadElegida = ViewBag.modalidad;
+    List<string> nivelesElegidos = ViewBag.nivelesElegidos;
 }
 
 <!-- ================= CABECERA ================= -->
@@ -40,7 +38,7 @@
                         </div>
 
                         <div class="drawer-body">
-                            <form id="formularioFiltros" method="get" asp-controller="Home" asp-action="Catalogo">
+                            <form id="formularioFiltros" method="get" asp-controller="Catalogo" asp-action="Index">
                                 <div class="form-field">
                                     <label for="filtroTexto">Buscar</label>
                                     <input class="form-control" type="search" id="filtroTexto" name="busqueda" value="@busqueda" placeholder="Nombre, materia o tema..." autocomplete="off" />
@@ -89,7 +87,7 @@
                                     </select>
                                 </div>
 
-                                <a class="boton contorno chico" id="botonLimpiarFiltros" asp-controller="Home" asp-action="Catalogo">Limpiar filtros</a>
+                                <button class="boton contorno chico" type="reset" id="botonLimpiarFiltros">Limpiar filtros</button>
                             </form>
                         </div>
                     </dialog>
@@ -97,34 +95,44 @@
             </div>
 
             <div class="col-12 lg:col-8 xl:col-9">
-                <p class="cantidad" id="cantidadResultados" aria-live="polite">@(profesores.Count == 1 ? "1 profesor" : profesores.Count + " profesores")</p>
+                <p class="cantidad" id="cantidadResultados" aria-live="polite">Cargando profesores...</p>
 
-                <div class="row row-cols-1 md:row-cols-2 xl:row-cols-3 g-3 lg:g-4" id="listaProfesores">
-                    @foreach (var profesor in profesores)
-                    {
-                        <div class="col">
-                            <partial name="_tarjetaProfesor" model="profesor" />
-                        </div>
-                    }
+                <div class="listaProfesores" id="listaProfesores"></div>
+
+                <div class="card estatica sinResultados" id="sinResultados" hidden>
+                    <span class="icono"><i class="bi bi-emoji-neutral" aria-hidden="true"></i></span>
+                    <h3>No encontramos profesores con esos filtros</h3>
+                    <p>Probá quitando algún filtro o buscando otra materia.</p>
                 </div>
 
-                @if (errorCatalogo != null)
-                {
-                    <div class="card estatica sinResultados" id="sinResultados">
-                        <span class="icono"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
-                        <h3>Algo salió mal</h3>
-                        <p>@errorCatalogo</p>
+                <div class="card estatica sinResultados" id="errorCatalogo" hidden>
+                    <span class="icono"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
+                    <h3>Algo salió mal</h3>
+                    <p id="mensajeErrorCatalogo">No pudimos cargar el catálogo. Probá de nuevo en un rato.</p>
+                </div>
+
+                @* Paginación: flechas, número de página y cantidad de tarjetas por página *@
+                <nav class="paginador" id="paginador" aria-label="Páginas del catálogo" hidden>
+                    <div class="paginas">
+                        <button class="boton contorno chico" type="button" id="paginaAnterior" aria-label="Página anterior"><i class="bi bi-chevron-left" aria-hidden="true"></i> Anterior</button>
+                        <span class="numerosPagina" id="numerosPagina"></span>
+                        <button class="boton contorno chico" type="button" id="paginaSiguiente" aria-label="Página siguiente">Siguiente <i class="bi bi-chevron-right" aria-hidden="true"></i></button>
                     </div>
-                }
-                else if (profesores.Count == 0)
-                {
-                    <div class="card estatica sinResultados" id="sinResultados">
-                        <span class="icono"><i class="bi bi-emoji-neutral" aria-hidden="true"></i></span>
-                        <h3>No encontramos profesores con esos filtros</h3>
-                        <p>Probá quitando algún filtro o buscando otra materia.</p>
+                    <div class="porPagina">
+                        <label for="tarjetasPorPagina">Por página</label>
+                        <select class="form-control" id="tarjetasPorPagina">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
                     </div>
-                }
+                </nav>
             </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="~/js/catalogo.js" asp-append-version="true"></script>
+}

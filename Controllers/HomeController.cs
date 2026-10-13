@@ -26,38 +26,11 @@ public class HomeController : Controller
         // Los 3 primeros del catálogo: cuentas verificadas y mejor calificadas. Si la base no responde, la página igual carga.
         try
         {
-            ViewBag.profesoresDestacados = new BD().obtenerCatalogo(null, null, null, null, null).Take(3).ToList();
+            ViewBag.profesoresDestacados = new BD().obtenerCatalogo(null, null, null, null, null, 1, 5).profesores.Take(3).ToList();
         }
         catch (Exception)
         {
             ViewBag.profesoresDestacados = new List<Profesor>();
-        }
-        return View();
-    }
-
-    // Los filtros llegan por la URL (Home/Catalogo?materia=...&nivel=Primaria&nivel=Secundaria), así se pueden compartir.
-    public IActionResult Catalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string[]? nivel)
-    {
-        string[] nivelesElegidos = nivel ?? new string[0];
-        ViewBag.busqueda = busqueda ?? "";
-        ViewBag.materia = materia ?? "";
-        ViewBag.colegio = colegio ?? "";
-        ViewBag.modalidad = modalidad ?? "";
-        ViewBag.nivelesElegidos = nivelesElegidos.ToList();
-
-        try
-        {
-            BD bd = new BD();
-            OpcionesPerfil opciones = bd.obtenerOpcionesPerfil();
-            ViewBag.materias = opciones.materias.Select(opcion => opcion.nombre).ToList();
-            ViewBag.colegios = opciones.escuelas.Select(opcion => opcion.nombre).ToList();
-            ViewBag.niveles = opciones.niveles.Select(opcion => opcion.nombre).ToList();
-            ViewBag.modalidades = opciones.modalidades.Select(opcion => opcion.nombre).ToList();
-            ViewBag.profesores = bd.obtenerCatalogo(busqueda, materia, colegio, modalidad, string.Join(",", nivelesElegidos));
-        }
-        catch (Exception)
-        {
-            ViewBag.errorCatalogo = "No pudimos cargar el catálogo. Probá de nuevo en un rato.";
         }
         return View();
     }
@@ -114,12 +87,12 @@ public class HomeController : Controller
             BD bd = new BD();
             DatosEdicion? datos = bd.obtenerDatosEdicion(int.Parse(idUsuario));
             OpcionPerfil? colegio = datos == null ? null : bd.obtenerOpcionesPerfil().escuelas.FirstOrDefault(escuela => datos.idsEscuelas.Contains(escuela.id));
-            if (colegio != null) return RedirectToAction("Catalogo", new { colegio = colegio.nombre });
+            if (colegio != null) return RedirectToAction("Index", "Catalogo", new { colegio = colegio.nombre });
         }
         catch (Exception)
         {
         }
-        return RedirectToAction("Catalogo");
+        return RedirectToAction("Index", "Catalogo");
     }
 
     public IActionResult Privacy()

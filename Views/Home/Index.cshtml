@@ -23,9 +23,9 @@
                     Buscá por materia o colegio, coordiná por chat y tomá tus clases presenciales o virtuales.
                 </p>
 
-                @* El formulario envía a Home/Catalogo?busqueda= *@
+                @* El formulario envía a Catalogo?busqueda= *@
                 <form class="buscador animarEntrada" id="formularioBuscador" style="--retraso: .3s"
-                      method="get" asp-controller="Home" asp-action="Catalogo" onsubmit="return validarBusqueda()" novalidate>
+                      method="get" asp-controller="Catalogo" asp-action="Index" onsubmit="return validarBusqueda()" novalidate>
                     <label for="campoBusqueda" class="visually-hidden">Buscar materia, profesor o colegio</label>
                     <input type="text" id="campoBusqueda" name="busqueda" placeholder="Materia, profesor o colegio..." autocomplete="off" />
                     <button type="submit" class="boton principal">
@@ -242,10 +242,10 @@
 
         <div class="colegios">
             <span>Explorá por colegio:</span>
-            <a class="badge badge-outline theme-inverse" asp-controller="Home" asp-action="Catalogo" asp-route-colegio="Belgrano Day School"><i class="bi bi-building"></i> Belgrano Day School</a>
-            <a class="badge badge-outline theme-inverse" asp-controller="Home" asp-action="Catalogo" asp-route-colegio="Colegio San Martín"><i class="bi bi-building"></i> Colegio San Martín</a>
-            <a class="badge badge-outline theme-inverse" asp-controller="Home" asp-action="Catalogo" asp-route-colegio="Colegio Nacional de Buenos Aires"><i class="bi bi-building"></i> Nacional Buenos Aires</a>
-            <a class="boton oscuro chico" asp-controller="Home" asp-action="Catalogo">Ver todos <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+            <a class="badge badge-outline theme-inverse" asp-controller="Catalogo" asp-action="Index" asp-route-colegio="Belgrano Day School"><i class="bi bi-building"></i> Belgrano Day School</a>
+            <a class="badge badge-outline theme-inverse" asp-controller="Catalogo" asp-action="Index" asp-route-colegio="Colegio San Martín"><i class="bi bi-building"></i> Colegio San Martín</a>
+            <a class="badge badge-outline theme-inverse" asp-controller="Catalogo" asp-action="Index" asp-route-colegio="Colegio Nacional de Buenos Aires"><i class="bi bi-building"></i> Nacional Buenos Aires</a>
+            <a class="boton oscuro chico" asp-controller="Catalogo" asp-action="Index">Ver todos <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
         </div>
     </div>
 </section>
@@ -336,7 +336,7 @@
             </div>
             <div class="col-12 lg:col-4 acciones">
                 <a class="boton secundario" asp-controller="Sesion" asp-action="Registrarse">Crear cuenta gratis</a>
-                <a class="boton claro" asp-controller="Home" asp-action="Catalogo">Ver catálogo</a>
+                <a class="boton claro" asp-controller="Catalogo" asp-action="Index">Ver catálogo</a>
             </div>
         </div>
     </div>

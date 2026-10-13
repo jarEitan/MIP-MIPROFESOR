@@ -122,31 +122,39 @@ public class BD
 
     // ================= CATÁLOGO =================
 
-    // Profesores que cumplen los filtros (todos opcionales). niveles: nombres separados por coma.
-    public List<Profesor> obtenerCatalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string? niveles)
+    // Una página de profesores que cumplen los filtros (todos opcionales). niveles: nombres separados por coma.
+    public ResultadoCatalogo obtenerCatalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string? niveles, int pagina, int porPagina)
     {
         using (var connection = new SqlConnection(connectionString))
         {
             using (var tablas = connection.QueryMultiple(
                 "obtenerCatalogo",
-                new { busqueda = busqueda, materia = materia, colegio = colegio, modalidad = modalidad, niveles = niveles },
+                new { busqueda = busqueda, materia = materia, colegio = colegio, modalidad = modalidad, niveles = niveles, pagina = pagina, porPagina = porPagina },
                 commandType: CommandType.StoredProcedure))
             {
-                List<Profesor> profesores = tablas.Read<Profesor>().ToList();
-                var materiasPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
-                var nivelesPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
-                var modalidadesPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
-                var colegiosPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+                ResultadoCatalogo resultado = tablas.ReadFirst<ResultadoCatalogo>();
+                resultado.profesores = tablas.Read<Profesor>().ToList();
+                var materiasPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+                var nivelesPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+                var modalidadesPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+                var colegiosPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
 
-                foreach (Profesor profesor in profesores)
+                foreach (Profesor profesor in resultado.profesores)
                 {
                     profesor.materias = materiasPorProfesor[profesor.id].ToList();
                     profesor.niveles = nivelesPorProfesor[profesor.id].ToList();
                     profesor.modalidades = modalidadesPorProfesor[profesor.id].ToList();
                     profesor.colegios = colegiosPorProfesor[profesor.id].ToList();
                 }
-                return profesores;
+                return resultado;
             }
         }
     }
+}
+
+// Una fila (profesor, nombre) de las listas del SP obtenerCatalogo
+public class ItemDeProfesor
+{
+    public int idUsuario { get; set; }
+    public string nombre { get; set; } = "";
 }

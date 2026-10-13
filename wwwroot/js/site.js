@@ -400,7 +400,7 @@ function inicializarRevelarAlScroll() {
 
 
 // ================= INICIO: validación del buscador =================
-// Se llama desde onsubmit del formulario. El envío va a Home/Catalogo?busqueda=...
+// Se llama desde onsubmit del formulario. El envío va a Catalogo?busqueda=...
 function validarBusqueda() {
     const campoBusqueda = document.getElementById("campoBusqueda");
     const mensajeErrorBusqueda = document.getElementById("mensajeErrorBusqueda");
@@ -426,41 +426,6 @@ function inicializarBuscador() {
     campoBusqueda.addEventListener("input", () => mostrarMensaje(mensajeErrorBusqueda, ""));
 
     // TODO BD: sugerencias en vivo cuando exista el endpoint (ej: Home/SugerirMaterias?texto=...)
-}
-
-
-// ================= CATÁLOGO: filtros =================
-// Los filtros son un formulario GET a Home/Catalogo: el servidor consulta la base (SP obtenerCatalogo)
-// y la URL conserva la búsqueda. Acá solo se envía el formulario cuando algo cambia.
-function inicializarFiltrosCatalogo() {
-    const formularioFiltros = document.getElementById("formularioFiltros");
-    const campoTexto = document.getElementById("filtroTexto");
-    if (!formularioFiltros || !campoTexto) return;
-
-    let temporizadorBusqueda = null;
-
-    // Al elegir en un selector (los de materia, colegio, modalidad y nivel) se filtra enseguida
-    formularioFiltros.addEventListener("change", evento => {
-        if (evento.target.tagName === "SELECT") formularioFiltros.requestSubmit();
-    });
-
-    // Al escribir se espera a que la persona termine antes de buscar
-    campoTexto.addEventListener("input", () => {
-        clearTimeout(temporizadorBusqueda);
-        temporizadorBusqueda = setTimeout(() => {
-            // La página se recarga con los resultados: se recuerda devolverle el foco al campo
-            try { sessionStorage.setItem("enfocarBusquedaCatalogo", "1"); } catch (error) { }
-            formularioFiltros.requestSubmit();
-        }, 600);
-    });
-
-    try {
-        if (sessionStorage.getItem("enfocarBusquedaCatalogo") === "1") {
-            sessionStorage.removeItem("enfocarBusquedaCatalogo");
-            campoTexto.focus();
-            campoTexto.setSelectionRange(campoTexto.value.length, campoTexto.value.length);
-        }
-    } catch (error) { }
 }
 
 
@@ -1251,7 +1216,6 @@ function inicializarSitio() {
     inicializarRolesDeRegistro();
     inicializarVerContrasena();
     inicializarBuscador();
-    inicializarFiltrosCatalogo();
     inicializarBuscadorDeAyuda();
     inicializarAccesosDelPanel();
     inicializarPerfil();
