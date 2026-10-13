@@ -2051,12 +2051,17 @@ fieldset {
         padding: 0;
     }
 
+    /* Misma tarjeta que los profesores. overflow visible: la lista de opciones de los selectores no se corta */
+    .catalogo .lg\:drawer,
+    .catalogo .drawer-body {
+        overflow: visible;
+    }
+
     .catalogo form {
         padding: 1.25rem;
-        border: var(--bordeMarcado);
+        border: 2px solid var(--colorBorde);
         border-radius: var(--radioGrande);
         background-color: var(--colorSuperficie);
-        box-shadow: var(--sombraMarcada);
     }
 }
 
@@ -2108,13 +2113,29 @@ fieldset {
     font-size: .85rem;
 }
 
+.profesorFila:hover {
+    translate: 0 -3px;
+}
+
 /* Columna derecha: modalidad, precio y botones */
 .profesorFila .lateral {
     grid-column: 1 / -1;
     display: grid;
-    gap: .6rem;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem .75rem;
+    align-items: center;
     padding-top: .9rem;
     border-top: 2px dashed var(--colorBorde);
+}
+
+.profesorFila .modalidades {
+    grid-column: 1;
+}
+
+.profesorFila .importe {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: end;
 }
 
 .profesorFila .etiquetaModalidad {
@@ -2137,10 +2158,18 @@ fieldset {
 
     .profesorFila .lateral {
         grid-column: auto;
+        grid-template-columns: 1fr;
         justify-items: end;
         padding: 0;
         border-top: 0;
         text-align: right;
+    }
+
+    .profesorFila .modalidades,
+    .profesorFila .importe {
+        grid-column: auto;
+        grid-row: auto;
+        justify-self: end;
     }
 
     .profesorFila .modalidades {
