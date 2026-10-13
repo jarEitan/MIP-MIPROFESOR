@@ -7,6 +7,7 @@ namespace MIP_MIPROFESOR.Models;
 // Acceso a datos del sitio con Dapper. El inicio de sesión y el registro están en BDsesion.cs.
 // Perfiles: stored procedures obtenerPerfil, obtenerOpcionesPerfil, obtenerDatosEdicion,
 // obtenerFaltantesVerificacion y guardarPerfilCompleto de la base MIP.
+// Catálogo: stored procedure obtenerCatalogo (MIP-catalogo.sql).
 public class BD
 {
     private static string connectionString = @"Server=localhost;Database=MIP;Integrated Security=True;TrustServerCertificate=True;";
@@ -116,6 +117,36 @@ public class BD
                     titulos = string.Join("|", edicion.titulos)
                 },
                 commandType: CommandType.StoredProcedure) ?? new ResultadoGuardado { resultado = "datosInvalidos" };
+        }
+    }
+
+    // ================= CATÁLOGO =================
+
+    // Profesores que cumplen los filtros (todos opcionales). niveles: nombres separados por coma.
+    public List<Profesor> obtenerCatalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string? niveles)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            using (var tablas = connection.QueryMultiple(
+                "obtenerCatalogo",
+                new { busqueda = busqueda, materia = materia, colegio = colegio, modalidad = modalidad, niveles = niveles },
+                commandType: CommandType.StoredProcedure))
+            {
+                List<Profesor> profesores = tablas.Read<Profesor>().ToList();
+                var materiasPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+                var nivelesPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+                var modalidadesPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+                var colegiosPorProfesor = tablas.Read<(int idUsuario, string nombre)>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+
+                foreach (Profesor profesor in profesores)
+                {
+                    profesor.materias = materiasPorProfesor[profesor.id].ToList();
+                    profesor.niveles = nivelesPorProfesor[profesor.id].ToList();
+                    profesor.modalidades = modalidadesPorProfesor[profesor.id].ToList();
+                    profesor.colegios = colegiosPorProfesor[profesor.id].ToList();
+                }
+                return profesores;
+            }
         }
     }
 }

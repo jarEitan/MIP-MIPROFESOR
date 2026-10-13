@@ -3,8 +3,14 @@
     List<Profesor> profesores = ViewBag.profesores ?? new List<Profesor>();
     List<string> materias = ViewBag.materias ?? new List<string>();
     List<string> colegios = ViewBag.colegios ?? new List<string>();
+    List<string> niveles = ViewBag.niveles ?? new List<string>();
+    List<string> modalidades = ViewBag.modalidades ?? new List<string>();
     string busqueda = ViewBag.busqueda ?? "";
+    string materiaElegida = ViewBag.materia ?? "";
     string colegioElegido = ViewBag.colegio ?? "";
+    string modalidadElegida = ViewBag.modalidad ?? "";
+    List<string> nivelesElegidos = ViewBag.nivelesElegidos ?? new List<string>();
+    string? errorCatalogo = ViewBag.errorCatalogo;
 }
 
 <!-- ================= CABECERA ================= -->
@@ -34,7 +40,7 @@
                         </div>
 
                         <div class="drawer-body">
-                            <form id="formularioFiltros" onsubmit="return false">
+                            <form id="formularioFiltros" method="get" asp-controller="Home" asp-action="Catalogo">
                                 <div class="form-field">
                                     <label for="filtroTexto">Buscar</label>
                                     <input class="form-control" type="search" id="filtroTexto" name="busqueda" value="@busqueda" placeholder="Nombre, materia o tema..." autocomplete="off" />
@@ -46,7 +52,7 @@
                                         <option value="">Todas las materias</option>
                                         @foreach (string materia in materias)
                                         {
-                                            <option value="@materia">@materia</option>
+                                            <option value="@materia" selected="@(materia == materiaElegida ? "selected" : null)">@materia</option>
                                         }
                                     </select>
                                 </div>
@@ -66,21 +72,24 @@
                                     <label for="filtroModalidad">Modalidad</label>
                                     <select class="form-control" id="filtroModalidad" name="modalidad" data-buscable data-placeholder="Presencial o virtual">
                                         <option value="">Todas las modalidades</option>
-                                        <option value="Presencial">Presencial</option>
-                                        <option value="Virtual">Virtual</option>
+                                        @foreach (string modalidad in modalidades)
+                                        {
+                                            <option value="@modalidad" selected="@(modalidad == modalidadElegida ? "selected" : null)">@modalidad</option>
+                                        }
                                     </select>
                                 </div>
 
                                 <div class="form-field">
                                     <label for="filtroNivel">Nivel escolar</label>
                                     <select class="form-control" id="filtroNivel" name="nivel" data-buscable data-placeholder="Todos los niveles" multiple>
-                                        <option value="Primaria">Primaria</option>
-                                        <option value="Secundaria">Secundaria</option>
-                                        <option value="Universitario">Universitario</option>
+                                        @foreach (string nivel in niveles)
+                                        {
+                                            <option value="@nivel" selected="@(nivelesElegidos.Contains(nivel) ? "selected" : null)">@nivel</option>
+                                        }
                                     </select>
                                 </div>
 
-                                <button class="boton contorno chico" type="reset" id="botonLimpiarFiltros">Limpiar filtros</button>
+                                <a class="boton contorno chico" id="botonLimpiarFiltros" asp-controller="Home" asp-action="Catalogo">Limpiar filtros</a>
                             </form>
                         </div>
                     </dialog>
@@ -88,7 +97,7 @@
             </div>
 
             <div class="col-12 lg:col-8 xl:col-9">
-                <p class="cantidad" id="cantidadResultados" aria-live="polite">@profesores.Count profesores</p>
+                <p class="cantidad" id="cantidadResultados" aria-live="polite">@(profesores.Count == 1 ? "1 profesor" : profesores.Count + " profesores")</p>
 
                 <div class="row row-cols-1 md:row-cols-2 xl:row-cols-3 g-3 lg:g-4" id="listaProfesores">
                     @foreach (var profesor in profesores)
@@ -99,11 +108,22 @@
                     }
                 </div>
 
-                <div class="card estatica sinResultados" id="sinResultados" hidden>
-                    <span class="icono"><i class="bi bi-emoji-neutral" aria-hidden="true"></i></span>
-                    <h3>No encontramos profesores con esos filtros</h3>
-                    <p>Probá quitando algún filtro o buscando otra materia.</p>
-                </div>
+                @if (errorCatalogo != null)
+                {
+                    <div class="card estatica sinResultados" id="sinResultados">
+                        <span class="icono"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
+                        <h3>Algo salió mal</h3>
+                        <p>@errorCatalogo</p>
+                    </div>
+                }
+                else if (profesores.Count == 0)
+                {
+                    <div class="card estatica sinResultados" id="sinResultados">
+                        <span class="icono"><i class="bi bi-emoji-neutral" aria-hidden="true"></i></span>
+                        <h3>No encontramos profesores con esos filtros</h3>
+                        <p>Probá quitando algún filtro o buscando otra materia.</p>
+                    </div>
+                }
             </div>
         </div>
     </div>

@@ -429,53 +429,38 @@ function inicializarBuscador() {
 }
 
 
-// ================= CATÁLOGO: filtros en el navegador =================
-// TODO BD: cuando exista BD.obtenerProfesores(...), el filtrado puede pasar al servidor.
+// ================= CATÁLOGO: filtros =================
+// Los filtros son un formulario GET a Home/Catalogo: el servidor consulta la base (SP obtenerCatalogo)
+// y la URL conserva la búsqueda. Acá solo se envía el formulario cuando algo cambia.
 function inicializarFiltrosCatalogo() {
     const formularioFiltros = document.getElementById("formularioFiltros");
-    const listaProfesores = document.getElementById("listaProfesores");
-    if (!formularioFiltros || !listaProfesores) return;
-
     const campoTexto = document.getElementById("filtroTexto");
-    const campoMateria = document.getElementById("filtroMateria");
-    const campoColegio = document.getElementById("filtroColegio");
-    const campoModalidad = document.getElementById("filtroModalidad");
-    const campoNivel = document.getElementById("filtroNivel");
-    const textoCantidad = document.getElementById("cantidadResultados");
-    const mensajeSinResultados = document.getElementById("sinResultados");
-    const columnasProfesores = Array.from(listaProfesores.children);
+    if (!formularioFiltros || !campoTexto) return;
 
-    const aplicarFiltros = () => {
-        const textoBuscado = normalizarTexto(campoTexto.value);
-        // Materia, colegio y modalidad son selectores simples; nivel es múltiple (selectores con búsqueda)
-        const modalidadElegida = campoModalidad.value;
-        const nivelesElegidos = Array.from(campoNivel.selectedOptions).map(opcion => opcion.value).filter(valor => valor !== "");
-        let cantidadVisible = 0;
+    let temporizadorBusqueda = null;
 
-        columnasProfesores.forEach(columna => {
-            const tarjeta = columna.querySelector(".profesor");
-            const coincideTexto = textoBuscado === "" || normalizarTexto(tarjeta.dataset.texto).includes(textoBuscado);
-            const coincideMateria = campoMateria.value === "" || tarjeta.dataset.materia === campoMateria.value;
-            const coincideColegio = campoColegio.value === "" || tarjeta.dataset.colegio === campoColegio.value;
-            // Un profesor que dicta "Ambas" modalidades aparece en las dos
-            const coincideModalidad = modalidadElegida === "" || tarjeta.dataset.modalidad === modalidadElegida || tarjeta.dataset.modalidad === "Ambas";
-            const coincideNivel = nivelesElegidos.length === 0 || nivelesElegidos.includes(tarjeta.dataset.nivel);
+    // Al elegir en un selector (los de materia, colegio, modalidad y nivel) se filtra enseguida
+    formularioFiltros.addEventListener("change", evento => {
+        if (evento.target.tagName === "SELECT") formularioFiltros.requestSubmit();
+    });
 
-            const visible = coincideTexto && coincideMateria && coincideColegio && coincideModalidad && coincideNivel;
-            columna.hidden = !visible;
-            if (visible) cantidadVisible++;
-        });
+    // Al escribir se espera a que la persona termine antes de buscar
+    campoTexto.addEventListener("input", () => {
+        clearTimeout(temporizadorBusqueda);
+        temporizadorBusqueda = setTimeout(() => {
+            // La página se recarga con los resultados: se recuerda devolverle el foco al campo
+            try { sessionStorage.setItem("enfocarBusquedaCatalogo", "1"); } catch (error) { }
+            formularioFiltros.requestSubmit();
+        }, 600);
+    });
 
-        textoCantidad.textContent = cantidadVisible === 1 ? "1 profesor" : `${cantidadVisible} profesores`;
-        mensajeSinResultados.hidden = cantidadVisible > 0;
-    };
-
-    formularioFiltros.addEventListener("input", aplicarFiltros);
-    formularioFiltros.addEventListener("change", aplicarFiltros);
-    // El reset vacía los campos DESPUÉS de este evento, por eso se espera un instante
-    formularioFiltros.addEventListener("reset", () => setTimeout(aplicarFiltros, 0));
-
-    aplicarFiltros();
+    try {
+        if (sessionStorage.getItem("enfocarBusquedaCatalogo") === "1") {
+            sessionStorage.removeItem("enfocarBusquedaCatalogo");
+            campoTexto.focus();
+            campoTexto.setSelectionRange(campoTexto.value.length, campoTexto.value.length);
+        }
+    } catch (error) { }
 }
 
 

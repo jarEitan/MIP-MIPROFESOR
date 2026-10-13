@@ -17,24 +17,48 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        // TODO BD: reemplazar por BD.obtenerMateriasDestacadas() y BD.obtenerProfesoresDestacados() cuando esté la base de datos.
+        // TODO BD: reemplazar la lista de materias por BD.obtenerMateriasDestacadas().
         ViewBag.materiasDestacadas = new List<string>
         {
             "Matemática", "Física", "Química", "Biología", "Inglés", "Historia",
             "Lengua y Literatura", "Programación", "Economía", "Geografía"
         };
-        ViewBag.profesoresDestacados = obtenerProfesoresDemo().Take(3).ToList();
+        // Los 3 primeros del catálogo: cuentas verificadas y mejor calificadas. Si la base no responde, la página igual carga.
+        try
+        {
+            ViewBag.profesoresDestacados = new BD().obtenerCatalogo(null, null, null, null, null).Take(3).ToList();
+        }
+        catch (Exception)
+        {
+            ViewBag.profesoresDestacados = new List<Profesor>();
+        }
         return View();
     }
 
-    public IActionResult Catalogo(string? busqueda, string? colegio)
+    // Los filtros llegan por la URL (Home/Catalogo?materia=...&nivel=Primaria&nivel=Secundaria), así se pueden compartir.
+    public IActionResult Catalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string[]? nivel)
     {
-        // TODO BD: reemplazar por BD.obtenerProfesores(busqueda, colegio). Hoy el filtrado se hace en el navegador (site.js).
-        ViewBag.profesores = obtenerProfesoresDemo();
+        string[] nivelesElegidos = nivel ?? new string[0];
         ViewBag.busqueda = busqueda ?? "";
+        ViewBag.materia = materia ?? "";
         ViewBag.colegio = colegio ?? "";
-        ViewBag.materias = new List<string> { "Matemática", "Física", "Química", "Biología", "Inglés", "Historia", "Lengua y Literatura", "Programación" };
-        ViewBag.colegios = new List<string> { "Belgrano Day School", "Colegio San Martín", "Nacional Buenos Aires" };
+        ViewBag.modalidad = modalidad ?? "";
+        ViewBag.nivelesElegidos = nivelesElegidos.ToList();
+
+        try
+        {
+            BD bd = new BD();
+            OpcionesPerfil opciones = bd.obtenerOpcionesPerfil();
+            ViewBag.materias = opciones.materias.Select(opcion => opcion.nombre).ToList();
+            ViewBag.colegios = opciones.escuelas.Select(opcion => opcion.nombre).ToList();
+            ViewBag.niveles = opciones.niveles.Select(opcion => opcion.nombre).ToList();
+            ViewBag.modalidades = opciones.modalidades.Select(opcion => opcion.nombre).ToList();
+            ViewBag.profesores = bd.obtenerCatalogo(busqueda, materia, colegio, modalidad, string.Join(",", nivelesElegidos));
+        }
+        catch (Exception)
+        {
+            ViewBag.errorCatalogo = "No pudimos cargar el catálogo. Probá de nuevo en un rato.";
+        }
         return View();
     }
 
@@ -81,8 +105,21 @@ public class HomeController : Controller
 
     public IActionResult MiColegio()
     {
-        // TODO BD: tomar el colegio del usuario desde la sesión.
-        return RedirectToAction("Catalogo", new { colegio = "Belgrano Day School" });
+        string? idUsuario = HttpContext.Session.GetString("idUsuario");
+        if (idUsuario == null) return RedirectToAction("IniciarSesion", "Sesion");
+
+        // Si el usuario todavía no cargó su colegio, se muestra el catálogo completo
+        try
+        {
+            BD bd = new BD();
+            DatosEdicion? datos = bd.obtenerDatosEdicion(int.Parse(idUsuario));
+            OpcionPerfil? colegio = datos == null ? null : bd.obtenerOpcionesPerfil().escuelas.FirstOrDefault(escuela => datos.idsEscuelas.Contains(escuela.id));
+            if (colegio != null) return RedirectToAction("Catalogo", new { colegio = colegio.nombre });
+        }
+        catch (Exception)
+        {
+        }
+        return RedirectToAction("Catalogo");
     }
 
     public IActionResult Privacy()
@@ -96,38 +133,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    // ================= DATOS DE EJEMPLO (TODO BD: borrar cuando exista BD.cs) =================
-
-    private List<Profesor> obtenerProfesoresDemo()
-    {
-        return new List<Profesor>
-        {
-            new Profesor { id = 1, nombre = "Sofía Martínez", iniciales = "SM", materia = "Matemática", colegio = "Belgrano Day School", modalidad = "Presencial", nivel = "Secundaria",
-                resumen = "6 años preparando exámenes de ingreso y finales. Explico paso a paso, sin apuro.", calificacion = 4.9m, cantidadResenas = 32, precioHora = 8000, verificado = true,
-                temas = new List<string> { "Álgebra", "Estadística" } },
-            new Profesor { id = 2, nombre = "Lucas Gómez", iniciales = "LG", materia = "Física", colegio = "Colegio San Martín", modalidad = "Virtual", nivel = "Secundaria",
-                resumen = "Ingeniero y docente. Problemas resueltos en vivo y apuntes alineados al programa del colegio.", calificacion = 4.8m, cantidadResenas = 21, precioHora = 7500, verificado = true,
-                temas = new List<string> { "Dinámica", "Cinemática" } },
-            new Profesor { id = 3, nombre = "Camila Rossi", iniciales = "CR", materia = "Inglés", colegio = "Nacional Buenos Aires", modalidad = "Ambas", nivel = "Secundaria",
-                resumen = "Conversación, gramática y preparación de exámenes internacionales en un solo lugar.", calificacion = 4.7m, cantidadResenas = 18, precioHora = 6500, verificado = false,
-                temas = new List<string> { "Speaking", "First Certificate" } },
-            new Profesor { id = 4, nombre = "Joaquín Fernández", iniciales = "JF", materia = "Química", colegio = "Belgrano Day School", modalidad = "Presencial", nivel = "Secundaria",
-                resumen = "Laboratorio y teoría sin miedo: estequiometría, soluciones y química orgánica.", calificacion = 4.6m, cantidadResenas = 12, precioHora = 7000, verificado = false,
-                temas = new List<string> { "Estequiometría", "Orgánica" } },
-            new Profesor { id = 5, nombre = "Valentina Paz", iniciales = "VP", materia = "Biología", colegio = "Colegio San Martín", modalidad = "Ambas", nivel = "Secundaria",
-                resumen = "Esquemas, mapas conceptuales y mucha práctica para llegar tranquilo al examen.", calificacion = 5.0m, cantidadResenas = 9, precioHora = 6800, verificado = true,
-                temas = new List<string> { "Genética", "Ecología" } },
-            new Profesor { id = 6, nombre = "Martín Acosta", iniciales = "MA", materia = "Programación", colegio = "Nacional Buenos Aires", modalidad = "Virtual", nivel = "Universitario",
-                resumen = "Desarrollador back-end. De tu primer algoritmo a tu proyecto final de la facultad.", calificacion = 4.9m, cantidadResenas = 27, precioHora = 9000, verificado = true,
-                temas = new List<string> { "C#", "Algoritmos" } },
-            new Profesor { id = 7, nombre = "Lucía Benítez", iniciales = "LB", materia = "Lengua y Literatura", colegio = "Belgrano Day School", modalidad = "Virtual", nivel = "Primaria",
-                resumen = "Comprensión lectora y escritura con juegos, lecturas cortas y mucha paciencia.", calificacion = 4.8m, cantidadResenas = 15, precioHora = 5500, verificado = false,
-                temas = new List<string> { "Lectura", "Ortografía" } },
-            new Profesor { id = 8, nombre = "Tomás Herrera", iniciales = "TH", materia = "Historia", colegio = "Colegio San Martín", modalidad = "Presencial", nivel = "Secundaria",
-                resumen = "Líneas de tiempo y resúmenes claros para entender los procesos, no solo memorizar fechas.", calificacion = 4.5m, cantidadResenas = 8, precioHora = 5800, verificado = false,
-                temas = new List<string> { "Argentina", "Historia Mundial" } }
-        };
-    }
+    // ================= DATOS DE EJEMPLO (TODO BD: borrar cuando exista el sistema de clases) =================
 
     private List<Clase> obtenerClasesProgramadasDemo()
     {

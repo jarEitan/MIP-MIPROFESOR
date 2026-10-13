@@ -1649,6 +1649,15 @@ fieldset {
     font-size: 1.05rem;
 }
 
+.profesor h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.profesor h3 a:hover {
+    text-decoration: underline;
+}
+
 .profesor header p {
     font-size: .8rem;
 }

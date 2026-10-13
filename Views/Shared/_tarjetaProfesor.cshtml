@@ -1,14 +1,20 @@
 @* Tarjeta de profesor reutilizable (Inicio y Catálogo). Recibe un Profesor.
-   Los data-* son los que lee site.js para filtrar el catálogo en el navegador. *@
+   El filtrado lo hace el SP obtenerCatalogo. *@
 @model Profesor
 
-<article class="card profesor" data-materia="@Model.materia" data-colegio="@Model.colegio" data-modalidad="@Model.modalidad" data-nivel="@Model.nivel"
-         data-texto="@(Model.nombre + " " + Model.materia + " " + Model.colegio + " " + string.Join(" ", Model.temas))">
+<article class="card profesor">
     <header>
-        <span class="avatar theme-primary">@Model.iniciales</span>
+        @if (!string.IsNullOrEmpty(Model.fotoPerfil))
+        {
+            <span class="avatar"><img src="@Model.fotoPerfil" alt="Foto de perfil de @Model.nombreCompleto" /></span>
+        }
+        else
+        {
+            <span class="avatar theme-primary" aria-hidden="true">@Model.iniciales</span>
+        }
         <div>
-            <h3>@Model.nombre</h3>
-            <p><i class="bi bi-building" aria-hidden="true"></i> @Model.colegio</p>
+            <h3><a asp-controller="Home" asp-action="Perfil" asp-route-id="@Model.id">@Model.nombreCompleto</a></h3>
+            <p><i class="bi bi-building" aria-hidden="true"></i> @(Model.colegios.Count == 0 ? "Sin colegio cargado" : string.Join(" · ", Model.colegios.Take(2)) + (Model.colegios.Count > 2 ? " +" + (Model.colegios.Count - 2) : ""))</p>
         </div>
         @if (Model.verificado)
         {
@@ -17,23 +23,29 @@
     </header>
 
     <div class="etiquetas">
-        <span class="badge theme-accent">@Model.materia</span>
-        @foreach (string tema in Model.temas)
+        @for (int posicion = 0; posicion < Model.materias.Count && posicion < 3; posicion++)
         {
-            <span class="badge badge-subtle theme-inverse">@tema</span>
+            <span class="badge @(posicion == 0 ? "theme-accent" : "badge-subtle theme-inverse")">@Model.materias[posicion]</span>
+        }
+        @if (Model.materias.Count > 3)
+        {
+            <span class="badge badge-subtle theme-inverse">+@(Model.materias.Count - 3)</span>
         }
     </div>
 
-    <p>@Model.resumen</p>
+    @if (Model.resumen != "")
+    {
+        <p>@Model.resumen</p>
+    }
 
     <ul class="datos">
-        <li><i class="bi bi-star-fill" aria-hidden="true"></i> <strong>@Model.calificacion.ToString("0.0")</strong> (@Model.cantidadResenas)</li>
-        <li><i class="bi bi-laptop" aria-hidden="true"></i> @Model.modalidad</li>
-        <li><i class="bi bi-mortarboard" aria-hidden="true"></i> @Model.nivel</li>
+        <li><i class="bi bi-star-fill" aria-hidden="true"></i> @(Model.cantidadResenas == 0 ? "Sin reseñas" : Model.calificacion.ToString("0.0")) @if (Model.cantidadResenas > 0) { <text>(@Model.cantidadResenas)</text> }</li>
+        <li><i class="bi bi-laptop" aria-hidden="true"></i> @string.Join(" y ", Model.modalidades)</li>
+        <li><i class="bi bi-mortarboard" aria-hidden="true"></i> @string.Join(", ", Model.niveles)</li>
     </ul>
 
     <footer>
         <p><strong>$ @Model.precioHora.ToString("N0")</strong> <span>/ hora</span></p>
-        <a class="boton principal chico" asp-controller="Sesion" asp-action="Registrarse" asp-route-rol="alumno">Contactar</a>
+        <a class="boton principal chico" asp-controller="Home" asp-action="Perfil" asp-route-id="@Model.id">Ver perfil</a>
     </footer>
 </article>
