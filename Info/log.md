@@ -310,3 +310,5 @@ Claves: `idUsuario`, `nombreUsuario`, `inicialesUsuario`, `cantidadNotificacione
 - **BD**: SP `obtenerCatalogo` (filtros + `OFFSET/FETCH`, orden: verificados, calificación, reseñas) en `MIP-catalogo.sql`, junto con **16 profesores y 2 alumnos de prueba** (contraseña `Prueba123`, mails `@prueba.mip`) y reseñas. Borrarlos antes de publicar. `BD.obtenerCatalogo` devuelve `ResultadoCatalogo`.
 - Inicio muestra los 3 primeros del catálogo; "Mi Colegio" filtra por el colegio del usuario.
 - Sin verificar con `dotnet build` (no había .NET donde se escribió): compilar y probar en la PC.
+- **Datos (misma fecha)**: niveles nuevos (Secundario 1 a 6, Terciario, Universitario; reemplazan Primaria/Secundaria/Universitario), ~66 colegios, institutos y universidades de **Ciudad de Buenos Aires** (una entrada por institución aunque tenga varias sedes), 35 materias unificadas (Historia, Geografía, Lengua y Literatura, Programación e Informática, Contabilidad y Administración...) y 48 profesores + 6 alumnos de prueba con reseñas. El sistema es solo para CABA: se sacaron Northlands y St. George's (fuera de la Ciudad). Todo en `MIP-catalogo.sql`.
+

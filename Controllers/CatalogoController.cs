@@ -7,7 +7,7 @@ namespace MIP_MIPROFESOR.Controllers;
 // con fetch a Catalogo/Buscar, que responde en JSON una página de resultados.
 public class CatalogoController : Controller
 {
-    // /Catalogo?busqueda=...&materia=...&colegio=...&modalidad=...&nivel=Primaria&nivel=Secundaria&pagina=2&porPagina=15
+    // /Catalogo?busqueda=...&materia=...&colegio=...&modalidad=...&nivel=Secundario 1&nivel=Secundario 2&pagina=2&porPagina=15
     // Los filtros de la URL solo preseleccionan el formulario (links de Inicio, "Mi Colegio" y búsquedas compartidas).
     [HttpGet("Catalogo")]
     public IActionResult Index(string? busqueda, string? materia, string? colegio, string? modalidad, string[]? nivel, int pagina = 1, int porPagina = 10)
