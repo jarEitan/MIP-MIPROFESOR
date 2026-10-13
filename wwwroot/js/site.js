@@ -941,10 +941,14 @@ function inicializarMeGusta() {
     const idPerfil = seccionPerfil.dataset.idPerfil;
     const haySesion = seccionPerfil.dataset.haySesion === "true";
 
-    // Si ya le diste me gusta, el corazón arranca lleno (sin sesión no hay nada que averiguar)
+    // Si ya le diste me gusta, el corazón arranca lleno (sin sesión no hay nada que averiguar).
+    // Si hacés clic antes de que llegue esta respuesta, se ignora para no pisar el estado nuevo.
+    let respuestaInicialVigente = true;
     if (haySesion) {
         pedirJson(`/Likes/ObtenerLike/${idPerfil}`)
-            .then(resultado => pintarEstadoMeGusta(botonMeGusta, resultado.leGusta))
+            .then(resultado => {
+                if (respuestaInicialVigente) pintarEstadoMeGusta(botonMeGusta, resultado.leGusta);
+            })
             .catch(error => console.error(error));
     }
 
@@ -953,6 +957,7 @@ function inicializarMeGusta() {
             window.location.href = "/Sesion/IniciarSesion";
             return;
         }
+        respuestaInicialVigente = false;
         alternarMeGusta(botonMeGusta, idPerfil);
     });
 }
