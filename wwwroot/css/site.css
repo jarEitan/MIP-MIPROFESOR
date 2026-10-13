@@ -1628,7 +1628,7 @@ fieldset {
     transform: translateY(-2px);
 }
 
-/* Tarjeta de profesor (Inicio y Catálogo) */
+/* Tarjeta de profesor: .profesor es la vertical (Inicio) y .profesorFila la horizontal (Catálogo); comparten estos estilos */
 .profesor {
     gap: .9rem;
 }
@@ -1645,16 +1645,19 @@ fieldset {
     min-width: 0;
 }
 
-.profesor h3 {
+.profesor h3,
+.profesorFila h3 {
     font-size: 1.05rem;
 }
 
-.profesor h3 a {
+.profesor h3 a,
+.profesorFila h3 a {
     color: inherit;
     text-decoration: none;
 }
 
-.profesor h3 a:hover {
+.profesor h3 a:hover,
+.profesorFila h3 a:hover {
     text-decoration: underline;
 }
 
@@ -1662,7 +1665,8 @@ fieldset {
     font-size: .8rem;
 }
 
-.profesor .etiquetas {
+.profesor .etiquetas,
+.profesorFila .etiquetas {
     display: flex;
     flex-wrap: wrap;
     gap: .4rem;
@@ -1672,7 +1676,8 @@ fieldset {
     flex-grow: 1;
 }
 
-.profesor .datos {
+.profesor .datos,
+.profesorFila .datos {
     display: flex;
     flex-wrap: wrap;
     gap: .35rem 1rem;
@@ -1681,11 +1686,13 @@ fieldset {
     color: var(--colorTexto);
 }
 
-.profesor .datos .bi-star-fill {
+.profesor .datos .bi-star-fill,
+.profesorFila .datos .bi-star-fill {
     color: #F59E0B;
 }
 
-.profesor .datos .bi {
+.profesor .datos .bi,
+.profesorFila .datos .bi {
     margin-right: .15rem;
 }
 
@@ -1702,7 +1709,8 @@ fieldset {
     font-size: .8rem;
 }
 
-.profesor footer strong {
+.profesor footer strong,
+.profesorFila .importe strong {
     font-family: var(--fuenteMarca);
     font-size: 1.3rem;
     color: var(--colorTinta);
@@ -2091,49 +2099,13 @@ fieldset {
     gap: .5rem;
 }
 
-.profesorFila h3 {
-    font-size: 1.1rem;
-}
-
-.profesorFila h3 a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.profesorFila h3 a:hover {
-    text-decoration: underline;
-}
-
 .profesorFila .colegios {
     font-size: .8rem;
     color: var(--colorTextoSuave);
 }
 
-.profesorFila .etiquetas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .4rem;
-}
-
 .profesorFila .resumen {
     font-size: .85rem;
-}
-
-.profesorFila .datos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .35rem 1rem;
-    font-size: .8rem;
-    font-weight: 600;
-    color: var(--colorTexto);
-}
-
-.profesorFila .datos .bi-star-fill {
-    color: #F59E0B;
-}
-
-.profesorFila .datos .bi {
-    margin-right: .15rem;
 }
 
 /* Columna derecha: modalidad, precio y botones */
@@ -2153,20 +2125,8 @@ fieldset {
     color: var(--colorTextoSuave);
 }
 
-.profesorFila .modalidades {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .35rem;
-}
-
 .profesorFila .importe {
     font-size: .8rem;
-}
-
-.profesorFila .importe strong {
-    font-family: var(--fuenteMarca);
-    font-size: 1.3rem;
-    color: var(--colorTinta);
 }
 
 @media (width >= 768px) {

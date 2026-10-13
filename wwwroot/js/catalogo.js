@@ -41,59 +41,52 @@ function inicializarCatalogo() {
         buscarProfesores(1);
     });
 
-    // Si la persona vuelve atrás o adelante en el navegador, se recargan los filtros de esa URL
-    window.addEventListener("popstate", () => location.reload());
-
     buscarProfesores(paginaActual);
 }
 
 // Arma los parámetros de la consulta con lo que hay en el formulario
-function leerFiltros(pagina) {
+function leerFiltros() {
     const parametros = new URLSearchParams();
-    const texto = document.getElementById("filtroTexto").value.trim();
-    const materia = document.getElementById("filtroMateria").value;
-    const colegio = document.getElementById("filtroColegio").value;
-    const modalidad = document.getElementById("filtroModalidad").value;
+    const agregarSiHayValor = (nombre, valor) => { if (valor !== "") parametros.append(nombre, valor); };
 
-    if (texto !== "") parametros.set("busqueda", texto);
-    if (materia !== "") parametros.set("materia", materia);
-    if (colegio !== "") parametros.set("colegio", colegio);
-    if (modalidad !== "") parametros.set("modalidad", modalidad);
-    Array.from(document.getElementById("filtroNivel").selectedOptions)
-        .filter(opcion => opcion.value !== "")
-        .forEach(opcion => parametros.append("nivel", opcion.value));
-    if (pagina > 1) parametros.set("pagina", pagina);
-    if (porPaginaActual !== porPaginaPredeterminado) parametros.set("porPagina", porPaginaActual);
+    agregarSiHayValor("busqueda", document.getElementById("filtroTexto").value.trim());
+    agregarSiHayValor("materia", document.getElementById("filtroMateria").value);
+    agregarSiHayValor("colegio", document.getElementById("filtroColegio").value);
+    agregarSiHayValor("modalidad", document.getElementById("filtroModalidad").value);
+    Array.from(document.getElementById("filtroNivel").selectedOptions).forEach(opcion => agregarSiHayValor("nivel", opcion.value));
     return parametros;
 }
 
 function buscarProfesores(pagina, subirALaLista) {
-    const parametros = leerFiltros(pagina);
-    // El servidor siempre necesita la página y la cantidad, aunque la URL visible las omita
-    const consulta = new URLSearchParams(parametros);
+    const filtros = leerFiltros();
+
+    // La URL visible guarda solo lo que no es el valor por defecto, para poder compartir la búsqueda
+    const parametrosUrl = new URLSearchParams(filtros);
+    if (pagina > 1) parametrosUrl.set("pagina", pagina);
+    if (porPaginaActual !== porPaginaPredeterminado) parametrosUrl.set("porPagina", porPaginaActual);
+    const textoUrl = parametrosUrl.toString();
+    history.replaceState(null, "", textoUrl === "" ? location.pathname : `${location.pathname}?${textoUrl}`);
+
+    // El servidor siempre recibe la página y la cantidad
+    const consulta = new URLSearchParams(filtros);
     consulta.set("pagina", pagina);
     consulta.set("porPagina", porPaginaActual);
-
-    // Se guarda en la URL para poder compartir la búsqueda (sin recargar la página)
-    const textoUrl = parametros.toString();
-    history.replaceState(null, "", textoUrl === "" ? location.pathname : `${location.pathname}?${textoUrl}`);
 
     const numeroDeEstaBusqueda = ++numeroDeBusqueda;
     const listaProfesores = document.getElementById("listaProfesores");
     listaProfesores.setAttribute("aria-busy", "true");
 
-    fetch(`/Catalogo/Buscar?${consulta.toString()}`)
+    fetch(`/Catalogo/Buscar?${consulta}`)
         .then(respuesta => respuesta.json().then(datos => ({ ok: respuesta.ok, datos })))
         .then(({ ok, datos }) => {
             // Si mientras tanto se pidió otra búsqueda, esta respuesta ya no sirve
             if (numeroDeEstaBusqueda !== numeroDeBusqueda) return;
-            if (!ok) throw new Error(datos.mensaje || "Error");
+            if (!ok) throw new Error("Respuesta con error");
             mostrarResultados(datos);
             if (subirALaLista) listaProfesores.scrollIntoView({ behavior: "smooth", block: "start" });
         })
         .catch(error => {
-            if (numeroDeEstaBusqueda !== numeroDeBusqueda) return;
-            mostrarErrorCatalogo(error.message === "Error" || error instanceof SyntaxError ? "No pudimos cargar el catálogo. Probá de nuevo en un rato." : error.message);
+            if (numeroDeEstaBusqueda === numeroDeBusqueda) mostrarErrorCatalogo();
         })
         .finally(() => listaProfesores.removeAttribute("aria-busy"));
 }
@@ -138,12 +131,11 @@ function dibujarNumerosDePagina(pagina, totalPaginas) {
     contenedor.replaceChildren(...elementos);
 }
 
-function mostrarErrorCatalogo(mensaje) {
+function mostrarErrorCatalogo() {
     document.getElementById("listaProfesores").replaceChildren();
     document.getElementById("sinResultados").hidden = true;
     document.getElementById("paginador").hidden = true;
     document.getElementById("cantidadResultados").textContent = "";
-    document.getElementById("mensajeErrorCatalogo").textContent = mensaje;
     document.getElementById("errorCatalogo").hidden = false;
 }
 
@@ -225,7 +217,7 @@ function crearTarjetaProfesor(profesor) {
     // Columna derecha: modalidad, precio y botones
     const lateral = crearElemento("div", "lateral");
     lateral.append(crearElemento("span", "etiquetaModalidad", "Modalidad"));
-    const modalidades = crearElemento("div", "modalidades");
+    const modalidades = crearElemento("div", "etiquetas modalidades");
     profesor.modalidades.forEach(modalidad => modalidades.append(crearElemento("span", "badge badge-subtle theme-success", modalidad)));
     lateral.append(modalidades);
 
