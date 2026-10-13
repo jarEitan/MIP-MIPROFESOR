@@ -259,46 +259,38 @@
         </div>
 
         @* TODO BD: reemplazar estos ejemplos por BD.obtenerReseñasDestacadas() *@
-        <div id="carruselOpiniones" class="carousel" aria-label="Opiniones de alumnos">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <figure class="card">
-                        <p class="estrellas" aria-label="5 de 5 estrellas">★★★★★</p>
-                        <blockquote>“Con Sofía por fin entendí funciones. Ya conocía el programa de mi colegio y fuimos directo a lo que me tomaban.”</blockquote>
-                        <figcaption><span class="avatar theme-accent">AL</span><div><strong>Ana L.</strong><span>Alumna · Belgrano Day School</span></div></figcaption>
-                    </figure>
-                </div>
-                <div class="carousel-item">
-                    <figure class="card">
-                        <p class="estrellas" aria-label="5 de 5 estrellas">★★★★★</p>
-                        <blockquote>“Cancelé una clase a último momento y reprogramamos por el chat en minutos. Cero complicaciones.”</blockquote>
-                        <figcaption><span class="avatar theme-primary">JP</span><div><strong>Juan P.</strong><span>Alumno · Colegio San Martín</span></div></figcaption>
-                    </figure>
-                </div>
-                <div class="carousel-item">
-                    <figure class="card">
-                        <p class="estrellas" aria-label="5 de 5 estrellas">★★★★★</p>
-                        <blockquote>“Como profesor, MiProfesor me acercó alumnos de los colegios donde ya doy clases. Es lo que necesitaba.”</blockquote>
-                        <figcaption><span class="avatar theme-inverse">MA</span><div><strong>Martín A.</strong><span>Profesor · Nacional Buenos Aires</span></div></figcaption>
-                    </figure>
-                </div>
-                <div class="carousel-item">
-                    <figure class="card">
-                        <p class="estrellas" aria-label="4 de 5 estrellas">★★★★☆</p>
-                        <blockquote>“Mi hijo encontró profesora de Inglés cerca de casa y a un precio que se ve desde el principio.”</blockquote>
-                        <figcaption><span class="avatar theme-warning">CG</span><div><strong>Carolina G.</strong><span>Mamá de alumno · Belgrano Day School</span></div></figcaption>
-                    </figure>
-                </div>
+        @* Carrusel propio (site.js: inicializarCarruseles): la pista se desliza con scroll-snap,
+           las flechas avanzan de a una tarjeta y desde la última vuelven a la primera *@
+        <div class="carrusel" id="carruselOpiniones">
+            <div class="pista" tabindex="0" role="region" aria-label="Opiniones de alumnos">
+                <figure class="card">
+                    <p class="estrellas" aria-label="5 de 5 estrellas">★★★★★</p>
+                    <blockquote>“Con Sofía por fin entendí funciones. Ya conocía el programa de mi colegio y fuimos directo a lo que me tomaban.”</blockquote>
+                    <figcaption><span class="avatar theme-accent">AL</span><div><strong>Ana L.</strong><span>Alumna · Belgrano Day School</span></div></figcaption>
+                </figure>
+                <figure class="card">
+                    <p class="estrellas" aria-label="5 de 5 estrellas">★★★★★</p>
+                    <blockquote>“Cancelé una clase a último momento y reprogramamos por el chat en minutos. Cero complicaciones.”</blockquote>
+                    <figcaption><span class="avatar theme-primary">JP</span><div><strong>Juan P.</strong><span>Alumno · Colegio San Martín</span></div></figcaption>
+                </figure>
+                <figure class="card">
+                    <p class="estrellas" aria-label="5 de 5 estrellas">★★★★★</p>
+                    <blockquote>“Como profesor, MiProfesor me acercó alumnos de los colegios donde ya doy clases. Es lo que necesitaba.”</blockquote>
+                    <figcaption><span class="avatar theme-inverse">MA</span><div><strong>Martín A.</strong><span>Profesor · Nacional Buenos Aires</span></div></figcaption>
+                </figure>
+                <figure class="card">
+                    <p class="estrellas" aria-label="4 de 5 estrellas">★★★★☆</p>
+                    <blockquote>“Mi hijo encontró profesora de Inglés cerca de casa y a un precio que se ve desde el principio.”</blockquote>
+                    <figcaption><span class="avatar theme-warning">CG</span><div><strong>Carolina G.</strong><span>Mamá de alumno · Belgrano Day School</span></div></figcaption>
+                </figure>
             </div>
 
             <div class="controles">
-                <button class="btn-icon" type="button" data-bs-target="#carruselOpiniones" data-bs-slide="prev">
-                    <span class="carousel-icon-prev" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
+                <button class="btn-icon" type="button" data-carrusel="anterior" aria-label="Opinión anterior">
+                    <i class="bi bi-chevron-left" aria-hidden="true"></i>
                 </button>
-                <button class="btn-icon" type="button" data-bs-target="#carruselOpiniones" data-bs-slide="next">
-                    <span class="carousel-icon-next" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
+                <button class="btn-icon" type="button" data-carrusel="siguiente" aria-label="Opinión siguiente">
+                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
                 </button>
             </div>
         </div>

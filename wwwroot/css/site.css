@@ -6,7 +6,7 @@
 
    Cómo está pensada:
    - Bootstrap 6 (alpha) pone la grilla (row/col), los componentes (navbar,
-     drawer, dialog, accordion, carousel, tabs, menu, badge, avatar) y los
+     drawer, dialog, accordion, tabs, menu, badge, avatar) y los
      formularios. Acá solo se pisan sus variables --bs-* y se agrega la
      identidad de MIP. Bootstrap 6 va dentro de @layer, así que esta hoja
      (sin layer) siempre gana, sin !important.
@@ -1475,10 +1475,6 @@ fieldset {
     animation: desplazarCinta 35s linear infinite;
 }
 
-.cinta:hover > div {
-    animation-play-state: paused;
-}
-
 .cinta ul {
     display: flex;
     flex-shrink: 0;
@@ -1716,23 +1712,86 @@ fieldset {
     color: var(--colorTinta);
 }
 
-/* ---------- 3.7 Inicio: opiniones (carrusel de Bootstrap 6) ---------- */
+/* ---------- 3.7 Carrusel propio (reutilizable) y opiniones del Inicio ---------- */
+/* .carrusel > .pista con las tarjetas + .controles con las flechas (site.js: inicializarCarruseles).
+   La pista se desliza sola con scroll-snap; --tarjetasVisibles cambia según el ancho */
+.carrusel {
+    --tarjetasVisibles: 1;
+    --separacionTarjetas: 1.25rem;
+}
+
+.carrusel .pista {
+    display: flex;
+    gap: var(--separacionTarjetas);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    /* Aire para que el borde, la sombra marcada y el salto del hover no se corten */
+    padding: .75rem .75rem 1rem .25rem;
+    scroll-padding-inline: .25rem;
+}
+
+.carrusel .pista::-webkit-scrollbar {
+    display: none;
+}
+
+.carrusel .pista > * {
+    flex: 0 0 calc((100% - (var(--tarjetasVisibles) - 1) * var(--separacionTarjetas)) / var(--tarjetasVisibles));
+    min-width: 0;
+    scroll-snap-align: start;
+}
+
+.carrusel .controles {
+    display: flex;
+    justify-content: center;
+    gap: .75rem;
+    margin-top: .5rem;
+}
+
+.carrusel .controles .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: var(--bordeMarcado);
+    border-radius: 50%;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
+    box-shadow: 3px 3px 0 var(--colorTinta);
+    transition: transform var(--duracionRapida) var(--curvaSuave), box-shadow var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) ease;
+}
+
+.carrusel .controles .btn-icon:hover {
+    background-color: var(--colorCeleste);
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--colorTinta);
+}
+
+.carrusel .controles .btn-icon:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--colorTinta);
+}
+
+@media (width >= 768px) {
+    .carrusel {
+        --tarjetasVisibles: 2;
+    }
+}
+
+@media (width >= 1280px) {
+    .carrusel {
+        --tarjetasVisibles: 3;
+    }
+}
+
 .opiniones {
     border-block: var(--bordeMarcado);
     background-color: var(--colorPapel);
 }
 
-.opiniones .carousel {
-    --bs-carousel-items: 1;
-    --bs-carousel-items-gap: 1.25rem;
-}
-
-.opiniones .carousel-inner {
-    padding: .25rem .5rem .75rem .25rem;
-}
-
 .opiniones figure.card {
-    height: 100%;
     gap: 1rem;
     border-color: var(--colorTinta);
     box-shadow: var(--sombraMarcada);
@@ -1766,48 +1825,6 @@ fieldset {
 .opiniones figcaption span:not(.avatar) {
     font-size: .8rem;
     color: var(--colorTextoSuave);
-}
-
-.opiniones .controles {
-    display: flex;
-    justify-content: center;
-    gap: .75rem;
-    margin-top: .5rem;
-}
-
-.opiniones .controles .btn-icon {
-    display: inline-flex;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: var(--bordeMarcado);
-    border-radius: 50%;
-    background-color: var(--colorSuperficie);
-    color: var(--colorTinta);
-    box-shadow: 3px 3px 0 var(--colorTinta);
-    transition: transform var(--duracionRapida) var(--curvaSuave), box-shadow var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) ease;
-}
-
-.opiniones .controles .btn-icon:hover {
-    background-color: var(--colorCeleste);
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 var(--colorTinta);
-}
-
-.opiniones .controles .btn-icon:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--colorTinta);
-}
-
-@media (width >= 768px) {
-    .opiniones .carousel {
-        --bs-carousel-items: 2;
-    }
-}
-
-@media (width >= 1280px) {
-    .opiniones .carousel {
-        --bs-carousel-items: 3;
-    }
 }
 
 /* ---------- 3.8 Preguntas frecuentes (acordeón de Bootstrap 6: details/summary) ---------- */
@@ -2051,12 +2068,17 @@ fieldset {
         padding: 0;
     }
 
+    /* Misma tarjeta que los profesores. overflow visible: la lista de opciones de los selectores no se corta */
+    .catalogo .lg\:drawer,
+    .catalogo .drawer-body {
+        overflow: visible;
+    }
+
     .catalogo form {
         padding: 1.25rem;
-        border: var(--bordeMarcado);
+        border: 2px solid var(--colorBorde);
         border-radius: var(--radioGrande);
         background-color: var(--colorSuperficie);
-        box-shadow: var(--sombraMarcada);
     }
 }
 
@@ -2108,13 +2130,29 @@ fieldset {
     font-size: .85rem;
 }
 
+.profesorFila:hover {
+    translate: 0 -3px;
+}
+
 /* Columna derecha: modalidad, precio y botones */
 .profesorFila .lateral {
     grid-column: 1 / -1;
     display: grid;
-    gap: .6rem;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem .75rem;
+    align-items: center;
     padding-top: .9rem;
     border-top: 2px dashed var(--colorBorde);
+}
+
+.profesorFila .modalidades {
+    grid-column: 1;
+}
+
+.profesorFila .importe {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: end;
 }
 
 .profesorFila .etiquetaModalidad {
@@ -2137,10 +2175,18 @@ fieldset {
 
     .profesorFila .lateral {
         grid-column: auto;
+        grid-template-columns: 1fr;
         justify-items: end;
         padding: 0;
         border-top: 0;
         text-align: right;
+    }
+
+    .profesorFila .modalidades,
+    .profesorFila .importe {
+        grid-column: auto;
+        grid-row: auto;
+        justify-self: end;
     }
 
     .profesorFila .modalidades {
