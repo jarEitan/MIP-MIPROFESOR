@@ -46,7 +46,7 @@
                         </a>
 
                         @* Nombre y foto llevan al perfil (ahí está el botón Cerrar sesión) *@
-                        <a class="usuario" asp-controller="Home" asp-action="Perfil" aria-label="Ir a mi perfil">
+                        <a class="usuario" asp-controller="Home" asp-action="Perfil" asp-route-id="@Context.Session.GetString("idUsuario")" aria-label="Ir a mi perfil">
                             <partial name="_avatarUsuario" model='""' />
                             <span class="nombreUsuario">@nombreUsuario</span>
                             @if (Context.Session.GetString("verificado") == "true")

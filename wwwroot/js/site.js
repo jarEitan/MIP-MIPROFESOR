@@ -34,6 +34,14 @@ function correoValido(correo) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo);
 }
 
+// Crea un elemento con clases y texto (textContent: nunca interpreta HTML). Lo usan catalogo.js y clases.js
+function crearElemento(etiqueta, clases, texto) {
+    const elemento = document.createElement(etiqueta);
+    if (clases) elemento.className = clases;
+    if (texto !== undefined) elemento.textContent = texto;
+    return elemento;
+}
+
 // fetch que devuelve el JSON o falla si el servidor respondió con error (401, 404, 500...)
 function pedirJson(url, opciones) {
     return fetch(url, opciones).then(respuesta => {
@@ -680,7 +688,10 @@ function mostrarPerfil(perfil) {
     document.getElementById("datosTitularPerfil").replaceChildren(...crearDatosTitular(perfil));
 
     // "Pedir clase" solo tiene sentido en el perfil de un profesor
-    document.querySelectorAll("[data-solo-profesor]").forEach(boton => { boton.hidden = perfil.tipoUsuario !== "profesor"; });
+    document.querySelectorAll("[data-solo-profesor]").forEach(boton => {
+        boton.hidden = perfil.tipoUsuario !== "profesor";
+        boton.dataset.nombreProfesor = nombreCompleto;
+    });
 
     mostrarCifrasPerfil(perfil);
     mostrarDescripcionPerfil(perfil.descripcion);

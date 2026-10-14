@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <script>document.documentElement.classList.add("jsActivo");</script>
 </head>
-<body>
+<body data-tipo-usuario="@Context.Session.GetString("tipoUsuario")">
     <a class="saltarContenido" href="#contenido">Saltar al contenido</a>
 
     <!-- ================= HEADER ================= -->
@@ -60,12 +60,21 @@
     <!-- ================= FOOTER ================= -->
     <partial name="_piePagina" />
 
+    @* Pedir clase: el diálogo está en todas las páginas para los alumnos (lo abren los botones [data-pedir-clase]
+       del Catálogo y del Perfil). Para otros usuarios el botón avisa o lleva a Iniciar sesión. *@
+    @if (tipoUsuarioSesion == "alumno")
+    {
+        <partial name="_dialogoPedirClase" />
+    }
+
     @* Snackbar del UI Kit: avisos cortos abajo de la pantalla (mostrarSnackbar en site.js) *@
     <div class="snackbar" id="snackbar" role="status" aria-live="polite" hidden></div>
 
     @* Bootstrap 6 es ESM: se carga como módulo (ya no existe window.bootstrap). jQuery no se usa. *@
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @* Clases y notificaciones: botones Pedir clase, insignia del header y Panel de Control *@
+    <script src="~/js/clases.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

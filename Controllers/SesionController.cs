@@ -134,7 +134,8 @@ public class SesionController : Controller
 
     // ================= SESIÓN =================
     // Claves: idUsuario, nombre, apellido, tipoUsuario, fotoPerfil (si tiene),
-    // verificado ("true"/"false") y datosFaltantes (texto del aviso "Cuenta no verificada")
+    // verificado ("true"/"false"), datosFaltantes (texto del aviso "Cuenta no verificada")
+    // y cantidadNotificaciones (insignia del Panel de Control; se actualiza con fetch en site.js)
 
     private void guardarSesion(ResultadoSesion cuenta)
     {
@@ -154,5 +155,16 @@ public class SesionController : Controller
         {
         }
         VerificacionCuenta.guardarEnSesion(HttpContext.Session, cuenta.verificado, faltantes);
+
+        // Insignia del botón Panel de Control: pedidos por responder + novedades sin ver
+        int cantidadNotificaciones = 0;
+        try
+        {
+            cantidadNotificaciones = new BD().contarNotificaciones(cuenta.id);
+        }
+        catch (Exception)
+        {
+        }
+        HttpContext.Session.SetString("cantidadNotificaciones", cantidadNotificaciones.ToString());
     }
 }

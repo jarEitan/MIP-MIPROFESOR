@@ -402,6 +402,11 @@ main {
     font-weight: 800;
 }
 
+/* Sin notificaciones la insignia sigue en el HTML (site.js la actualiza) pero no se ve */
+.encabezado .boton .badge[hidden] {
+    display: none;
+}
+
 .encabezado .boton .badge::after {
     content: "";
     position: absolute;
@@ -833,6 +838,21 @@ mark {
 .card.oscura:not(.estatica):hover {
     border-color: var(--colorTinta);
     box-shadow: 7px 7px 0 var(--colorCeleste);
+}
+
+/* Tarjeta de "no hay nada todavía" (perfil inexistente, panel sin clases): centrada y con sombra marcada */
+.card.estadoVacio {
+    align-items: center;
+    max-width: 32rem;
+    margin-inline: auto;
+    padding-block: 2.5rem;
+    border-color: var(--colorTinta);
+    box-shadow: var(--sombraMarcada);
+    text-align: center;
+}
+
+.card.estadoVacio .boton {
+    align-self: center;
 }
 
 /* Ícono cuadrado de las tarjetas */
@@ -2641,7 +2661,7 @@ fieldset {
     font-size: clamp(1.6rem, 1.2rem + 2vw, 2.5rem);
 }
 
-.saludo p:not(.aviso) {
+.saludo p {
     max-width: 38rem;
     color: var(--colorTextoSuave);
 }
@@ -2651,26 +2671,80 @@ fieldset {
     box-shadow: var(--sombraMarcada);
 }
 
-.saludo .aviso {
+/* Notificaciones del Panel: una fila por aviso con su botón para ir a resolverlo */
+.notificaciones {
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.notificaciones .card h2 {
     display: flex;
     align-items: center;
     gap: .6rem;
-    width: fit-content;
-    max-width: 100%;
-    margin-top: 1.5rem;
-    padding: .65rem 1rem;
-    border: 2px solid var(--colorTinta);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorCelesteSuave);
-    font-size: .88rem;
-    font-weight: 600;
-    line-height: 1.4;
+    font-size: clamp(1.2rem, 1.05rem + .6vw, 1.45rem);
 }
 
-.saludo .aviso .bi {
-    flex-shrink: 0;
-    color: var(--colorCoralOscuro);
-    animation: sacudirError 1.6s var(--curvaSuave) infinite;
+.notificaciones .sinNotificaciones {
+    color: var(--colorTextoSuave);
+}
+
+.notificaciones .listaNotificaciones {
+    display: grid;
+    gap: .75rem;
+    max-height: 26rem;
+    margin: 0;
+    padding: 0 .25rem .25rem 0;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.notificaciones .notificacion {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: .75rem 1rem;
+    padding: .85rem 1rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorSuperficie);
+}
+
+.notificaciones .notificacion.nueva {
+    border-color: var(--colorTinta);
+    background-color: var(--colorCoralSuave);
+}
+
+.notificaciones .notificacion .boton {
+    grid-column: 1 / -1;
+    justify-self: start;
+}
+
+@media (width >= 768px) {
+    .notificaciones .notificacion {
+        grid-template-columns: auto 1fr auto;
+    }
+
+    .notificaciones .notificacion .boton {
+        grid-column: auto;
+        justify-self: end;
+    }
+}
+
+.notificaciones .textoNotificacion h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.notificaciones .textoNotificacion p {
+    margin: .15rem 0 0;
+    font-size: .92rem;
+}
+
+.notificaciones .textoNotificacion small {
+    color: var(--colorTextoSuave);
 }
 
 .metricas {
@@ -2796,6 +2870,27 @@ fieldset {
     margin-top: auto;
     padding-top: .5rem;
 }
+
+.clase h3 a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--colorCoral);
+    text-underline-offset: .2em;
+}
+
+/* La clase a la que lleva una notificación se resalta un momento */
+.col.resaltada .clase,
+tr.resaltada td {
+    animation: resaltarClase 2.4s var(--curvaSuave) 2;
+}
+
+@keyframes resaltarClase {
+    50% {
+        background-color: var(--colorCelesteSuave);
+        box-shadow: var(--sombraMarcadaElevada);
+    }
+}
+
 
 /* Historial: tabla; en pantallas chicas cada fila se apila usando data-etiqueta */
 .panel .tabla {
@@ -3002,6 +3097,68 @@ fieldset {
 
 .dialog .dialog-body p {
     color: var(--colorTextoSuave);
+}
+
+/* Pedir y reubicar una clase: día + grilla de horas (las arma crearSelectorHorario en site.js) */
+.dialogoClase {
+    --bs-dialog-width: min(34rem, 94vw);
+}
+
+.dialogoClase .dialog-body {
+    display: grid;
+    gap: 1rem;
+}
+
+.selectorHorario {
+    display: grid;
+    gap: 1rem;
+}
+
+.selectorHorario .franjas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(4.6rem, 1fr));
+    gap: .5rem;
+    max-height: 13rem;
+    padding: .25rem;
+    overflow-y: auto;
+}
+
+.selectorHorario .ayudaFranjas {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: .9rem;
+}
+
+.selectorHorario .franja {
+    padding: .45rem .25rem;
+    border: 2px solid var(--colorTinta);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    font-family: var(--fuenteMarca);
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--colorTinta);
+    cursor: pointer;
+    transition: background-color .15s, transform .15s var(--curvaRebote);
+}
+
+.selectorHorario .franja:hover:not(:disabled) {
+    background-color: var(--colorCelesteSuave);
+    transform: translateY(-2px);
+}
+
+.selectorHorario .franja[aria-pressed="true"] {
+    background-color: var(--colorCoral);
+    box-shadow: 2px 2px 0 var(--colorTinta);
+    color: #fff;
+}
+
+.selectorHorario .franja:disabled {
+    border-color: var(--colorBorde);
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+    text-decoration: line-through;
+    cursor: not-allowed;
 }
 
 /* ---------- 3.15 Quiénes somos ---------- */
@@ -3233,24 +3390,12 @@ fieldset {
     }
 }
 
-/* Perfil inexistente */
-.perfil .sinPerfil {
-    align-items: center;
-    max-width: 32rem;
-    margin-inline: auto;
-    padding-block: 2.5rem;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
-    text-align: center;
-}
+/* Perfil inexistente (la tarjeta es .estadoVacio) */
 
 .perfil .sinPerfil h1 {
     font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
 }
 
-.perfil .sinPerfil .boton {
-    align-self: center;
-}
 
 /* Aviso de verificación del perfil propio */
 .perfil .avisoPerfil {

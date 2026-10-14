@@ -31,7 +31,7 @@
         </p>
 
         @* Se muestra si el ID de la URL no corresponde a ningún alumno o profesor *@
-        <div class="card estatica sinPerfil" id="perfilInexistente" hidden>
+        <div class="card estatica estadoVacio sinPerfil" id="perfilInexistente" hidden>
             <span class="icono"><i class="bi bi-person-x" aria-hidden="true"></i></span>
             <h1>Este perfil no existe</h1>
             <p>Revisá que el enlace esté completo. Puede que la cuenta se haya dado de baja.</p>
@@ -90,9 +90,9 @@
                     }
                     else
                     {
-                        @* Botones sociales (Me gusta ya funciona): salen de las tablas Amigos, Chats/Mensajes, Resenas, Clases y
-                           Consultas_Soporte. Por ahora muestran "Muy pronto" (sin sesión llevan a Iniciar sesión). *@
-                        <button class="boton principal" type="button" data-proximamente="Pedir clase" data-solo-profesor hidden>
+                        @* Botones sociales (Me gusta y Pedir clase ya funcionan): salen de las tablas Amigos, Chats/Mensajes, Resenas
+                           y Consultas_Soporte. Los que faltan muestran "Muy pronto" (sin sesión llevan a Iniciar sesión). *@
+                        <button class="boton principal" type="button" data-pedir-clase data-id-profesor="@idPerfil" data-nombre-profesor="" data-solo-profesor hidden>
                             <i class="bi bi-calendar-plus" aria-hidden="true"></i> Pedir clase
                         </button>
                         <button class="boton contorno" type="button" data-proximamente="Enviar mensaje">

@@ -68,11 +68,24 @@ public class HomeController : Controller
 
     public IActionResult PanelControl()
     {
-        if (HttpContext.Session.GetString("idUsuario") == null) return RedirectToAction("IniciarSesion", "Sesion");
+        string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
+        if (!int.TryParse(idUsuarioSesion, out int idUsuario)) return RedirectToAction("IniciarSesion", "Sesion");
 
-        // TODO BD: reemplazar por BD.obtenerClasesDelUsuario(idUsuario).
-        ViewBag.clasesProgramadas = obtenerClasesProgramadasDemo();
-        ViewBag.clasesHistorial = obtenerHistorialDemo();
+        // Clases y notificaciones salen de la BD. Las notificaciones se leen ANTES de marcarlas como vistas:
+        // al entrar al Panel las novedades se muestran como nuevas y recién después pasan a vistas
+        // (los pedidos por responder siguen contando en la insignia hasta que se resuelven).
+        try
+        {
+            BD bd = new BD();
+            ViewBag.misClases = bd.obtenerMisClases(idUsuario);
+            ViewBag.notificaciones = bd.obtenerNotificaciones(idUsuario);
+            int cantidadNotificaciones = bd.marcarNotificacionesVistas(idUsuario);
+            HttpContext.Session.SetString("cantidadNotificaciones", cantidadNotificaciones.ToString());
+        }
+        catch (Exception)
+        {
+            ViewBag.errorBD = true;
+        }
         return View();
     }
 
@@ -104,28 +117,5 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    // ================= DATOS DE EJEMPLO (TODO BD: borrar cuando exista el sistema de clases) =================
-
-    private List<Clase> obtenerClasesProgramadasDemo()
-    {
-        return new List<Clase>
-        {
-            new Clase { id = 1, materia = "Matemática Discreta", profesor = "Sofía Martínez", colegio = "Belgrano Day School", fecha = "Mañana, 16:00 hs", lugar = "Presencial (Biblioteca)", modalidad = "Presencial", estado = "Confirmada", icono = "bi-calculator" },
-            new Clase { id = 2, materia = "Física II", profesor = "Lucas Gómez", colegio = "Colegio San Martín", fecha = "Jueves, 18:00 hs", lugar = "Virtual (Google Meet)", modalidad = "Virtual", estado = "Pendiente", icono = "bi-lightning-charge" }
-        };
-    }
-
-    private List<Clase> obtenerHistorialDemo()
-    {
-        return new List<Clase>
-        {
-            new Clase { id = 10, materia = "Matemática Discreta", profesor = "Sofía Martínez", fecha = "02/10/2026", estado = "Completada" },
-            new Clase { id = 11, materia = "Física I", profesor = "Lucas Gómez", fecha = "28/09/2026", estado = "Completada" },
-            new Clase { id = 12, materia = "Inglés", profesor = "Camila Rossi", fecha = "21/09/2026", estado = "Cancelada" },
-            new Clase { id = 13, materia = "Química", profesor = "Joaquín Fernández", fecha = "15/09/2026", estado = "Completada" },
-            new Clase { id = 14, materia = "Biología", profesor = "Valentina Paz", fecha = "09/09/2026", estado = "Completada" }
-        };
     }
 }

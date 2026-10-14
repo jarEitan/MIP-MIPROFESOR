@@ -1,8 +1,53 @@
+@* Panel de Control. Las clases y las notificaciones vienen de la BD (HomeController.PanelControl);
+   las acciones (aceptar, rechazar, reubicar, cancelar) se envían con fetch a ClasesController (site.js). *@
 @{
     ViewData["Title"] = "Panel de Control";
-    List<Clase> clasesProgramadas = ViewBag.clasesProgramadas ?? new List<Clase>();
-    List<Clase> clasesHistorial = ViewBag.clasesHistorial ?? new List<Clase>();
+    MisClases misClases = ViewBag.misClases ?? new MisClases();
+    List<NotificacionUsuario> notificaciones = ViewBag.notificaciones ?? new List<NotificacionUsuario>();
+    bool errorBD = ViewBag.errorBD ?? false;
+    List<ClasePanel> clasesActivas = misClases.clases.Where(clase => clase.grupo != "historial").ToList();
+    List<ClasePanel> clasesHistorial = misClases.clases.Where(clase => clase.grupo == "historial").ToList();
+    int cantidadNuevas = notificaciones.Count(notificacion => notificacion.esNueva);
     string nombreUsuario = ((Context.Session.GetString("nombre") ?? "") + " " + (Context.Session.GetString("apellido") ?? "")).Trim();
+    string rolUsuario = Context.Session.GetString("tipoUsuario") == "profesor" ? "Profesor" : "Alumno";
+}
+
+@functions {
+    // "lunes 19 de octubre" / "hace 5 min": formato argentino (la cultura es-AR se fija en Program.cs)
+    static string textoDia(DateTime fecha)
+    {
+        string texto = fecha.ToString("dddd d 'de' MMMM");
+        return char.ToUpper(texto[0]) + texto.Substring(1);
+    }
+
+    static string textoHorario(DateTime inicio, DateTime fin)
+    {
+        return inicio.ToString("HH:mm") + " a " + fin.ToString("HH:mm") + " hs";
+    }
+
+    static string tiempoRelativo(DateTime fecha)
+    {
+        TimeSpan pasado = DateTime.Now - fecha;
+        if (pasado.TotalMinutes < 1) return "recién";
+        if (pasado.TotalMinutes < 60) return "hace " + (int)pasado.TotalMinutes + " min";
+        if (pasado.TotalHours < 24) return "hace " + (int)pasado.TotalHours + " h";
+        if (pasado.TotalDays < 7) return "hace " + (int)pasado.TotalDays + (pasado.TotalDays < 2 ? " día" : " días");
+        return fecha.ToString("dd/MM/yyyy");
+    }
+
+    static string iconoDeNotificacion(string tipo)
+    {
+        switch (tipo)
+        {
+            case "pedidoPorResponder": return "bi-calendar-plus";
+            case "propuestaPorResponder": return "bi-arrow-repeat";
+            case "pedidoAceptado": return "bi-check-circle";
+            case "pedidoRechazado": return "bi-x-circle";
+            case "pedidoVencido": return "bi-hourglass-split";
+            case "pedidoCancelado": return "bi-calendar-x";
+            default: return "bi-patch-check";
+        }
+    }
 }
 
 <!-- ================= SALUDO ================= -->
@@ -11,13 +56,68 @@
         <div class="d-flex flex-column sm:flex-row sm:align-items-center gap-3 sm:gap-4">
             <partial name="_avatarUsuario" model='"avatar-xl"' />
             <div>
-                <span class="pildora">Alumno • Belgrano Day School</span>
+                <span class="pildora">@rolUsuario</span>
                 <h1>¡Hola, @nombreUsuario! 👋</h1>
-                <p>Gestioná tus tutorías programadas, tus mensajes con profesores y la configuración de tu cuenta.</p>
+                <p>Gestioná tus clases, tus mensajes y la configuración de tu cuenta.</p>
             </div>
         </div>
+    </div>
+</section>
 
-        <p class="aviso"><i class="bi bi-bell-fill" aria-hidden="true"></i> <span>La prof. <strong>Sofía Martínez</strong> aceptó tu consulta de Matemática.</span></p>
+@* Token para los fetch POST de las acciones sobre las clases (site.js lo manda en el encabezado) *@
+@Html.AntiForgeryToken()
+
+<!-- ================= NOTIFICACIONES ================= -->
+<section class="notificaciones" id="notificaciones" aria-labelledby="tituloNotificaciones">
+    <div class="container">
+        <div class="card estatica">
+            <h2 id="tituloNotificaciones">
+                <i class="bi bi-bell" aria-hidden="true"></i> Notificaciones
+                @if (cantidadNuevas > 0)
+                {
+                    <span class="badge theme-primary" id="cantidadNotificacionesPanel">@cantidadNuevas</span>
+                }
+            </h2>
+
+            @if (errorBD)
+            {
+                <p class="sinNotificaciones">No pudimos cargar tus notificaciones. Probá de nuevo en unos minutos.</p>
+            }
+            else if (notificaciones.Count == 0)
+            {
+                <p class="sinNotificaciones">No tenés notificaciones por ahora. Cuando alguien te pida una clase o responda a tu pedido, lo vas a ver acá.</p>
+            }
+            else
+            {
+                <ul class="listaNotificaciones">
+                    @foreach (var notificacion in notificaciones)
+                    {
+                        string urlDestino = notificacion.destino == "catalogo"
+                            ? Url.Action("Index", "Catalogo")!
+                            : Url.Action("PanelControl", "Home", new { tab = notificacion.destino == "panelHistorial" ? "historial" : "clases", clase = notificacion.idClase })!;
+                        <li class="notificacion @(notificacion.esNueva ? "nueva" : "")">
+                            <span class="icono @(notificacion.requiereAccion ? "" : "celeste")"><i class="bi @iconoDeNotificacion(notificacion.tipo)" aria-hidden="true"></i></span>
+                            <div class="textoNotificacion">
+                                <h3>
+                                    @notificacion.titulo
+                                    @if (notificacion.requiereAccion)
+                                    {
+                                        <span class="badge badge-subtle theme-warning">Esperando tu respuesta</span>
+                                    }
+                                    else if (notificacion.esNueva)
+                                    {
+                                        <span class="badge theme-primary">Nueva</span>
+                                    }
+                                </h3>
+                                <p>@notificacion.mensaje</p>
+                                <small>@tiempoRelativo(notificacion.fechaNovedad)</small>
+                            </div>
+                            <a class="boton @(notificacion.requiereAccion ? "principal" : "contorno") chico" href="@urlDestino">@notificacion.textoBoton <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
     </div>
 </section>
 
@@ -29,13 +129,13 @@
                 <div class="row g-3 lg:g-4">
                     <div class="col-6 lg:col-12">
                         <div class="card">
-                            <strong>@clasesProgramadas.Count</strong>
+                            <strong id="contadorClasesActivas">@(misClases.pendientes + misClases.proximas)</strong>
                             <span>Clases activas</span>
                         </div>
                     </div>
                     <div class="col-6 lg:col-12">
                         <div class="card oscura">
-                            <strong>12</strong>
+                            <strong id="contadorClasesCompletadas">@misClases.completadas</strong>
                             <span>Clases completadas</span>
                         </div>
                     </div>
@@ -98,69 +198,140 @@
             <!-- Mis clases programadas -->
             <div class="tab-pane show active" id="tabClases" role="tabpanel" aria-labelledby="botonTabClases" tabindex="0">
                 <h2>Mis clases programadas</h2>
-                <div class="row row-cols-1 lg:row-cols-2 g-3 lg:g-4">
-                    @foreach (var clase in clasesProgramadas)
-                    {
-                        <div class="col">
-                            <article class="card clase">
-                                <header>
-                                    <span class="icono @(clase.estado == "Confirmada" ? "celeste" : "")"><i class="bi @clase.icono" aria-hidden="true"></i></span>
-                                    <span class="badge badge-subtle @(clase.estado == "Confirmada" ? "theme-success" : "theme-warning")">@(clase.estado == "Confirmada" ? "Confirmada" : "Pendiente de confirmación")</span>
-                                </header>
-                                <h3>@clase.materia</h3>
-                                <p>Prof. @clase.profesor</p>
-                                <ul>
-                                    <li><i class="bi bi-building" aria-hidden="true"></i> @clase.colegio</li>
-                                    <li><i class="bi bi-calendar-event" aria-hidden="true"></i> @clase.fecha</li>
-                                    <li><i class="bi @(clase.modalidad == "Virtual" ? "bi-laptop" : "bi-geo-alt")" aria-hidden="true"></i> @clase.lugar</li>
-                                </ul>
-                                <footer>
-                                    <button class="boton contorno chico" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Reubicar</button>
-                                    <button class="boton oscuro chico" type="button" data-bs-toggle="dialog" data-bs-target="#dialogoCancelarClase"><i class="bi bi-x-circle" aria-hidden="true"></i> Cancelar</button>
-                                </footer>
-                            </article>
-                        </div>
-                    }
-                </div>
+                @if (errorBD)
+                {
+                    <div class="card estatica estadoVacio"><p>No pudimos cargar tus clases. Probá de nuevo en unos minutos.</p></div>
+                }
+                else if (clasesActivas.Count == 0)
+                {
+                    <div class="card estatica estadoVacio">
+                        <span class="icono"><i class="bi bi-calendar-plus" aria-hidden="true"></i></span>
+                        <h3>Todavía no tenés clases programadas</h3>
+                        <p>@(rolUsuario == "Alumno" ? "Buscá un profesor en el catálogo y enviale un pedido de clase." : "Cuando un alumno te pida una clase, la vas a ver acá para aceptarla o rechazarla.")</p>
+                        @if (rolUsuario == "Alumno")
+                        {
+                            <a class="boton principal chico" asp-controller="Catalogo" asp-action="Index">Ir al catálogo</a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="row row-cols-1 lg:row-cols-2 g-3 lg:g-4">
+                        @foreach (var clase in clasesActivas)
+                        {
+                            string nombreOtro = clase.nombreOtro + " " + clase.apellidoOtro;
+                            <div class="col" id="clase-@clase.id">
+                                <article class="card clase" data-clase data-id-clase="@clase.id" data-id-otro="@clase.idOtroUsuario"
+                                         data-nombre-otro="@nombreOtro" data-fecha-texto="@textoDia(clase.fecha), @clase.fecha.ToString("HH:mm") hs"
+                                         data-muy-cerca="@(clase.muyCerca ? "true" : "false")" data-estado="@clase.estado">
+                                    <header>
+                                        <span class="icono @(clase.estado == "Confirmada" ? "celeste" : "")"><i class="bi @(clase.estado == "Confirmada" ? "bi-calendar-check" : clase.estado == "Rechazada" ? "bi-calendar-x" : "bi-hourglass-split")" aria-hidden="true"></i></span>
+                                        @if (clase.estado == "Confirmada")
+                                        {
+                                            <span class="badge badge-subtle theme-success">Confirmada</span>
+                                        }
+                                        else if (clase.estado == "Rechazada")
+                                        {
+                                            <span class="badge badge-subtle theme-danger">Horario rechazado</span>
+                                        }
+                                        else if (clase.esperaA == "yo")
+                                        {
+                                            <span class="badge theme-primary">Te toca responder</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-subtle theme-warning">Esperando respuesta</span>
+                                        }
+                                    </header>
+                                    <h3>Clase con <a asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario">@nombreOtro</a></h3>
+                                    <p>@(clase.miRol == "alumno" ? "Profesor" : "Alumno")</p>
+                                    <ul>
+                                        <li><i class="bi bi-calendar-event" aria-hidden="true"></i> @textoDia(clase.fecha)</li>
+                                        <li><i class="bi bi-clock" aria-hidden="true"></i> @textoHorario(clase.fecha, clase.fechaFin)</li>
+                                        @if (clase.estado == "Pendiente" && clase.esperaA == "otro")
+                                        {
+                                            <li><i class="bi bi-hourglass-split" aria-hidden="true"></i> Esperando que responda @clase.nombreOtro</li>
+                                        }
+                                        @if (clase.estado == "Rechazada")
+                                        {
+                                            <li><i class="bi bi-info-circle" aria-hidden="true"></i> @(clase.esperaA == "yo" ? $"{clase.nombreOtro} no aceptó este horario: proponé otro o cancelá la clase." : $"Rechazaste este horario. Esperando que {clase.nombreOtro} proponga otro o cancele.")</li>
+                                        }
+                                        <li><i class="bi bi-person" aria-hidden="true"></i> <a asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario">Ver perfil de @clase.nombreOtro</a></li>
+                                    </ul>
+                                    <footer>
+                                        @if (clase.puedeResponder)
+                                        {
+                                            <button class="boton principal chico" type="button" data-accion-clase="aceptar"><i class="bi bi-check2" aria-hidden="true"></i> @(clase.miRol == "alumno" ? "Aceptar horario" : "Aceptar")</button>
+                                            <button class="boton contorno chico" type="button" data-accion-clase="rechazar"><i class="bi bi-x-lg" aria-hidden="true"></i> Rechazar</button>
+                                        }
+                                        @if (clase.puedeReubicar)
+                                        {
+                                            @* Proponer otro horario cuando hay algo que responder o rechazado; cambiar el horario si está confirmada o esperando *@
+                                            bool proponeOtro = clase.puedeResponder || clase.estado == "Rechazada";
+                                            bool reubicarEsLoPrincipal = clase.estado == "Rechazada" && clase.esperaA == "yo";
+                                            <button class="boton @(reubicarEsLoPrincipal ? "principal" : "contorno") chico" type="button" data-accion-clase="reubicar"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> @(proponeOtro ? "Proponer otro horario" : "Cambiar horario")</button>
+                                        }
+                                        @if (clase.puedeCancelar)
+                                        {
+                                            <button class="boton oscuro chico" type="button" data-accion-clase="cancelar"><i class="bi bi-x-circle" aria-hidden="true"></i> @(clase.estado == "Pendiente" ? "Cancelar pedido" : "Cancelar clase")</button>
+                                        }
+                                    </footer>
+                                </article>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
 
             <!-- Historial de clases -->
             <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
                 <h2>Historial de clases</h2>
-                <div class="card estatica tabla">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Materia</th>
-                                <th scope="col">Profesor</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var clase in clasesHistorial)
-                            {
+                @if (clasesHistorial.Count == 0)
+                {
+                    <div class="card estatica estadoVacio">
+                        <span class="icono celeste"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
+                        <h3>Todavía no hay clases en tu historial</h3>
+                        <p>Las clases completadas, canceladas y rechazadas aparecen acá.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="card estatica tabla">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td data-etiqueta="Materia"><strong>@clase.materia</strong></td>
-                                    <td data-etiqueta="Profesor">@clase.profesor</td>
-                                    <td data-etiqueta="Fecha">@clase.fecha</td>
-                                    <td data-etiqueta="Estado"><span class="badge badge-subtle @(clase.estado == "Completada" ? "theme-success" : "theme-danger")">@clase.estado</span></td>
-                                    <td data-etiqueta="Acción">
-                                        @if (clase.estado == "Completada")
-                                        {
-                                            <a class="boton contorno chico" asp-controller="Catalogo" asp-action="Index"><i class="bi bi-star" aria-hidden="true"></i> Reseñar</a>
-                                        }
-                                        else
-                                        {
-                                            <a class="boton contorno chico" asp-controller="Catalogo" asp-action="Index"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Reservar de nuevo</a>
-                                        }
-                                    </td>
+                                    <th scope="col">@(rolUsuario == "Alumno" ? "Profesor" : "Alumno")</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Horario</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Acción</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                @foreach (var clase in clasesHistorial)
+                                {
+                                    <tr id="historial-@clase.id">
+                                        <td data-etiqueta="@(rolUsuario == "Alumno" ? "Profesor" : "Alumno")"><strong><a asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario">@clase.nombreOtro @clase.apellidoOtro</a></strong></td>
+                                        <td data-etiqueta="Fecha">@clase.fecha.ToString("dd/MM/yyyy")</td>
+                                        <td data-etiqueta="Horario">@textoHorario(clase.fecha, clase.fechaFin)</td>
+                                        <td data-etiqueta="Estado"><span class="badge badge-subtle @(clase.estado == "Completada" ? "theme-success" : "theme-danger")">@clase.estado</span></td>
+                                        <td data-etiqueta="Acción">
+                                            @if (rolUsuario == "Alumno")
+                                            {
+                                                @* Abre el diálogo "Pedir una clase" (clases.js) ya con ese profesor *@
+                                                <button class="boton principal chico" type="button" data-pedir-clase data-id-profesor="@clase.idOtroUsuario" data-nombre-profesor="@clase.nombreOtro @clase.apellidoOtro"><i class="bi bi-calendar-plus" aria-hidden="true"></i> Pedir otra clase</button>
+                                            }
+                                            else
+                                            {
+                                                <a class="boton contorno chico" asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario"><i class="bi bi-person" aria-hidden="true"></i> Ver perfil</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
             </div>
 
             <!-- Chat directo -->
@@ -249,16 +420,53 @@
 </section>
 
 <!-- ================= DIÁLOGO: CANCELAR CLASE (componente Dialog de Bootstrap 6) ================= -->
+@* Lo abre clases.js (data-accion-clase="cancelar") y escribe el texto según la clase: pedido sin aceptar o clase confirmada *@
 <dialog class="dialog" id="dialogoCancelarClase" aria-labelledby="tituloCancelarClase">
     <div class="dialog-header">
         <h2 class="dialog-title" id="tituloCancelarClase">¿Cancelar esta clase?</h2>
         <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
     </div>
     <div class="dialog-body">
-        <p>Si cancelás con anticipación se cancela automáticamente. Si la clase está próxima, se abre un chat con el profesor para acordarlo.</p>
+        <p id="textoCancelarClase"></p>
+        <p class="mensajeError" id="mensajeCancelarClase" role="alert"></p>
     </div>
     <div class="dialog-footer">
         <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Volver</button>
-        <button type="button" class="boton principal chico" data-bs-dismiss="dialog">Sí, cancelar</button>
+        <button type="button" class="boton principal chico" id="botonConfirmarCancelacion">Sí, cancelar</button>
+    </div>
+</dialog>
+
+<!-- ================= DIÁLOGO: REUBICAR CLASE ================= -->
+@* Cualquiera de los dos propone otro horario; la clase vuelve a Pendiente y le toca responder al otro *@
+<dialog class="dialog dialogoClase" id="dialogoReubicarClase" aria-labelledby="tituloReubicarClase">
+    <form id="formularioReubicarClase" onsubmit="return enviarReubicacionDeClase()" novalidate>
+        <div class="dialog-header">
+            <h2 class="dialog-title" id="tituloReubicarClase">Cambiar el horario</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+        </div>
+        <div class="dialog-body">
+            <p>Elegí el nuevo horario para tu clase con <strong id="nombreClaseAReubicar"></strong>. <strong id="nombreQuienResponde"></strong> tiene que confirmarlo.</p>
+            <partial name="_selectorHorario" model='"reubicar"' />
+            <p class="mensajeError" id="mensajeReubicarClase" role="alert"></p>
+        </div>
+        <div class="dialog-footer">
+            <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Volver</button>
+            <button type="submit" class="boton principal chico" id="botonConfirmarReubicacion"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Proponer nuevo horario</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- ================= DIÁLOGO: LA CLASE EMPIEZA EN MENOS DE 24 H ================= -->
+<dialog class="dialog" id="dialogoClaseCercana" aria-labelledby="tituloClaseCercana">
+    <div class="dialog-header">
+        <h2 class="dialog-title" id="tituloClaseCercana">La clase está muy próxima</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+    </div>
+    <div class="dialog-body">
+        <p>Tu clase con <strong id="nombreClaseCercana"></strong> empieza en menos de 24 horas, así que no se cancela ni se cambia sola. Coordinalo por el chat con esa persona.</p>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Cerrar</button>
+        <button type="button" class="boton principal chico" id="botonAbrirChatClaseCercana" data-bs-dismiss="dialog"><i class="bi bi-chat-dots" aria-hidden="true"></i> Ir al chat</button>
     </div>
 </dialog>

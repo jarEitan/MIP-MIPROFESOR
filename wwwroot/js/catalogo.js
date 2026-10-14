@@ -141,13 +141,6 @@ function mostrarErrorCatalogo() {
 
 // ================= TARJETA HORIZONTAL =================
 
-function crearElemento(etiqueta, clases, texto) {
-    const elemento = document.createElement(etiqueta);
-    if (clases) elemento.className = clases;
-    if (texto !== undefined) elemento.textContent = texto;
-    return elemento;
-}
-
 function crearIcono(clase) {
     const icono = crearElemento("i", `bi ${clase}`);
     icono.setAttribute("aria-hidden", "true");
@@ -227,9 +220,12 @@ function crearTarjetaProfesor(profesor) {
 
     const botonPerfil = crearElemento("a", "boton contorno chico", "Ver perfil");
     botonPerfil.href = urlPerfil;
-    // Por ahora el pedido se hace desde el perfil; cuando existan las clases esto abre el pedido directo
-    const botonPedido = crearElemento("a", "boton principal chico", "Enviar pedido");
-    botonPedido.href = urlPerfil;
+    // Abre el diálogo "Pedir clase" (site.js: abrirPedidoDeClase); sin sesión lleva a Iniciar sesión
+    const botonPedido = crearElemento("button", "boton principal chico", "Enviar pedido");
+    botonPedido.type = "button";
+    botonPedido.dataset.pedirClase = "";
+    botonPedido.dataset.idProfesor = profesor.id;
+    botonPedido.dataset.nombreProfesor = profesor.nombreCompleto;
     lateral.append(botonPerfil, botonPedido);
 
     tarjeta.append(avatar, cuerpo, lateral);
