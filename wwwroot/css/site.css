@@ -6,7 +6,7 @@
 
    Cómo está pensada:
    - Bootstrap 6 (alpha) pone la grilla (row/col), los componentes (navbar,
-     drawer, dialog, accordion, tabs, menu, badge, avatar) y los
+     drawer, dialog, accordion, tabs, badge, avatar) y los
      formularios. Acá solo se pisan sus variables --bs-* y se agrega la
      identidad de MIP. Bootstrap 6 va dentro de @layer, así que esta hoja
      (sin layer) siempre gana, sin !important.
@@ -444,28 +444,6 @@ main {
     transform: scale(1.08) rotate(-4deg);
 }
 
-.encabezado .menu {
-    --bs-menu-min-width: 13rem;
-    --bs-menu-font-size: .9rem;
-    --bs-menu-bg: var(--colorSuperficie);
-    --bs-menu-box-shadow: var(--sombraMarcada);
-    --bs-menu-item-hover-bg: var(--colorCelesteSuave);
-    --bs-menu-item-border-radius: .5rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
-}
-
-.encabezado .menu .menu-header {
-    font-family: var(--fuenteMarca);
-    font-weight: 600;
-    color: var(--colorTinta);
-}
-
-.encabezado .menu .menu-item {
-    font-weight: 600;
-    text-decoration: none;
-}
-
 /* Antes de lg el menú es un drawer lateral.
    (@container y no @media: el navbar de Bootstrap 6 se expande según el ancho de su propio contenedor,
    que no cuenta la barra de scroll, así que el corte puede diferir unos píxeles del viewport) */
@@ -789,9 +767,8 @@ mark {
     margin: 0;
 }
 
-/* Insignias, píldoras y botones dentro de una tarjeta no se estiran a lo ancho */
+/* Insignias y botones dentro de una tarjeta no se estiran a lo ancho */
 .card > .badge,
-.card > .pildora,
 .card > .boton {
     align-self: flex-start;
 }
@@ -912,8 +889,7 @@ mark {
 }
 
 /* ---------- Formularios (Bootstrap) ---------- */
-.form-field label,
-legend {
+.form-field label {
     font-size: .85rem;
     font-weight: 700;
     color: var(--colorTinta);
@@ -945,17 +921,6 @@ legend {
     --bs-check-checked-bg: var(--colorCoral);
     --bs-check-checked-border-color: var(--colorTinta);
     --bs-check-border-color: var(--colorTinta);
-}
-
-.radio {
-    --bs-radio-checked-bg: var(--colorCoral);
-    --bs-radio-checked-border-color: var(--colorTinta);
-    --bs-radio-border-color: var(--colorTinta);
-}
-
-fieldset {
-    display: grid;
-    gap: .6rem;
 }
 
 /* Mensajes de validación: se ven solo cuando el JS les escribe un texto */
@@ -2052,11 +2017,6 @@ fieldset {
     display: grid;
     align-content: start;
     gap: 1.1rem;
-}
-
-.catalogo legend {
-    float: none;
-    margin-bottom: .1rem;
 }
 
 .catalogo form .boton.chico {
@@ -3517,7 +3477,6 @@ tr.resaltada td {
 
 .perfil .cabeceraPerfil .avatar {
     --bs-avatar-size: clamp(5.5rem, 4.5rem + 3vw, 7.5rem);
-    --bs-avatar-font-size: clamp(1.8rem, 1.4rem + 1.4vw, 2.6rem);
     border-width: 3px;
     box-shadow: var(--sombraMarcada);
 }
@@ -3978,7 +3937,6 @@ tr.resaltada td {
 
 .dialogoEdicion .vistaPreviaFoto .avatar {
     --bs-avatar-size: 5.5rem;
-    --bs-avatar-font-size: 1.8rem;
     border-width: 3px;
     box-shadow: var(--sombraMarcada);
 }

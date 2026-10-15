@@ -1,3 +1,6 @@
+using System.Net;
+using System.Text.RegularExpressions;
+
 namespace MIP_MIPROFESOR.Models;
 
 // Una tarjeta del catálogo (SP obtenerCatalogo). Las listas se arman en BD.obtenerCatalogo.
@@ -19,13 +22,21 @@ public class Profesor
 
     public string nombreCompleto => nombre + " " + apellido;
 
+    // Para el avatar sin foto: "Sofía Martínez" → "SM" ("?" si no tiene nombre ni apellido)
     public string iniciales
     {
         get
         {
             string inicialNombre = nombre.Length > 0 ? nombre.Substring(0, 1).ToUpper() : "";
             string inicialApellido = apellido.Length > 0 ? apellido.Substring(0, 1).ToUpper() : "";
-            return inicialNombre + inicialApellido == "" ? "?" : inicialNombre + inicialApellido;
+            string letras = inicialNombre + inicialApellido;
+
+            if (letras == "")
+            {
+                return "?";
+            }
+
+            return letras;
         }
     }
 
@@ -34,9 +45,15 @@ public class Profesor
     {
         get
         {
-            string texto = System.Net.WebUtility.HtmlDecode(System.Text.RegularExpressions.Regex.Replace(descripcion ?? "", "<[^>]*>", " "));
-            texto = System.Text.RegularExpressions.Regex.Replace(texto, @"\s+", " ").Trim();
-            return texto.Length > 140 ? texto.Substring(0, 137).TrimEnd() + "..." : texto;
+            string texto = WebUtility.HtmlDecode(Regex.Replace(descripcion ?? "", "<[^>]*>", " "));
+            texto = Regex.Replace(texto, @"\s+", " ").Trim();
+
+            if (texto.Length > 140)
+            {
+                return texto.Substring(0, 137).TrimEnd() + "...";
+            }
+
+            return texto;
         }
     }
 }

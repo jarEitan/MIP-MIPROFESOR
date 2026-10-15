@@ -4,7 +4,7 @@ namespace MIP_MIPROFESOR.Models;
 // resultado (solo en alternarLike): ok | mismoUsuario | usuarioInexistente
 public class ResultadoLike
 {
-    public string resultado { get; set; } = "ok";
+    public string resultado { get; set; } = "";
     public bool leGusta { get; set; }
     public int cantidadLikes { get; set; }
 }

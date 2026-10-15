@@ -4,12 +4,8 @@ using Microsoft.Data.SqlClient;
 
 namespace MIP_MIPROFESOR.Models;
 
-// Acceso a datos del sitio con Dapper. El inicio de sesión y el registro están en BDsesion.cs.
-// Perfiles: stored procedures obtenerPerfil, obtenerOpcionesPerfil, obtenerDatosEdicion,
-// obtenerFaltantesVerificacion y guardarPerfilCompleto de la base MIP.
-// Catálogo: stored procedure obtenerCatalogo (en MIP-BD.sql).
-// Likes: stored procedures obtenerLike y alternarLike (en MIP-BD.sql).
-// Clases y notificaciones: stored procedures en MIP-BD.sql (reglas y estados en Info/log.md, entrada 2026-10-14).
+// Acceso a datos del sitio con Dapper: cada método llama a un stored procedure de MIP-BD.sql.
+// El inicio de sesión y el registro están en BDsesion.cs.
 public class BD
 {
     private static string connectionString = @"Server=localhost;Database=MIP;Integrated Security=True;TrustServerCertificate=True;";
@@ -20,21 +16,23 @@ public class BD
     public PerfilUsuario obtenerPerfil(int idUsuario)
     {
         using (var connection = new SqlConnection(connectionString))
+        using (var tablas = connection.QueryMultiple("obtenerPerfil", new { idUsuario }, commandType: CommandType.StoredProcedure))
         {
-            using (var tablas = connection.QueryMultiple("obtenerPerfil", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure))
-            {
-                PerfilUsuario? perfil = tablas.ReadFirstOrDefault<PerfilUsuario>();
-                if (perfil == null) return new PerfilUsuario { encontrado = false };
+            PerfilUsuario? perfil = tablas.ReadFirstOrDefault<PerfilUsuario>();
 
-                perfil.encontrado = true;
-                perfil.materias = tablas.Read<string>().ToList();
-                perfil.niveles = tablas.Read<string>().ToList();
-                perfil.modalidades = tablas.Read<string>().ToList();
-                perfil.colegios = tablas.Read<string>().ToList();
-                perfil.titulos = tablas.Read<string>().ToList();
-                perfil.resenas = tablas.Read<ResenaPerfil>().ToList();
-                return perfil;
+            if (perfil == null)
+            {
+                return new PerfilUsuario { encontrado = false };
             }
+
+            perfil.encontrado = true;
+            perfil.materias = tablas.Read<string>().ToList();
+            perfil.niveles = tablas.Read<string>().ToList();
+            perfil.modalidades = tablas.Read<string>().ToList();
+            perfil.colegios = tablas.Read<string>().ToList();
+            perfil.titulos = tablas.Read<string>().ToList();
+            perfil.resenas = tablas.Read<ResenaPerfil>().ToList();
+            return perfil;
         }
     }
 
@@ -45,7 +43,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoLike>("obtenerLike", new { idEmisor = idEmisor, idReceptor = idReceptor }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoLike>("obtenerLike", new { idEmisor, idReceptor }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -54,7 +52,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoLike>("alternarLike", new { idEmisor = idEmisor, idReceptor = idReceptor }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoLike>("alternarLike", new { idEmisor, idReceptor }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -64,17 +62,15 @@ public class BD
     public OpcionesPerfil obtenerOpcionesPerfil()
     {
         using (var connection = new SqlConnection(connectionString))
+        using (var tablas = connection.QueryMultiple("obtenerOpcionesPerfil", commandType: CommandType.StoredProcedure))
         {
-            using (var tablas = connection.QueryMultiple("obtenerOpcionesPerfil", commandType: CommandType.StoredProcedure))
+            return new OpcionesPerfil
             {
-                return new OpcionesPerfil
-                {
-                    materias = tablas.Read<OpcionPerfil>().ToList(),
-                    niveles = tablas.Read<OpcionPerfil>().ToList(),
-                    modalidades = tablas.Read<OpcionPerfil>().ToList(),
-                    escuelas = tablas.Read<OpcionPerfil>().ToList()
-                };
-            }
+                materias = tablas.Read<OpcionPerfil>().ToList(),
+                niveles = tablas.Read<OpcionPerfil>().ToList(),
+                modalidades = tablas.Read<OpcionPerfil>().ToList(),
+                escuelas = tablas.Read<OpcionPerfil>().ToList()
+            };
         }
     }
 
@@ -82,20 +78,22 @@ public class BD
     public DatosEdicion? obtenerDatosEdicion(int idUsuario)
     {
         using (var connection = new SqlConnection(connectionString))
+        using (var tablas = connection.QueryMultiple("obtenerDatosEdicion", new { idUsuario }, commandType: CommandType.StoredProcedure))
         {
-            using (var tablas = connection.QueryMultiple("obtenerDatosEdicion", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure))
-            {
-                DatosEdicion? datos = tablas.ReadFirstOrDefault<DatosEdicion>();
-                if (datos == null) return null;
+            DatosEdicion? datos = tablas.ReadFirstOrDefault<DatosEdicion>();
 
-                datos.tieneFotoDni = !string.IsNullOrWhiteSpace(datos.fotoDni);
-                datos.idsMaterias = tablas.Read<int>().ToList();
-                datos.idsNiveles = tablas.Read<int>().ToList();
-                datos.idsModalidades = tablas.Read<int>().ToList();
-                datos.idsEscuelas = tablas.Read<int>().ToList();
-                datos.titulos = tablas.Read<string>().ToList();
-                return datos;
+            if (datos == null)
+            {
+                return null;
             }
+
+            datos.tieneFotoDni = !string.IsNullOrWhiteSpace(datos.fotoDni);
+            datos.idsMaterias = tablas.Read<int>().ToList();
+            datos.idsNiveles = tablas.Read<int>().ToList();
+            datos.idsModalidades = tablas.Read<int>().ToList();
+            datos.idsEscuelas = tablas.Read<int>().ToList();
+            datos.titulos = tablas.Read<string>().ToList();
+            return datos;
         }
     }
 
@@ -104,10 +102,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.Query<string>(
-                "obtenerFaltantesVerificacion",
-                new { idUsuario = idUsuario },
-                commandType: CommandType.StoredProcedure).ToList();
+            return connection.Query<string>("obtenerFaltantesVerificacion", new { idUsuario }, commandType: CommandType.StoredProcedure).ToList();
         }
     }
 
@@ -121,7 +116,7 @@ public class BD
                 "guardarPerfilCompleto",
                 new
                 {
-                    idUsuario = idUsuario,
+                    idUsuario,
                     nombre = edicion.nombre,
                     apellido = edicion.apellido,
                     mail = edicion.mail,
@@ -148,28 +143,26 @@ public class BD
     public ResultadoCatalogo obtenerCatalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string? niveles, int pagina, int porPagina)
     {
         using (var connection = new SqlConnection(connectionString))
+        using (var tablas = connection.QueryMultiple("obtenerCatalogo", new { busqueda, materia, colegio, modalidad, niveles, pagina, porPagina }, commandType: CommandType.StoredProcedure))
         {
-            using (var tablas = connection.QueryMultiple(
-                "obtenerCatalogo",
-                new { busqueda = busqueda, materia = materia, colegio = colegio, modalidad = modalidad, niveles = niveles, pagina = pagina, porPagina = porPagina },
-                commandType: CommandType.StoredProcedure))
-            {
-                ResultadoCatalogo resultado = tablas.ReadFirst<ResultadoCatalogo>();
-                resultado.profesores = tablas.Read<Profesor>().ToList();
-                var materiasPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
-                var nivelesPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
-                var modalidadesPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
-                var colegiosPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+            ResultadoCatalogo resultado = tablas.ReadFirst<ResultadoCatalogo>();
+            resultado.profesores = tablas.Read<Profesor>().ToList();
 
-                foreach (Profesor profesor in resultado.profesores)
-                {
-                    profesor.materias = materiasPorProfesor[profesor.id].ToList();
-                    profesor.niveles = nivelesPorProfesor[profesor.id].ToList();
-                    profesor.modalidades = modalidadesPorProfesor[profesor.id].ToList();
-                    profesor.colegios = colegiosPorProfesor[profesor.id].ToList();
-                }
-                return resultado;
+            // Las 4 listas llegan como filas (idUsuario, nombre) de todos los profesores de la página
+            var materiasPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+            var nivelesPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+            var modalidadesPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+            var colegiosPorProfesor = tablas.Read<ItemDeProfesor>().ToLookup(fila => fila.idUsuario, fila => fila.nombre);
+
+            foreach (Profesor profesor in resultado.profesores)
+            {
+                profesor.materias = materiasPorProfesor[profesor.id].ToList();
+                profesor.niveles = nivelesPorProfesor[profesor.id].ToList();
+                profesor.modalidades = modalidadesPorProfesor[profesor.id].ToList();
+                profesor.colegios = colegiosPorProfesor[profesor.id].ToList();
             }
+
+            return resultado;
         }
     }
 
@@ -181,7 +174,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoClase>("enviarPedidoClase", new { idAlumno = idAlumno, idProfesor = idProfesor, fecha = fecha }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoClase>("enviarPedidoClase", new { idAlumno, idProfesor, fecha }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -190,7 +183,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoClase>("responderPedidoClase", new { idUsuario = idUsuario, idClase = idClase, aceptar = aceptar }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoClase>("responderPedidoClase", new { idUsuario, idClase, aceptar }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -199,7 +192,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoClase>("cancelarClase", new { idUsuario = idUsuario, idClase = idClase }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoClase>("cancelarClase", new { idUsuario, idClase }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -208,7 +201,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoClase>("reubicarClase", new { idUsuario = idUsuario, idClase = idClase, nuevaFecha = nuevaFecha }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoClase>("reubicarClase", new { idUsuario, idClase, nuevaFecha }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -216,17 +209,16 @@ public class BD
     public MisClases obtenerMisClases(int idUsuario)
     {
         using (var connection = new SqlConnection(connectionString))
+        using (var tablas = connection.QueryMultiple("obtenerMisClases", new { idUsuario }, commandType: CommandType.StoredProcedure))
         {
-            using (var tablas = connection.QueryMultiple("obtenerMisClases", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure))
-            {
-                MisClases misClases = new MisClases();
-                misClases.clases = tablas.Read<ClasePanel>().ToList();
-                ContadoresClasesCrudos contadores = tablas.ReadFirst<ContadoresClasesCrudos>();
-                misClases.pendientes = contadores.pendientes ?? 0;
-                misClases.proximas = contadores.proximas ?? 0;
-                misClases.completadas = contadores.completadas ?? 0;
-                return misClases;
-            }
+            MisClases misClases = new MisClases();
+            misClases.clases = tablas.Read<ClasePanel>().ToList();
+
+            ContadoresClasesCrudos contadores = tablas.ReadFirst<ContadoresClasesCrudos>();
+            misClases.pendientes = contadores.pendientes ?? 0;
+            misClases.proximas = contadores.proximas ?? 0;
+            misClases.completadas = contadores.completadas ?? 0;
+            return misClases;
         }
     }
 
@@ -235,16 +227,18 @@ public class BD
     public ResultadoHistorial obtenerHistorialClases(int idUsuario, int? idVisitante)
     {
         using (var connection = new SqlConnection(connectionString))
+        using (var tablas = connection.QueryMultiple("obtenerHistorialClases", new { idUsuario, idVisitante }, commandType: CommandType.StoredProcedure))
         {
-            using (var tablas = connection.QueryMultiple("obtenerHistorialClases", new { idUsuario = idUsuario, idVisitante = idVisitante }, commandType: CommandType.StoredProcedure))
-            {
-                ResultadoHistorial? resultado = tablas.ReadFirstOrDefault<ResultadoHistorial>();
-                if (resultado == null) return new ResultadoHistorial { encontrado = false };
+            ResultadoHistorial? resultado = tablas.ReadFirstOrDefault<ResultadoHistorial>();
 
-                resultado.encontrado = true;
-                resultado.clases = tablas.Read<ClaseHistorial>().ToList();
-                return resultado;
+            if (resultado == null)
+            {
+                return new ResultadoHistorial { encontrado = false };
             }
+
+            resultado.encontrado = true;
+            resultado.clases = tablas.Read<ClaseHistorial>().ToList();
+            return resultado;
         }
     }
 
@@ -253,10 +247,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.Query<HorarioOcupado>(
-                "obtenerHorariosOcupados",
-                new { idProfesor = idProfesor, idAlumno = idAlumno, desde = desde, hasta = hasta, idClaseExcluir = idClaseExcluir },
-                commandType: CommandType.StoredProcedure).ToList();
+            return connection.Query<HorarioOcupado>("obtenerHorariosOcupados", new { idProfesor, idAlumno, desde, hasta, idClaseExcluir }, commandType: CommandType.StoredProcedure).ToList();
         }
     }
 
@@ -267,7 +258,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.Query<NotificacionUsuario>("obtenerNotificaciones", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure).ToList();
+            return connection.Query<NotificacionUsuario>("obtenerNotificaciones", new { idUsuario }, commandType: CommandType.StoredProcedure).ToList();
         }
     }
 
@@ -276,7 +267,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<int>("contarNotificaciones", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<int>("contarNotificaciones", new { idUsuario }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -285,7 +276,7 @@ public class BD
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<int>("marcarNotificacionesVistas", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<int>("marcarNotificacionesVistas", new { idUsuario }, commandType: CommandType.StoredProcedure);
         }
     }
 }

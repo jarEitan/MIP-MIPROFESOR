@@ -7,15 +7,15 @@ public static class VerificacionCuenta
 {
     public static void guardarEnSesion(ISession sesion, bool verificado, List<string> faltantes)
     {
-        sesion.SetString("verificado", verificado ? "true" : "false");
-        sesion.SetString("datosFaltantes", unirFaltantes(faltantes));
-    }
+        // ["el DNI", "la dirección", "tu colegio"] → "el DNI, la dirección y tu colegio"
+        string datosFaltantes = string.Join(", ", faltantes);
 
-    // ["el DNI", "la dirección", "tu colegio"] → "el DNI, la dirección y tu colegio"
-    public static string unirFaltantes(List<string> faltantes)
-    {
-        if (faltantes.Count == 0) return "";
-        if (faltantes.Count == 1) return faltantes[0];
-        return string.Join(", ", faltantes.Take(faltantes.Count - 1)) + " y " + faltantes[faltantes.Count - 1];
+        if (faltantes.Count > 1)
+        {
+            datosFaltantes = string.Join(", ", faltantes.Take(faltantes.Count - 1)) + " y " + faltantes[faltantes.Count - 1];
+        }
+
+        sesion.SetString("verificado", verificado ? "true" : "false");
+        sesion.SetString("datosFaltantes", datosFaltantes);
     }
 }

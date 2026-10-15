@@ -9,7 +9,11 @@ public class SesionController : Controller
 
     public IActionResult IniciarSesion()
     {
-        if (HttpContext.Session.GetString("idUsuario") != null) return RedirectToAction("Perfil", "Home");
+        if (HttpContext.Session.GetString("idUsuario") != null)
+        {
+            return RedirectToAction("Perfil", "Home");
+        }
+
         return View();
     }
 
@@ -27,10 +31,11 @@ public class SesionController : Controller
             return View();
         }
 
+        BDsesion bdSesion = new BDsesion();
         ResultadoSesion cuenta;
         try
         {
-            cuenta = new BDsesion().iniciarSesion(mail, contrasena);
+            cuenta = bdSesion.iniciarSesion(mail, contrasena);
         }
         catch (Exception)
         {
@@ -52,7 +57,11 @@ public class SesionController : Controller
 
     public IActionResult Registrarse(string? rol)
     {
-        if (HttpContext.Session.GetString("idUsuario") != null) return RedirectToAction("Perfil", "Home");
+        if (HttpContext.Session.GetString("idUsuario") != null)
+        {
+            return RedirectToAction("Perfil", "Home");
+        }
+
         ViewBag.rol = (rol == "profesor" ? "profesor" : "alumno");
         return View();
     }
@@ -74,31 +83,36 @@ public class SesionController : Controller
             ViewBag.mensaje = "Ingresá tu nombre y tu apellido.";
             return View();
         }
+
         if (registro.nombre.Length > 50 || registro.apellido.Length > 50)
         {
             ViewBag.mensaje = "El nombre y el apellido pueden tener hasta 50 caracteres.";
             return View();
         }
+
         if (!registro.mail.Contains('@') || registro.mail.Length < 5 || registro.mail.Length > 150)
         {
             ViewBag.mensaje = "Ingresá un correo electrónico válido.";
             return View();
         }
+
         if (registro.contrasena.Length < 8)
         {
             ViewBag.mensaje = "La contraseña debe tener al menos 8 caracteres.";
             return View();
         }
+
         if (registro.fechaNacimiento == null || registro.fechaNacimiento > DateTime.Today || registro.fechaNacimiento < new DateTime(1900, 1, 1))
         {
             ViewBag.mensaje = "Ingresá una fecha de nacimiento válida.";
             return View();
         }
 
+        BDsesion bdSesion = new BDsesion();
         ResultadoSesion cuenta;
         try
         {
-            cuenta = new BDsesion().registrarUsuario(registro);
+            cuenta = bdSesion.registrarUsuario(registro);
         }
         catch (Exception)
         {
@@ -111,6 +125,7 @@ public class SesionController : Controller
             ViewBag.mensaje = "Ya existe una cuenta con ese correo. Probá iniciar sesión.";
             return View();
         }
+
         if (cuenta.resultado != "ok")
         {
             ViewBag.mensaje = "Revisá los datos ingresados e intentá de nuevo.";
@@ -121,8 +136,7 @@ public class SesionController : Controller
         return RedirectToAction("Perfil", "Home");
     }
 
-    // ================= CIERRE DE SESIÓN =================
-    // El perfil (propio y de otros usuarios) está en HomeController.Perfil
+    // ================= CERRAR SESIÓN =================
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -133,9 +147,8 @@ public class SesionController : Controller
     }
 
     // ================= SESIÓN =================
-    // Claves: idUsuario, nombre, apellido, tipoUsuario, fotoPerfil (si tiene),
-    // verificado ("true"/"false"), datosFaltantes (texto del aviso "Cuenta no verificada")
-    // y cantidadNotificaciones (insignia del Panel de Control; se actualiza con fetch en site.js)
+    // Claves: idUsuario, nombre, apellido, tipoUsuario, fotoPerfil, verificado ("true"/"false"),
+    // datosFaltantes (texto del aviso "Cuenta no verificada") y cantidadNotificaciones (insignia del Panel de Control).
 
     private void guardarSesion(ResultadoSesion cuenta)
     {
@@ -145,22 +158,24 @@ public class SesionController : Controller
         HttpContext.Session.SetString("tipoUsuario", cuenta.tipoUsuario);
         HttpContext.Session.SetString("fotoPerfil", cuenta.fotoPerfil ?? "");
 
-        // Si la base no responde acá, el aviso simplemente no muestra el detalle de lo que falta
+        BD bd = new BD();
+
+        // Si la base no responde, el aviso de verificación sale sin el detalle de lo que falta
         List<string> faltantes = new List<string>();
         try
         {
-            faltantes = new BD().obtenerFaltantesVerificacion(cuenta.id);
+            faltantes = bd.obtenerFaltantesVerificacion(cuenta.id);
         }
         catch (Exception)
         {
         }
         VerificacionCuenta.guardarEnSesion(HttpContext.Session, cuenta.verificado, faltantes);
 
-        // Insignia del botón Panel de Control: pedidos por responder + novedades sin ver
+        // Insignia del Panel de Control: pedidos por responder + novedades sin ver (0 si la base no responde)
         int cantidadNotificaciones = 0;
         try
         {
-            cantidadNotificaciones = new BD().contarNotificaciones(cuenta.id);
+            cantidadNotificaciones = bd.contarNotificaciones(cuenta.id);
         }
         catch (Exception)
         {

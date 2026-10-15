@@ -5,8 +5,8 @@ using Microsoft.Data.SqlClient;
 
 namespace MIP_MIPROFESOR.Models;
 
-// Acceso a datos de inicio de sesión y registro. Usa los stored procedures
-// registrarUsuario e iniciarSesion de la base MIP.
+// Acceso a datos de inicio de sesión y registro (stored procedures registrarUsuario e iniciarSesion).
+// Las contraseñas se guardan como hash PBKDF2, nunca en texto.
 public class BDsesion
 {
     private static string connectionString = @"Server=localhost;Database=MIP;Integrated Security=True;TrustServerCertificate=True;";
@@ -42,17 +42,21 @@ public class BDsesion
         ResultadoSesion cuenta;
         using (var connection = new SqlConnection(connectionString))
         {
-            cuenta = connection.QueryFirstOrDefault<ResultadoSesion>(
-                "iniciarSesion",
-                new { mail = mail },
-                commandType: CommandType.StoredProcedure) ?? new ResultadoSesion { resultado = "cuentaInexistente" };
+            cuenta = connection.QueryFirstOrDefault<ResultadoSesion>("iniciarSesion", new { mail }, commandType: CommandType.StoredProcedure) ?? new ResultadoSesion { resultado = "cuentaInexistente" };
         }
 
-        if (cuenta.resultado != "ok") return cuenta;
+        if (cuenta.resultado != "ok")
+        {
+            return cuenta;
+        }
 
-        bool contrasenaCorrecta = verificarHash(contrasena, cuenta.contrasenaHash);
+        if (!verificarHash(contrasena, cuenta.contrasenaHash))
+        {
+            return new ResultadoSesion { resultado = "cuentaInexistente" };
+        }
+
+        // El hash no sale de esta clase
         cuenta.contrasenaHash = null;
-        if (!contrasenaCorrecta) return new ResultadoSesion { resultado = "cuentaInexistente" };
         return cuenta;
     }
 
@@ -66,9 +70,17 @@ public class BDsesion
 
     private static bool verificarHash(string contrasena, string? hashGuardado)
     {
-        if (string.IsNullOrEmpty(hashGuardado)) return false;
+        if (string.IsNullOrEmpty(hashGuardado))
+        {
+            return false;
+        }
+
         string[] partes = hashGuardado.Split('$');
-        if (partes.Length != 4 || partes[0] != "pbkdf2" || !int.TryParse(partes[1], out int iteraciones)) return false;
+
+        if (partes.Length != 4 || partes[0] != "pbkdf2" || !int.TryParse(partes[1], out int iteraciones))
+        {
+            return false;
+        }
 
         try
         {

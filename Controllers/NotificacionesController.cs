@@ -3,20 +3,25 @@ using MIP_MIPROFESOR.Models;
 
 namespace MIP_MIPROFESOR.Controllers;
 
-// Notificaciones del usuario. Se llama con fetch desde site.js para mantener al día la insignia del
-// botón Panel de Control (la lista se arma en HomeController.PanelControl).
+// Notificaciones del usuario. site.js lo llama con fetch para mantener al día la insignia del botón
+// Panel de Control (la lista se arma en HomeController.PanelControl).
 public class NotificacionesController : Controller
 {
     // GET /Notificaciones/Contar → { cantidad }: pedidos por responder + novedades que todavía no vio
     [HttpGet]
     public IActionResult Contar()
     {
-        string? idUsuario = HttpContext.Session.GetString("idUsuario");
-        if (!int.TryParse(idUsuario, out int id)) return StatusCode(401, new { cantidad = 0 });
+        string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
 
+        if (!int.TryParse(idUsuarioSesion, out int idUsuario))
+        {
+            return StatusCode(401, new { cantidad = 0 });
+        }
+
+        BD bd = new BD();
         try
         {
-            int cantidad = new BD().contarNotificaciones(id);
+            int cantidad = bd.contarNotificaciones(idUsuario);
             HttpContext.Session.SetString("cantidadNotificaciones", cantidad.ToString());
             return Json(new { cantidad = cantidad });
         }

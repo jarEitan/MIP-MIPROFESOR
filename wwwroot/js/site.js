@@ -1,27 +1,31 @@
 // =====================================================================
-// MiProfesor (MIP) - JavaScript global
-// Cada módulo es una función independiente que se inicializa al final.
-// Para agregar funciones nuevas: crear la función y sumarla a inicializarSitio().
-//
-// Bootstrap 6 es ESM y ya no expone window.bootstrap: sus componentes (drawer,
-// dialog, menu, tabs, acordeón) funcionan solos con los atributos
-// data-bs-* del HTML. Acá solo va la lógica propia de MIP (el carrusel es propio).
+// MiProfesor (MIP) - JavaScript global (se carga en todas las páginas)
+// Bootstrap 6 es ESM y ya no expone window.bootstrap: sus componentes (drawer, dialog, menu,
+// tabs, acordeón) funcionan solos con los atributos data-bs-* del HTML. Acá va solo la lógica
+// propia de MIP. Cada parte se arranca desde inicializarSitio(), al final del archivo.
 // =====================================================================
 
 
 // ================= UTILIDADES =================
 // Los mensajes de error se muestran solos: el CSS oculta ".mensajeError:empty"
 function mostrarMensaje(elementoMensaje, texto) {
-    if (elementoMensaje) elementoMensaje.textContent = texto;
+    if (elementoMensaje) {
+        elementoMensaje.textContent = texto;
+    }
 }
 
+// Muestra el error y pone el foco en el campo. Devuelve false para cortar el onsubmit
 function mostrarErrorEnCampo(elementoMensaje, campo, texto) {
     mostrarMensaje(elementoMensaje, texto);
+
     // Si el campo es un <select data-buscable>, el foco va a su campo de texto visible
-    const campoVisible = campo && campo.hidden && campo.nextElementSibling?.classList.contains("selectorBuscable")
-        ? campo.nextElementSibling.querySelector("input")
-        : campo;
-    if (campoVisible) campoVisible.focus();
+    let campoVisible = campo;
+    if (campo && campo.hidden && campo.nextElementSibling?.classList.contains("selectorBuscable")) {
+        campoVisible = campo.nextElementSibling.querySelector("input");
+    }
+    if (campoVisible) {
+        campoVisible.focus();
+    }
     return false;
 }
 
@@ -34,20 +38,16 @@ function correoValido(correo) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo);
 }
 
-// Crea un elemento con clases y texto (textContent: nunca interpreta HTML). Lo usan catalogo.js y clases.js
+// Crea un elemento con clases y texto (textContent: nunca interpreta HTML)
 function crearElemento(etiqueta, clases, texto) {
     const elemento = document.createElement(etiqueta);
-    if (clases) elemento.className = clases;
-    if (texto !== undefined) elemento.textContent = texto;
+    if (clases) {
+        elemento.className = clases;
+    }
+    if (texto !== undefined) {
+        elemento.textContent = texto;
+    }
     return elemento;
-}
-
-// fetch que devuelve el JSON o falla si el servidor respondió con error (401, 404, 500...)
-function pedirJson(url, opciones) {
-    return fetch(url, opciones).then(respuesta => {
-        if (!respuesta.ok) throw new Error(`Error ${respuesta.status} en ${url}`);
-        return respuesta.json();
-    });
 }
 
 // Snackbar del UI Kit: aviso corto abajo de la pantalla. tipo: "info" | "exito" | "error"
@@ -55,20 +55,26 @@ let temporizadorSnackbar = null;
 
 function mostrarSnackbar(texto, tipo = "info") {
     const snackbar = document.getElementById("snackbar");
-    if (!snackbar) return;
+    if (!snackbar) {
+        return;
+    }
 
     snackbar.textContent = texto;
     snackbar.dataset.tipo = tipo;
     snackbar.hidden = false;
+
     // Se reinicia la animación aunque ya hubiera uno visible
     snackbar.classList.remove("visible");
     void snackbar.offsetWidth;
     snackbar.classList.add("visible");
 
+    // Un aviso nuevo cancela el ocultado del anterior (también si ya se estaba yendo)
     clearTimeout(temporizadorSnackbar);
     temporizadorSnackbar = setTimeout(() => {
         snackbar.classList.remove("visible");
-        setTimeout(() => { snackbar.hidden = true; }, 300);
+        temporizadorSnackbar = setTimeout(() => {
+            snackbar.hidden = true;
+        }, 300);
     }, 3200);
 }
 
@@ -97,18 +103,12 @@ function crearSelectorBuscable(select) {
     const esMultiple = select.multiple;
     const idBase = select.id || `selectorBuscable${++contadorSelectoresBuscables}`;
 
-    const selector = document.createElement("div");
-    selector.className = esMultiple ? "selectorBuscable multiple" : "selectorBuscable";
+    const selector = crearElemento("div", esMultiple ? "selectorBuscable multiple" : "selectorBuscable");
+    const etiquetasElegidas = crearElemento("div", "etiquetasElegidas");
+    const campo = crearElemento("div", "campoSelector");
 
-    const etiquetasElegidas = document.createElement("div");
-    etiquetasElegidas.className = "etiquetasElegidas";
-
-    const campo = document.createElement("div");
-    campo.className = "campoSelector";
-
-    const entrada = document.createElement("input");
+    const entrada = crearElemento("input", "form-control");
     entrada.type = "text";
-    entrada.className = "form-control";
     entrada.id = `${idBase}Buscador`;
     entrada.autocomplete = "off";
     entrada.spellcheck = false;
@@ -117,27 +117,29 @@ function crearSelectorBuscable(select) {
     entrada.setAttribute("aria-expanded", "false");
     entrada.setAttribute("aria-controls", `${idBase}Lista`);
 
-    const botonDesplegar = document.createElement("button");
+    const botonDesplegar = crearElemento("button", "desplegar");
     botonDesplegar.type = "button";
-    botonDesplegar.className = "desplegar";
     botonDesplegar.tabIndex = -1;
     botonDesplegar.setAttribute("aria-label", "Mostrar opciones");
     botonDesplegar.innerHTML = '<i class="bi bi-chevron-down" aria-hidden="true"></i>';
 
-    const lista = document.createElement("ul");
-    lista.className = "listaOpciones";
+    const lista = crearElemento("ul", "listaOpciones");
     lista.id = `${idBase}Lista`;
     lista.setAttribute("role", "listbox");
-    if (esMultiple) lista.setAttribute("aria-multiselectable", "true");
     lista.hidden = true;
 
     campo.append(entrada, botonDesplegar);
-    if (esMultiple) selector.append(etiquetasElegidas);
+    if (esMultiple) {
+        lista.setAttribute("aria-multiselectable", "true");
+        selector.append(etiquetasElegidas);
+    }
     selector.append(campo, lista);
 
     // La etiqueta del <select> pasa a apuntar al campo de texto
     const etiqueta = select.id ? document.querySelector(`label[for="${select.id}"]`) : null;
-    if (etiqueta) etiqueta.htmlFor = entrada.id;
+    if (etiqueta) {
+        etiqueta.htmlFor = entrada.id;
+    }
 
     select.hidden = true;
     select.tabIndex = -1;
@@ -146,15 +148,15 @@ function crearSelectorBuscable(select) {
     let textoFiltro = "";
     let indiceActivo = -1;
 
-    const textoPlaceholder = () => select.dataset.placeholder
-        || Array.from(select.options).find(opcion => opcion.value === "")?.textContent
-        || "Elegí una opción";
-    const itemsDeLista = () => Array.from(lista.querySelectorAll("[role='option']"));
+    const obtenerItemsDeLista = () => Array.from(lista.querySelectorAll("[role='option']"));
     const avisarCambio = () => select.dispatchEvent(new Event("change", { bubbles: true }));
 
     // Muestra lo elegido: texto en el campo (simple) o etiquetas (múltiple)
     const mostrarElegidas = () => {
-        entrada.placeholder = textoPlaceholder();
+        entrada.placeholder = select.dataset.placeholder
+            || Array.from(select.options).find(opcion => opcion.value === "")?.textContent
+            || "Elegí una opción";
+
         if (!esMultiple) {
             const elegida = select.selectedOptions[0];
             entrada.value = elegida && elegida.value !== "" ? elegida.textContent : "";
@@ -164,9 +166,7 @@ function crearSelectorBuscable(select) {
         entrada.value = "";
         etiquetasElegidas.replaceChildren();
         Array.from(select.selectedOptions).filter(opcion => opcion.value !== "").forEach(opcion => {
-            const etiquetaElegida = document.createElement("span");
-            etiquetaElegida.className = "badge theme-accent";
-            etiquetaElegida.textContent = opcion.textContent;
+            const etiquetaElegida = crearElemento("span", "badge theme-accent", opcion.textContent);
 
             const botonQuitar = document.createElement("button");
             botonQuitar.type = "button";
@@ -175,7 +175,9 @@ function crearSelectorBuscable(select) {
             botonQuitar.addEventListener("click", () => {
                 opcion.selected = false;
                 mostrarElegidas();
-                if (!lista.hidden) dibujarOpciones();
+                if (!lista.hidden) {
+                    dibujarOpciones();
+                }
                 avisarCambio();
             });
 
@@ -186,12 +188,13 @@ function crearSelectorBuscable(select) {
     };
 
     const marcarActiva = nuevoIndice => {
-        const items = itemsDeLista();
+        const items = obtenerItemsDeLista();
         if (items.length === 0) {
             indiceActivo = -1;
             entrada.removeAttribute("aria-activedescendant");
             return;
         }
+
         indiceActivo = Math.max(0, Math.min(nuevoIndice, items.length - 1));
         items.forEach((item, posicion) => item.classList.toggle("activa", posicion === indiceActivo));
         entrada.setAttribute("aria-activedescendant", items[indiceActivo].id);
@@ -201,6 +204,7 @@ function crearSelectorBuscable(select) {
     const dibujarOpciones = () => {
         lista.replaceChildren();
         const filtro = normalizarTexto(textoFiltro);
+
         // La opción vacía ("Todas las materias") solo aparece en el simple y cuando no se está buscando
         const coincidencias = Array.from(select.options).filter(opcion =>
             !opcion.disabled
@@ -214,10 +218,7 @@ function crearSelectorBuscable(select) {
         }
 
         if (coincidencias.length === 0) {
-            const sinCoincidencias = document.createElement("li");
-            sinCoincidencias.className = "sinCoincidencias";
-            sinCoincidencias.textContent = "No hay coincidencias";
-            lista.append(sinCoincidencias);
+            lista.append(crearElemento("li", "sinCoincidencias", "No hay coincidencias"));
             marcarActiva(-1);
             return;
         }
@@ -230,11 +231,11 @@ function crearSelectorBuscable(select) {
             item.classList.toggle("vacia", opcion.value === "");
             item.textContent = opcion.textContent;
             if (opcion.selected && opcion.value !== "") {
-                const tilde = document.createElement("i");
-                tilde.className = "bi bi-check-lg";
+                const tilde = crearElemento("i", "bi bi-check-lg");
                 tilde.setAttribute("aria-hidden", "true");
                 item.append(tilde);
             }
+
             // pointerdown no saca el foco del campo, así la lista no se cierra antes del click
             item.addEventListener("pointerdown", evento => evento.preventDefault());
             item.addEventListener("click", () => elegirOpcion(opcion));
@@ -246,8 +247,11 @@ function crearSelectorBuscable(select) {
         marcarActiva(textoFiltro === "" && posicionElegida >= 0 ? posicionElegida : 0);
     };
 
-    const abrir = () => {
-        if (!lista.hidden) return;
+    const abrirLista = () => {
+        if (!lista.hidden) {
+            return;
+        }
+
         textoFiltro = "";
         lista.hidden = false;
         selector.classList.add("abierto");
@@ -255,8 +259,11 @@ function crearSelectorBuscable(select) {
         dibujarOpciones();
     };
 
-    const cerrar = () => {
-        if (lista.hidden) return;
+    const cerrarLista = () => {
+        if (lista.hidden) {
+            return;
+        }
+
         lista.hidden = true;
         selector.classList.remove("abierto");
         entrada.setAttribute("aria-expanded", "false");
@@ -273,58 +280,71 @@ function crearSelectorBuscable(select) {
             dibujarOpciones();
         } else {
             select.value = opcion.value;
-            cerrar();
+            cerrarLista();
             mostrarElegidas();
         }
         avisarCambio();
     };
 
     entrada.addEventListener("focus", () => {
-        abrir();
-        if (!esMultiple) entrada.select();
+        abrirLista();
+        if (!esMultiple) {
+            entrada.select();
+        }
     });
-    entrada.addEventListener("click", abrir);
+    entrada.addEventListener("click", abrirLista);
     entrada.addEventListener("input", () => {
-        abrir();
+        abrirLista();
         textoFiltro = entrada.value;
         dibujarOpciones();
     });
     entrada.addEventListener("keydown", evento => {
         if (evento.key === "ArrowDown" || evento.key === "ArrowUp") {
             evento.preventDefault();
-            if (lista.hidden) { abrir(); return; }
+            if (lista.hidden) {
+                abrirLista();
+                return;
+            }
             marcarActiva(indiceActivo + (evento.key === "ArrowDown" ? 1 : -1));
         } else if (evento.key === "Enter") {
-            if (lista.hidden) return;
+            if (lista.hidden) {
+                return;
+            }
             evento.preventDefault();
-            const item = itemsDeLista()[indiceActivo];
-            if (item) elegirOpcion(item.opcionDelSelect);
+            const item = obtenerItemsDeLista()[indiceActivo];
+            if (item) {
+                elegirOpcion(item.opcionDelSelect);
+            }
         } else if (evento.key === "Escape") {
-            if (lista.hidden) return;
+            if (lista.hidden) {
+                return;
+            }
             // Dentro de un diálogo, Escape cierra la lista y no el diálogo
             evento.preventDefault();
             evento.stopPropagation();
-            cerrar();
+            cerrarLista();
         } else if (evento.key === "Tab") {
-            cerrar();
+            cerrarLista();
         } else if (evento.key === "Backspace" && esMultiple && entrada.value === "") {
             const ultimaElegida = Array.from(select.selectedOptions).filter(opcion => opcion.value !== "").pop();
-            if (!ultimaElegida) return;
+            if (!ultimaElegida) {
+                return;
+            }
             ultimaElegida.selected = false;
             mostrarElegidas();
             dibujarOpciones();
             avisarCambio();
         }
     });
-    entrada.addEventListener("blur", cerrar);
+    entrada.addEventListener("blur", cerrarLista);
 
     botonDesplegar.addEventListener("pointerdown", evento => evento.preventDefault());
     botonDesplegar.addEventListener("click", () => {
         if (lista.hidden) {
             entrada.focus();
-            abrir();
+            abrirLista();
         } else {
-            cerrar();
+            cerrarLista();
         }
     });
 
@@ -333,7 +353,9 @@ function crearSelectorBuscable(select) {
 
     select.actualizarSelectorBuscable = () => {
         mostrarElegidas();
-        if (!lista.hidden) dibujarOpciones();
+        if (!lista.hidden) {
+            dibujarOpciones();
+        }
     };
     mostrarElegidas();
 }
@@ -341,30 +363,47 @@ function crearSelectorBuscable(select) {
 
 // ================= AVISO "CUENTA NO VERIFICADA" (debajo del header) =================
 // Se puede cerrar hasta la próxima sesión: se recuerda en sessionStorage y se olvida al cerrar sesión.
+// sessionStorage puede estar bloqueado por el navegador: por eso los try.
 function inicializarAvisoVerificacion() {
     document.querySelectorAll("form[action*='CerrarSesion']").forEach(formulario => {
         formulario.addEventListener("submit", () => {
-            try { sessionStorage.removeItem("avisoVerificacionCerrado"); } catch (error) { /* sin sessionStorage */ }
+            try {
+                sessionStorage.removeItem("avisoVerificacionCerrado");
+            } catch {
+                // Sin sessionStorage no hay nada que olvidar
+            }
         });
     });
 
     const avisoVerificacion = document.getElementById("avisoVerificacion");
-    if (!avisoVerificacion) return;
+    if (!avisoVerificacion) {
+        return;
+    }
 
     let estaCerrado = false;
-    try { estaCerrado = sessionStorage.getItem("avisoVerificacionCerrado") === "true"; } catch (error) { /* sin sessionStorage */ }
+    try {
+        estaCerrado = sessionStorage.getItem("avisoVerificacionCerrado") === "true";
+    } catch {
+        // Sin sessionStorage el aviso se muestra siempre
+    }
     avisoVerificacion.hidden = estaCerrado;
 
     document.getElementById("botonCerrarAvisoVerificacion").addEventListener("click", () => {
         avisoVerificacion.hidden = true;
-        try { sessionStorage.setItem("avisoVerificacionCerrado", "true"); } catch (error) { /* sin sessionStorage */ }
+        try {
+            sessionStorage.setItem("avisoVerificacionCerrado", "true");
+        } catch {
+            // Sin sessionStorage no se puede recordar
+        }
     });
 }
 
 // ================= HEADER: sombra al hacer scroll =================
 function inicializarEncabezadoConScroll() {
     const encabezado = document.getElementById("encabezado");
-    if (!encabezado) return;
+    if (!encabezado) {
+        return;
+    }
 
     const actualizarSombraEncabezado = () => {
         encabezado.classList.toggle("conSombra", window.scrollY > 8);
@@ -399,7 +438,9 @@ function inicializarRevelarAlScroll() {
 
     const observadorDeVisibilidad = new IntersectionObserver((entradas, observador) => {
         entradas.forEach(entrada => {
-            if (!entrada.isIntersecting) return;
+            if (!entrada.isIntersecting) {
+                return;
+            }
             entrada.target.classList.add("visible");
             observador.unobserve(entrada.target);
         });
@@ -416,19 +457,27 @@ function inicializarRevelarAlScroll() {
 function inicializarCarruseles() {
     document.querySelectorAll(".carrusel").forEach(carrusel => {
         const pista = carrusel.querySelector(".pista");
-        if (!pista) return;
+        if (!pista) {
+            return;
+        }
 
         const moverCarrusel = direccion => {
             const primeraTarjeta = pista.firstElementChild;
-            if (!primeraTarjeta) return;
+            if (!primeraTarjeta) {
+                return;
+            }
 
             const paso = primeraTarjeta.offsetWidth + parseFloat(getComputedStyle(pista).columnGap || 0);
             const ultimaPosicion = pista.scrollWidth - pista.clientWidth;
             let destino = pista.scrollLeft + direccion * paso;
 
             // Margen de 2px por los redondeos del navegador
-            if (direccion > 0 && pista.scrollLeft >= ultimaPosicion - 2) destino = 0;
-            if (direccion < 0 && pista.scrollLeft <= 2) destino = ultimaPosicion;
+            if (direccion > 0 && pista.scrollLeft >= ultimaPosicion - 2) {
+                destino = 0;
+            }
+            if (direccion < 0 && pista.scrollLeft <= 2) {
+                destino = ultimaPosicion;
+            }
 
             pista.scrollTo({ left: destino });
         };
@@ -457,15 +506,15 @@ function validarBusqueda() {
     return true;
 }
 
+// Oculta el error apenas el usuario vuelve a escribir
 function inicializarBuscador() {
     const campoBusqueda = document.getElementById("campoBusqueda");
     const mensajeErrorBusqueda = document.getElementById("mensajeErrorBusqueda");
-    if (!campoBusqueda || !mensajeErrorBusqueda) return;
+    if (!campoBusqueda || !mensajeErrorBusqueda) {
+        return;
+    }
 
-    // Oculta el error apenas el usuario vuelve a escribir
     campoBusqueda.addEventListener("input", () => mostrarMensaje(mensajeErrorBusqueda, ""));
-
-    // TODO BD: sugerencias en vivo cuando exista el endpoint (ej: Home/SugerirMaterias?texto=...)
 }
 
 
@@ -473,7 +522,9 @@ function inicializarBuscador() {
 // Muestra el panel ilustrado que corresponde al rol elegido (data-solo-rol)
 function inicializarRolesDeRegistro() {
     const formularioRegistro = document.getElementById("formularioRegistro");
-    if (!formularioRegistro) return;
+    if (!formularioRegistro) {
+        return;
+    }
 
     const mostrarPanelDelRol = () => {
         const rolElegido = formularioRegistro.querySelector("input[name='tipoUsuario']:checked").value;
@@ -490,7 +541,9 @@ function inicializarRolesDeRegistro() {
 function inicializarVerContrasena() {
     document.querySelectorAll("[data-ver-contrasena]").forEach(boton => {
         const campo = document.getElementById(boton.dataset.verContrasena);
-        if (!campo) return;
+        if (!campo) {
+            return;
+        }
 
         boton.addEventListener("click", () => {
             const seMuestra = campo.type === "password";
@@ -504,21 +557,42 @@ function inicializarVerContrasena() {
 
 function validarRegistro() {
     const mensajeRegistro = document.getElementById("mensajeRegistro");
-    const campo = id => document.getElementById(id);
+    const campoNombre = document.getElementById("registroNombre");
+    const campoApellido = document.getElementById("registroApellido");
+    const campoCorreo = document.getElementById("registroCorreo");
+    const campoContrasena = document.getElementById("registroContrasena");
+    const campoFechaNacimiento = document.getElementById("registroFechaNacimiento");
+    const campoTerminos = document.getElementById("registroTerminos");
 
-    if (campo("registroNombre").value.trim().length < 2) return mostrarErrorEnCampo(mensajeRegistro, campo("registroNombre"), "Ingresá tu nombre.");
-    if (campo("registroApellido").value.trim().length < 2) return mostrarErrorEnCampo(mensajeRegistro, campo("registroApellido"), "Ingresá tu apellido.");
-    if (!correoValido(campo("registroCorreo").value.trim())) return mostrarErrorEnCampo(mensajeRegistro, campo("registroCorreo"), "Ingresá un correo electrónico válido.");
-    if (campo("registroContrasena").value.length < 8) return mostrarErrorEnCampo(mensajeRegistro, campo("registroContrasena"), "La contraseña debe tener al menos 8 caracteres.");
-    if (!fechaNacimientoValida(campo("registroFechaNacimiento").value)) return mostrarErrorEnCampo(mensajeRegistro, campo("registroFechaNacimiento"), "Ingresá una fecha de nacimiento válida.");
-    if (!campo("registroTerminos").checked) return mostrarErrorEnCampo(mensajeRegistro, campo("registroTerminos"), "Tenés que aceptar los términos para continuar.");
+    if (campoNombre.value.trim().length < 2) {
+        return mostrarErrorEnCampo(mensajeRegistro, campoNombre, "Ingresá tu nombre.");
+    }
+    if (campoApellido.value.trim().length < 2) {
+        return mostrarErrorEnCampo(mensajeRegistro, campoApellido, "Ingresá tu apellido.");
+    }
+    if (!correoValido(campoCorreo.value.trim())) {
+        return mostrarErrorEnCampo(mensajeRegistro, campoCorreo, "Ingresá un correo electrónico válido.");
+    }
+    if (campoContrasena.value.length < 8) {
+        return mostrarErrorEnCampo(mensajeRegistro, campoContrasena, "La contraseña debe tener al menos 8 caracteres.");
+    }
+    if (!fechaNacimientoValida(campoFechaNacimiento.value)) {
+        return mostrarErrorEnCampo(mensajeRegistro, campoFechaNacimiento, "Ingresá una fecha de nacimiento válida.");
+    }
+    if (!campoTerminos.checked) {
+        return mostrarErrorEnCampo(mensajeRegistro, campoTerminos, "Tenés que aceptar los términos para continuar.");
+    }
 
     mostrarMensaje(mensajeRegistro, "");
     return true;
 }
 
+// Entre 1900 y hoy ("" no es válida)
 function fechaNacimientoValida(valor) {
-    if (valor === "") return false;
+    if (valor === "") {
+        return false;
+    }
+
     const fecha = new Date(valor + "T00:00:00");
     return !isNaN(fecha) && fecha <= new Date() && fecha.getFullYear() >= 1900;
 }
@@ -530,8 +604,12 @@ function validarIngreso() {
     const campoCorreo = document.getElementById("ingresoCorreo");
     const campoContrasena = document.getElementById("ingresoContrasena");
 
-    if (!correoValido(campoCorreo.value.trim())) return mostrarErrorEnCampo(mensajeIngreso, campoCorreo, "Ingresá un correo electrónico válido.");
-    if (campoContrasena.value === "") return mostrarErrorEnCampo(mensajeIngreso, campoContrasena, "Ingresá tu contraseña.");
+    if (!correoValido(campoCorreo.value.trim())) {
+        return mostrarErrorEnCampo(mensajeIngreso, campoCorreo, "Ingresá un correo electrónico válido.");
+    }
+    if (campoContrasena.value === "") {
+        return mostrarErrorEnCampo(mensajeIngreso, campoContrasena, "Ingresá tu contraseña.");
+    }
 
     mostrarMensaje(mensajeIngreso, "");
     return true;
@@ -542,7 +620,9 @@ function validarIngreso() {
 function inicializarBuscadorDeAyuda() {
     const campoAyuda = document.getElementById("campoAyuda");
     const preguntas = document.querySelectorAll("#acordeonPreguntas details");
-    if (!campoAyuda || preguntas.length === 0) return;
+    if (!campoAyuda || preguntas.length === 0) {
+        return;
+    }
 
     const mensajeAyuda = document.getElementById("mensajeAyuda");
     const sinCoincidencias = document.getElementById("sinCoincidencias");
@@ -554,7 +634,9 @@ function inicializarBuscadorDeAyuda() {
         preguntas.forEach(pregunta => {
             const coincide = textoBuscado === "" || normalizarTexto(pregunta.textContent).includes(textoBuscado);
             pregunta.hidden = !coincide;
-            if (coincide) cantidadVisible++;
+            if (coincide) {
+                cantidadVisible++;
+            }
         });
 
         sinCoincidencias.hidden = cantidadVisible > 0;
@@ -565,16 +647,27 @@ function inicializarBuscadorDeAyuda() {
 function validarContacto() {
     const mensajeContacto = document.getElementById("mensajeContacto");
     const exitoContacto = document.getElementById("exitoContacto");
-    const campo = id => document.getElementById(id);
+    const campoNombre = document.getElementById("contactoNombre");
+    const campoCorreo = document.getElementById("contactoCorreo");
+    const campoTipo = document.getElementById("contactoTipo");
+    const campoMensaje = document.getElementById("contactoMensaje");
     exitoContacto.hidden = true;
 
-    if (campo("contactoNombre").value.trim().length < 3) return mostrarErrorEnCampo(mensajeContacto, campo("contactoNombre"), "Ingresá tu nombre completo.");
-    if (!correoValido(campo("contactoCorreo").value.trim())) return mostrarErrorEnCampo(mensajeContacto, campo("contactoCorreo"), "Ingresá un correo electrónico válido.");
-    if (campo("contactoTipo").value === "") return mostrarErrorEnCampo(mensajeContacto, campo("contactoTipo"), "Elegí el tipo de consulta.");
-    if (campo("contactoMensaje").value.trim().length < 10) return mostrarErrorEnCampo(mensajeContacto, campo("contactoMensaje"), "Contanos un poco más (mínimo 10 caracteres).");
+    if (campoNombre.value.trim().length < 3) {
+        return mostrarErrorEnCampo(mensajeContacto, campoNombre, "Ingresá tu nombre completo.");
+    }
+    if (!correoValido(campoCorreo.value.trim())) {
+        return mostrarErrorEnCampo(mensajeContacto, campoCorreo, "Ingresá un correo electrónico válido.");
+    }
+    if (campoTipo.value === "") {
+        return mostrarErrorEnCampo(mensajeContacto, campoTipo, "Elegí el tipo de consulta.");
+    }
+    if (campoMensaje.value.trim().length < 10) {
+        return mostrarErrorEnCampo(mensajeContacto, campoMensaje, "Contanos un poco más (mínimo 10 caracteres).");
+    }
 
+    // TODO BD: guardar la consulta o enviarla por correo desde el servidor. Por ahora solo se muestra el aviso.
     mostrarMensaje(mensajeContacto, "");
-    // TODO BD: guardar la consulta (BD.guardarConsulta) o enviarla por correo desde el servidor
     exitoContacto.hidden = false;
     document.getElementById("formularioContacto").reset();
     return false;
@@ -592,17 +685,16 @@ function inicializarAccesosDelPanel() {
     });
 }
 
+// TODO BD: guardar el mensaje y refrescar la conversación. Por ahora solo se agrega la burbuja.
 function enviarMensajeChat() {
     const campoMensaje = document.getElementById("campoMensajeChat");
     const contenedorMensajes = document.getElementById("mensajesChat");
     const texto = campoMensaje.value.trim();
-    if (texto === "") return false;
+    if (texto === "") {
+        return false;
+    }
 
-    // TODO BD: guardar el mensaje con BD.enviarMensaje(...) y refrescar la conversación
-    const burbuja = document.createElement("p");
-    burbuja.className = "burbuja propia";
-    burbuja.textContent = texto;
-    contenedorMensajes.appendChild(burbuja);
+    contenedorMensajes.appendChild(crearElemento("p", "burbuja propia", texto));
     contenedorMensajes.scrollTop = contenedorMensajes.scrollHeight;
 
     campoMensaje.value = "";
@@ -610,6 +702,7 @@ function enviarMensajeChat() {
     return false;
 }
 
+// TODO BD: guardar los cambios. Por ahora solo se valida y se muestra el aviso.
 function guardarConfiguracion() {
     const mensajeConfiguracion = document.getElementById("mensajeConfiguracion");
     const exitoConfiguracion = document.getElementById("exitoConfiguracion");
@@ -617,11 +710,14 @@ function guardarConfiguracion() {
     const campoCorreo = document.getElementById("configCorreo");
     exitoConfiguracion.hidden = true;
 
-    if (campoNombre.value.trim().length < 3) return mostrarErrorEnCampo(mensajeConfiguracion, campoNombre, "Ingresá tu nombre completo.");
-    if (!correoValido(campoCorreo.value.trim())) return mostrarErrorEnCampo(mensajeConfiguracion, campoCorreo, "Ingresá un correo electrónico válido.");
+    if (campoNombre.value.trim().length < 3) {
+        return mostrarErrorEnCampo(mensajeConfiguracion, campoNombre, "Ingresá tu nombre completo.");
+    }
+    if (!correoValido(campoCorreo.value.trim())) {
+        return mostrarErrorEnCampo(mensajeConfiguracion, campoCorreo, "Ingresá un correo electrónico válido.");
+    }
 
     mostrarMensaje(mensajeConfiguracion, "");
-    // TODO BD: guardar con BD.actualizarPerfil(...)
     exitoConfiguracion.hidden = false;
     return false;
 }
@@ -631,6 +727,7 @@ function guardarConfiguracion() {
 // La vista Home/Perfil solo trae el esqueleto: los datos llegan por fetch desde PerfilesController.
 // Los textos de la BD se ponen con textContent. La única excepción es "Sobre mí", que es HTML del
 // editor y llega limpio desde el servidor (HtmlSanitizer solo deja negrita, listas, enlaces, etc.).
+// Si el servidor responde un error, el JSON trae { mensaje }: se lanza y lo maneja el .catch.
 const nombresDeTipoUsuario = { alumno: "Alumno", profesor: "Profesor", admin: "Administrador" };
 const largoMaximoDescripcion = 1000;
 const pesoMaximoFoto = 5 * 1024 * 1024;
@@ -643,7 +740,9 @@ let edicionYaAbiertaSola = false;
 
 function inicializarPerfil() {
     const seccionPerfil = document.getElementById("perfil");
-    if (!seccionPerfil) return;
+    if (!seccionPerfil) {
+        return;
+    }
 
     cargarPerfil();
     inicializarCopiarEnlacePerfil();
@@ -656,24 +755,35 @@ function esPerfilPropio() {
     return document.getElementById("perfil").dataset.perfilPropio === "true";
 }
 
+// GET /Perfiles/ObtenerPerfil/5 → perfil público ({ encontrado: false } si el ID no existe)
 function cargarPerfil() {
-    const seccionPerfil = document.getElementById("perfil");
+    const idPerfil = document.getElementById("perfil").dataset.idPerfil;
     const estadoPerfil = document.getElementById("estadoPerfil");
 
-    pedirJson(`/Perfiles/ObtenerPerfil/${seccionPerfil.dataset.idPerfil}`)
-        .then(perfil => {
-            estadoPerfil.hidden = true;
-            if (!perfil.encontrado) {
-                mostrarContenidoCargado(document.getElementById("perfilInexistente"));
-                return;
-            }
-            mostrarPerfil(perfil);
-            if (esPerfilPropio()) cargarAvisoVerificacionPerfil();
-        })
-        .catch(error => {
-            console.error(error);
-            estadoPerfil.textContent = "No pudimos cargar el perfil. Revisá tu conexión y recargá la página.";
-        });
+    fetch("/Perfiles/ObtenerPerfil/" + idPerfil, {
+        method: "GET"
+    })
+    .then(respuesta => respuesta.json())
+    .then(perfil => {
+        if (perfil.mensaje) {
+            throw new Error(perfil.mensaje);
+        }
+
+        estadoPerfil.hidden = true;
+        if (!perfil.encontrado) {
+            mostrarContenidoCargado(document.getElementById("perfilInexistente"));
+            return;
+        }
+
+        mostrarPerfil(perfil);
+        if (esPerfilPropio()) {
+            cargarAvisoVerificacionPerfil();
+        }
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        estadoPerfil.textContent = "No pudimos cargar el perfil. Revisá tu conexión y recargá la página.";
+    });
 }
 
 function mostrarPerfil(perfil) {
@@ -724,6 +834,7 @@ function pintarAvatar(avatar, nombre, apellido, fotoPerfil) {
         avatar.append(foto);
         return;
     }
+
     avatar.textContent = ((nombre || "").charAt(0) + (apellido || "").charAt(0)).toUpperCase() || "?";
 }
 
@@ -734,16 +845,17 @@ function crearDatosTitular(perfil) {
         const colegios = perfil.colegios.length > 1 ? `${perfil.colegios[0]} y ${perfil.colegios.length - 1} más` : perfil.colegios[0];
         partes.push(crearDatoConIcono("bi-building", colegios));
     }
+
     const fechaInscripcion = new Date(perfil.fechaInscripcion).toLocaleDateString("es-AR", { month: "long", year: "numeric" });
     partes.push(crearDatoConIcono("bi-calendar3", `Miembro desde ${fechaInscripcion}`));
     return partes;
 }
 
 function crearDatoConIcono(icono, texto) {
-    const dato = document.createElement("span");
-    const iconoDato = document.createElement("i");
-    iconoDato.className = `bi ${icono}`;
+    const iconoDato = crearElemento("i", `bi ${icono}`);
     iconoDato.setAttribute("aria-hidden", "true");
+
+    const dato = document.createElement("span");
     dato.append(iconoDato, ` ${texto}`);
     return dato;
 }
@@ -767,16 +879,16 @@ function mostrarCifrasPerfil(perfil) {
 }
 
 function crearCifraPerfil(icono, valor, detalle, idValor) {
-    const cifra = document.createElement("li");
-    const iconoCifra = document.createElement("i");
-    iconoCifra.className = `bi ${icono}`;
+    const iconoCifra = crearElemento("i", `bi ${icono}`);
     iconoCifra.setAttribute("aria-hidden", "true");
-    const valorCifra = document.createElement("strong");
-    valorCifra.textContent = valor;
-    if (idValor) valorCifra.id = idValor;
-    const detalleCifra = document.createElement("span");
-    detalleCifra.textContent = detalle;
-    cifra.append(iconoCifra, valorCifra, detalleCifra);
+
+    const valorCifra = crearElemento("strong", "", valor);
+    if (idValor) {
+        valorCifra.id = idValor;
+    }
+
+    const cifra = document.createElement("li");
+    cifra.append(iconoCifra, valorCifra, crearElemento("span", "", detalle));
     return cifra;
 }
 
@@ -792,6 +904,7 @@ function mostrarDescripcionPerfil(descripcion) {
         });
         return;
     }
+
     descripcionPerfil.classList.add("vacio");
     descripcionPerfil.textContent = esPerfilPropio()
         ? "Todavía no escribiste nada sobre vos. Tocá «Editar perfil» para contarle a los demás quién sos."
@@ -803,49 +916,40 @@ function mostrarResenasPerfil(resenas) {
     resenasPerfil.replaceChildren();
 
     if (resenas.length === 0) {
-        const sinResenas = document.createElement("p");
-        sinResenas.className = "vacio";
-        sinResenas.textContent = "Todavía no tiene reseñas.";
-        resenasPerfil.append(sinResenas);
+        resenasPerfil.append(crearElemento("p", "vacio", "Todavía no tiene reseñas."));
         return;
     }
 
     resenas.forEach(resena => {
-        const tarjetaResena = document.createElement("div");
-        tarjetaResena.className = "resena";
-
         // El nombre de quien escribió la reseña lleva a su perfil
-        const autorResena = document.createElement("a");
+        const autorResena = crearElemento("a", "", `${resena.nombre} ${resena.apellido}`);
         autorResena.href = `/Home/Perfil/${resena.idEmisor}`;
-        autorResena.textContent = `${resena.nombre} ${resena.apellido}`;
-        if (resena.verificadoEmisor) autorResena.append(" ", crearTickVerificado());
+        if (resena.verificadoEmisor) {
+            autorResena.append(" ", crearTickVerificado());
+        }
 
-        const estrellas = document.createElement("span");
-        estrellas.className = "estrellas";
+        const estrellas = crearElemento("span", "estrellas");
         estrellas.setAttribute("aria-label", `${resena.puntuacion} de 5 estrellas`);
         for (let posicion = 1; posicion <= 5; posicion++) {
-            const estrella = document.createElement("i");
-            estrella.className = posicion <= resena.puntuacion ? "bi bi-star-fill" : "bi bi-star";
+            const estrella = crearElemento("i", posicion <= resena.puntuacion ? "bi bi-star-fill" : "bi bi-star");
             estrella.setAttribute("aria-hidden", "true");
             estrellas.append(estrella);
         }
 
         const encabezadoResena = document.createElement("header");
         encabezadoResena.append(autorResena, estrellas);
-        tarjetaResena.append(encabezadoResena);
 
+        const tarjetaResena = crearElemento("div", "resena");
+        tarjetaResena.append(encabezadoResena);
         if (resena.descripcion) {
-            const textoResena = document.createElement("p");
-            textoResena.textContent = resena.descripcion;
-            tarjetaResena.append(textoResena);
+            tarjetaResena.append(crearElemento("p", "", resena.descripcion));
         }
         resenasPerfil.append(tarjetaResena);
     });
 }
 
 function crearTickVerificado() {
-    const tick = document.createElement("i");
-    tick.className = "bi bi-patch-check-fill tickVerificado";
+    const tick = crearElemento("i", "bi bi-patch-check-fill tickVerificado");
     tick.title = "Cuenta verificada";
     tick.setAttribute("aria-label", "Cuenta verificada");
     return tick;
@@ -862,28 +966,22 @@ function mostrarDatosPerfil(perfil) {
 
     const gruposConDatos = gruposDeDatos.filter(([, , valores]) => valores.length > 0);
     if (gruposConDatos.length === 0) {
-        const sinDatos = document.createElement("p");
-        sinDatos.className = "vacio";
-        sinDatos.textContent = perfil.tipoUsuario === "profesor"
+        const textoSinDatos = perfil.tipoUsuario === "profesor"
             ? "Todavía no cargó sus materias, niveles ni colegios."
             : "Todavía no cargó su colegio ni su nivel.";
-        datosPerfil.append(sinDatos);
+        datosPerfil.append(crearElemento("p", "vacio", textoSinDatos));
         return;
     }
 
     gruposConDatos.forEach(([tituloGrupo, icono, valores]) => {
-        const grupo = document.createElement("div");
-        grupo.className = "grupo";
         const tituloDelGrupo = document.createElement("h3");
         tituloDelGrupo.append(crearDatoConIcono(icono, tituloGrupo));
-        const etiquetas = document.createElement("div");
-        etiquetas.className = "etiquetas";
-        valores.forEach(valor => {
-            const etiqueta = document.createElement("span");
-            etiqueta.className = tituloGrupo === "Materias" ? "badge theme-accent" : "badge badge-subtle theme-inverse";
-            etiqueta.textContent = valor;
-            etiquetas.append(etiqueta);
-        });
+
+        const claseEtiqueta = tituloGrupo === "Materias" ? "badge theme-accent" : "badge badge-subtle theme-inverse";
+        const etiquetas = crearElemento("div", "etiquetas");
+        valores.forEach(valor => etiquetas.append(crearElemento("span", claseEtiqueta, valor)));
+
+        const grupo = crearElemento("div", "grupo");
         grupo.append(tituloDelGrupo, etiquetas);
         datosPerfil.append(grupo);
     });
@@ -891,23 +989,27 @@ function mostrarDatosPerfil(perfil) {
 
 // ----- Aviso de verificación dentro del perfil propio -----
 function cargarAvisoVerificacionPerfil() {
-    pedirJson("/Perfiles/ObtenerDatosEdicion")
-        .then(datos => mostrarAvisoVerificacionPerfil(datos.verificado, datos.faltantes))
-        .catch(error => console.error(error));
+    pedirDatosEdicion()
+    .then(datos => {
+        mostrarAvisoVerificacionPerfil(datos.verificado, datos.faltantes);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
 }
 
 function mostrarAvisoVerificacionPerfil(verificado, faltantes) {
     const avisoPerfil = document.getElementById("avisoVerificacionPerfil");
-    if (!avisoPerfil) return;
+    if (!avisoPerfil) {
+        return;
+    }
 
     avisoPerfil.hidden = verificado || faltantes.length === 0;
     const listaFaltantes = document.getElementById("faltantesPerfil");
-    listaFaltantes.replaceChildren(...faltantes.map(faltante => {
-        const itemFaltante = document.createElement("li");
-        itemFaltante.textContent = faltante.charAt(0).toUpperCase() + faltante.slice(1);
-        return itemFaltante;
-    }));
-    if (!avisoPerfil.hidden) avisoPerfil.classList.add("revelar", "visible");
+    listaFaltantes.replaceChildren(...faltantes.map(faltante => crearElemento("li", "", faltante.charAt(0).toUpperCase() + faltante.slice(1))));
+    if (!avisoPerfil.hidden) {
+        avisoPerfil.classList.add("revelar", "visible");
+    }
 }
 
 // ----- Copiar enlace y botones sociales -----
@@ -915,13 +1017,19 @@ function mostrarAvisoVerificacionPerfil(verificado, faltantes) {
 // Copia la URL pública del perfil (/Home/Perfil/{id}), también cuando se entra a "Mi perfil" sin ID
 function inicializarCopiarEnlacePerfil() {
     const botonCopiarEnlace = document.getElementById("botonCopiarEnlace");
-    if (!botonCopiarEnlace) return;
+    if (!botonCopiarEnlace) {
+        return;
+    }
 
     const enlacePerfil = `${window.location.origin}/Home/Perfil/${document.getElementById("perfil").dataset.idPerfil}`;
     botonCopiarEnlace.addEventListener("click", () => {
         navigator.clipboard.writeText(enlacePerfil)
-            .then(() => mostrarSnackbar("¡Enlace copiado! Ya lo podés compartir.", "exito"))
-            .catch(() => window.prompt("Copiá el enlace del perfil:", enlacePerfil));
+        .then(() => {
+            mostrarSnackbar("¡Enlace copiado! Ya lo podés compartir.", "exito");
+        })
+        .catch(() => {
+            window.prompt("Copiá el enlace del perfil:", enlacePerfil);
+        });
     });
 }
 
@@ -941,12 +1049,14 @@ function inicializarBotonesProximamente() {
     });
 }
 
-// ----- Me gusta (LikesController: fetch) -----
+// ----- Me gusta (LikesController) -----
 const coloresExplosionLike = ["#FF5757", "#5CE1E6", "#D51F47", "#FFB4B4"];
 
 function inicializarMeGusta() {
     const botonMeGusta = document.getElementById("botonMeGusta");
-    if (!botonMeGusta) return;
+    if (!botonMeGusta) {
+        return;
+    }
 
     const seccionPerfil = document.getElementById("perfil");
     const idPerfil = seccionPerfil.dataset.idPerfil;
@@ -956,11 +1066,21 @@ function inicializarMeGusta() {
     // Si hacés clic antes de que llegue esta respuesta, se ignora para no pisar el estado nuevo.
     let respuestaInicialVigente = true;
     if (haySesion) {
-        pedirJson(`/Likes/ObtenerLike/${idPerfil}`)
-            .then(resultado => {
-                if (respuestaInicialVigente) pintarEstadoMeGusta(botonMeGusta, resultado.leGusta);
-            })
-            .catch(error => console.error(error));
+        fetch("/Likes/ObtenerLike/" + idPerfil, {
+            method: "GET"
+        })
+        .then(respuesta => respuesta.json())
+        .then(resultado => {
+            if (resultado.mensaje) {
+                throw new Error(resultado.mensaje);
+            }
+            if (respuestaInicialVigente) {
+                pintarEstadoMeGusta(botonMeGusta, resultado.leGusta);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
     }
 
     botonMeGusta.addEventListener("click", () => {
@@ -977,23 +1097,30 @@ function alternarMeGusta(botonMeGusta, idPerfil) {
     // Mientras viaja el pedido el botón queda bloqueado: dos clics seguidos no se pisan
     botonMeGusta.disabled = true;
     const token = document.querySelector("#perfil input[name='__RequestVerificationToken']");
-    const datos = new URLSearchParams({ idReceptor: idPerfil });
 
-    pedirJson("/Likes/AlternarLike", {
+    fetch("/Likes/AlternarLike", {
         method: "POST",
         headers: { "RequestVerificationToken": token ? token.value : "" },
-        body: datos
+        body: new URLSearchParams({ idReceptor: idPerfil })
     })
-        .then(resultado => {
-            pintarEstadoMeGusta(botonMeGusta, resultado.leGusta);
-            actualizarCantidadLikes(resultado.cantidadLikes);
-            animarMeGusta(botonMeGusta, resultado.leGusta);
-        })
-        .catch(error => {
-            console.error(error);
-            mostrarSnackbar("No pudimos guardar tu me gusta. Probá de nuevo.", "error");
-        })
-        .finally(() => { botonMeGusta.disabled = false; });
+    .then(respuesta => respuesta.json())
+    .then(resultado => {
+        // Sin sesión, perfil propio o inexistente, error de la base: { resultado, mensaje }
+        if (resultado.mensaje) {
+            throw new Error(resultado.mensaje);
+        }
+
+        pintarEstadoMeGusta(botonMeGusta, resultado.leGusta);
+        actualizarCantidadLikes(resultado.cantidadLikes);
+        animarMeGusta(botonMeGusta, resultado.leGusta);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        mostrarSnackbar("No pudimos guardar tu me gusta. Probá de nuevo.", "error");
+    })
+    .finally(() => {
+        botonMeGusta.disabled = false;
+    });
 }
 
 function pintarEstadoMeGusta(botonMeGusta, leGusta) {
@@ -1006,8 +1133,12 @@ function pintarEstadoMeGusta(botonMeGusta, leGusta) {
 
 function actualizarCantidadLikes(cantidadLikes) {
     const cantidad = document.getElementById("cantidadLikesPerfil");
-    if (!cantidad) return;
+    if (!cantidad) {
+        return;
+    }
+
     cantidad.textContent = cantidadLikes;
+    // Se reinicia la animación de rebote
     cantidad.classList.remove("rebote");
     void cantidad.offsetWidth;
     cantidad.classList.add("rebote");
@@ -1020,19 +1151,20 @@ function animarMeGusta(botonMeGusta, leGusta) {
     void icono.offsetWidth;
     icono.classList.add("saltoCorazon");
 
-    if (!leGusta || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!leGusta || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
 
     const cantidadCorazones = 10;
-    for (let i = 0; i < cantidadCorazones; i++) {
-        const angulo = (i / cantidadCorazones) * 2 * Math.PI + Math.random() * 0.4;
+    for (let numeroCorazon = 0; numeroCorazon < cantidadCorazones; numeroCorazon++) {
+        const angulo = (numeroCorazon / cantidadCorazones) * 2 * Math.PI + Math.random() * 0.4;
         const distancia = 40 + Math.random() * 30;
-        const corazon = document.createElement("i");
-        corazon.className = "bi bi-heart-fill corazonVolador";
+        const corazon = crearElemento("i", "bi bi-heart-fill corazonVolador");
         corazon.setAttribute("aria-hidden", "true");
         corazon.style.setProperty("--destinoX", `${Math.cos(angulo) * distancia}px`);
         corazon.style.setProperty("--destinoY", `${Math.sin(angulo) * distancia}px`);
-        corazon.style.color = coloresExplosionLike[i % coloresExplosionLike.length];
-        corazon.style.fontSize = `${.6 + Math.random() * .5}rem`;
+        corazon.style.color = coloresExplosionLike[numeroCorazon % coloresExplosionLike.length];
+        corazon.style.fontSize = `${0.6 + Math.random() * 0.5}rem`;
         corazon.addEventListener("animationend", () => corazon.remove());
         botonMeGusta.append(corazon);
     }
@@ -1041,7 +1173,9 @@ function animarMeGusta(botonMeGusta, leGusta) {
 // ----- Modal "Editar perfil" -----
 function inicializarEdicionPerfil() {
     const dialogoEditarPerfil = document.getElementById("dialogoEditarPerfil");
-    if (!dialogoEditarPerfil) return;
+    if (!dialogoEditarPerfil) {
+        return;
+    }
 
     document.querySelectorAll("[data-abrir-edicion]").forEach(boton => boton.addEventListener("click", cargarDatosEdicion));
     inicializarEditorDescripcion();
@@ -1049,63 +1183,100 @@ function inicializarEdicionPerfil() {
     inicializarTitulosEdicion();
 }
 
+// GET /Perfiles/ObtenerDatosEdicion → datos privados del usuario de la sesión
+function pedirDatosEdicion() {
+    return fetch("/Perfiles/ObtenerDatosEdicion", {
+        method: "GET"
+    })
+    .then(respuesta => respuesta.json())
+    .then(datos => {
+        if (datos.mensaje) {
+            throw new Error(datos.mensaje);
+        }
+        return datos;
+    });
+}
+
+// GET /Perfiles/ObtenerOpcionesPerfil → materias, niveles, modalidades y colegios.
+// Casi no cambian: se piden una sola vez.
+function pedirOpcionesPerfil() {
+    if (opcionesPerfilCargadas) {
+        return Promise.resolve(opcionesPerfilCargadas);
+    }
+
+    return fetch("/Perfiles/ObtenerOpcionesPerfil", {
+        method: "GET"
+    })
+    .then(respuesta => respuesta.json())
+    .then(opciones => {
+        if (opciones.mensaje) {
+            throw new Error(opciones.mensaje);
+        }
+        opcionesPerfilCargadas = opciones;
+        return opciones;
+    });
+}
+
 function cargarDatosEdicion() {
     const estadoEdicion = document.getElementById("estadoEdicion");
     const contenidoEdicion = document.getElementById("contenidoEdicion");
     mostrarMensaje(document.getElementById("mensajeEditarPerfil"), "");
 
-    // Las opciones casi no cambian: se piden una sola vez
-    const pedidoOpciones = opcionesPerfilCargadas
-        ? Promise.resolve(opcionesPerfilCargadas)
-        : pedirJson("/Perfiles/ObtenerOpcionesPerfil").then(opciones => (opcionesPerfilCargadas = opciones));
-
-    Promise.all([pedidoOpciones, pedirJson("/Perfiles/ObtenerDatosEdicion")])
-        .then(([opciones, datos]) => {
-            completarFormularioEdicion(opciones, datos);
-            estadoEdicion.hidden = true;
-            contenidoEdicion.hidden = false;
-        })
-        .catch(error => {
-            console.error(error);
-            estadoEdicion.hidden = false;
-            contenidoEdicion.hidden = true;
-            estadoEdicion.textContent = "No pudimos cargar tus datos. Cerrá el cuadro y probá de nuevo.";
-        });
+    Promise.all([pedirOpcionesPerfil(), pedirDatosEdicion()])
+    .then(([opciones, datos]) => {
+        completarFormularioEdicion(opciones, datos);
+        estadoEdicion.hidden = true;
+        contenidoEdicion.hidden = false;
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        estadoEdicion.hidden = false;
+        contenidoEdicion.hidden = true;
+        estadoEdicion.textContent = "No pudimos cargar tus datos. Cerrá el cuadro y probá de nuevo.";
+    });
 }
 
 function completarFormularioEdicion(opciones, datos) {
-    const campo = id => document.getElementById(id);
-
-    // Modificar perfil
+    // Pestaña "Modificar perfil"
     if (editorDescripcion) {
         editorDescripcion.setContents([]);
-        if (datos.descripcion) editorDescripcion.clipboard.dangerouslyPasteHTML(datos.descripcion);
+        if (datos.descripcion) {
+            editorDescripcion.clipboard.dangerouslyPasteHTML(datos.descripcion);
+        }
         actualizarContadorDescripcion();
     }
-    llenarSelectDeOpciones(campo("edicionEscuelas"), opciones.escuelas, datos.idsEscuelas);
-    llenarSelectDeOpciones(campo("edicionNiveles"), opciones.niveles, datos.idsNiveles);
-    llenarSelectDeOpciones(campo("edicionMaterias"), opciones.materias, datos.idsMaterias);
-    llenarSelectDeOpciones(campo("edicionModalidades"), opciones.modalidades, datos.idsModalidades);
-    if (campo("edicionPrecioHora")) campo("edicionPrecioHora").value = datos.precioHora > 0 ? datos.precioHora : "";
-    if (campo("listaTitulos")) {
-        campo("listaTitulos").replaceChildren();
+    llenarSelectDeOpciones(document.getElementById("edicionEscuelas"), opciones.escuelas, datos.idsEscuelas);
+    llenarSelectDeOpciones(document.getElementById("edicionNiveles"), opciones.niveles, datos.idsNiveles);
+    llenarSelectDeOpciones(document.getElementById("edicionMaterias"), opciones.materias, datos.idsMaterias);
+    llenarSelectDeOpciones(document.getElementById("edicionModalidades"), opciones.modalidades, datos.idsModalidades);
+
+    // Precio y títulos solo están en el modal de los profesores
+    const campoPrecioHora = document.getElementById("edicionPrecioHora");
+    if (campoPrecioHora) {
+        campoPrecioHora.value = datos.precioHora > 0 ? datos.precioHora : "";
+    }
+    const listaTitulos = document.getElementById("listaTitulos");
+    if (listaTitulos) {
+        listaTitulos.replaceChildren();
         datos.titulos.forEach(agregarTituloEdicion);
     }
 
-    // Modificar cuenta
-    campo("edicionNombre").value = datos.nombre;
-    campo("edicionApellido").value = datos.apellido;
-    campo("edicionMail").value = datos.mail;
-    campo("edicionFechaNacimiento").value = datos.fechaNacimiento ? datos.fechaNacimiento.slice(0, 10) : "";
-    campo("edicionDni").value = datos.dni || "";
-    campo("edicionDireccion").value = datos.direccion || "";
-    campo("edicionFotoPerfil").value = "";
-    campo("edicionFotoDni").value = "";
-    pintarAvatar(campo("vistaPreviaFotoPerfil"), datos.nombre, datos.apellido, datos.fotoPerfil);
-    campo("estadoFotoDni").textContent = datos.tieneFotoDni
+    // Pestaña "Modificar cuenta"
+    document.getElementById("edicionNombre").value = datos.nombre;
+    document.getElementById("edicionApellido").value = datos.apellido;
+    document.getElementById("edicionMail").value = datos.mail;
+    document.getElementById("edicionFechaNacimiento").value = datos.fechaNacimiento ? datos.fechaNacimiento.slice(0, 10) : "";
+    document.getElementById("edicionDni").value = datos.dni || "";
+    document.getElementById("edicionDireccion").value = datos.direccion || "";
+    document.getElementById("edicionFotoPerfil").value = "";
+    document.getElementById("edicionFotoDni").value = "";
+    pintarAvatar(document.getElementById("vistaPreviaFotoPerfil"), datos.nombre, datos.apellido, datos.fotoPerfil);
+
+    const estadoFotoDni = document.getElementById("estadoFotoDni");
+    estadoFotoDni.textContent = datos.tieneFotoDni
         ? "✓ Ya subiste la foto del DNI. Si elegís otra, se reemplaza."
         : "Todavía no subiste la foto del DNI.";
-    campo("estadoFotoDni").classList.toggle("cargada", datos.tieneFotoDni);
+    estadoFotoDni.classList.toggle("cargada", datos.tieneFotoDni);
 
     mostrarProgresoVerificacion(datos.verificado, datos.faltantes);
 }
@@ -1113,10 +1284,14 @@ function completarFormularioEdicion(opciones, datos) {
 // Llena un <select> del modal y lo convierte en selector con búsqueda.
 // En los de una sola opción (alumno), "Sin elegir" permite dejarlo vacío.
 function llenarSelectDeOpciones(select, opciones, idsElegidos) {
-    if (!select) return;
+    if (!select) {
+        return;
+    }
 
     select.replaceChildren();
-    if (!select.multiple) select.append(new Option("Sin elegir", "", false, idsElegidos.length === 0));
+    if (!select.multiple) {
+        select.append(new Option("Sin elegir", "", false, idsElegidos.length === 0));
+    }
     opciones.forEach(opcion => {
         const estaElegida = idsElegidos.includes(opcion.id);
         select.append(new Option(opcion.nombre, opcion.id, estaElegida, estaElegida));
@@ -1141,18 +1316,16 @@ function mostrarProgresoVerificacion(verificado, faltantes) {
         ? "Te falta 1 dato para verificar tu cuenta:"
         : `Te faltan ${faltantes.length} datos para verificar tu cuenta:`;
     const listaFaltantes = document.createElement("ul");
-    listaFaltantes.replaceChildren(...faltantes.map(faltante => {
-        const itemFaltante = document.createElement("li");
-        itemFaltante.textContent = faltante;
-        return itemFaltante;
-    }));
+    listaFaltantes.replaceChildren(...faltantes.map(faltante => crearElemento("li", "", faltante)));
     progresoVerificacion.append(titulo, listaFaltantes);
 }
 
 // Editor de texto enriquecido (Quill 2): negrita, cursiva, subrayado, tachado, listas, cita y enlaces
 function inicializarEditorDescripcion() {
     const contenedorEditor = document.getElementById("editorDescripcion");
-    if (!contenedorEditor || !window.Quill) return;
+    if (!contenedorEditor || !window.Quill) {
+        return;
+    }
 
     editorDescripcion = new Quill(contenedorEditor, {
         theme: "snow",
@@ -1169,13 +1342,13 @@ function inicializarEditorDescripcion() {
     editorDescripcion.on("text-change", actualizarContadorDescripcion);
 }
 
-function textoDeLaDescripcion() {
+function obtenerTextoDescripcion() {
     return editorDescripcion ? editorDescripcion.getText().trim() : "";
 }
 
 function actualizarContadorDescripcion() {
     const contadorDescripcion = document.getElementById("contadorDescripcion");
-    const cantidadCaracteres = textoDeLaDescripcion().length;
+    const cantidadCaracteres = obtenerTextoDescripcion().length;
     contadorDescripcion.textContent = `${cantidadCaracteres} / ${largoMaximoDescripcion}`;
     contadorDescripcion.classList.toggle("excedido", cantidadCaracteres > largoMaximoDescripcion);
 }
@@ -1184,122 +1357,163 @@ function actualizarContadorDescripcion() {
 function inicializarFotosEdicion() {
     const campoFotoPerfil = document.getElementById("edicionFotoPerfil");
     const campoFotoDni = document.getElementById("edicionFotoDni");
-    const mensajeEditarPerfil = document.getElementById("mensajeEditarPerfil");
 
     campoFotoPerfil.addEventListener("change", () => {
-        const archivo = campoFotoPerfil.files[0];
-        if (!archivo) return;
-        if (!fotoValida(archivo)) {
-            campoFotoPerfil.value = "";
-            mostrarMensaje(mensajeEditarPerfil, "La foto de perfil tiene que ser JPG, PNG o WEBP de hasta 5 MB.");
+        const archivo = revisarFotoElegida(campoFotoPerfil, "La foto de perfil tiene que ser JPG, PNG o WEBP de hasta 5 MB.");
+        if (!archivo) {
             return;
         }
-        mostrarMensaje(mensajeEditarPerfil, "");
-        if (urlVistaPreviaFoto) URL.revokeObjectURL(urlVistaPreviaFoto);
+
+        if (urlVistaPreviaFoto) {
+            URL.revokeObjectURL(urlVistaPreviaFoto);
+        }
         urlVistaPreviaFoto = URL.createObjectURL(archivo);
         pintarAvatar(document.getElementById("vistaPreviaFotoPerfil"), "", "", urlVistaPreviaFoto);
     });
 
     campoFotoDni.addEventListener("change", () => {
-        const archivo = campoFotoDni.files[0];
-        if (!archivo) return;
-        if (!fotoValida(archivo)) {
-            campoFotoDni.value = "";
-            mostrarMensaje(mensajeEditarPerfil, "La foto del DNI tiene que ser JPG, PNG o WEBP de hasta 5 MB.");
+        const archivo = revisarFotoElegida(campoFotoDni, "La foto del DNI tiene que ser JPG, PNG o WEBP de hasta 5 MB.");
+        if (!archivo) {
             return;
         }
-        mostrarMensaje(mensajeEditarPerfil, "");
+
         const estadoFotoDni = document.getElementById("estadoFotoDni");
         estadoFotoDni.textContent = `Nueva foto elegida: ${archivo.name}. Se sube al guardar.`;
         estadoFotoDni.classList.add("cargada");
     });
 }
 
-function fotoValida(archivo) {
-    return tiposDeFotoPermitidos.includes(archivo.type) && archivo.size <= pesoMaximoFoto;
+// Devuelve la foto elegida si es JPG, PNG o WEBP de hasta 5 MB. Si no, vacía el campo, avisa y devuelve null.
+function revisarFotoElegida(campoFoto, textoError) {
+    const archivo = campoFoto.files[0];
+    if (!archivo) {
+        return null;
+    }
+
+    const mensajeEditarPerfil = document.getElementById("mensajeEditarPerfil");
+    if (!tiposDeFotoPermitidos.includes(archivo.type) || archivo.size > pesoMaximoFoto) {
+        campoFoto.value = "";
+        mostrarMensaje(mensajeEditarPerfil, textoError);
+        return null;
+    }
+
+    mostrarMensaje(mensajeEditarPerfil, "");
+    return archivo;
 }
 
 // Títulos del profesor: lista con "Agregar" y una ✕ para quitar cada uno (inputs name="titulos")
 function inicializarTitulosEdicion() {
     const botonAgregarTitulo = document.getElementById("botonAgregarTitulo");
-    if (!botonAgregarTitulo) return;
+    if (!botonAgregarTitulo) {
+        return;
+    }
 
     const campoNuevoTitulo = document.getElementById("nuevoTitulo");
+    const mensajeEditarPerfil = document.getElementById("mensajeEditarPerfil");
+
     const agregarDesdeElCampo = () => {
+        // "|" es el separador de títulos en la base
         const titulo = campoNuevoTitulo.value.replaceAll("|", " ").replace(/\s+/g, " ").trim();
-        const mensajeEditarPerfil = document.getElementById("mensajeEditarPerfil");
-        if (titulo === "") return mostrarErrorEnCampo(mensajeEditarPerfil, campoNuevoTitulo, "Escribí el título antes de agregarlo.");
-        if (document.querySelectorAll("#listaTitulos li").length >= 10) return mostrarErrorEnCampo(mensajeEditarPerfil, campoNuevoTitulo, "Podés cargar hasta 10 títulos.");
+        if (titulo === "") {
+            mostrarErrorEnCampo(mensajeEditarPerfil, campoNuevoTitulo, "Escribí el título antes de agregarlo.");
+            return;
+        }
+        if (document.querySelectorAll("#listaTitulos li").length >= 10) {
+            mostrarErrorEnCampo(mensajeEditarPerfil, campoNuevoTitulo, "Podés cargar hasta 10 títulos.");
+            return;
+        }
+
         mostrarMensaje(mensajeEditarPerfil, "");
         agregarTituloEdicion(titulo);
         campoNuevoTitulo.value = "";
         campoNuevoTitulo.focus();
-        return true;
     };
 
     botonAgregarTitulo.addEventListener("click", agregarDesdeElCampo);
     campoNuevoTitulo.addEventListener("keydown", evento => {
-        if (evento.key !== "Enter") return;
+        if (evento.key !== "Enter") {
+            return;
+        }
         evento.preventDefault();
         agregarDesdeElCampo();
     });
 }
 
 function agregarTituloEdicion(titulo) {
-    const itemTitulo = document.createElement("li");
-    const textoTitulo = document.createElement("span");
-    textoTitulo.textContent = titulo;
-
     const campoTitulo = document.createElement("input");
     campoTitulo.type = "hidden";
     campoTitulo.name = "titulos";
     campoTitulo.value = titulo;
 
-    const botonQuitar = document.createElement("button");
+    const itemTitulo = document.createElement("li");
+    const botonQuitar = crearElemento("button", "btn-close");
     botonQuitar.type = "button";
-    botonQuitar.className = "btn-close";
     botonQuitar.setAttribute("aria-label", `Quitar ${titulo}`);
     botonQuitar.addEventListener("click", () => itemTitulo.remove());
 
-    itemTitulo.append(textoTitulo, campoTitulo, botonQuitar);
+    itemTitulo.append(crearElemento("span", "", titulo), campoTitulo, botonQuitar);
     document.getElementById("listaTitulos").append(itemTitulo);
 }
 
-// Muestra la pestaña donde está un campo (para los errores de validación)
-function mostrarPestanaDelCampo(campo) {
+// Error de validación del modal: muestra la pestaña donde está el campo y le pone el foco.
+// Devuelve false para cortar el onsubmit.
+function mostrarErrorDeEdicion(campo, texto) {
     const pestana = campo?.closest(".tab-pane");
-    if (!pestana || pestana.classList.contains("active")) return;
-    document.querySelector(`[data-bs-target="#${pestana.id}"]`)?.click();
-}
+    if (pestana && !pestana.classList.contains("active")) {
+        document.querySelector(`[data-bs-target="#${pestana.id}"]`)?.click();
+    }
 
-function errorEnCampoDeEdicion(campo, texto) {
-    mostrarPestanaDelCampo(campo);
     // Se espera a que la pestaña se vea para poder poner el foco
-    setTimeout(() => mostrarErrorEnCampo(document.getElementById("mensajeEditarPerfil"), campo, texto), 50);
+    setTimeout(() => {
+        mostrarErrorEnCampo(document.getElementById("mensajeEditarPerfil"), campo, texto);
+    }, 50);
     return false;
 }
 
+// POST /Perfiles/GuardarPerfil (action del formulario) → guarda las dos pestañas juntas.
+// El token anti-falsificación viaja dentro del FormData (campo oculto del formulario).
 function guardarPerfil() {
     const formularioEditarPerfil = document.getElementById("formularioEditarPerfil");
     const mensajeEditarPerfil = document.getElementById("mensajeEditarPerfil");
     const botonGuardarPerfil = document.getElementById("botonGuardarPerfil");
-    const campo = id => document.getElementById(id);
-    const campoPrecioHora = campo("edicionPrecioHora");
-    const dniSinPuntos = campo("edicionDni").value.replace(/[\s.\-]/g, "");
+    const campoNombre = document.getElementById("edicionNombre");
+    const campoApellido = document.getElementById("edicionApellido");
+    const campoMail = document.getElementById("edicionMail");
+    const campoDni = document.getElementById("edicionDni");
+    const campoFechaNacimiento = document.getElementById("edicionFechaNacimiento");
+    const campoPrecioHora = document.getElementById("edicionPrecioHora");
+    const dniSinPuntos = campoDni.value.replace(/[\s.\-]/g, "");
+    const precioHora = campoPrecioHora ? campoPrecioHora.value : "";
 
-    if (campo("edicionNombre").value.trim() === "") return errorEnCampoDeEdicion(campo("edicionNombre"), "Ingresá tu nombre.");
-    if (campo("edicionApellido").value.trim() === "") return errorEnCampoDeEdicion(campo("edicionApellido"), "Ingresá tu apellido.");
-    if (!correoValido(campo("edicionMail").value.trim())) return errorEnCampoDeEdicion(campo("edicionMail"), "Ingresá un correo electrónico válido.");
-    if (dniSinPuntos !== "" && !/^\d{7,8}$/.test(dniSinPuntos)) return errorEnCampoDeEdicion(campo("edicionDni"), "El DNI tiene que tener 7 u 8 números.");
-    if (campo("edicionFechaNacimiento").value !== "" && !fechaNacimientoValida(campo("edicionFechaNacimiento").value)) return errorEnCampoDeEdicion(campo("edicionFechaNacimiento"), "Ingresá una fecha de nacimiento válida.");
-    if (textoDeLaDescripcion().length > largoMaximoDescripcion) return errorEnCampoDeEdicion(campo("editorDescripcion"), "La descripción puede tener hasta 1000 caracteres.");
-    if (campoPrecioHora && campoPrecioHora.value !== "" && !(Number.isInteger(Number(campoPrecioHora.value)) && Number(campoPrecioHora.value) >= 0)) {
-        return errorEnCampoDeEdicion(campoPrecioHora, "Ingresá un precio por hora válido (solo números).");
+    if (campoNombre.value.trim() === "") {
+        return mostrarErrorDeEdicion(campoNombre, "Ingresá tu nombre.");
+    }
+    if (campoApellido.value.trim() === "") {
+        return mostrarErrorDeEdicion(campoApellido, "Ingresá tu apellido.");
+    }
+    if (!correoValido(campoMail.value.trim())) {
+        return mostrarErrorDeEdicion(campoMail, "Ingresá un correo electrónico válido.");
+    }
+    if (dniSinPuntos !== "" && !/^\d{7,8}$/.test(dniSinPuntos)) {
+        return mostrarErrorDeEdicion(campoDni, "El DNI tiene que tener 7 u 8 números.");
+    }
+    if (campoFechaNacimiento.value !== "" && !fechaNacimientoValida(campoFechaNacimiento.value)) {
+        return mostrarErrorDeEdicion(campoFechaNacimiento, "Ingresá una fecha de nacimiento válida.");
+    }
+    if (obtenerTextoDescripcion().length > largoMaximoDescripcion) {
+        return mostrarErrorDeEdicion(document.getElementById("editorDescripcion"), "La descripción puede tener hasta 1000 caracteres.");
+    }
+    if (precioHora !== "" && !(Number.isInteger(Number(precioHora)) && Number(precioHora) >= 0)) {
+        return mostrarErrorDeEdicion(campoPrecioHora, "Ingresá un precio por hora válido (solo números).");
     }
 
-    // HTML del editor (vacío si no se escribió nada) y listas de IDs separadas por coma
-    // getSemanticHTML() de Quill convierte cada espacio en &nbsp; (y el texto no se corta en renglones)
-    campo("edicionDescripcion").value = textoDeLaDescripcion() === "" ? "" : editorDescripcion.getSemanticHTML().replace(/&nbsp;/g, " ");
+    // HTML del editor (vacío si no se escribió nada). getSemanticHTML() de Quill convierte cada
+    // espacio en &nbsp; (y así el texto no se corta en renglones): se vuelven espacios comunes.
+    document.getElementById("edicionDescripcion").value = obtenerTextoDescripcion() === ""
+        ? ""
+        : editorDescripcion.getSemanticHTML().replace(/&nbsp;/g, " ");
+
+    // Los selectores van como listas de IDs separadas por coma (idsMaterias=3,7,12)
     const datosFormulario = new FormData(formularioEditarPerfil);
     formularioEditarPerfil.querySelectorAll("select[data-nombre-ids]").forEach(select => {
         const idsElegidos = Array.from(select.selectedOptions).map(opcion => opcion.value).filter(valor => valor !== "");
@@ -1309,26 +1523,38 @@ function guardarPerfil() {
     mostrarMensaje(mensajeEditarPerfil, "");
     botonGuardarPerfil.disabled = true;
 
-    pedirJson(formularioEditarPerfil.action, { method: "POST", body: datosFormulario })
-        .then(respuesta => {
-            if (respuesta.resultado === "mailExistente") return errorEnCampoDeEdicion(campo("edicionMail"), respuesta.mensaje);
-            if (respuesta.resultado === "dniExistente") return errorEnCampoDeEdicion(campo("edicionDni"), respuesta.mensaje);
-            if (respuesta.resultado !== "ok") {
-                mostrarMensaje(mensajeEditarPerfil, respuesta.mensaje);
-                return;
-            }
+    fetch(formularioEditarPerfil.action, {
+        method: "POST",
+        body: datosFormulario
+    })
+    .then(respuesta => respuesta.json())
+    .then(guardado => {
+        if (guardado.resultado === "mailExistente") {
+            mostrarErrorDeEdicion(campoMail, guardado.mensaje);
+            return;
+        }
+        if (guardado.resultado === "dniExistente") {
+            mostrarErrorDeEdicion(campoDni, guardado.mensaje);
+            return;
+        }
+        if (guardado.resultado !== "ok") {
+            mostrarMensaje(mensajeEditarPerfil, guardado.mensaje);
+            return;
+        }
 
-            formularioEditarPerfil.querySelector("[data-bs-dismiss='dialog']").click();
-            mostrarSnackbar(respuesta.mensaje, "exito");
-            actualizarUsuarioEnEncabezado(respuesta);
-            mostrarAvisoVerificacionPerfil(respuesta.verificado, respuesta.faltantes);
-            cargarPerfil();
-        })
-        .catch(error => {
-            console.error(error);
-            mostrarMensaje(mensajeEditarPerfil, "No pudimos guardar los cambios. Revisá tu conexión e intentá de nuevo.");
-        })
-        .finally(() => { botonGuardarPerfil.disabled = false; });
+        formularioEditarPerfil.querySelector("[data-bs-dismiss='dialog']").click();
+        mostrarSnackbar(guardado.mensaje, "exito");
+        actualizarUsuarioEnEncabezado(guardado);
+        mostrarAvisoVerificacionPerfil(guardado.verificado, guardado.faltantes);
+        cargarPerfil();
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        mostrarMensaje(mensajeEditarPerfil, "No pudimos guardar los cambios. Revisá tu conexión e intentá de nuevo.");
+    })
+    .finally(() => {
+        botonGuardarPerfil.disabled = false;
+    });
 
     return false;
 }
@@ -1342,9 +1568,13 @@ function actualizarUsuarioEnEncabezado(usuario) {
         pintarAvatar(avatar, usuario.nombre, usuario.apellido, usuario.fotoPerfil);
         avatar.classList.toggle("theme-primary", !usuario.fotoPerfil);
 
-        let tick = enlaceUsuario.querySelector(".tickVerificado");
-        if (usuario.verificado && !tick) enlaceUsuario.append(crearTickVerificado());
-        if (!usuario.verificado && tick) tick.remove();
+        const tick = enlaceUsuario.querySelector(".tickVerificado");
+        if (usuario.verificado && !tick) {
+            enlaceUsuario.append(crearTickVerificado());
+        }
+        if (!usuario.verificado && tick) {
+            tick.remove();
+        }
     });
 }
 

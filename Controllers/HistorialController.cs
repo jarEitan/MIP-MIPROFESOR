@@ -14,19 +14,17 @@ public class HistorialController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Obtener(int id)
     {
+        string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
+        int? idVisitante = int.TryParse(idUsuarioSesion, out int idUsuario) ? idUsuario : null;
+
+        BD bd = new BD();
         try
         {
-            return Json(new BD().obtenerHistorialClases(id, obtenerIdUsuarioSesion()));
+            return Json(bd.obtenerHistorialClases(id, idVisitante));
         }
         catch (Exception)
         {
             return StatusCode(500, new { mensaje = "No pudimos cargar el historial. Probá de nuevo en unos minutos." });
         }
-    }
-
-    private int? obtenerIdUsuarioSesion()
-    {
-        string? idUsuario = HttpContext.Session.GetString("idUsuario");
-        return int.TryParse(idUsuario, out int id) ? id : null;
     }
 }

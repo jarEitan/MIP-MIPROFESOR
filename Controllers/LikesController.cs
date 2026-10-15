@@ -3,16 +3,19 @@ using MIP_MIPROFESOR.Models;
 
 namespace MIP_MIPROFESOR.Controllers;
 
-// Me gusta de los perfiles. Se llama con fetch desde site.js y devuelve JSON.
+// Me gusta de los perfiles. site.js lo llama con fetch y recibe JSON.
 public class LikesController : Controller
 {
-    // GET /Likes/ObtenerLike/5 → si el usuario de la sesión le dio me gusta al perfil 5 (sin sesión: false)
+    // GET /Likes/ObtenerLike/5 → si el usuario de la sesión le dio me gusta al perfil 5 (sin sesión: false) y cuántos tiene
     [HttpGet]
     public IActionResult ObtenerLike(int id)
     {
+        int? idEmisor = obtenerIdUsuarioSesion();
+
+        BD bd = new BD();
         try
         {
-            ResultadoLike resultado = new BD().obtenerLike(obtenerIdUsuarioSesion(), id);
+            ResultadoLike resultado = bd.obtenerLike(idEmisor, id);
             return Json(new { leGusta = resultado.leGusta, cantidadLikes = resultado.cantidadLikes });
         }
         catch (Exception)
@@ -27,13 +30,27 @@ public class LikesController : Controller
     public IActionResult AlternarLike(int idReceptor)
     {
         int? idEmisor = obtenerIdUsuarioSesion();
-        if (idEmisor == null) return StatusCode(401, new { resultado = "sinSesion", mensaje = "Iniciá sesión para dar me gusta." });
 
+        if (idEmisor == null)
+        {
+            return StatusCode(401, new { resultado = "sinSesion", mensaje = "Iniciá sesión para dar me gusta." });
+        }
+
+        BD bd = new BD();
         try
         {
-            ResultadoLike resultado = new BD().alternarLike(idEmisor.Value, idReceptor);
-            if (resultado.resultado == "mismoUsuario") return StatusCode(400, new { resultado = resultado.resultado, mensaje = "No podés darte me gusta a vos mismo." });
-            if (resultado.resultado == "usuarioInexistente") return StatusCode(404, new { resultado = resultado.resultado, mensaje = "Este perfil ya no existe." });
+            ResultadoLike resultado = bd.alternarLike(idEmisor.Value, idReceptor);
+
+            if (resultado.resultado == "mismoUsuario")
+            {
+                return StatusCode(400, new { resultado = resultado.resultado, mensaje = "No podés darte me gusta a vos mismo." });
+            }
+
+            if (resultado.resultado == "usuarioInexistente")
+            {
+                return StatusCode(404, new { resultado = resultado.resultado, mensaje = "Este perfil ya no existe." });
+            }
+
             return Json(new { resultado = resultado.resultado, leGusta = resultado.leGusta, cantidadLikes = resultado.cantidadLikes });
         }
         catch (Exception)
@@ -42,6 +59,7 @@ public class LikesController : Controller
         }
     }
 
+    // El ID del usuario de la sesión, o null si no hay sesión
     private int? obtenerIdUsuarioSesion()
     {
         string? idUsuario = HttpContext.Session.GetString("idUsuario");

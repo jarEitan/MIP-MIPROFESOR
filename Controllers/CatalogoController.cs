@@ -3,8 +3,8 @@ using MIP_MIPROFESOR.Models;
 
 namespace MIP_MIPROFESOR.Controllers;
 
-// Catálogo de profesores. La página (Index) trae los selectores y el resto lo carga catalogo.js
-// con fetch a Catalogo/Buscar, que responde en JSON una página de resultados.
+// Catálogo de profesores. Index arma la página con los selectores y catalogo.js trae los resultados
+// con fetch a Catalogo/Buscar, que responde en JSON una página de profesores.
 public class CatalogoController : Controller
 {
     // /Catalogo?busqueda=...&materia=...&colegio=...&modalidad=...&nivel=Secundario 1&nivel=Secundario 2&pagina=2&porPagina=15
@@ -20,13 +20,10 @@ public class CatalogoController : Controller
         ViewBag.pagina = pagina < 1 ? 1 : pagina;
         ViewBag.porPagina = new[] { 5, 10, 15, 20 }.Contains(porPagina) ? porPagina : 10;
 
-        ViewBag.materias = new List<string>();
-        ViewBag.colegios = new List<string>();
-        ViewBag.niveles = new List<string>();
-        ViewBag.modalidades = new List<string>();
+        BD bd = new BD();
         try
         {
-            OpcionesPerfil opciones = new BD().obtenerOpcionesPerfil();
+            OpcionesPerfil opciones = bd.obtenerOpcionesPerfil();
             ViewBag.materias = opciones.materias.Select(opcion => opcion.nombre).ToList();
             ViewBag.colegios = opciones.escuelas.Select(opcion => opcion.nombre).ToList();
             ViewBag.niveles = opciones.niveles.Select(opcion => opcion.nombre).ToList();
@@ -34,19 +31,26 @@ public class CatalogoController : Controller
         }
         catch (Exception)
         {
-            // Sin las opciones la página igual carga; catalogo.js muestra el error al buscar
+            // Sin las opciones la página igual carga con los selectores vacíos; catalogo.js muestra el error al buscar
+            ViewBag.materias = new List<string>();
+            ViewBag.colegios = new List<string>();
+            ViewBag.niveles = new List<string>();
+            ViewBag.modalidades = new List<string>();
         }
+
         return View();
     }
 
-    // Una página de resultados en JSON. Cada profesor trae lo que muestra la tarjeta.
+    // GET /Catalogo/Buscar?... (mismos filtros) → una página de resultados. Cada profesor trae lo que muestra su tarjeta.
     [HttpGet("Catalogo/Buscar")]
     public IActionResult Buscar(string? busqueda, string? materia, string? colegio, string? modalidad, string[]? nivel, int pagina = 1, int porPagina = 10)
     {
+        string niveles = string.Join(",", nivel ?? new string[0]);
+
+        BD bd = new BD();
         try
         {
-            string niveles = string.Join(",", nivel ?? new string[0]);
-            ResultadoCatalogo resultado = new BD().obtenerCatalogo(busqueda, materia, colegio, modalidad, niveles, pagina, porPagina);
+            ResultadoCatalogo resultado = bd.obtenerCatalogo(busqueda, materia, colegio, modalidad, niveles, pagina, porPagina);
             return Json(new
             {
                 ok = true,

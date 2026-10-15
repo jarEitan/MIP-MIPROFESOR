@@ -6,13 +6,6 @@ namespace MIP_MIPROFESOR.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
-
     // ================= PÁGINAS PÚBLICAS =================
 
     public IActionResult Index()
@@ -23,15 +16,18 @@ public class HomeController : Controller
             "Matemática", "Física", "Química", "Biología", "Inglés", "Historia",
             "Lengua y Literatura", "Programación", "Economía", "Geografía"
         };
+
         // Los 3 primeros del catálogo: cuentas verificadas y mejor calificadas. Si la base no responde, la página igual carga.
+        BD bd = new BD();
         try
         {
-            ViewBag.profesoresDestacados = new BD().obtenerCatalogo(null, null, null, null, null, 1, 5).profesores.Take(3).ToList();
+            ViewBag.profesoresDestacados = bd.obtenerCatalogo(null, null, null, null, null, 1, 5).profesores.Take(3).ToList();
         }
         catch (Exception)
         {
             ViewBag.profesoresDestacados = new List<Profesor>();
         }
+
         return View();
     }
 
@@ -45,17 +41,26 @@ public class HomeController : Controller
         return View();
     }
 
-    // /Home/Perfil/5 → perfil de cualquier usuario (se puede compartir la URL).
-    // /Home/Perfil sin ID → el perfil propio. Los datos los trae site.js con fetch a PerfilesController.
-    // /Home/Perfil?editar=true → el perfil propio con el modal "Editar perfil" ya abierto
-    // (lo usa el botón "Completar mis datos" del aviso de cuenta no verificada).
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    // /Home/Perfil/5 → perfil de cualquier usuario (se puede compartir la URL). Sin ID → el perfil propio.
+    // /Home/Perfil?editar=true → el perfil propio con el modal "Editar perfil" abierto (botón "Completar mis datos").
+    // Los datos los trae site.js con fetch a PerfilesController.
     public IActionResult Perfil(int? id, bool editar = false)
     {
         string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
-        if (id == null && idUsuarioSesion == null) return RedirectToAction("IniciarSesion", "Sesion");
+
+        if (id == null && idUsuarioSesion == null)
+        {
+            return RedirectToAction("IniciarSesion", "Sesion");
+        }
 
         int idPerfil = id ?? int.Parse(idUsuarioSesion!);
         bool esPerfilPropio = idUsuarioSesion == idPerfil.ToString();
+
         ViewBag.idPerfil = idPerfil;
         ViewBag.esPerfilPropio = esPerfilPropio;
         ViewBag.abrirEdicion = esPerfilPropio && editar;
@@ -69,14 +74,17 @@ public class HomeController : Controller
     public IActionResult PanelControl()
     {
         string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
-        if (!int.TryParse(idUsuarioSesion, out int idUsuario)) return RedirectToAction("IniciarSesion", "Sesion");
 
-        // Clases y notificaciones salen de la BD. Las notificaciones se leen ANTES de marcarlas como vistas:
-        // al entrar al Panel las novedades se muestran como nuevas y recién después pasan a vistas
-        // (los pedidos por responder siguen contando en la insignia hasta que se resuelven).
+        if (!int.TryParse(idUsuarioSesion, out int idUsuario))
+        {
+            return RedirectToAction("IniciarSesion", "Sesion");
+        }
+
+        // Las notificaciones se leen ANTES de marcarlas como vistas: al entrar al Panel las novedades se ven como nuevas
+        // y recién después pasan a vistas (los pedidos por responder siguen en la insignia hasta que se resuelven).
+        BD bd = new BD();
         try
         {
-            BD bd = new BD();
             ViewBag.misClases = bd.obtenerMisClases(idUsuario);
             ViewBag.notificaciones = bd.obtenerNotificaciones(idUsuario);
             int cantidadNotificaciones = bd.marcarNotificacionesVistas(idUsuario);
@@ -86,31 +94,42 @@ public class HomeController : Controller
         {
             ViewBag.errorBD = true;
         }
+
         return View();
     }
 
+    // Lleva al catálogo filtrado por el colegio del usuario
     public IActionResult MiColegio()
     {
         string? idUsuario = HttpContext.Session.GetString("idUsuario");
-        if (idUsuario == null) return RedirectToAction("IniciarSesion", "Sesion");
 
-        // Si el usuario todavía no cargó su colegio, se muestra el catálogo completo
+        if (idUsuario == null)
+        {
+            return RedirectToAction("IniciarSesion", "Sesion");
+        }
+
+        BD bd = new BD();
         try
         {
-            BD bd = new BD();
             DatosEdicion? datos = bd.obtenerDatosEdicion(int.Parse(idUsuario));
-            OpcionPerfil? colegio = datos == null ? null : bd.obtenerOpcionesPerfil().escuelas.FirstOrDefault(escuela => datos.idsEscuelas.Contains(escuela.id));
-            if (colegio != null) return RedirectToAction("Index", "Catalogo", new { colegio = colegio.nombre });
+
+            if (datos != null && datos.idsEscuelas.Count > 0)
+            {
+                OpcionPerfil? colegio = bd.obtenerOpcionesPerfil().escuelas.FirstOrDefault(escuela => datos.idsEscuelas.Contains(escuela.id));
+
+                if (colegio != null)
+                {
+                    return RedirectToAction("Index", "Catalogo", new { colegio = colegio.nombre });
+                }
+            }
         }
         catch (Exception)
         {
+            // Si la base no responde se muestra el catálogo completo
         }
-        return RedirectToAction("Index", "Catalogo");
-    }
 
-    public IActionResult Privacy()
-    {
-        return View();
+        // Todavía no cargó su colegio: catálogo completo
+        return RedirectToAction("Index", "Catalogo");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

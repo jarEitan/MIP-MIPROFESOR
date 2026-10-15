@@ -4,17 +4,28 @@
 // Qué clases se ven y cuántas (máximo 20) lo decide el SP obtenerHistorialClases, no esta página.
 // Todo lo que viene de la base se inserta con textContent, nunca como HTML.
 
-const textoBotonDarResena = "«Dar reseña» va a estar disponible muy pronto.";
+const textoDarResenaPendiente = "«Dar reseña» va a estar disponible muy pronto.";
 
 // ----- Datos -----
+// GET /Historial/Obtener/5. Si la base falla llega { mensaje } en vez del historial: se pasa al .catch de quien lo pidió.
 function pedirHistorial(idUsuario) {
-    return pedirJson(`/Historial/Obtener/${idUsuario}`);
+    return fetch("/Historial/Obtener/" + idUsuario, {
+        method: "GET"
+    })
+    .then(respuesta => respuesta.json())
+    .then(resultado => {
+        if (resultado.mensaje) {
+            throw new Error(resultado.mensaje);
+        }
+
+        return resultado;
+    });
 }
 
 // ----- Dibujo de la tabla (lo comparten el Panel y el modal) -----
-// opciones.esPanel: historial propio dentro del Panel. Suma la columna "Acción" (Pedir otra clase, solo alumnos)
+// esPanel: historial propio dentro del Panel. Suma la columna "Acción" (Pedir otra clase, solo alumnos)
 // y le pone id a cada fila para que las notificaciones puedan resaltarla.
-function dibujarHistorial(contenedor, resultado, opciones) {
+function dibujarHistorial(contenedor, resultado, esPanel) {
     contenedor.replaceChildren();
 
     if (!resultado.encontrado) {
@@ -22,33 +33,41 @@ function dibujarHistorial(contenedor, resultado, opciones) {
         return;
     }
 
-    if (resultado.clases.length === 0) {
-        contenedor.append(resultado.esPropio
-            ? crearEstadoVacioHistorial("Todavía no hay clases en tu historial", "Las clases completadas, canceladas y rechazadas aparecen acá.")
-            : crearEstadoVacioHistorial("Todavía no tiene clases completadas", "Cuando termine sus primeras clases, van a aparecer acá."));
+    if (resultado.clases.length === 0 && resultado.esPropio) {
+        contenedor.append(crearEstadoVacioHistorial("Todavía no hay clases en tu historial", "Las clases completadas, canceladas y rechazadas aparecen acá."));
         return;
     }
 
-    const conAccion = Boolean(opciones.esPanel) && resultado.tipoUsuario === "alumno";
+    if (resultado.clases.length === 0) {
+        contenedor.append(crearEstadoVacioHistorial("Todavía no tiene clases completadas", "Cuando termine sus primeras clases, van a aparecer acá."));
+        return;
+    }
+
+    const conAccion = esPanel && resultado.tipoUsuario === "alumno";
     // La contraparte de un alumno es un profesor, y al revés
     const columnaContraparte = resultado.tipoUsuario === "alumno" ? "Profesor" : "Alumno";
     const columnas = [columnaContraparte, "Materia", "Colegio", "Puntuación", "Día"];
-    if (conAccion) columnas.push("Acción");
+
+    if (conAccion) {
+        columnas.push("Acción");
+    }
 
     const filaTitulos = crearElemento("tr");
+
     columnas.forEach(columna => {
         const titulo = crearElemento("th", "", columna);
         titulo.scope = "col";
         filaTitulos.append(titulo);
     });
+
     const encabezado = crearElemento("thead");
     encabezado.append(filaTitulos);
 
-    const cuerpo = crearElemento("tbody");
-    resultado.clases.forEach(clase => cuerpo.append(crearFilaHistorial(clase, columnaContraparte, conAccion, opciones)));
+    const cuerpoTabla = crearElemento("tbody");
+    resultado.clases.forEach(clase => cuerpoTabla.append(crearFilaHistorial(clase, columnaContraparte, conAccion, esPanel)));
 
     const tabla = crearElemento("table", "table");
-    tabla.append(encabezado, cuerpo);
+    tabla.append(encabezado, cuerpoTabla);
 
     const tarjeta = crearElemento("div", "card estatica tabla");
     tarjeta.append(tabla);
@@ -60,10 +79,13 @@ function dibujarHistorial(contenedor, resultado, opciones) {
     }
 }
 
-function crearFilaHistorial(clase, columnaContraparte, conAccion, opciones) {
+function crearFilaHistorial(clase, columnaContraparte, conAccion, esPanel) {
     const nombreOtro = `${clase.nombreOtro} ${clase.apellidoOtro}`;
     const fila = crearElemento("tr");
-    if (opciones.esPanel) fila.id = `historial-${clase.id}`;
+
+    if (esPanel) {
+        fila.id = `historial-${clase.id}`;
+    }
 
     // La contraparte lleva a su perfil
     const enlace = crearElemento("a", "", nombreOtro);
@@ -75,7 +97,11 @@ function crearFilaHistorial(clase, columnaContraparte, conAccion, opciones) {
 
     // Cancelada y Rechazada solo aparecen en el historial propio: se marcan al lado del día
     const diaYEstado = crearElemento("span", "", new Date(clase.dia).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }));
-    if (clase.estado !== "Completada") diaYEstado.append(" ", crearElemento("span", "badge badge-subtle theme-danger", clase.estado));
+
+    if (clase.estado !== "Completada") {
+        diaYEstado.append(" ", crearElemento("span", "badge badge-subtle theme-danger", clase.estado));
+    }
+
     const celdaDia = crearCeldaHistorial("Día");
     celdaDia.append(diaYEstado);
 
@@ -99,6 +125,7 @@ function crearFilaHistorial(clase, columnaContraparte, conAccion, opciones) {
         celdaAccion.append(botonPedir);
         fila.append(celdaAccion);
     }
+
     return fila;
 }
 
@@ -109,9 +136,11 @@ function crearCeldaPuntuacionHistorial(clase, nombreOtro) {
     if (clase.puntuacion) {
         const estrellas = crearElemento("span", "estrellas");
         estrellas.setAttribute("aria-label", `${clase.puntuacion} de 5 estrellas`);
+
         for (let posicion = 1; posicion <= 5; posicion++) {
             estrellas.append(crearIconoHistorial(posicion <= clase.puntuacion ? "bi-star-fill" : "bi-star"));
         }
+
         celda.append(estrellas);
     } else if (clase.puedeDarResena) {
         const botonResena = crearElemento("button", "boton contorno chico");
@@ -124,6 +153,7 @@ function crearCeldaPuntuacionHistorial(clase, nombreOtro) {
     } else {
         celda.textContent = "–";
     }
+
     return celda;
 }
 
@@ -154,16 +184,18 @@ let historialPropioEnCurso = null;
 // Siempre vuelve a pedir los datos (también lo llama clases.js después de aceptar, cancelar, etc.)
 function cargarHistorialPropio() {
     const contenedor = document.getElementById("contenidoHistorialPanel");
-    if (!contenedor) return Promise.resolve();
 
     historialPropioEnCurso = pedirHistorial(contenedor.dataset.idUsuario)
-        .then(resultado => dibujarHistorial(contenedor, resultado, { esPanel: true }))
-        .catch(error => {
-            console.error(error);
-            const errorCarga = crearElemento("div", "card estatica estadoVacio");
-            errorCarga.append(crearElemento("p", "", "No pudimos cargar tu historial. Probá de nuevo en unos minutos."));
-            contenedor.replaceChildren(errorCarga);
-        });
+    .then(resultado => {
+        dibujarHistorial(contenedor, resultado, true);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        const errorCarga = crearElemento("div", "card estatica estadoVacio");
+        errorCarga.append(crearElemento("p", "", "No pudimos cargar tu historial. Probá de nuevo en unos minutos."));
+        contenedor.replaceChildren(errorCarga);
+    });
+
     return historialPropioEnCurso;
 }
 
@@ -180,57 +212,75 @@ function mostrarEstadoHistorialPerfil(texto, cargando) {
     const estado = document.getElementById("estadoHistorial");
     estado.hidden = false;
     estado.classList.toggle("cargando", cargando);
-    estado.replaceChildren(...(cargando ? [crearIconoHistorial("bi-arrow-repeat"), ` ${texto}`] : [texto]));
+
+    if (cargando) {
+        estado.replaceChildren(crearIconoHistorial("bi-arrow-repeat"), ` ${texto}`);
+    } else {
+        estado.replaceChildren(texto);
+    }
 }
 
 function abrirHistorialDelPerfil() {
     const contenedor = document.getElementById("contenidoHistorialPerfil");
-    const avisoHistorial = document.getElementById("avisoHistorial");
     const idPerfil = document.getElementById("perfil").dataset.idPerfil;
 
     document.getElementById("nombreHistorial").textContent = document.getElementById("nombrePerfil").textContent;
-    avisoHistorial.hidden = true;
+    document.getElementById("avisoHistorial").hidden = true;
     contenedor.replaceChildren();
     mostrarEstadoHistorialPerfil("Cargando historial…", true);
     abrirDialogo("dialogoHistorial");
 
     // Si se cierra y se vuelve a abrir antes de que llegue la respuesta, solo vale la última consulta
     const consulta = ++consultaHistorialPerfilVigente;
+
     pedirHistorial(idPerfil)
-        .then(resultado => {
-            if (consulta !== consultaHistorialPerfilVigente) return;
-            document.getElementById("estadoHistorial").hidden = true;
-            dibujarHistorial(contenedor, resultado, { esPanel: false });
-        })
-        .catch(error => {
-            console.error(error);
-            if (consulta === consultaHistorialPerfilVigente) mostrarEstadoHistorialPerfil("No pudimos cargar el historial. Probá de nuevo en unos minutos.", false);
-        });
+    .then(resultado => {
+        if (consulta !== consultaHistorialPerfilVigente) {
+            return;
+        }
+
+        document.getElementById("estadoHistorial").hidden = true;
+        dibujarHistorial(contenedor, resultado, false);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+
+        if (consulta === consultaHistorialPerfilVigente) {
+            mostrarEstadoHistorialPerfil("No pudimos cargar el historial. Probá de nuevo en unos minutos.", false);
+        }
+    });
 }
 
 // "Dar reseña" todavía no hace nada. Dentro del modal el snackbar quedaría detrás (el diálogo está en la capa de arriba),
-// así que ahí el aviso va dentro del mismo modal.
+// así que ahí el aviso va dentro del mismo modal (solo existe en el Perfil).
 function avisarDarResenaPendiente(botonResena) {
-    const avisoHistorial = document.getElementById("avisoHistorial");
-    if (botonResena.closest("dialog") && avisoHistorial) {
-        avisoHistorial.textContent = textoBotonDarResena;
+    if (botonResena.closest("dialog")) {
+        const avisoHistorial = document.getElementById("avisoHistorial");
+        avisoHistorial.textContent = textoDarResenaPendiente;
         avisoHistorial.hidden = false;
         return;
     }
-    mostrarSnackbar(textoBotonDarResena);
+
+    mostrarSnackbar(textoDarResenaPendiente);
 }
 
 
 // ================= INICIALIZACIÓN =================
 function inicializarHistorial() {
-    // Los botones se crean con fetch: se escuchan en el documento
+    // Los botones "Dar reseña" se crean con fetch: se escuchan en el documento
     document.addEventListener("click", evento => {
         const botonResena = evento.target.closest("[data-dar-resena]");
-        if (botonResena) avisarDarResenaPendiente(botonResena);
+
+        if (botonResena) {
+            avisarDarResenaPendiente(botonResena);
+        }
     });
 
     document.getElementById("botonHistorial")?.addEventListener("click", abrirHistorialDelPerfil);
-    if (document.getElementById("contenidoHistorialPanel")) esperarHistorialPropio();
+
+    if (document.getElementById("contenidoHistorialPanel")) {
+        esperarHistorialPropio();
+    }
 }
 
 document.addEventListener("DOMContentLoaded", inicializarHistorial);
