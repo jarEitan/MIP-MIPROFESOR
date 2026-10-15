@@ -230,7 +230,7 @@ function enviarPedidoDeClase() {
 
 // ----- Panel de Control: aceptar, rechazar, reubicar y cancelar -----
 // Todo con fetch y sin recargar la página: después de cada acción se vuelve a pedir el Panel y se cambia solo
-// lo que cambió (clases, historial, notificaciones, contadores y la insignia del header).
+// lo que cambió (clases, notificaciones, contadores, insignia del header e historial, que se vuelve a pedir por fetch).
 let selectorDeReubicacion = null;
 let claseElegida = null;
 
@@ -279,7 +279,9 @@ function inicializarAccionesDeClases() {
     document.getElementById("botonAbrirChatClaseCercana").addEventListener("click", () => document.getElementById("botonTabChat")?.click());
 }
 
-// Vuelve a pedir el Panel y cambia solo lo que cambió. Si la sesión venció, el servidor redirige al inicio de sesión
+// Vuelve a pedir el Panel y cambia solo lo que cambió. Si la sesión venció, el servidor redirige al inicio de sesión.
+// El historial no viene en esa página: se vuelve a pedir con fetch (cargarHistorialPropio, historial.js).
+// Devuelve una promesa que se cumple cuando todo está actualizado.
 function refrescarPanel() {
     return fetch("/Home/PanelControl")
         .then(respuesta => {
@@ -293,7 +295,7 @@ function refrescarPanel() {
             if (html === null) return;
             const nuevo = new DOMParser().parseFromString(html, "text/html");
 
-            ["notificaciones", "tabClases", "tabHistorial"].forEach(id => {
+            ["notificaciones", "tabClases"].forEach(id => {
                 const reemplazo = nuevo.getElementById(id);
                 if (reemplazo) document.getElementById(id).innerHTML = reemplazo.innerHTML;
             });
@@ -302,6 +304,7 @@ function refrescarPanel() {
                 if (reemplazo) document.getElementById(id).textContent = reemplazo.textContent;
             });
             actualizarInsigniaDeNotificaciones(Number(nuevo.getElementById("insigniaNotificaciones")?.textContent ?? 0));
+            return cargarHistorialPropio();
         })
         .catch(error => console.error(error));
 }
@@ -313,12 +316,17 @@ function abrirPestanaYClase(parametros) {
     if (!parametros.has("tab") && !idClase) return;
 
     document.getElementById(`botonTab${pestana}`)?.click();
-    const destino = document.getElementById(pestana === "Historial" ? `historial-${idClase}` : `clase-${idClase}`);
-    if (!destino) return;
-    setTimeout(() => {
-        destino.scrollIntoView({ behavior: "smooth", block: "center" });
-        resaltarElemento(destino);
-    }, 150);
+
+    // Las filas del historial recién existen cuando termina su fetch
+    const historialListo = pestana === "Historial" ? esperarHistorialPropio() : Promise.resolve();
+    historialListo.then(() => {
+        const destino = document.getElementById(pestana === "Historial" ? `historial-${idClase}` : `clase-${idClase}`);
+        if (!destino) return;
+        setTimeout(() => {
+            destino.scrollIntoView({ behavior: "smooth", block: "center" });
+            resaltarElemento(destino);
+        }, 150);
+    });
 }
 
 // La clase que acaba de cambiar se resalta un momento (en Mis clases o, si ya terminó, en el Historial)

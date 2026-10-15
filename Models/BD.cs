@@ -230,6 +230,24 @@ public class BD
         }
     }
 
+    // Historial de clases de idUsuario (máximo 20, tope fijo en el SP). idVisitante = quien mira (null = sin sesión):
+    // si es el mismo usuario ve todo su historial; si es otro, solo las clases completadas.
+    public ResultadoHistorial obtenerHistorialClases(int idUsuario, int? idVisitante)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            using (var tablas = connection.QueryMultiple("obtenerHistorialClases", new { idUsuario = idUsuario, idVisitante = idVisitante }, commandType: CommandType.StoredProcedure))
+            {
+                ResultadoHistorial? resultado = tablas.ReadFirstOrDefault<ResultadoHistorial>();
+                if (resultado == null) return new ResultadoHistorial { encontrado = false };
+
+                resultado.encontrado = true;
+                resultado.clases = tablas.Read<ClaseHistorial>().ToList();
+                return resultado;
+            }
+        }
+    }
+
     // Franjas que el selector de horario tiene que bloquear (clases confirmadas del profesor y clases del alumno)
     public List<HorarioOcupado> obtenerHorariosOcupados(int idProfesor, int? idAlumno, DateTime desde, DateTime hasta, int? idClaseExcluir)
     {

@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="~/lib/quill/quill.snow.css" />
         <script src="~/lib/quill/quill.js"></script>
     }
+    <script src="~/js/historial.js" asp-append-version="true"></script>
 }
 
 <!-- ================= PERFIL ================= -->
@@ -115,7 +116,13 @@
                     }
                 </div>
 
-                <ul class="cifras" id="cifrasPerfil"></ul>
+                @* Cifras a la izquierda y el botón Historial a la derecha (modal #dialogoHistorial, historial.js) *@
+                <div class="filaCifras">
+                    <ul class="cifras" id="cifrasPerfil"></ul>
+                    <button class="boton contorno" type="button" id="botonHistorial" aria-haspopup="dialog">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i> Historial
+                    </button>
+                </div>
             </div>
 
             <div class="row g-3 lg:g-4">
@@ -148,6 +155,24 @@
         </div>
     </div>
 </section>
+
+<!-- ================= MODAL: HISTORIAL DE CLASES (Dialog de Bootstrap 6) ================= -->
+@* Lo abre #botonHistorial. historial.js pide las últimas 20 clases a /Historial/Obtener/{id} y dibuja la misma tabla del
+   Panel de Control. En el perfil de otro solo se ven las clases completadas; en el propio, todas las del historial. *@
+<dialog class="dialog dialogoHistorial" id="dialogoHistorial" aria-labelledby="tituloHistorial">
+    <div class="dialog-header">
+        <h2 class="dialog-title" id="tituloHistorial">Historial de <span id="nombreHistorial"></span></h2>
+        <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+    </div>
+    <div class="dialog-body">
+        <p class="estadoHistorial" id="estadoHistorial" role="status"></p>
+        <div id="contenidoHistorialPerfil"></div>
+        <p class="avisoHistorial" id="avisoHistorial" role="status" hidden></p>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Cerrar</button>
+    </div>
+</dialog>
 
 @if (esPerfilPropio)
 {

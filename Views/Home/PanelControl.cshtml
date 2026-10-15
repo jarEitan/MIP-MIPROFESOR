@@ -6,7 +6,6 @@
     List<NotificacionUsuario> notificaciones = ViewBag.notificaciones ?? new List<NotificacionUsuario>();
     bool errorBD = ViewBag.errorBD ?? false;
     List<ClasePanel> clasesActivas = misClases.clases.Where(clase => clase.grupo != "historial").ToList();
-    List<ClasePanel> clasesHistorial = misClases.clases.Where(clase => clase.grupo == "historial").ToList();
     int cantidadNuevas = notificaciones.Count(notificacion => notificacion.esNueva);
     string nombreUsuario = ((Context.Session.GetString("nombre") ?? "") + " " + (Context.Session.GetString("apellido") ?? "")).Trim();
     string rolUsuario = Context.Session.GetString("tipoUsuario") == "profesor" ? "Profesor" : "Alumno";
@@ -284,54 +283,12 @@
             </div>
 
             <!-- Historial de clases -->
+            @* El historial propio se pide con fetch a /Historial/Obtener/{id} y lo dibuja historial.js (la misma tabla del modal de los perfiles) *@
             <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
                 <h2>Historial de clases</h2>
-                @if (clasesHistorial.Count == 0)
-                {
-                    <div class="card estatica estadoVacio">
-                        <span class="icono celeste"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
-                        <h3>Todavía no hay clases en tu historial</h3>
-                        <p>Las clases completadas, canceladas y rechazadas aparecen acá.</p>
-                    </div>
-                }
-                else
-                {
-                    <div class="card estatica tabla">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">@(rolUsuario == "Alumno" ? "Profesor" : "Alumno")</th>
-                                    <th scope="col">Fecha</th>
-                                    <th scope="col">Horario</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var clase in clasesHistorial)
-                                {
-                                    <tr id="historial-@clase.id">
-                                        <td data-etiqueta="@(rolUsuario == "Alumno" ? "Profesor" : "Alumno")"><strong><a asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario">@clase.nombreOtro @clase.apellidoOtro</a></strong></td>
-                                        <td data-etiqueta="Fecha">@clase.fecha.ToString("dd/MM/yyyy")</td>
-                                        <td data-etiqueta="Horario">@textoHorario(clase.fecha, clase.fechaFin)</td>
-                                        <td data-etiqueta="Estado"><span class="badge badge-subtle @(clase.estado == "Completada" ? "theme-success" : "theme-danger")">@clase.estado</span></td>
-                                        <td data-etiqueta="Acción">
-                                            @if (rolUsuario == "Alumno")
-                                            {
-                                                @* Abre el diálogo "Pedir una clase" (clases.js) ya con ese profesor *@
-                                                <button class="boton principal chico" type="button" data-pedir-clase data-id-profesor="@clase.idOtroUsuario" data-nombre-profesor="@clase.nombreOtro @clase.apellidoOtro"><i class="bi bi-calendar-plus" aria-hidden="true"></i> Pedir otra clase</button>
-                                            }
-                                            else
-                                            {
-                                                <a class="boton contorno chico" asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario"><i class="bi bi-person" aria-hidden="true"></i> Ver perfil</a>
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
+                <div id="contenidoHistorialPanel" data-id-usuario="@Context.Session.GetString("idUsuario")">
+                    <p class="cargandoHistorial"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tu historial…</p>
+                </div>
             </div>
 
             <!-- Chat directo -->
@@ -470,3 +427,7 @@
         <button type="button" class="boton principal chico" id="botonAbrirChatClaseCercana" data-bs-dismiss="dialog"><i class="bi bi-chat-dots" aria-hidden="true"></i> Ir al chat</button>
     </div>
 </dialog>
+
+@section Scripts {
+    <script src="~/js/historial.js" asp-append-version="true"></script>
+}

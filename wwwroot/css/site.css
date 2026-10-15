@@ -2892,14 +2892,15 @@ tr.resaltada td {
 }
 
 
-/* Historial: tabla; en pantallas chicas cada fila se apila usando data-etiqueta */
-.panel .tabla {
+/* Historial: tabla (la dibuja historial.js en la pestaña del Panel y en el modal del Perfil);
+   en pantallas chicas cada fila se apila usando data-etiqueta */
+.card.tabla {
     height: auto;
     padding: 0;
     overflow: hidden;
 }
 
-.panel .table {
+.tabla .table {
     --bs-table-bg: transparent;
     --bs-table-cell-padding-x: 1.1rem;
     --bs-table-cell-padding-y: .85rem;
@@ -2908,7 +2909,7 @@ tr.resaltada td {
     font-size: .9rem;
 }
 
-.panel .table th {
+.tabla .table th {
     border-bottom: var(--bordeMarcado);
     background-color: var(--colorFondo);
     font-size: .72rem;
@@ -2918,18 +2919,18 @@ tr.resaltada td {
 }
 
 @media (width < 768px) {
-    .panel .table thead {
+    .tabla .table thead {
         display: none;
     }
 
-    .panel .table tr {
+    .tabla .table tr {
         display: grid;
         gap: .35rem;
         padding: 1rem 1.1rem;
         border-bottom: 1px solid var(--colorBorde);
     }
 
-    .panel .table td {
+    .tabla .table td {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -2939,7 +2940,7 @@ tr.resaltada td {
         text-align: right;
     }
 
-    .panel .table td::before {
+    .tabla .table td::before {
         content: attr(data-etiqueta);
         font-size: .72rem;
         font-weight: 700;
@@ -2947,6 +2948,39 @@ tr.resaltada td {
         text-transform: uppercase;
         color: var(--colorTextoSuave);
     }
+}
+
+/* Puntuación: las estrellas de la última reseña que se dejó a esa persona */
+.tabla .estrellas {
+    display: inline-flex;
+    gap: .1rem;
+    color: #F59E0B;
+}
+
+.tabla .table td .boton {
+    white-space: nowrap;
+}
+
+/* Debajo de la tabla cuando hay 20 clases (el máximo que se puede ver) */
+.notaHistorial {
+    margin-top: .75rem;
+    font-size: .82rem;
+    text-align: center;
+    color: var(--colorTextoSuave);
+}
+
+/* "Cargando tu historial…" mientras llega el fetch */
+.cargandoHistorial {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding-block: 1.5rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.cargandoHistorial .bi {
+    animation: girarCarga 1s linear infinite;
 }
 
 /* Chat directo */
@@ -3602,14 +3636,24 @@ tr.resaltada td {
     }
 }
 
+/* Fila de cifras: las cifras a la izquierda y el botón Historial a la derecha */
+.perfil .filaCifras {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem 1rem;
+    padding-top: 1.25rem;
+    border-top: 2px dashed var(--colorBorde);
+}
+
 /* Cifras: calificación, me gusta y precio por hora */
 .perfil .cifras {
     display: flex;
     flex-wrap: wrap;
     gap: .75rem;
     margin: 0;
-    padding: 1.25rem 0 0;
-    border-top: 2px dashed var(--colorBorde);
+    padding: 0;
     list-style: none;
 }
 
@@ -3998,6 +4042,53 @@ tr.resaltada td {
     min-width: 0;
 }
 
+
+/* ---------- Modal "Historial" del Perfil (la tabla es la misma del Panel: ver 3.14) ---------- */
+.dialog.dialogoHistorial {
+    --bs-dialog-width: min(60rem, 96vw);
+}
+
+/* El cuerpo scrollea y el encabezado y el botón Cerrar quedan fijos */
+.dialogoHistorial .dialog-body {
+    max-height: min(70vh, 38rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.dialogoHistorial .estadoHistorial {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding-block: 1.5rem;
+    font-weight: 600;
+}
+
+.dialogoHistorial .estadoHistorial:empty {
+    display: none;
+}
+
+.dialogoHistorial .estadoHistorial.cargando .bi {
+    animation: girarCarga 1s linear infinite;
+}
+
+.dialogoHistorial .card.tabla {
+    box-shadow: none;
+}
+
+/* Aviso de los botones que todavía no hacen nada (el snackbar quedaría detrás del modal) */
+.dialogoHistorial .avisoHistorial {
+    margin-top: .75rem;
+    font-size: .88rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cargandoHistorial .bi,
+    .dialogoHistorial .estadoHistorial.cargando .bi {
+        animation: none;
+    }
+}
 
 /* =========================================================
    4) FOOTER
