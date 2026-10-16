@@ -7,7 +7,7 @@ namespace MIP_MIPROFESOR.Controllers;
 // botón Panel de Control (la lista se arma en HomeController.PanelControl).
 public class NotificacionesController : Controller
 {
-    // GET /Notificaciones/Contar → { cantidad }: pedidos por responder + novedades que todavía no vio
+    // GET /Notificaciones/Contar → { cantidad }: solicitudes de amistad, chats con mensajes sin leer y clases que esperan respuesta
     [HttpGet]
     public IActionResult Contar()
     {

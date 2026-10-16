@@ -1,6 +1,7 @@
 // Clases y notificaciones: pedir una clase (Catálogo y Perfil), responder, cancelar y reubicar desde el
 // Panel de Control, y la insignia de notificaciones del header. Todo se llama con fetch a ClasesController
-// y NotificacionesController. Las utilidades (pedirJson, mostrarSnackbar, crearElemento...) están en site.js.
+// y NotificacionesController. Las utilidades (pedirJson, mostrarSnackbar, crearElemento...) están en site.js
+// y el chat en chat.js (que también usa enviarAccionDeClase para mandar los mensajes).
 // El servidor siempre valida las reglas (Info/log.md, entrada 2026-10-14); acá solo se ayuda a no
 // elegir horarios imposibles. Todo el texto de la base se inserta con textContent, nunca como HTML.
 
@@ -267,7 +268,7 @@ function inicializarAccionesDeClases() {
         else if (accion === "reubicar") abrirReubicacionDeClase();
     });
 
-    // Los botones de las notificaciones llevan a la pestaña y a la clase sin recargar el Panel
+    // Los botones de las notificaciones llevan a la pestaña (la clase o el chat) sin recargar el Panel
     document.getElementById("notificaciones").addEventListener("click", evento => {
         const enlace = evento.target.closest("a.boton[href*='/Home/PanelControl']");
         if (!enlace) return;
@@ -276,7 +277,8 @@ function inicializarAccionesDeClases() {
     });
 
     document.getElementById("botonConfirmarCancelacion").addEventListener("click", confirmarCancelacionDeClase);
-    document.getElementById("botonAbrirChatClaseCercana").addEventListener("click", () => document.getElementById("botonTabChat")?.click());
+    // "Ir al chat" abre el chat con la otra persona de la clase
+    document.getElementById("botonAbrirChatClaseCercana").addEventListener("click", () => abrirPestanaYClase(new URLSearchParams({ tab: "chat", chat: claseElegida.idOtro })));
 }
 
 // Vuelve a pedir el Panel y cambia solo lo que cambió. Si la sesión venció, el servidor redirige al inicio de sesión.
@@ -309,8 +311,14 @@ function refrescarPanel() {
         .catch(error => console.error(error));
 }
 
-// Las notificaciones llevan a /Home/PanelControl?tab=clases&clase=12: abre esa pestaña y resalta la clase
+// Las notificaciones llevan a /Home/PanelControl?tab=clases&clase=12: abre esa pestaña y resalta la clase.
+// Con ?tab=chat&chat=5 (notificación de mensajes o botón Mensaje del perfil) abre el chat con esa persona (chat.js).
 function abrirPestanaYClase(parametros) {
+    if (parametros.get("tab") === "chat") {
+        if (typeof mostrarChat === "function") mostrarChat(parametros.get("chat"));
+        return;
+    }
+
     const pestana = parametros.get("tab") === "historial" ? "Historial" : "Clases";
     const idClase = parametros.get("clase");
     if (!parametros.has("tab") && !idClase) return;

@@ -2671,7 +2671,7 @@ fieldset {
     box-shadow: var(--sombraMarcada);
 }
 
-/* Notificaciones del Panel: una fila por aviso con su botón para ir a resolverlo */
+/* Notificaciones del Panel: una fila por cosa pendiente (amistad, mensajes, clase) con su botón para ir a resolverla */
 .notificaciones {
     padding-top: clamp(1.5rem, 3vw, 2.25rem);
 }
@@ -2706,11 +2706,6 @@ fieldset {
     border: 2px solid var(--colorBorde);
     border-radius: var(--radioMedio);
     background-color: var(--colorSuperficie);
-}
-
-.notificaciones .notificacion.nueva {
-    border-color: var(--colorTinta);
-    background-color: var(--colorCoralSuave);
 }
 
 .notificaciones .notificacion .boton {
@@ -2993,28 +2988,49 @@ tr.resaltada td {
 
 .chat .conversaciones {
     display: flex;
+    margin: 0;
+    padding: 0;
     overflow-x: auto;
     border-bottom: 2px solid var(--colorBorde);
     background-color: var(--colorFondo);
+    list-style: none;
 }
 
 .chat .conversaciones li {
+    flex-shrink: 0;
+}
+
+.chat .conversaciones .conversacion {
     display: flex;
     align-items: center;
     gap: .75rem;
-    flex-shrink: 0;
+    width: 100%;
     padding: .9rem 1.1rem;
+    border: 0;
     border-bottom: 3px solid transparent;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
     cursor: pointer;
 }
 
-.chat .conversaciones li.activa {
+.chat .conversaciones .conversacion:hover {
+    background-color: var(--colorSuperficie);
+}
+
+.chat .conversaciones .conversacion.activa {
     border-bottom-color: var(--colorCoral);
     background-color: var(--colorSuperficie);
 }
 
+.chat .conversaciones .conversacion .badge {
+    margin-left: auto;
+}
+
 .chat .conversaciones div {
     display: grid;
+    min-width: 0;
     line-height: 1.3;
 }
 
@@ -3046,29 +3062,71 @@ tr.resaltada td {
     line-height: 1.3;
 }
 
-.chat .enLinea {
-    font-size: .75rem;
-    font-weight: 700;
-    color: var(--colorExito);
+.chat .hilo header strong a {
+    color: inherit;
 }
 
-.chat .enLinea::before {
-    content: "";
-    display: inline-block;
-    width: .5rem;
-    height: .5rem;
-    margin-right: .35rem;
-    border-radius: 50%;
-    background-color: var(--colorExito);
+.chat .hilo header span:not(.avatar) {
+    font-size: .78rem;
+    color: var(--colorTextoSuave);
 }
 
 .chat .mensajes {
     display: flex;
     flex-direction: column;
     gap: .6rem;
+    min-height: 16rem;
     padding: 1.25rem;
     overflow-y: auto;
     max-height: 22rem;
+}
+
+/* Avisos del chat: cargando, sin conversaciones, sin mensajes, error */
+.chat .avisoChat {
+    margin: auto 0;
+    padding: 1rem 1.1rem;
+    color: var(--colorTextoSuave);
+    font-size: .9rem;
+    text-align: center;
+}
+
+.chat .conversaciones .avisoChat {
+    flex: 1 1 auto;
+}
+
+.chat .avisoChat .bi-arrow-repeat {
+    display: inline-block;
+    animation: girarCarga 1s linear infinite;
+}
+
+/* Separador de día entre los mensajes ("Hoy", "Ayer", "Lunes 12 de octubre") */
+.chat .diaChat {
+    align-self: center;
+    margin: .4rem 0 0;
+    padding: .15rem .7rem;
+    border-radius: 999px;
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.chat .burbuja {
+    overflow-wrap: anywhere;
+}
+
+/* Hora del mensaje y, en los propios, una tilde (enviado) o dos (visto) */
+.chat .burbuja .detalleMensaje {
+    display: block;
+    margin-top: .2rem;
+    color: var(--colorTextoSuave);
+    font-size: .68rem;
+    font-weight: 400;
+    text-align: right;
+}
+
+.chat .burbuja .detalleMensaje.visto .bi {
+    color: var(--colorCelesteOscuro);
 }
 
 .chat .redactar {
@@ -3091,16 +3149,19 @@ tr.resaltada td {
     .chat .conversaciones {
         display: grid;
         align-content: start;
+        max-height: 30rem;
+        overflow-x: hidden;
+        overflow-y: auto;
         border-right: 2px solid var(--colorBorde);
         border-bottom: 0;
     }
 
-    .chat .conversaciones li {
+    .chat .conversaciones .conversacion {
         border-bottom: 0;
         border-left: 3px solid transparent;
     }
 
-    .chat .conversaciones li.activa {
+    .chat .conversaciones .conversacion.activa {
         border-left-color: var(--colorCoral);
     }
 }
@@ -4040,6 +4101,44 @@ tr.resaltada td {
 .dialogoEdicion .agregarTitulo .form-control {
     flex: 1;
     min-width: 0;
+}
+
+/* Profesores: desde qué año da clase en cada colegio elegido (un campo de año por colegio) */
+.dialogoEdicion .aniosEscuelas {
+    display: grid;
+    gap: .5rem;
+    margin-top: .35rem;
+    padding: .75rem .85rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorFondo);
+}
+
+.dialogoEdicion .aniosEscuelas[hidden] {
+    display: none;
+}
+
+.dialogoEdicion .aniosEscuelas p {
+    margin: 0;
+    font-size: .85rem;
+    font-weight: 700;
+}
+
+.dialogoEdicion .aniosEscuelas #listaAniosEscuelas {
+    display: grid;
+    gap: .45rem;
+}
+
+.dialogoEdicion .anioEscuela {
+    display: grid;
+    grid-template-columns: 1fr 7.5rem;
+    align-items: center;
+    gap: .75rem;
+}
+
+.dialogoEdicion .anioEscuela label {
+    font-size: .88rem;
+    font-weight: 600;
 }
 
 

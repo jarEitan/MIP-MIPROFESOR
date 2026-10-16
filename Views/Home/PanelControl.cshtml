@@ -1,12 +1,13 @@
 @* Panel de Control. Las clases y las notificaciones vienen de la BD (HomeController.PanelControl);
-   las acciones (aceptar, rechazar, reubicar, cancelar) se envían con fetch a ClasesController (site.js). *@
+   las acciones (aceptar, rechazar, reubicar, cancelar) se envían con fetch a ClasesController (clases.js)
+   y el chat se pide y se envía con fetch a MensajesController (chat.js). *@
 @{
     ViewData["Title"] = "Panel de Control";
     MisClases misClases = ViewBag.misClases ?? new MisClases();
     List<NotificacionUsuario> notificaciones = ViewBag.notificaciones ?? new List<NotificacionUsuario>();
     bool errorBD = ViewBag.errorBD ?? false;
     List<ClasePanel> clasesActivas = misClases.clases.Where(clase => clase.grupo != "historial").ToList();
-    int cantidadNuevas = notificaciones.Count(notificacion => notificacion.esNueva);
+    int mensajesSinLeer = notificaciones.Where(notificacion => notificacion.tipo == "mensajesSinLeer").Sum(notificacion => notificacion.cantidad);
     string nombreUsuario = ((Context.Session.GetString("nombre") ?? "") + " " + (Context.Session.GetString("apellido") ?? "")).Trim();
     string rolUsuario = Context.Session.GetString("tipoUsuario") == "profesor" ? "Profesor" : "Alumno";
 }
@@ -38,13 +39,11 @@
     {
         switch (tipo)
         {
+            case "solicitudAmistad": return "bi-person-plus";
+            case "mensajesSinLeer": return "bi-chat-dots";
             case "pedidoPorResponder": return "bi-calendar-plus";
             case "propuestaPorResponder": return "bi-arrow-repeat";
-            case "pedidoAceptado": return "bi-check-circle";
-            case "pedidoRechazado": return "bi-x-circle";
-            case "pedidoVencido": return "bi-hourglass-split";
-            case "pedidoCancelado": return "bi-calendar-x";
-            default: return "bi-patch-check";
+            default: return "bi-calendar-x";
         }
     }
 }
@@ -63,7 +62,7 @@
     </div>
 </section>
 
-@* Token para los fetch POST de las acciones sobre las clases (site.js lo manda en el encabezado) *@
+@* Token para los fetch POST de las clases y del chat (clases.js y chat.js lo mandan en el encabezado) *@
 @Html.AntiForgeryToken()
 
 <!-- ================= NOTIFICACIONES ================= -->
@@ -72,10 +71,7 @@
         <div class="card estatica">
             <h2 id="tituloNotificaciones">
                 <i class="bi bi-bell" aria-hidden="true"></i> Notificaciones
-                @if (cantidadNuevas > 0)
-                {
-                    <span class="badge theme-primary" id="cantidadNotificacionesPanel">@cantidadNuevas</span>
-                }
+                <span class="badge theme-primary" id="cantidadNotificacionesPanel" hidden="@(notificaciones.Count == 0)">@notificaciones.Count</span>
             </h2>
 
             @if (errorBD)
@@ -84,34 +80,41 @@
             }
             else if (notificaciones.Count == 0)
             {
-                <p class="sinNotificaciones">No tenés notificaciones por ahora. Cuando alguien te pida una clase o responda a tu pedido, lo vas a ver acá.</p>
+                <p class="sinNotificaciones">No tenés nada pendiente. Acá vas a ver las solicitudes de amistad, los mensajes sin leer y las clases que esperan tu respuesta.</p>
             }
             else
             {
+                @* Cada notificación es algo a medio resolver: desaparece sola cuando se resuelve (al abrir el chat, responder la clase, etc.) *@
                 <ul class="listaNotificaciones">
                     @foreach (var notificacion in notificaciones)
                     {
-                        string urlDestino = notificacion.destino == "catalogo"
-                            ? Url.Action("Index", "Catalogo")!
-                            : Url.Action("PanelControl", "Home", new { tab = notificacion.destino == "panelHistorial" ? "historial" : "clases", clase = notificacion.idClase })!;
-                        <li class="notificacion @(notificacion.esNueva ? "nueva" : "")">
-                            <span class="icono @(notificacion.requiereAccion ? "" : "celeste")"><i class="bi @iconoDeNotificacion(notificacion.tipo)" aria-hidden="true"></i></span>
+                        bool esChat = notificacion.tipo == "mensajesSinLeer";
+                        string urlDestino = notificacion.destino == "perfil"
+                            ? Url.Action("Perfil", "Home", new { id = notificacion.idOtroUsuario })!
+                            : esChat
+                                ? Url.Action("PanelControl", "Home", new { tab = "chat", chat = notificacion.idOtroUsuario })!
+                                : Url.Action("PanelControl", "Home", new { tab = "clases", clase = notificacion.idClase })!;
+                        <li class="notificacion" data-tipo="@notificacion.tipo" data-id-otro="@notificacion.idOtroUsuario">
+                            <span class="icono @(esChat ? "celeste" : "")"><i class="bi @iconoDeNotificacion(notificacion.tipo)" aria-hidden="true"></i></span>
                             <div class="textoNotificacion">
                                 <h3>
                                     @notificacion.titulo
-                                    @if (notificacion.requiereAccion)
+                                    @if (esChat)
+                                    {
+                                        <span class="badge theme-primary">@(notificacion.cantidad == 1 ? "1 sin leer" : $"{notificacion.cantidad} sin leer")</span>
+                                    }
+                                    else
                                     {
                                         <span class="badge badge-subtle theme-warning">Esperando tu respuesta</span>
                                     }
-                                    else if (notificacion.esNueva)
-                                    {
-                                        <span class="badge theme-primary">Nueva</span>
-                                    }
                                 </h3>
                                 <p>@notificacion.mensaje</p>
-                                <small>@tiempoRelativo(notificacion.fechaNovedad)</small>
+                                @if (notificacion.fecha != null)
+                                {
+                                    <small>@tiempoRelativo(notificacion.fecha.Value)</small>
+                                }
                             </div>
-                            <a class="boton @(notificacion.requiereAccion ? "principal" : "contorno") chico" href="@urlDestino">@notificacion.textoBoton <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            <a class="boton principal chico" href="@urlDestino">@notificacion.textoBoton <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                         </li>
                     }
                 </ul>
@@ -160,8 +163,8 @@
                     <div class="col">
                         <a class="card" href="#panelTabs" data-abrir-tab="tabChat">
                             <span class="icono oscuro"><i class="bi bi-chat-dots" aria-hidden="true"></i></span>
-                            <h3>Chat directo <span class="badge theme-primary">1</span></h3>
-                            <p>Hablá con tus profesores.</p>
+                            <h3>Chat directo <span class="badge theme-primary" id="insigniaChat" hidden="@(mensajesSinLeer == 0)">@mensajesSinLeer</span></h3>
+                            <p>@(rolUsuario == "Alumno" ? "Hablá con tus profesores." : "Hablá con tus alumnos.")</p>
                         </a>
                     </div>
                     <div class="col">
@@ -294,34 +297,26 @@
             <!-- Chat directo -->
             <div class="tab-pane" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
                 <h2>Chat directo</h2>
-                @* TODO BD: conversaciones y mensajes reales (BD.obtenerConversaciones / BD.obtenerMensajes) *@
-                <div class="card estatica chat">
-                    <ul class="conversaciones">
-                        <li class="activa">
-                            <span class="avatar theme-primary">SM</span>
-                            <div><strong>Sofía Martínez</strong><span>¡Perfecto, nos vemos mañana!</span></div>
-                            <span class="badge theme-primary">1</span>
-                        </li>
-                        <li>
-                            <span class="avatar theme-accent">LG</span>
-                            <div><strong>Lucas Gómez</strong><span>Te confirmo el horario del jueves.</span></div>
-                        </li>
+                @* Todo con fetch (chat.js → MensajesController): la lista de conversaciones, el chat abierto (al abrirlo,
+                   los mensajes que te mandaron pasan a Visto) y el envío. Mientras la pestaña está a la vista se actualiza sola. *@
+                <div class="card estatica chat" id="chat">
+                    <ul class="conversaciones" id="conversacionesChat" aria-label="Conversaciones">
+                        <li class="avisoChat"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tus conversaciones…</li>
                     </ul>
 
-                    <div class="hilo">
+                    <div class="hilo" id="hiloChat">
                         <header>
-                            <span class="avatar theme-primary">SM</span>
-                            <div><strong>Sofía Martínez</strong><span class="enLinea">En línea</span></div>
+                            <span class="avatar theme-primary" id="avatarChat" aria-hidden="true"><i class="bi bi-chat-dots"></i></span>
+                            <div>
+                                <strong id="nombreChat">Elegí una conversación</strong>
+                                <span id="detalleChat">Tus mensajes con profesores y alumnos aparecen acá.</span>
+                            </div>
                         </header>
-                        <div class="mensajes" id="mensajesChat" aria-live="polite">
-                            <p class="burbuja">Hola Mateo, vi tu consulta de Matemática Discreta. ¿Te sirve mañana a las 16?</p>
-                            <p class="burbuja propia">¡Sí! ¿Podemos en la biblioteca del colegio?</p>
-                            <p class="burbuja">Perfecto, nos vemos mañana. Llevá los ejercicios de la guía 3.</p>
-                        </div>
-                        <form class="redactar" id="formularioChat" onsubmit="return enviarMensajeChat()">
+                        <div class="mensajes" id="mensajesChat" aria-live="polite"></div>
+                        <form class="redactar" id="formularioChat" novalidate hidden>
                             <label for="campoMensajeChat" class="visually-hidden">Escribí tu mensaje</label>
-                            <input class="form-control" type="text" id="campoMensajeChat" placeholder="Escribí un mensaje..." autocomplete="off" />
-                            <button class="boton principal chico" type="submit"><i class="bi bi-send" aria-hidden="true"></i> Enviar</button>
+                            <input class="form-control" type="text" id="campoMensajeChat" placeholder="Escribí un mensaje..." autocomplete="off" maxlength="1000" />
+                            <button class="boton principal chico" type="submit" id="botonEnviarChat"><i class="bi bi-send" aria-hidden="true"></i> Enviar</button>
                         </form>
                     </div>
                 </div>
@@ -430,4 +425,5 @@
 
 @section Scripts {
     <script src="~/js/historial.js" asp-append-version="true"></script>
+    <script src="~/js/chat.js" asp-append-version="true"></script>
 }

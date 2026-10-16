@@ -582,7 +582,7 @@ function validarContacto() {
 
 
 // ================= PANEL DE CONTROL =================
-// Los accesos rápidos (data-abrir-tab="tabChat") activan la pestaña con ese id
+// Los accesos rápidos (data-abrir-tab="tabChat") activan la pestaña con ese id. El chat está en chat.js.
 function inicializarAccesosDelPanel() {
     document.querySelectorAll("[data-abrir-tab]").forEach(acceso => {
         acceso.addEventListener("click", () => {
@@ -590,24 +590,6 @@ function inicializarAccesosDelPanel() {
             document.getElementById(idPestana.replace(/^tab/, "botonTab"))?.click();
         });
     });
-}
-
-function enviarMensajeChat() {
-    const campoMensaje = document.getElementById("campoMensajeChat");
-    const contenedorMensajes = document.getElementById("mensajesChat");
-    const texto = campoMensaje.value.trim();
-    if (texto === "") return false;
-
-    // TODO BD: guardar el mensaje con BD.enviarMensaje(...) y refrescar la conversación
-    const burbuja = document.createElement("p");
-    burbuja.className = "burbuja propia";
-    burbuja.textContent = texto;
-    contenedorMensajes.appendChild(burbuja);
-    contenedorMensajes.scrollTop = contenedorMensajes.scrollHeight;
-
-    campoMensaje.value = "";
-    campoMensaje.focus();
-    return false;
 }
 
 function guardarConfiguracion() {
@@ -635,11 +617,14 @@ const nombresDeTipoUsuario = { alumno: "Alumno", profesor: "Profesor", admin: "A
 const largoMaximoDescripcion = 1000;
 const pesoMaximoFoto = 5 * 1024 * 1024;
 const tiposDeFotoPermitidos = ["image/jpeg", "image/png", "image/webp"];
+const anioMinimoEscuela = 1950;
 
 let editorDescripcion = null;
 let opcionesPerfilCargadas = null;
 let urlVistaPreviaFoto = null;
 let edicionYaAbiertaSola = false;
+// Profesores: año desde el que da clase en cada colegio elegido, por id de colegio ({ "20": "2015" })
+let aniosDeEscuelas = {};
 
 function inicializarPerfil() {
     const seccionPerfil = document.getElementById("perfil");
@@ -925,7 +910,7 @@ function inicializarCopiarEnlacePerfil() {
     });
 }
 
-// Agregar amigo, Mensaje, Reseña, Pedir clase y Reportar todavía no hacen nada
+// Agregar amigo, Reseña y Reportar todavía no hacen nada (Pedir clase está en clases.js y Mensaje lleva al chat del Panel)
 function inicializarBotonesProximamente() {
     const haySesion = document.getElementById("perfil").dataset.haySesion === "true";
 
@@ -1044,6 +1029,7 @@ function inicializarEdicionPerfil() {
     if (!dialogoEditarPerfil) return;
 
     document.querySelectorAll("[data-abrir-edicion]").forEach(boton => boton.addEventListener("click", cargarDatosEdicion));
+    document.getElementById("edicionEscuelas").addEventListener("change", dibujarAniosDeEscuelas);
     inicializarEditorDescripcion();
     inicializarFotosEdicion();
     inicializarTitulosEdicion();
@@ -1082,7 +1068,9 @@ function completarFormularioEdicion(opciones, datos) {
         if (datos.descripcion) editorDescripcion.clipboard.dangerouslyPasteHTML(datos.descripcion);
         actualizarContadorDescripcion();
     }
+    aniosDeEscuelas = Object.fromEntries(datos.escuelas.map(escuela => [escuela.id, escuela.anioDesde ?? ""]));
     llenarSelectDeOpciones(campo("edicionEscuelas"), opciones.escuelas, datos.idsEscuelas);
+    dibujarAniosDeEscuelas();
     llenarSelectDeOpciones(campo("edicionNiveles"), opciones.niveles, datos.idsNiveles);
     llenarSelectDeOpciones(campo("edicionMaterias"), opciones.materias, datos.idsMaterias);
     llenarSelectDeOpciones(campo("edicionModalidades"), opciones.modalidades, datos.idsModalidades);
@@ -1122,6 +1110,36 @@ function llenarSelectDeOpciones(select, opciones, idsElegidos) {
         select.append(new Option(opcion.nombre, opcion.id, estaElegida, estaElegida));
     });
     crearSelectorBuscable(select);
+}
+
+// Profesores: por cada colegio elegido se pregunta desde qué año da clase ahí (solo el año). Se redibuja cada
+// vez que cambian los colegios; lo escrito queda en aniosDeEscuelas para no perderlo al agregar o quitar otro.
+function dibujarAniosDeEscuelas() {
+    const contenedorAnios = document.getElementById("aniosEscuelas");
+    if (!contenedorAnios) return;
+
+    const escuelasElegidas = Array.from(document.getElementById("edicionEscuelas").selectedOptions).filter(opcion => opcion.value !== "");
+    contenedorAnios.hidden = escuelasElegidas.length === 0;
+    document.getElementById("listaAniosEscuelas").replaceChildren(...escuelasElegidas.map(opcion => {
+        const campoAnio = document.createElement("input");
+        campoAnio.type = "number";
+        campoAnio.className = "form-control";
+        campoAnio.id = `anioEscuela${opcion.value}`;
+        campoAnio.min = anioMinimoEscuela;
+        campoAnio.max = new Date().getFullYear();
+        campoAnio.step = 1;
+        campoAnio.inputMode = "numeric";
+        campoAnio.placeholder = "Ej: 2018";
+        campoAnio.value = aniosDeEscuelas[opcion.value] ?? "";
+        campoAnio.dataset.nombreEscuela = opcion.textContent;
+        campoAnio.addEventListener("input", () => { aniosDeEscuelas[opcion.value] = campoAnio.value; });
+
+        const etiquetaAnio = crearElemento("label", "", opcion.textContent);
+        etiquetaAnio.htmlFor = campoAnio.id;
+        const filaAnio = crearElemento("div", "anioEscuela");
+        filaAnio.append(etiquetaAnio, campoAnio);
+        return filaAnio;
+    }));
 }
 
 // Arriba del modal: verde si ya está verificada; amarillo con lo que falta si no
@@ -1296,14 +1314,24 @@ function guardarPerfil() {
     if (campoPrecioHora && campoPrecioHora.value !== "" && !(Number.isInteger(Number(campoPrecioHora.value)) && Number(campoPrecioHora.value) >= 0)) {
         return errorEnCampoDeEdicion(campoPrecioHora, "Ingresá un precio por hora válido (solo números).");
     }
+    const anioActual = new Date().getFullYear();
+    for (const campoAnio of document.querySelectorAll("#listaAniosEscuelas input")) {
+        const anio = Number(campoAnio.value);
+        if (campoAnio.value === "") return errorEnCampoDeEdicion(campoAnio, `Escribí desde qué año das clase en ${campoAnio.dataset.nombreEscuela}.`);
+        if (!Number.isInteger(anio) || anio < anioMinimoEscuela || anio > anioActual) return errorEnCampoDeEdicion(campoAnio, `El año de ${campoAnio.dataset.nombreEscuela} tiene que estar entre ${anioMinimoEscuela} y ${anioActual}.`);
+    }
 
-    // HTML del editor (vacío si no se escribió nada) y listas de IDs separadas por coma
+    // HTML del editor (vacío si no se escribió nada) y listas de IDs separadas por coma.
+    // Los colegios del profesor van con su año: "20:2015,21:2019"
     // getSemanticHTML() de Quill convierte cada espacio en &nbsp; (y el texto no se corta en renglones)
     campo("edicionDescripcion").value = textoDeLaDescripcion() === "" ? "" : editorDescripcion.getSemanticHTML().replace(/&nbsp;/g, " ");
     const datosFormulario = new FormData(formularioEditarPerfil);
     formularioEditarPerfil.querySelectorAll("select[data-nombre-ids]").forEach(select => {
         const idsElegidos = Array.from(select.selectedOptions).map(opcion => opcion.value).filter(valor => valor !== "");
-        datosFormulario.append(select.dataset.nombreIds, idsElegidos.join(","));
+        const valores = select.id === "edicionEscuelas" && document.getElementById("aniosEscuelas")
+            ? idsElegidos.map(id => `${id}:${aniosDeEscuelas[id] ?? ""}`)
+            : idsElegidos;
+        datosFormulario.append(select.dataset.nombreIds, valores.join(","));
     });
 
     mostrarMensaje(mensajeEditarPerfil, "");

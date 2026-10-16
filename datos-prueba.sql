@@ -1,6 +1,6 @@
 ﻿-- =====================================================================================
 -- DATOS DE PRUEBA para MIP (generado). Para depurar: 36 usuarios nuevos (24 alumnos, 12 profesores,
--- mail @seed.mip, contraseña Prueba123), y alrededor de 325 clases, 145 reseñas, 264 Me gusta, chats y mensajes,
+-- mail @seed.mip, contraseña Prueba123), y alrededor de 325 clases, 145 reseñas, 264 Me gusta, mensajes de chat,
 -- amigos y consultas de soporte. También suma historial a los usuarios que ya existían
 -- (en especial Eitan, id 57, que supera las 20 clases completadas para probar el tope de 20).
 -- Para deshacerlo todo: borrar-datos-prueba.sql
@@ -19,10 +19,9 @@ DECLARE @hash NVARCHAR(255) = (SELECT contrasena FROM Usuarios WHERE mail = N'ma
 IF @hash IS NULL THROW 50001, N'No encuentro a mateo.gomez@prueba.mip (se usa su contraseña para todos los usuarios de prueba).', 1;
 
 DECLARE @A1 INT, @A2 INT, @A3 INT, @A4 INT, @A5 INT, @A6 INT, @A7 INT, @A8 INT, @A9 INT, @A10 INT, @A11 INT, @A12 INT, @A13 INT, @A14 INT, @A15 INT, @A16 INT, @A17 INT, @A18 INT, @A19 INT, @A20 INT, @A21 INT, @A22 INT, @A23 INT, @A24 INT, @P1 INT, @P2 INT, @P3 INT, @P4 INT, @P5 INT, @P6 INT, @P7 INT, @P8 INT, @P9 INT, @P10 INT, @P11 INT, @P12 INT;
-DECLARE @chat INT;
 DECLARE @minClase INT = (SELECT ISNULL(MAX(ID),0)+1 FROM Clases);
 DECLARE @minResena INT = (SELECT ISNULL(MAX(ID),0)+1 FROM Resenas);
-DECLARE @minChat INT = (SELECT ISNULL(MAX(ID),0)+1 FROM Chats);
+DECLARE @minMensaje INT = (SELECT ISNULL(MAX(ID),0)+1 FROM Mensajes);
 
 BEGIN TRANSACTION;
 
@@ -234,7 +233,7 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P1,20);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P1,21);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P1,9);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P1,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P1,79);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P1,79,'2008-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P1,N'Profesor de Matemática y Física (UBA)');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P1,N'Ingeniero Industrial (UTN)');
 
@@ -250,7 +249,7 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P2,16);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P2,17);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P2,18);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P2,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P2,38);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P2,38,'2010-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P2,N'Profesora de Letras (UBA)');
 
 -- Hernán Pilotto (profesor)
@@ -266,7 +265,7 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P3,19);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P3,20);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P3,21);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P3,9);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P3,59);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P3,59,'2016-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P3,N'Profesor de Historia (ISP Joaquín V. González)');
 
 -- Natalia Ferro (profesor)
@@ -284,8 +283,8 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P4,19);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P4,22);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P4,9);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P4,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P4,52);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P4,53);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P4,52,'2016-01-01');
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P4,53,'2019-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P4,N'Traductora Pública de Inglés');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P4,N'Profesora de Inglés (Lenguas Vivas)');
 
@@ -304,7 +303,7 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P5,22);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P5,23);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P5,9);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P5,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P5,68);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P5,68,'2023-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P5,N'Licenciado en Ciencias Biológicas (UBA)');
 
 -- Mariana Spinelli (profesor)
@@ -320,8 +319,8 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P6,21);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P6,22);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P6,23);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P6,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P6,41);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P6,33);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P6,41,'2010-01-01');
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P6,33,'2006-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P6,N'Analista Universitaria de Sistemas');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P6,N'Técnica en Robótica');
 
@@ -339,8 +338,8 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P7,22);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P7,23);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P7,9);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P7,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P7,33);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P7,51);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P7,33,'2006-01-01');
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P7,51,'2000-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P7,N'Contador Público (UBA)');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P7,N'Licenciado en Economía');
 
@@ -356,8 +355,8 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P8,20);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P8,21);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P8,23);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P8,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P8,67);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P8,21);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P8,67,'2021-01-01');
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P8,21,'2013-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P8,N'Licenciada en Psicología (UBA)');
 
 -- Marcelo Ruiz (profesor)
@@ -372,7 +371,7 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P9,20);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P9,21);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P9,22);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P9,9);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P9,62);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P9,62,'2017-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P9,N'Profesor de Filosofía (UBA)');
 
 -- Daniela Vidal (profesor)
@@ -389,7 +388,7 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P10,18);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P10,19);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P10,9);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P10,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P10,79);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P10,79,'2020-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P10,N'Profesora de Idiomas (Lenguas Vivas)');
 
 -- Ezequiel Montes (profesor)
@@ -403,7 +402,7 @@ INSERT INTO Usuarios_Materias (idUsuario,idMateria) SELECT @P11,ID FROM Materias
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P11,23);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P11,9);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P11,10);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P11,70);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P11,70,'2011-01-01');
 
 -- Rocío Paredes (profesor)
 INSERT INTO Usuarios (nombre,apellido,mail,contrasena,dni,direccion,fotoDni,tipoUsuario,fechaNacimiento,fechaInscripcion,verificado)
@@ -418,8 +417,8 @@ INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P12,17);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P12,18);
 INSERT INTO Usuarios_Niveles (idUsuario,idNivel) VALUES (@P12,22);
 INSERT INTO Profesores_Modalidades (idUsuario,idModalidad) VALUES (@P12,9);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P12,27);
-INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela) VALUES (@P12,74);
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P12,27,'2024-01-01');
+INSERT INTO Escuelas_Usuarios (idUsuario,idEscuela,desde) VALUES (@P12,74,'2025-01-01');
 INSERT INTO Titulos (idUsuario,titulo) VALUES (@P12,N'Profesora de Música (Conservatorio Manuel de Falla)');
 
 -- Verificado = no falta ningún dato (los pocos incompletos quedan sin verificar a propósito)
@@ -1184,255 +1183,229 @@ VALUES
   (@A11,@P11),
   (@A1,33);
 
--- ---------------------------------------------------------------- chats y mensajes
+-- ---------------------------------------------------------------- mensajes de chat
+-- Cada conversación en orden (del más viejo al más nuevo). Los últimos mensajes seguidos de la misma persona
+-- quedan 'No visto' en dos de cada tres chats (sirven para probar las notificaciones y el chat); el resto, 'Visto'.
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (57,5); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,57,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-6888,GETDATE())),
-  (@chat,5,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-15866,GETDATE())),
-  (@chat,57,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-19194,GETDATE())),
-  (@chat,5,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-19477,GETDATE())),
-  (@chat,57,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-8821,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (57,5,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-19477,GETDATE())),
+  (5,57,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-19194,GETDATE())),
+  (57,5,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-15866,GETDATE())),
+  (5,57,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-8821,GETDATE())),
+  (57,5,N'Genial, gracias. Nos vemos.',N'No visto',DATEADD(MINUTE,-6888,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (57,8); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,57,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-12555,GETDATE())),
-  (@chat,8,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-21288,GETDATE())),
-  (@chat,57,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-7731,GETDATE())),
-  (@chat,8,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-27531,GETDATE())),
-  (@chat,57,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-25345,GETDATE())),
-  (@chat,8,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-425,GETDATE())),
-  (@chat,57,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-1372,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (57,8,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-27531,GETDATE())),
+  (8,57,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-25345,GETDATE())),
+  (57,8,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-21288,GETDATE())),
+  (8,57,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-12555,GETDATE())),
+  (57,8,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-7731,GETDATE())),
+  (8,57,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-1372,GETDATE())),
+  (57,8,N'Dale, lo reviso hoy.',N'No visto',DATEADD(MINUTE,-425,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (57,9); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,57,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-24798,GETDATE())),
-  (@chat,9,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-1019,GETDATE())),
-  (@chat,57,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-27574,GETDATE())),
-  (@chat,9,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-20980,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (57,9,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-27574,GETDATE())),
+  (9,57,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-24798,GETDATE())),
+  (57,9,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-20980,GETDATE())),
+  (9,57,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-1019,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (57,12); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,57,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-18211,GETDATE())),
-  (@chat,12,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-6732,GETDATE())),
-  (@chat,57,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-11943,GETDATE())),
-  (@chat,12,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-19363,GETDATE())),
-  (@chat,57,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-27127,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (57,12,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-27127,GETDATE())),
+  (12,57,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-19363,GETDATE())),
+  (57,12,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-18211,GETDATE())),
+  (12,57,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-11943,GETDATE())),
+  (57,12,N'Genial, gracias. Nos vemos.',N'No visto',DATEADD(MINUTE,-6732,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (57,24); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,57,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-3711,GETDATE())),
-  (@chat,24,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-9007,GETDATE())),
-  (@chat,57,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-14476,GETDATE())),
-  (@chat,24,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-22038,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (57,24,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-22038,GETDATE())),
+  (24,57,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-14476,GETDATE())),
+  (57,24,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-9007,GETDATE())),
+  (24,57,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'No visto',DATEADD(MINUTE,-3711,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (57,@P2); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,57,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-27807,GETDATE())),
-  (@chat,@P2,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-17144,GETDATE())),
-  (@chat,57,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-23190,GETDATE())),
-  (@chat,@P2,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-18322,GETDATE())),
-  (@chat,57,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-16181,GETDATE())),
-  (@chat,@P2,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-14169,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (57,@P2,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-27807,GETDATE())),
+  (@P2,57,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-23190,GETDATE())),
+  (57,@P2,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-18322,GETDATE())),
+  (@P2,57,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-17144,GETDATE())),
+  (57,@P2,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-16181,GETDATE())),
+  (@P2,57,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-14169,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (57,58); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,57,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-3623,GETDATE())),
-  (@chat,58,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-3577,GETDATE())),
-  (@chat,57,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-10075,GETDATE())),
-  (@chat,58,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-410,GETDATE())),
-  (@chat,57,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-12799,GETDATE())),
-  (@chat,58,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-3957,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (57,58,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-12799,GETDATE())),
+  (58,57,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-10075,GETDATE())),
+  (57,58,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-3957,GETDATE())),
+  (58,57,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-3623,GETDATE())),
+  (57,58,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-3577,GETDATE())),
+  (58,57,N'Acordate de repasar el tema 3 antes de la clase.',N'No visto',DATEADD(MINUTE,-410,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (53,6); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,53,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-23192,GETDATE())),
-  (@chat,6,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-13881,GETDATE())),
-  (@chat,53,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-3347,GETDATE())),
-  (@chat,6,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-26911,GETDATE())),
-  (@chat,53,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-13589,GETDATE())),
-  (@chat,6,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-4832,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (53,6,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-26911,GETDATE())),
+  (6,53,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-23192,GETDATE())),
+  (53,6,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-13881,GETDATE())),
+  (6,53,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-13589,GETDATE())),
+  (53,6,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-4832,GETDATE())),
+  (6,53,N'Acordate de repasar el tema 3 antes de la clase.',N'No visto',DATEADD(MINUTE,-3347,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (56,8); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,56,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-21839,GETDATE())),
-  (@chat,8,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-21175,GETDATE())),
-  (@chat,56,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-16953,GETDATE())),
-  (@chat,8,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-11198,GETDATE())),
-  (@chat,56,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-3355,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (56,8,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-21839,GETDATE())),
+  (8,56,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-21175,GETDATE())),
+  (56,8,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-16953,GETDATE())),
+  (8,56,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-11198,GETDATE())),
+  (56,8,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-3355,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (56,13); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,56,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-21149,GETDATE())),
-  (@chat,13,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-10284,GETDATE())),
-  (@chat,56,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-16469,GETDATE())),
-  (@chat,13,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-18844,GETDATE())),
-  (@chat,56,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-2356,GETDATE())),
-  (@chat,13,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-28678,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (56,13,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-28678,GETDATE())),
+  (13,56,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-21149,GETDATE())),
+  (56,13,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-18844,GETDATE())),
+  (13,56,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-16469,GETDATE())),
+  (56,13,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-10284,GETDATE())),
+  (13,56,N'Acordate de repasar el tema 3 antes de la clase.',N'No visto',DATEADD(MINUTE,-2356,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (54,16); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,54,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-17999,GETDATE())),
-  (@chat,16,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-15130,GETDATE())),
-  (@chat,54,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-15885,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (54,16,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-17999,GETDATE())),
+  (16,54,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-15885,GETDATE())),
+  (54,16,N'El jueves a la tarde si puede ser.',N'No visto',DATEADD(MINUTE,-15130,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (52,19); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,52,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-24224,GETDATE())),
-  (@chat,19,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-11451,GETDATE())),
-  (@chat,52,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-18333,GETDATE())),
-  (@chat,19,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-405,GETDATE())),
-  (@chat,52,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-24224,GETDATE())),
-  (@chat,19,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-20556,GETDATE())),
-  (@chat,52,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-9298,GETDATE())),
-  (@chat,19,N'Cualquier duda me escribís.',DATEADD(MINUTE,-28330,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (52,19,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-28330,GETDATE())),
+  (19,52,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-24224,GETDATE())),
+  (52,19,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-24224,GETDATE())),
+  (19,52,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-20556,GETDATE())),
+  (52,19,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-18333,GETDATE())),
+  (19,52,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-11451,GETDATE())),
+  (52,19,N'Dale, lo reviso hoy.',N'Visto',DATEADD(MINUTE,-9298,GETDATE())),
+  (19,52,N'Cualquier duda me escribís.',N'Visto',DATEADD(MINUTE,-405,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (56,24); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,56,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-13262,GETDATE())),
-  (@chat,24,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-4662,GETDATE())),
-  (@chat,56,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-480,GETDATE())),
-  (@chat,24,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-10072,GETDATE())),
-  (@chat,56,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-809,GETDATE())),
-  (@chat,24,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-12467,GETDATE())),
-  (@chat,56,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-24438,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (56,24,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-24438,GETDATE())),
+  (24,56,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-13262,GETDATE())),
+  (56,24,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-12467,GETDATE())),
+  (24,56,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-10072,GETDATE())),
+  (56,24,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-4662,GETDATE())),
+  (24,56,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-809,GETDATE())),
+  (56,24,N'Dale, lo reviso hoy.',N'No visto',DATEADD(MINUTE,-480,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (54,28); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,54,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-3292,GETDATE())),
-  (@chat,28,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-16160,GETDATE())),
-  (@chat,54,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-22980,GETDATE())),
-  (@chat,28,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-15538,GETDATE())),
-  (@chat,54,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-27135,GETDATE())),
-  (@chat,28,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-1619,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (54,28,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-27135,GETDATE())),
+  (28,54,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-22980,GETDATE())),
+  (54,28,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-16160,GETDATE())),
+  (28,54,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-15538,GETDATE())),
+  (54,28,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-3292,GETDATE())),
+  (28,54,N'Acordate de repasar el tema 3 antes de la clase.',N'No visto',DATEADD(MINUTE,-1619,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (52,33); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,52,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-18255,GETDATE())),
-  (@chat,33,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-12491,GETDATE())),
-  (@chat,52,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-9494,GETDATE())),
-  (@chat,33,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-25691,GETDATE())),
-  (@chat,52,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-1239,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (52,33,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-25691,GETDATE())),
+  (33,52,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-18255,GETDATE())),
+  (52,33,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-12491,GETDATE())),
+  (33,52,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-9494,GETDATE())),
+  (52,33,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-1239,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (54,34); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,54,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-20126,GETDATE())),
-  (@chat,34,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-21526,GETDATE())),
-  (@chat,54,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-1812,GETDATE())),
-  (@chat,34,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-17671,GETDATE())),
-  (@chat,54,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-13141,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (54,34,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-21526,GETDATE())),
+  (34,54,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-20126,GETDATE())),
+  (54,34,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-17671,GETDATE())),
+  (34,54,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-13141,GETDATE())),
+  (54,34,N'Genial, gracias. Nos vemos.',N'No visto',DATEADD(MINUTE,-1812,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (56,35); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,56,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-5798,GETDATE())),
-  (@chat,35,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-20047,GETDATE())),
-  (@chat,56,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-24261,GETDATE())),
-  (@chat,35,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-9669,GETDATE())),
-  (@chat,56,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-26277,GETDATE())),
-  (@chat,35,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-8875,GETDATE())),
-  (@chat,56,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-26319,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (56,35,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-26319,GETDATE())),
+  (35,56,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-26277,GETDATE())),
+  (56,35,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-24261,GETDATE())),
+  (35,56,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-20047,GETDATE())),
+  (56,35,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-9669,GETDATE())),
+  (35,56,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-8875,GETDATE())),
+  (56,35,N'Dale, lo reviso hoy.',N'No visto',DATEADD(MINUTE,-5798,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (54,39); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,54,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-11024,GETDATE())),
-  (@chat,39,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-26248,GETDATE())),
-  (@chat,54,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-8589,GETDATE())),
-  (@chat,39,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-1811,GETDATE())),
-  (@chat,54,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-26905,GETDATE())),
-  (@chat,39,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-18940,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (54,39,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-26905,GETDATE())),
+  (39,54,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-26248,GETDATE())),
+  (54,39,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-18940,GETDATE())),
+  (39,54,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-11024,GETDATE())),
+  (54,39,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-8589,GETDATE())),
+  (39,54,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-1811,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (51,43); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,51,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-23708,GETDATE())),
-  (@chat,43,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-4227,GETDATE())),
-  (@chat,51,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-5915,GETDATE())),
-  (@chat,43,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-20303,GETDATE())),
-  (@chat,51,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-12577,GETDATE())),
-  (@chat,43,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-10409,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (51,43,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-23708,GETDATE())),
+  (43,51,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-20303,GETDATE())),
+  (51,43,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-12577,GETDATE())),
+  (43,51,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-10409,GETDATE())),
+  (51,43,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-5915,GETDATE())),
+  (43,51,N'Acordate de repasar el tema 3 antes de la clase.',N'No visto',DATEADD(MINUTE,-4227,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (55,44); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,55,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-21566,GETDATE())),
-  (@chat,44,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-3414,GETDATE())),
-  (@chat,55,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-17075,GETDATE())),
-  (@chat,44,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-21526,GETDATE())),
-  (@chat,55,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-4892,GETDATE())),
-  (@chat,44,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-21103,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (55,44,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-21566,GETDATE())),
+  (44,55,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-21526,GETDATE())),
+  (55,44,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-21103,GETDATE())),
+  (44,55,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-17075,GETDATE())),
+  (55,44,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-4892,GETDATE())),
+  (44,55,N'Acordate de repasar el tema 3 antes de la clase.',N'No visto',DATEADD(MINUTE,-3414,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (53,45); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,53,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-14360,GETDATE())),
-  (@chat,45,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-19054,GETDATE())),
-  (@chat,53,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-13009,GETDATE())),
-  (@chat,45,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-19991,GETDATE())),
-  (@chat,53,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-18809,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (53,45,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-19991,GETDATE())),
+  (45,53,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-19054,GETDATE())),
+  (53,45,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-18809,GETDATE())),
+  (45,53,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-14360,GETDATE())),
+  (53,45,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-13009,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (52,46); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,52,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-20463,GETDATE())),
-  (@chat,46,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-15089,GETDATE())),
-  (@chat,52,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-24208,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (52,46,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-24208,GETDATE())),
+  (46,52,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-20463,GETDATE())),
+  (52,46,N'El jueves a la tarde si puede ser.',N'No visto',DATEADD(MINUTE,-15089,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (51,5); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,51,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-28051,GETDATE())),
-  (@chat,5,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-17731,GETDATE())),
-  (@chat,51,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-22155,GETDATE())),
-  (@chat,5,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-11698,GETDATE())),
-  (@chat,51,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-5394,GETDATE())),
-  (@chat,5,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-27858,GETDATE())),
-  (@chat,51,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-8100,GETDATE())),
-  (@chat,5,N'Cualquier duda me escribís.',DATEADD(MINUTE,-19816,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (51,5,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-28051,GETDATE())),
+  (5,51,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-27858,GETDATE())),
+  (51,5,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-22155,GETDATE())),
+  (5,51,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-19816,GETDATE())),
+  (51,5,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-17731,GETDATE())),
+  (5,51,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-11698,GETDATE())),
+  (51,5,N'Dale, lo reviso hoy.',N'Visto',DATEADD(MINUTE,-8100,GETDATE())),
+  (5,51,N'Cualquier duda me escribís.',N'No visto',DATEADD(MINUTE,-5394,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (@A2,45); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,@A2,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-16001,GETDATE())),
-  (@chat,45,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-7171,GETDATE())),
-  (@chat,@A2,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-22691,GETDATE())),
-  (@chat,45,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-25749,GETDATE())),
-  (@chat,@A2,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-24924,GETDATE())),
-  (@chat,45,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-4180,GETDATE())),
-  (@chat,@A2,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-122,GETDATE())),
-  (@chat,45,N'Cualquier duda me escribís.',DATEADD(MINUTE,-17974,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (@A2,45,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-25749,GETDATE())),
+  (45,@A2,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-24924,GETDATE())),
+  (@A2,45,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-22691,GETDATE())),
+  (45,@A2,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-17974,GETDATE())),
+  (@A2,45,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-16001,GETDATE())),
+  (45,@A2,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-7171,GETDATE())),
+  (@A2,45,N'Dale, lo reviso hoy.',N'Visto',DATEADD(MINUTE,-4180,GETDATE())),
+  (45,@A2,N'Cualquier duda me escribís.',N'Visto',DATEADD(MINUTE,-122,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (@A3,8); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,@A3,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-3626,GETDATE())),
-  (@chat,8,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-2353,GETDATE())),
-  (@chat,@A3,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-15022,GETDATE())),
-  (@chat,8,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-28619,GETDATE())),
-  (@chat,@A3,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-24875,GETDATE())),
-  (@chat,8,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-19636,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (@A3,8,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-28619,GETDATE())),
+  (8,@A3,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-24875,GETDATE())),
+  (@A3,8,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-19636,GETDATE())),
+  (8,@A3,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-15022,GETDATE())),
+  (@A3,8,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-3626,GETDATE())),
+  (8,@A3,N'Acordate de repasar el tema 3 antes de la clase.',N'No visto',DATEADD(MINUTE,-2353,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (@A4,@P1); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,@A4,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-6848,GETDATE())),
-  (@chat,@P1,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-27329,GETDATE())),
-  (@chat,@A4,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-23275,GETDATE())),
-  (@chat,@P1,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-3437,GETDATE())),
-  (@chat,@A4,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-17341,GETDATE())),
-  (@chat,@P1,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-22272,GETDATE())),
-  (@chat,@A4,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-3067,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (@A4,@P1,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-27329,GETDATE())),
+  (@P1,@A4,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-23275,GETDATE())),
+  (@A4,@P1,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-22272,GETDATE())),
+  (@P1,@A4,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-17341,GETDATE())),
+  (@A4,@P1,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-6848,GETDATE())),
+  (@P1,@A4,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-3437,GETDATE())),
+  (@A4,@P1,N'Dale, lo reviso hoy.',N'No visto',DATEADD(MINUTE,-3067,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (@A4,12); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,@A4,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-7813,GETDATE())),
-  (@chat,12,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-17641,GETDATE())),
-  (@chat,@A4,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-27203,GETDATE())),
-  (@chat,12,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-12595,GETDATE())),
-  (@chat,@A4,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-10687,GETDATE())),
-  (@chat,12,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-21421,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (@A4,12,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-27203,GETDATE())),
+  (12,@A4,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-21421,GETDATE())),
+  (@A4,12,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-17641,GETDATE())),
+  (12,@A4,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-12595,GETDATE())),
+  (@A4,12,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-10687,GETDATE())),
+  (12,@A4,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-7813,GETDATE()));
 
-INSERT INTO Chats (idUsuario1,idUsuario2) VALUES (@A6,@P1); SET @chat = SCOPE_IDENTITY();
-INSERT INTO Mensajes (idChat,idEmisor,contenido,fechaEnvio) VALUES
-  (@chat,@A6,N'Hola, ¿tenés lugar para una clase esta semana?',DATEADD(MINUTE,-4501,GETDATE())),
-  (@chat,@P1,N'Hola, sí. ¿Qué día te viene bien?',DATEADD(MINUTE,-9202,GETDATE())),
-  (@chat,@A6,N'El jueves a la tarde si puede ser.',DATEADD(MINUTE,-15612,GETDATE())),
-  (@chat,@P1,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',DATEADD(MINUTE,-18284,GETDATE())),
-  (@chat,@A6,N'Genial, gracias. Nos vemos.',DATEADD(MINUTE,-22860,GETDATE())),
-  (@chat,@P1,N'Acordate de repasar el tema 3 antes de la clase.',DATEADD(MINUTE,-4214,GETDATE())),
-  (@chat,@A6,N'Dale, lo reviso hoy.',DATEADD(MINUTE,-26820,GETDATE())),
-  (@chat,@P1,N'Cualquier duda me escribís.',DATEADD(MINUTE,-28582,GETDATE()));
+INSERT INTO Mensajes (idEmisor,idReceptor,contenido,estado,fechaEnvio) VALUES
+  (@A6,@P1,N'Hola, ¿tenés lugar para una clase esta semana?',N'Visto',DATEADD(MINUTE,-28582,GETDATE())),
+  (@P1,@A6,N'Hola, sí. ¿Qué día te viene bien?',N'Visto',DATEADD(MINUTE,-26820,GETDATE())),
+  (@A6,@P1,N'El jueves a la tarde si puede ser.',N'Visto',DATEADD(MINUTE,-22860,GETDATE())),
+  (@P1,@A6,N'Perfecto, te mando el pedido. Traé los ejercicios que te cuesten.',N'Visto',DATEADD(MINUTE,-18284,GETDATE())),
+  (@A6,@P1,N'Genial, gracias. Nos vemos.',N'Visto',DATEADD(MINUTE,-15612,GETDATE())),
+  (@P1,@A6,N'Acordate de repasar el tema 3 antes de la clase.',N'Visto',DATEADD(MINUTE,-9202,GETDATE())),
+  (@A6,@P1,N'Dale, lo reviso hoy.',N'Visto',DATEADD(MINUTE,-4501,GETDATE())),
+  (@P1,@A6,N'Cualquier duda me escribís.',N'No visto',DATEADD(MINUTE,-4214,GETDATE()));
 
 -- ---------------------------------------------------------------- amigos
 
@@ -1468,22 +1441,17 @@ VALUES
   (@P2,N'Silvia Cano',N'silvia.cano@seed.mip',N'cuenta',N'Quiero cambiar el mail de mi cuenta.',N'Pendiente',DATEADD(DAY,-15,GETDATE())),
   (57,N'Eitan Glaz',N'eitugz@gmail.com',N'sugerencia',N'Me gustaría ver las reseñas que dejé desde mi perfil.',N'Pendiente',DATEADD(DAY,-24,GETDATE()));
 
--- ---------------------------------------------------------------- notificaciones
--- Eitan: hace 5 días que no abre la lista, así las novedades de esta semana aparecen como nuevas
--- (original: 2026-10-15 08:57:10.657, lo restaura borrar-datos-prueba.sql)
-UPDATE Notificaciones SET fecha = DATEADD(DAY,-5,GETDATE()), visto = 1 WHERE idUsuario = 57;
-INSERT INTO Notificaciones (idUsuario,visto,fecha)
-SELECT ID, 1, DATEADD(DAY,-3,GETDATE()) FROM Usuarios WHERE mail LIKE N'%@seed.mip' AND ID % 2 = 0;
 
 COMMIT TRANSACTION;
 
 -- ---------------------------------------------------------------- resumen
-DECLARE @maxClase INT = (SELECT MAX(ID) FROM Clases), @maxResena INT = (SELECT MAX(ID) FROM Resenas), @maxChat INT = (SELECT MAX(ID) FROM Chats);
+DECLARE @maxClase INT = (SELECT MAX(ID) FROM Clases), @maxResena INT = (SELECT MAX(ID) FROM Resenas), @maxMensaje INT = (SELECT MAX(ID) FROM Mensajes);
 PRINT CONCAT(N'Clases agregadas: ID ', @minClase, N' a ', @maxClase);
 PRINT CONCAT(N'Reseñas agregadas: ID ', @minResena, N' a ', @maxResena);
-PRINT CONCAT(N'Chats agregados: ID ', @minChat, N' a ', @maxChat);
+PRINT CONCAT(N'Mensajes agregados: ID ', @minMensaje, N' a ', @maxMensaje);
 SELECT estado, COUNT(*) AS clases FROM Clases GROUP BY estado ORDER BY clases DESC;
 SELECT (SELECT COUNT(*) FROM Usuarios WHERE mail LIKE N'%@seed.mip') AS usuariosSeed,
        (SELECT COUNT(*) FROM Resenas) AS resenas, (SELECT COUNT(*) FROM Likes) AS likes,
-       (SELECT COUNT(*) FROM Chats) AS chats, (SELECT COUNT(*) FROM Mensajes) AS mensajes;
+       (SELECT COUNT(*) FROM Mensajes) AS mensajes,
+       (SELECT COUNT(*) FROM Mensajes WHERE estado = N'No visto') AS mensajesSinLeer;
 GO
