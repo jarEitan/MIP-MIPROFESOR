@@ -26,7 +26,7 @@ public class HomeController : Controller
         // Los 3 primeros del catálogo: cuentas verificadas y mejor calificadas. Si la base no responde, la página igual carga.
         try
         {
-            ViewBag.profesoresDestacados = new BD().obtenerCatalogo(null, null, null, null, null, 1, 5).profesores.Take(3).ToList();
+            ViewBag.profesoresDestacados = new BD().obtenerCatalogo(null, null, null, null, null, 1, 5, null).profesores.Take(3).ToList();
         }
         catch (Exception)
         {
@@ -87,25 +87,6 @@ public class HomeController : Controller
             ViewBag.errorBD = true;
         }
         return View();
-    }
-
-    public IActionResult MiColegio()
-    {
-        string? idUsuario = HttpContext.Session.GetString("idUsuario");
-        if (idUsuario == null) return RedirectToAction("IniciarSesion", "Sesion");
-
-        // Si el usuario todavía no cargó su colegio, se muestra el catálogo completo
-        try
-        {
-            BD bd = new BD();
-            DatosEdicion? datos = bd.obtenerDatosEdicion(int.Parse(idUsuario));
-            OpcionPerfil? colegio = datos == null ? null : bd.obtenerOpcionesPerfil().escuelas.FirstOrDefault(escuela => datos.idsEscuelas.Contains(escuela.id));
-            if (colegio != null) return RedirectToAction("Index", "Catalogo", new { colegio = colegio.nombre });
-        }
-        catch (Exception)
-        {
-        }
-        return RedirectToAction("Index", "Catalogo");
     }
 
     public IActionResult Privacy()

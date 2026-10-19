@@ -4,8 +4,6 @@
 // Qué clases se ven y cuántas (máximo 20) lo decide el SP obtenerHistorialClases, no esta página.
 // Todo lo que viene de la base se inserta con textContent, nunca como HTML.
 
-const textoBotonDarResena = "«Dar reseña» va a estar disponible muy pronto.";
-
 // ----- Datos -----
 function pedirHistorial(idUsuario) {
     return pedirJson(`/Historial/Obtener/${idUsuario}`);
@@ -118,6 +116,7 @@ function crearCeldaPuntuacionHistorial(clase, nombreOtro) {
         botonResena.type = "button";
         botonResena.dataset.darResena = "";
         botonResena.dataset.idUsuario = clase.idOtroUsuario;
+        botonResena.dataset.nombreUsuario = nombreOtro;
         botonResena.setAttribute("aria-label", `Dar reseña a ${nombreOtro}`);
         botonResena.append(crearIconoHistorial("bi-star"), " Dar reseña");
         celda.append(botonResena);
@@ -184,15 +183,17 @@ function mostrarEstadoHistorialPerfil(texto, cargando) {
 }
 
 function abrirHistorialDelPerfil() {
-    const contenedor = document.getElementById("contenidoHistorialPerfil");
-    const avisoHistorial = document.getElementById("avisoHistorial");
-    const idPerfil = document.getElementById("perfil").dataset.idPerfil;
-
     document.getElementById("nombreHistorial").textContent = document.getElementById("nombrePerfil").textContent;
-    avisoHistorial.hidden = true;
+    document.getElementById("avisoHistorial").hidden = true;
+    cargarHistorialDelPerfil();
+    abrirDialogo("dialogoHistorial");
+}
+
+function cargarHistorialDelPerfil() {
+    const contenedor = document.getElementById("contenidoHistorialPerfil");
+    const idPerfil = document.getElementById("perfil").dataset.idPerfil;
     contenedor.replaceChildren();
     mostrarEstadoHistorialPerfil("Cargando historial…", true);
-    abrirDialogo("dialogoHistorial");
 
     // Si se cierra y se vuelve a abrir antes de que llegue la respuesta, solo vale la última consulta
     const consulta = ++consultaHistorialPerfilVigente;
@@ -208,27 +209,24 @@ function abrirHistorialDelPerfil() {
         });
 }
 
-// "Dar reseña" todavía no hace nada. Dentro del modal el snackbar quedaría detrás (el diálogo está en la capa de arriba),
+// Al publicar una reseña (site.js: enviarResena) se vuelve a pedir el historial que se esté viendo: "Dar reseña"
+// pasa a ser las estrellas. Dentro del modal el snackbar quedaría detrás (el diálogo está en la capa de arriba),
 // así que ahí el aviso va dentro del mismo modal.
-function avisarDarResenaPendiente(botonResena) {
+function actualizarHistorialTrasResena(evento) {
+    if (document.getElementById("contenidoHistorialPanel")) cargarHistorialPropio();
+
+    const dialogoHistorial = document.getElementById("dialogoHistorial");
+    if (!dialogoHistorial?.open) return;
+    cargarHistorialDelPerfil();
     const avisoHistorial = document.getElementById("avisoHistorial");
-    if (botonResena.closest("dialog") && avisoHistorial) {
-        avisoHistorial.textContent = textoBotonDarResena;
-        avisoHistorial.hidden = false;
-        return;
-    }
-    mostrarSnackbar(textoBotonDarResena);
+    avisoHistorial.textContent = evento.detail.mensaje;
+    avisoHistorial.hidden = false;
 }
 
 
 // ================= INICIALIZACIÓN =================
 function inicializarHistorial() {
-    // Los botones se crean con fetch: se escuchan en el documento
-    document.addEventListener("click", evento => {
-        const botonResena = evento.target.closest("[data-dar-resena]");
-        if (botonResena) avisarDarResenaPendiente(botonResena);
-    });
-
+    document.addEventListener("resenaPublicada", actualizarHistorialTrasResena);
     document.getElementById("botonHistorial")?.addEventListener("click", abrirHistorialDelPerfil);
     if (document.getElementById("contenidoHistorialPanel")) esperarHistorialPropio();
 }

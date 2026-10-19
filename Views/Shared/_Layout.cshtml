@@ -66,6 +66,11 @@
     {
         <partial name="_dialogoPedirClase" />
     }
+    @* Dar reseña: alumnos y profesores con sesión (la estrella del Perfil y "Dar reseña" del Historial) *@
+    @if (tipoUsuarioSesion == "alumno" || tipoUsuarioSesion == "profesor")
+    {
+        <partial name="_dialogoDarResena" />
+    }
 
     @* Snackbar del UI Kit: avisos cortos abajo de la pantalla (mostrarSnackbar en site.js) *@
     <div class="snackbar" id="snackbar" role="status" aria-live="polite" hidden></div>

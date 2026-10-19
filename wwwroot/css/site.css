@@ -3751,6 +3751,34 @@ tr.resaltada td {
     color: var(--colorTextoSuave);
 }
 
+/* La cifra de amigos es un botón que abre la lista */
+.perfil .cifras li:has(.botonCifra) {
+    padding: 0;
+}
+
+.perfil .cifras .botonCifra {
+    display: flex;
+    align-items: baseline;
+    gap: .4rem;
+    padding: .55rem .9rem;
+    border: 0;
+    border-radius: inherit;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: background-color var(--duracionRapida) var(--curvaSuave);
+}
+
+.perfil .cifras .botonCifra:hover {
+    background-color: var(--colorCelesteSuave);
+}
+
+.perfil .cifras .botonCifra:focus-visible {
+    outline: 3px solid var(--colorCeleste);
+    outline-offset: 2px;
+}
+
 /* Tarjetas de contenido: Sobre mí, Reseñas y Datos */
 .perfil .card h2 {
     display: flex;
@@ -4077,6 +4105,124 @@ tr.resaltada td {
     color: var(--colorExito);
 }
 
+/* ---------- Modal "Ajustá tu foto" (Cropper.js 1.6, se abre arriba de "Editar perfil") ---------- */
+.dialog.dialogoRecorte {
+    --bs-dialog-width: min(40rem, 94vw);
+}
+
+.dialogoRecorte .dialog-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 11rem;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+/* Escenario oscuro donde se mueve la foto */
+.dialogoRecorte .areaRecorte {
+    height: min(52vh, 22rem);
+    overflow: hidden;
+    border: var(--bordeMarcado);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorTinta);
+}
+
+/* Cropper.js pide max-width: 100% en la imagen para que entre en el escenario */
+.dialogoRecorte .areaRecorte img {
+    display: block;
+    max-width: 100%;
+}
+
+/* Recuadro cuadrado con esquinas marcadas y borde celeste */
+.dialogoRecorte .cropper-view-box {
+    outline: 2px solid var(--colorCeleste);
+    outline-color: var(--colorCeleste);
+}
+
+.dialogoRecorte .cropper-modal {
+    background-color: var(--colorTinta);
+    opacity: .6;
+}
+
+.dialogoRecorte .cropper-line,
+.dialogoRecorte .cropper-point {
+    background-color: transparent;
+}
+
+.dialogoRecorte .cropper-point {
+    display: none;
+}
+
+.dialogoRecorte .cropper-point.point-nw,
+.dialogoRecorte .cropper-point.point-ne,
+.dialogoRecorte .cropper-point.point-sw,
+.dialogoRecorte .cropper-point.point-se {
+    display: block;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: 4px solid #fff;
+    opacity: 1;
+}
+
+.dialogoRecorte .cropper-point.point-nw { top: -4px; left: -4px; border-right: 0; border-bottom: 0; }
+.dialogoRecorte .cropper-point.point-ne { top: -4px; right: -4px; border-left: 0; border-bottom: 0; }
+.dialogoRecorte .cropper-point.point-sw { bottom: -4px; left: -4px; border-right: 0; border-top: 0; }
+.dialogoRecorte .cropper-point.point-se { bottom: -4px; right: -4px; border-left: 0; border-top: 0; }
+
+.dialogoRecorte .cropper-point.point-se::before {
+    display: none;
+}
+
+/* Columna derecha: cómo va a quedar (círculo, como el avatar del sitio) y los ajustes */
+.dialogoRecorte .controlesRecorte {
+    display: grid;
+    justify-items: center;
+    gap: .9rem;
+    text-align: center;
+}
+
+.dialogoRecorte .vistaPreviaRecorte {
+    width: 9rem;
+    height: 9rem;
+    overflow: hidden;
+    border: 3px solid var(--colorTinta);
+    border-radius: 50%;
+    background-color: var(--colorCelesteSuave);
+    box-shadow: 5px 5px 0 var(--colorCoral);
+}
+
+.dialogoRecorte .controlesRecorte p {
+    margin: 0;
+    font-size: .82rem;
+}
+
+.dialogoRecorte .botonesRecorte {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .5rem;
+}
+
+.dialogoRecorte .botonesRecorte .boton {
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+}
+
+@media (max-width: 575.98px) {
+    .dialogoRecorte .dialog-body {
+        grid-template-columns: 1fr;
+    }
+
+    .dialogoRecorte .areaRecorte {
+        height: min(45vh, 18rem);
+    }
+
+    .dialogoRecorte .vistaPreviaRecorte {
+        width: 6rem;
+        height: 6rem;
+    }
+}
+
 /* Títulos del profesor */
 .dialogoEdicion .listaTitulos {
     display: grid;
@@ -4182,12 +4328,146 @@ tr.resaltada td {
     box-shadow: none;
 }
 
-/* Aviso de los botones que todavía no hacen nada (el snackbar quedaría detrás del modal) */
+/* Aviso dentro del modal, como "reseña publicada" (el snackbar quedaría detrás del modal) */
 .dialogoHistorial .avisoHistorial {
     margin-top: .75rem;
     font-size: .88rem;
     font-weight: 600;
     text-align: center;
+}
+
+/* ---------- Modal "Amigos" del Perfil ---------- */
+.dialogoAmigos .dialog-body {
+    max-height: min(65vh, 32rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.dialogoAmigos .estadoAmigos {
+    padding-block: 1rem;
+    font-weight: 600;
+}
+
+.dialogoAmigos .listaAmigos {
+    display: grid;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dialogoAmigos .listaAmigos a {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .5rem .75rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioMedio);
+    color: var(--colorTinta);
+    text-decoration: none;
+    transition: border-color var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) var(--curvaSuave);
+}
+
+.dialogoAmigos .listaAmigos a:hover {
+    border-color: var(--colorTinta);
+    background-color: var(--colorPapel);
+}
+
+.dialogoAmigos .listaAmigos .avatar {
+    --bs-avatar-size: 2.5rem;
+    --bs-avatar-font-size: .9rem;
+    flex-shrink: 0;
+}
+
+.dialogoAmigos .listaAmigos strong {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Diálogo "Dar reseña" (_dialogoDarResena) ---------- */
+.dialogoResena .dialog-body {
+    display: grid;
+    gap: 1rem;
+}
+
+.dialogoResena .estrellasResena {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.dialogoResena .estrellasResena legend {
+    margin-bottom: .4rem;
+    font-size: .95rem;
+    font-weight: 600;
+}
+
+.dialogoResena .filaEstrellas {
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+}
+
+/* Se pintan las estrellas hasta la elegida (o hasta la que está bajo el mouse) */
+.dialogoResena .filaEstrellas label {
+    padding: .1rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--colorBorde);
+    cursor: pointer;
+    transition: color var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaRebote);
+}
+
+.dialogoResena .filaEstrellas:not(:has(label:hover)):has(input:checked) label,
+.dialogoResena .filaEstrellas:has(label:hover) label {
+    color: #F59E0B;
+}
+
+.dialogoResena .filaEstrellas:not(:has(label:hover)) label:has(input:checked) ~ label,
+.dialogoResena .filaEstrellas:has(label:hover) label:hover ~ label {
+    color: var(--colorBorde);
+}
+
+.dialogoResena .filaEstrellas label:hover {
+    transform: scale(1.15);
+}
+
+.dialogoResena .filaEstrellas label:has(input:focus-visible) {
+    outline: 3px solid var(--colorCeleste);
+    outline-offset: 2px;
+    border-radius: var(--radioChico);
+}
+
+.dialogoResena .textoPuntuacion {
+    margin-left: .5rem;
+    font-family: var(--fuenteMarca);
+    font-weight: 600;
+    color: var(--colorCoralOscuro);
+}
+
+.dialogoResena .form-field {
+    display: grid;
+    gap: .35rem;
+}
+
+.dialogoResena textarea {
+    resize: vertical;
+}
+
+.dialogoResena small {
+    justify-self: end;
+    color: var(--colorTextoSuave);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dialogoResena .filaEstrellas label {
+        transition: none;
+    }
+
+    .dialogoResena .filaEstrellas label:hover {
+        transform: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

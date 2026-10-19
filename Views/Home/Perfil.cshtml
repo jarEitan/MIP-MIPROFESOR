@@ -11,12 +11,14 @@
     ViewData["Title"] = esPerfilPropio ? "Mi perfil" : "Perfil";
 }
 
-@* Editor de texto enriquecido (Quill 2, local en wwwroot/lib/quill): solo en el perfil propio *@
+@* Solo en el perfil propio: editor de texto enriquecido (Quill 2) y recorte de la foto (Cropper.js 1.6), locales en wwwroot/lib *@
 @section Scripts {
     @if (esPerfilPropio)
     {
         <link rel="stylesheet" href="~/lib/quill/quill.snow.css" />
         <script src="~/lib/quill/quill.js"></script>
+        <link rel="stylesheet" href="~/lib/cropperjs/cropper.min.css" />
+        <script src="~/lib/cropperjs/cropper.min.js"></script>
     }
     <script src="~/js/historial.js" asp-append-version="true"></script>
 }
@@ -91,24 +93,24 @@
                     }
                     else
                     {
-                        @* Botones sociales (Me gusta, Pedir clase y Mensaje ya funcionan): salen de las tablas Amigos, Mensajes, Resenas
-                           y Consultas_Soporte. Los que faltan muestran "Muy pronto" (sin sesión llevan a Iniciar sesión).
-                           Mensaje abre el chat con esta persona en el Panel de Control (chat.js); sin sesión, el Panel lleva a Iniciar sesión. *@
+                        @* Botones sociales: salen de las tablas Amigos, Mensajes, Likes y Resenas. Sin sesión llevan a Iniciar sesión.
+                           Mensaje abre el chat con esta persona en el Panel de Control (chat.js). Agregar amigo cambia según cómo
+                           estén los dos (AmigosController) y la estrella abre "Dar reseña" (_dialogoDarResena, ResenasController). *@
                         <button class="boton principal" type="button" data-pedir-clase data-id-profesor="@idPerfil" data-nombre-profesor="" data-solo-profesor hidden>
                             <i class="bi bi-calendar-plus" aria-hidden="true"></i> Pedir clase
                         </button>
                         <a class="boton contorno" asp-controller="Home" asp-action="PanelControl" asp-route-tab="chat" asp-route-chat="@idPerfil">
                             <i class="bi bi-chat-dots" aria-hidden="true"></i> Mensaje
                         </a>
-                        <button class="boton contorno" type="button" data-proximamente="Agregar amigo">
-                            <i class="bi bi-person-plus" aria-hidden="true"></i> Agregar amigo
+                        <button class="boton contorno" type="button" id="botonAmistad" data-estado-amistad="ninguna">
+                            <i class="bi bi-person-plus" aria-hidden="true"></i> <span>Agregar amigo</span>
                         </button>
                         @* Me gusta: LikesController (fetch). El token va en un campo oculto y site.js lo manda en el encabezado. *@
                         @Html.AntiForgeryToken()
                         <button class="boton contorno botonIcono botonMeGusta" type="button" id="botonMeGusta" aria-pressed="false" aria-label="Me gusta" title="Me gusta">
                             <i class="bi bi-heart" aria-hidden="true"></i>
                         </button>
-                        <button class="boton contorno botonIcono" type="button" data-proximamente="Dejar reseña" aria-label="Dejar reseña" title="Dejar reseña">
+                        <button class="boton contorno botonIcono" type="button" data-dar-resena data-id-usuario="@idPerfil" data-nombre-usuario="" aria-label="Dejar reseña" title="Dejar reseña">
                             <i class="bi bi-star" aria-hidden="true"></i>
                         </button>
                         <button class="boton contorno botonIcono" type="button" id="botonCopiarEnlace" aria-label="Copiar enlace" title="Copiar enlace">
@@ -156,6 +158,40 @@
         </div>
     </div>
 </section>
+
+<!-- ================= MODAL: AMIGOS (Dialog de Bootstrap 6) ================= -->
+@* Lo abre la cifra "amigos" del perfil. site.js pide la lista a /Amigos/Lista/{id}. *@
+<dialog class="dialog dialogoAmigos" id="dialogoAmigos" aria-labelledby="tituloAmigos">
+    <div class="dialog-header">
+        <h2 class="dialog-title" id="tituloAmigos">Amigos de <span id="nombreAmigos"></span></h2>
+        <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+    </div>
+    <div class="dialog-body">
+        <p class="estadoAmigos" id="estadoAmigos" role="status"></p>
+        <ul class="listaAmigos" id="listaAmigos"></ul>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Cerrar</button>
+    </div>
+</dialog>
+
+@if (!esPerfilPropio)
+{
+    <!-- ================= DIÁLOGO: QUITAR AMIGO ================= -->
+    <dialog class="dialog" id="dialogoQuitarAmigo" aria-labelledby="tituloQuitarAmigo">
+        <div class="dialog-header">
+            <h2 class="dialog-title" id="tituloQuitarAmigo">¿Quitar de tus amigos?</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+        </div>
+        <div class="dialog-body">
+            <p>Van a dejar de ser amigos. Si cambiás de idea, podés volver a mandarle una solicitud.</p>
+        </div>
+        <div class="dialog-footer">
+            <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Volver</button>
+            <button type="button" class="boton principal chico" id="botonConfirmarQuitarAmigo">Sí, quitar</button>
+        </div>
+    </dialog>
+}
 
 <!-- ================= MODAL: HISTORIAL DE CLASES (Dialog de Bootstrap 6) ================= -->
 @* Lo abre #botonHistorial. historial.js pide las últimas 20 clases a /Historial/Obtener/{id} y dibuja la misma tabla del
@@ -264,7 +300,7 @@
 
                         <!-- ===== Pestaña: Modificar cuenta (datos personales y documentación) ===== -->
                         <div class="tab-pane" id="pestanaCuenta" role="tabpanel" aria-labelledby="botonPestanaCuenta" tabindex="0">
-                            @* "Change profile picture" del UI Kit: vista previa en círculo. Se guarda como WEBP 100x100. *@
+                            @* "Change profile picture" del UI Kit: vista previa en círculo. Al elegir la foto se abre #dialogoRecortarFoto; se guarda como WEBP 256x256. *@
                             <div class="form-field fotoPerfilEdicion">
                                 <label for="edicionFotoPerfil">Foto de perfil</label>
                                 <div class="vistaPreviaFoto">
@@ -272,7 +308,7 @@
                                     <div>
                                         <label class="boton contorno chico" for="edicionFotoPerfil"><i class="bi bi-camera" aria-hidden="true"></i> Elegir foto</label>
                                         <input class="visually-hidden" type="file" id="edicionFotoPerfil" name="archivoFotoPerfil" accept="image/jpeg,image/png,image/webp" />
-                                        <small>JPG, PNG o WEBP de hasta 5 MB. Se recorta al centro y se guarda en 100 × 100.</small>
+                                        <small>JPG, PNG o WEBP de hasta 5 MB. Después elegís qué parte se ve.</small>
                                     </div>
                                 </div>
                             </div>
@@ -322,5 +358,35 @@
                 <button type="submit" class="boton principal chico" id="botonGuardarPerfil"><i class="bi bi-check2" aria-hidden="true"></i> Guardar</button>
             </div>
         </form>
+    </dialog>
+
+    <!-- ================= MODAL: RECORTAR FOTO DE PERFIL (Dialog de Bootstrap 6 + Cropper.js) ================= -->
+    @* Se abre arriba de "Editar perfil" al elegir una foto. El recorte se hace en el navegador (WEBP 256x256)
+       y se sube recién al tocar "Guardar" en "Editar perfil". *@
+    <dialog class="dialog dialogoRecorte" id="dialogoRecortarFoto" aria-labelledby="tituloRecortarFoto">
+        <div class="dialog-header">
+            <h2 class="dialog-title" id="tituloRecortarFoto">Ajustá tu foto</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
+        </div>
+        <div class="dialog-body">
+            <div class="areaRecorte">
+                <img id="imagenRecorte" alt="Foto elegida para recortar" />
+            </div>
+            <div class="controlesRecorte">
+                <div class="vistaPreviaRecorte" id="vistaPreviaRecorte" aria-hidden="true"></div>
+                <p>Mové el recuadro o la foto y usá la rueda del mouse (o dos dedos) para acercar.</p>
+                <div class="botonesRecorte" role="group" aria-label="Ajustes de la foto">
+                    <button type="button" class="boton contorno chico" data-recorte="acercar" aria-label="Acercar"><i class="bi bi-zoom-in" aria-hidden="true"></i></button>
+                    <button type="button" class="boton contorno chico" data-recorte="alejar" aria-label="Alejar"><i class="bi bi-zoom-out" aria-hidden="true"></i></button>
+                    <button type="button" class="boton contorno chico" data-recorte="girarIzquierda" aria-label="Girar a la izquierda"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></button>
+                    <button type="button" class="boton contorno chico" data-recorte="girarDerecha" aria-label="Girar a la derecha"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i></button>
+                    <button type="button" class="boton contorno chico" data-recorte="reiniciar" aria-label="Volver a empezar"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="dialog-footer">
+            <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Cancelar</button>
+            <button type="button" class="boton principal chico" id="botonUsarRecorte"><i class="bi bi-check2" aria-hidden="true"></i> Usar esta foto</button>
+        </div>
     </dialog>
 }

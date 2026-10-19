@@ -21,7 +21,7 @@ public class PerfilesController : Controller
     private const int precioHoraMaximo = 10000000;
     private const int anioMinimoEscuela = 1950;
     private const long pesoMaximoFoto = 5 * 1024 * 1024;
-    private const int ladoFotoPerfil = 100;
+    private const int ladoFotoPerfil = 256;
 
     private readonly IWebHostEnvironment entorno;
 
@@ -140,7 +140,7 @@ public class PerfilesController : Controller
         }
         if (datosAnteriores == null) return respuestaError("usuarioInexistente", "No encontramos tu cuenta.");
 
-        // Fotos: la de perfil se guarda como WEBP 100x100 (pública); la del DNI en una carpeta privada
+        // Fotos: la de perfil se guarda como WEBP 256x256 (pública); la del DNI en una carpeta privada
         string? rutaFotoPerfilNueva = null;
         string? rutaFotoDniNueva = null;
         if (archivoFotoPerfil != null && archivoFotoPerfil.Length > 0)
@@ -308,7 +308,7 @@ public class PerfilesController : Controller
 
     // ================= FOTOS =================
 
-    // Recorta al centro, achica a 100x100 y guarda como WEBP en wwwroot/userData/fotos-perfil/.
+    // Recorta al centro, achica a 256x256 y guarda como WEBP en wwwroot/userData/fotos-perfil/.
     // Devuelve la URL ("/userData/fotos-perfil/...") o null si el archivo no es una imagen válida.
     private string? guardarFotoPerfil(IFormFile archivo, int idUsuario)
     {

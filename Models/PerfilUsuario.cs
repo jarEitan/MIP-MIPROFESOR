@@ -17,6 +17,7 @@ public class PerfilUsuario
     public decimal? calificacion { get; set; }
     public int cantidadResenas { get; set; }
     public int cantidadLikes { get; set; }
+    public int cantidadAmigos { get; set; }
     public List<string> materias { get; set; } = new List<string>();
     public List<string> niveles { get; set; } = new List<string>();
     public List<string> modalidades { get; set; } = new List<string>();

@@ -32,7 +32,7 @@
                             <a class="nav-link @(controladorActual == "Catalogo" ? "active" : "")" aria-current="@(controladorActual == "Catalogo" ? "page" : null)" asp-controller="Catalogo" asp-action="Index">Catálogo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="MiColegio">Mi Colegio</a>
+                            <a class="nav-link @(accionActual == "QuienesSomos" ? "active" : "")" aria-current="@(accionActual == "QuienesSomos" ? "page" : null)" asp-controller="Home" asp-action="QuienesSomos">Quiénes somos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(accionActual == "Soporte" ? "active" : "")" aria-current="@(accionActual == "Soporte" ? "page" : null)" asp-controller="Home" asp-action="Soporte">Soporte</a>

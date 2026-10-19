@@ -9,6 +9,7 @@ namespace MIP_MIPROFESOR.Models;
 // obtenerFaltantesVerificacion y guardarPerfilCompleto de la base MIP.
 // Catálogo: stored procedure obtenerCatalogo (en MIP-BD.sql).
 // Likes: stored procedures obtenerLike y alternarLike (en MIP-BD.sql).
+// Amigos: obtenerAmistad, cambiarAmistad y obtenerAmigos. Reseñas: darResena (en MIP-BD.sql).
 // Clases y notificaciones: stored procedures en MIP-BD.sql (reglas y estados en Info/log.md, entrada 2026-10-14).
 // Chat: stored procedures enviarMensaje, obtenerConversaciones y obtenerChat (en MIP-BD.sql).
 public class BD
@@ -56,6 +57,45 @@ public class BD
         using (var connection = new SqlConnection(connectionString))
         {
             return connection.QuerySingle<ResultadoLike>("alternarLike", new { idEmisor = idEmisor, idReceptor = idReceptor }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    // ================= AMIGOS =================
+
+    // Cómo están idUsuario (null = sin sesión) e idOtroUsuario: ninguna | enviada | recibida | amigos
+    public ResultadoAmistad obtenerAmistad(int? idUsuario, int idOtroUsuario)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoAmistad>("obtenerAmistad", new { idUsuario = idUsuario, idOtroUsuario = idOtroUsuario }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    // accion: enviar (manda o acepta la solicitud) | quitar (la cancela o deja de ser amigo)
+    public ResultadoAmistad cambiarAmistad(int idUsuario, int idOtroUsuario, string accion)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoAmistad>("cambiarAmistad", new { idUsuario = idUsuario, idOtroUsuario = idOtroUsuario, accion = accion }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    public List<AmigoPerfil> obtenerAmigos(int idUsuario)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.Query<AmigoPerfil>("obtenerAmigos", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure).ToList();
+        }
+    }
+
+    // ================= RESEÑAS =================
+
+    // resultado: ok | mismoUsuario | usuarioInexistente | puntuacionInvalida | descripcionInvalida | sinClaseCompletada | yaReseno
+    public string darResena(int idEmisor, int idReceptor, int puntuacion, string? descripcion)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<string>("darResena", new { idEmisor = idEmisor, idReceptor = idReceptor, puntuacion = puntuacion, descripcion = descripcion }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -147,13 +187,13 @@ public class BD
     // ================= CATÁLOGO =================
 
     // Una página de profesores que cumplen los filtros (todos opcionales). niveles: nombres separados por coma.
-    public ResultadoCatalogo obtenerCatalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string? niveles, int pagina, int porPagina)
+    public ResultadoCatalogo obtenerCatalogo(string? busqueda, string? materia, string? colegio, string? modalidad, string? niveles, int pagina, int porPagina, int? idVisitante)
     {
         using (var connection = new SqlConnection(connectionString))
         {
             using (var tablas = connection.QueryMultiple(
                 "obtenerCatalogo",
-                new { busqueda = busqueda, materia = materia, colegio = colegio, modalidad = modalidad, niveles = niveles, pagina = pagina, porPagina = porPagina },
+                new { busqueda = busqueda, materia = materia, colegio = colegio, modalidad = modalidad, niveles = niveles, pagina = pagina, porPagina = porPagina, idVisitante = idVisitante },
                 commandType: CommandType.StoredProcedure))
             {
                 ResultadoCatalogo resultado = tablas.ReadFirst<ResultadoCatalogo>();

@@ -614,12 +614,16 @@ function inicializarCierreDeDialogos() {
 const nombresDeTipoUsuario = { alumno: "Alumno", profesor: "Profesor", admin: "Administrador" };
 const largoMaximoDescripcion = 1000;
 const pesoMaximoFoto = 5 * 1024 * 1024;
+const ladoFotoPerfil = 256;
 const tiposDeFotoPermitidos = ["image/jpeg", "image/png", "image/webp"];
 const anioMinimoEscuela = 1950;
 
 let editorDescripcion = null;
 let opcionesPerfilCargadas = null;
 let urlVistaPreviaFoto = null;
+// Foto de perfil ya recortada en el navegador (WEBP 256x256, igual que la guarda el servidor): es lo que se sube al guardar
+let fotoPerfilRecortada = null;
+let recortadorFoto = null;
 let edicionYaAbiertaSola = false;
 // Profesores: año desde el que da clase en cada colegio elegido, por id de colegio ({ "20": "2015" })
 let aniosDeEscuelas = {};
@@ -632,6 +636,7 @@ function inicializarPerfil() {
     inicializarCopiarEnlacePerfil();
     inicializarBotonesProximamente();
     inicializarMeGusta();
+    inicializarAmistad();
     inicializarEdicionPerfil();
 }
 
@@ -675,6 +680,7 @@ function mostrarPerfil(perfil) {
         boton.hidden = perfil.tipoUsuario !== "profesor";
         boton.dataset.nombreProfesor = nombreCompleto;
     });
+    document.querySelectorAll("#perfil [data-dar-resena]").forEach(boton => { boton.dataset.nombreUsuario = nombreCompleto; });
 
     mostrarCifrasPerfil(perfil);
     mostrarDescripcionPerfil(perfil.descripcion);
@@ -741,6 +747,16 @@ function mostrarCifrasPerfil(perfil) {
     const textoResenas = perfil.cantidadResenas === 1 ? "1 reseña" : `${perfil.cantidadResenas} reseñas`;
     cifrasPerfil.append(crearCifraPerfil("bi-star-fill", calificacion, textoResenas));
     cifrasPerfil.append(crearCifraPerfil("bi-heart-fill", perfil.cantidadLikes, "me gusta", "cantidadLikesPerfil"));
+
+    // Amigos: la cifra es un botón que abre la lista
+    const cifraAmigos = crearCifraPerfil("bi-people-fill", perfil.cantidadAmigos, perfil.cantidadAmigos === 1 ? "amigo" : "amigos", "cantidadAmigosPerfil");
+    const botonAmigos = crearElemento("button", "botonCifra");
+    botonAmigos.type = "button";
+    botonAmigos.setAttribute("aria-haspopup", "dialog");
+    botonAmigos.append(...cifraAmigos.childNodes);
+    botonAmigos.addEventListener("click", abrirAmigosDelPerfil);
+    cifraAmigos.append(botonAmigos);
+    cifrasPerfil.append(cifraAmigos);
 
     // En la base, un profesor sin precio queda con 0
     if (perfil.tipoUsuario === "profesor") {
@@ -908,7 +924,7 @@ function inicializarCopiarEnlacePerfil() {
     });
 }
 
-// Agregar amigo, Reseña y Reportar todavía no hacen nada (Pedir clase está en clases.js y Mensaje lleva al chat del Panel)
+// Reportar todavía no hace nada (Pedir clase está en clases.js y Mensaje lleva al chat del Panel)
 function inicializarBotonesProximamente() {
     const haySesion = document.getElementById("perfil").dataset.haySesion === "true";
 
@@ -994,6 +1010,134 @@ function actualizarCantidadLikes(cantidadLikes) {
     cantidad.classList.remove("rebote");
     void cantidad.offsetWidth;
     cantidad.classList.add("rebote");
+}
+
+// ----- Amigos (AmigosController: fetch) -----
+// El botón muestra cómo están los dos y qué pasa al tocarlo. accion: enviar (manda o acepta) | quitar (cancela o deja de ser amigo)
+const estadosBotonAmistad = {
+    ninguna: { icono: "bi-person-plus", texto: "Agregar amigo", accion: "enviar" },
+    enviada: { icono: "bi-person-check", texto: "Solicitud enviada", accion: "quitar", titulo: "Tocá para cancelar la solicitud" },
+    recibida: { icono: "bi-person-plus-fill", texto: "Aceptar solicitud", accion: "enviar" },
+    amigos: { icono: "bi-people-fill", texto: "Amigos", accion: "quitar", titulo: "Tocá para quitar de tus amigos" }
+};
+
+function inicializarAmistad() {
+    const botonAmistad = document.getElementById("botonAmistad");
+    if (!botonAmistad) return;
+
+    const seccionPerfil = document.getElementById("perfil");
+    const idPerfil = seccionPerfil.dataset.idPerfil;
+    const haySesion = seccionPerfil.dataset.haySesion === "true";
+
+    if (haySesion) {
+        pedirJson(`/Amigos/Estado/${idPerfil}`)
+            .then(resultado => pintarBotonAmistad(botonAmistad, resultado.estadoAmistad))
+            .catch(error => console.error(error));
+    }
+
+    botonAmistad.addEventListener("click", () => {
+        if (!haySesion) {
+            window.location.href = "/Sesion/IniciarSesion";
+            return;
+        }
+        // Dejar de ser amigos se confirma; lo demás se puede deshacer con el mismo botón
+        if (botonAmistad.dataset.estadoAmistad === "amigos") {
+            document.getElementById("dialogoQuitarAmigo").showModal();
+            return;
+        }
+        cambiarAmistad(estadosBotonAmistad[botonAmistad.dataset.estadoAmistad].accion);
+    });
+
+    document.getElementById("botonConfirmarQuitarAmigo").addEventListener("click", () => {
+        document.getElementById("dialogoQuitarAmigo").close();
+        cambiarAmistad("quitar");
+    });
+}
+
+function cambiarAmistad(accion) {
+    const botonAmistad = document.getElementById("botonAmistad");
+    const token = document.querySelector("#perfil input[name='__RequestVerificationToken']");
+    botonAmistad.disabled = true;
+
+    pedirJson("/Amigos/Cambiar", {
+        method: "POST",
+        headers: { "RequestVerificationToken": token ? token.value : "" },
+        body: new URLSearchParams({ idOtroUsuario: document.getElementById("perfil").dataset.idPerfil, accion: accion })
+    })
+        .then(resultado => {
+            pintarBotonAmistad(botonAmistad, resultado.estadoAmistad);
+            actualizarCantidadAmigos(resultado.cantidadAmigos);
+            const avisos = { enviada: "Le mandaste una solicitud de amistad.", amigos: "¡Ahora son amigos!" };
+            if (avisos[resultado.estadoAmistad]) mostrarSnackbar(avisos[resultado.estadoAmistad], "exito");
+            // Aceptar acá resuelve la notificación de la solicitud: la insignia del header se pone al día
+            if (accion === "enviar" && resultado.estadoAmistad === "amigos") {
+                pedirJson("/Notificaciones/Contar")
+                    .then(contador => actualizarInsigniaDeNotificaciones(contador.cantidad))
+                    .catch(error => console.error(error));
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            mostrarSnackbar("No pudimos guardar el cambio. Probá de nuevo.", "error");
+        })
+        .finally(() => { botonAmistad.disabled = false; });
+}
+
+function pintarBotonAmistad(botonAmistad, estadoAmistad) {
+    const estado = estadosBotonAmistad[estadoAmistad] || estadosBotonAmistad.ninguna;
+    botonAmistad.dataset.estadoAmistad = estadoAmistad in estadosBotonAmistad ? estadoAmistad : "ninguna";
+    botonAmistad.classList.toggle("principal", estadoAmistad === "recibida");
+    botonAmistad.classList.toggle("contorno", estadoAmistad !== "recibida");
+    botonAmistad.querySelector(".bi").className = `bi ${estado.icono}`;
+    botonAmistad.querySelector("span").textContent = estado.texto;
+    if (estado.titulo) botonAmistad.title = estado.titulo;
+    else botonAmistad.removeAttribute("title");
+}
+
+function actualizarCantidadAmigos(cantidadAmigos) {
+    const cantidad = document.getElementById("cantidadAmigosPerfil");
+    if (!cantidad) return;
+    cantidad.textContent = cantidadAmigos;
+    cantidad.nextElementSibling.textContent = cantidadAmigos === 1 ? "amigo" : "amigos";
+    cantidad.classList.remove("rebote");
+    void cantidad.offsetWidth;
+    cantidad.classList.add("rebote");
+}
+
+// Lista de amigos del perfil (modal #dialogoAmigos)
+function abrirAmigosDelPerfil() {
+    const listaAmigos = document.getElementById("listaAmigos");
+    const estadoAmigos = document.getElementById("estadoAmigos");
+    document.getElementById("nombreAmigos").textContent = document.getElementById("nombrePerfil").textContent;
+    listaAmigos.replaceChildren();
+    estadoAmigos.hidden = false;
+    estadoAmigos.textContent = "Cargando amigos…";
+    document.getElementById("dialogoAmigos").showModal();
+
+    pedirJson(`/Amigos/Lista/${document.getElementById("perfil").dataset.idPerfil}`)
+        .then(amigos => {
+            estadoAmigos.hidden = amigos.length > 0;
+            estadoAmigos.textContent = "Todavía no tiene amigos en MIP.";
+            listaAmigos.replaceChildren(...amigos.map(crearItemAmigo));
+        })
+        .catch(error => {
+            console.error(error);
+            estadoAmigos.textContent = "No pudimos cargar los amigos. Probá de nuevo en unos minutos.";
+        });
+}
+
+function crearItemAmigo(amigo) {
+    const item = document.createElement("li");
+    const enlace = crearElemento("a");
+    enlace.href = `/Home/Perfil/${amigo.id}`;
+    const avatar = crearElemento("span", amigo.fotoPerfil ? "avatar" : "avatar theme-primary");
+    avatar.setAttribute("aria-hidden", "true");
+    pintarAvatar(avatar, amigo.nombre, amigo.apellido, amigo.fotoPerfil);
+    const nombre = crearElemento("strong", "", `${amigo.nombre} ${amigo.apellido}`);
+    if (amigo.verificado) nombre.append(" ", crearTickVerificado());
+    enlace.append(avatar, nombre, crearElemento("span", "pildora", nombresDeTipoUsuario[amigo.tipoUsuario] || "Usuario"));
+    item.append(enlace);
+    return item;
 }
 
 // El corazón "salta" y, al dar me gusta, suelta una explosión de corazoncitos con los colores de la marca
@@ -1086,6 +1230,7 @@ function completarFormularioEdicion(opciones, datos) {
     campo("edicionDni").value = datos.dni || "";
     campo("edicionDireccion").value = datos.direccion || "";
     campo("edicionFotoPerfil").value = "";
+    fotoPerfilRecortada = null;
     campo("edicionFotoDni").value = "";
     pintarAvatar(campo("vistaPreviaFotoPerfil"), datos.nombre, datos.apellido, datos.fotoPerfil);
     campo("estadoFotoDni").textContent = datos.tieneFotoDni
@@ -1196,7 +1341,7 @@ function actualizarContadorDescripcion() {
     contadorDescripcion.classList.toggle("excedido", cantidadCaracteres > largoMaximoDescripcion);
 }
 
-// Vista previa de la foto de perfil (se guarda recién al tocar "Guardar") y aviso de la foto del DNI
+// Foto de perfil: al elegirla se abre el recorte (se guarda recién al tocar "Guardar"). Aviso de la foto del DNI.
 function inicializarFotosEdicion() {
     const campoFotoPerfil = document.getElementById("edicionFotoPerfil");
     const campoFotoDni = document.getElementById("edicionFotoDni");
@@ -1204,17 +1349,17 @@ function inicializarFotosEdicion() {
 
     campoFotoPerfil.addEventListener("change", () => {
         const archivo = campoFotoPerfil.files[0];
+        // Lo que se sube es el recorte; vaciarlo también deja volver a elegir la misma foto
+        campoFotoPerfil.value = "";
         if (!archivo) return;
         if (!fotoValida(archivo)) {
-            campoFotoPerfil.value = "";
             mostrarMensaje(mensajeEditarPerfil, "La foto de perfil tiene que ser JPG, PNG o WEBP de hasta 5 MB.");
             return;
         }
         mostrarMensaje(mensajeEditarPerfil, "");
-        if (urlVistaPreviaFoto) URL.revokeObjectURL(urlVistaPreviaFoto);
-        urlVistaPreviaFoto = URL.createObjectURL(archivo);
-        pintarAvatar(document.getElementById("vistaPreviaFotoPerfil"), "", "", urlVistaPreviaFoto);
+        abrirRecorteDeFoto(archivo);
     });
+    inicializarRecorteDeFoto();
 
     campoFotoDni.addEventListener("change", () => {
         const archivo = campoFotoDni.files[0];
@@ -1229,6 +1374,84 @@ function inicializarFotosEdicion() {
         estadoFotoDni.textContent = `Nueva foto elegida: ${archivo.name}. Se sube al guardar.`;
         estadoFotoDni.classList.add("cargada");
     });
+}
+
+// ---------- Recortar la foto de perfil (Cropper.js 1.6, en wwwroot/lib/cropperjs) ----------
+// El recuadro es cuadrado y la vista previa circular, como se ve en el sitio. Se puede mover, acercar y girar.
+function abrirRecorteDeFoto(archivo) {
+    document.getElementById("imagenRecorte").src = URL.createObjectURL(archivo);
+    document.getElementById("dialogoRecortarFoto").showModal();
+}
+
+function inicializarRecorteDeFoto() {
+    const dialogoRecortarFoto = document.getElementById("dialogoRecortarFoto");
+    const imagenRecorte = document.getElementById("imagenRecorte");
+
+    // Cropper.js necesita la imagen cargada y a la vista para medirla
+    imagenRecorte.addEventListener("load", () => {
+        recortadorFoto?.destroy();
+        recortadorFoto = new Cropper(imagenRecorte, {
+            aspectRatio: 1,
+            viewMode: 1,
+            dragMode: "move",
+            autoCropArea: .85,
+            background: false,
+            guides: false,
+            toggleDragModeOnDblclick: false,
+            preview: document.getElementById("vistaPreviaRecorte")
+        });
+    });
+    imagenRecorte.addEventListener("error", () => {
+        dialogoRecortarFoto.close();
+        mostrarMensaje(document.getElementById("mensajeEditarPerfil"), "No pudimos abrir esa foto. Probá con otra.");
+    });
+
+    // Al cerrar se suelta la foto original (puede pesar varios MB): ya se usó el recorte o se canceló
+    dialogoRecortarFoto.addEventListener("close", () => {
+        recortadorFoto?.destroy();
+        recortadorFoto = null;
+        URL.revokeObjectURL(imagenRecorte.src);
+    });
+
+    const acciones = {
+        acercar: () => recortadorFoto.zoom(.1),
+        alejar: () => recortadorFoto.zoom(-.1),
+        girarIzquierda: () => girarFoto(-90),
+        girarDerecha: () => girarFoto(90),
+        reiniciar: () => recortadorFoto.reset()
+    };
+    dialogoRecortarFoto.querySelectorAll("[data-recorte]").forEach(boton => {
+        boton.addEventListener("click", () => recortadorFoto && acciones[boton.dataset.recorte]());
+    });
+
+    document.getElementById("botonUsarRecorte").addEventListener("click", () => {
+        if (!recortadorFoto) return;
+        const lienzo = recortadorFoto.getCroppedCanvas({ width: ladoFotoPerfil, height: ladoFotoPerfil, imageSmoothingQuality: "high" });
+        // Si el navegador no sabe generar WEBP (Safari viejo) devuelve PNG: el servidor igual lo pasa a WEBP
+        lienzo.toBlob(foto => {
+            if (!foto) return;
+            fotoPerfilRecortada = foto;
+            if (urlVistaPreviaFoto) URL.revokeObjectURL(urlVistaPreviaFoto);
+            urlVistaPreviaFoto = URL.createObjectURL(foto);
+            pintarAvatar(document.getElementById("vistaPreviaFotoPerfil"), "", "", urlVistaPreviaFoto);
+            dialogoRecortarFoto.close();
+        }, "image/webp", .9);
+    });
+}
+
+// Cropper.js gira la foto sin volver a encuadrarla: acá se la centra entera en el escenario y se centra el recuadro
+function girarFoto(grados) {
+    recortadorFoto.clear();
+    recortadorFoto.rotate(grados);
+    const escenario = recortadorFoto.getContainerData();
+    const foto = recortadorFoto.getCanvasData();
+    const escala = Math.min(escenario.width / foto.width, escenario.height / foto.height);
+    const ancho = foto.width * escala;
+    const alto = foto.height * escala;
+    recortadorFoto.setCanvasData({ left: (escenario.width - ancho) / 2, top: (escenario.height - alto) / 2, width: ancho, height: alto });
+    recortadorFoto.crop();
+    const lado = Math.min(ancho, alto) * .85;
+    recortadorFoto.setCropBoxData({ left: (escenario.width - lado) / 2, top: (escenario.height - lado) / 2, width: lado, height: lado });
 }
 
 function fotoValida(archivo) {
@@ -1324,6 +1547,7 @@ function guardarPerfil() {
     // getSemanticHTML() de Quill convierte cada espacio en &nbsp; (y el texto no se corta en renglones)
     campo("edicionDescripcion").value = textoDeLaDescripcion() === "" ? "" : editorDescripcion.getSemanticHTML().replace(/&nbsp;/g, " ");
     const datosFormulario = new FormData(formularioEditarPerfil);
+    if (fotoPerfilRecortada) datosFormulario.set("archivoFotoPerfil", fotoPerfilRecortada, `perfil.${fotoPerfilRecortada.type.split("/")[1]}`);
     formularioEditarPerfil.querySelectorAll("select[data-nombre-ids]").forEach(select => {
         const idsElegidos = Array.from(select.selectedOptions).map(opcion => opcion.value).filter(valor => valor !== "");
         const valores = select.id === "edicionEscuelas" && document.getElementById("aniosEscuelas")
@@ -1376,6 +1600,86 @@ function actualizarUsuarioEnEncabezado(usuario) {
 
 
 // ================= INICIALIZACIÓN =================
+// ================= RESEÑAS =================
+// "Dar reseña" (_dialogoDarResena): la estrella del Perfil y el botón del Historial ([data-dar-resena] con
+// data-id-usuario y data-nombre-usuario). El servidor (SP darResena) revisa que hayan tenido una clase completada.
+const textosPuntuacion = ["", "Muy mala", "Mala", "Regular", "Buena", "Excelente"];
+
+function inicializarResenas() {
+    // Los botones del historial se crean con fetch: se escuchan en el documento
+    document.addEventListener("click", evento => {
+        const boton = evento.target.closest("[data-dar-resena]");
+        if (!boton) return;
+        evento.preventDefault();
+        // El diálogo solo está para alumnos y profesores: sin sesión se va a Iniciar sesión
+        if (!document.getElementById("dialogoDarResena")) {
+            if (document.getElementById("perfil")?.dataset.haySesion === "true") mostrarSnackbar("Solo los alumnos y los profesores pueden dejar reseñas.");
+            else window.location.href = "/Sesion/IniciarSesion";
+            return;
+        }
+        abrirResena(boton.dataset.idUsuario, boton.dataset.nombreUsuario);
+    });
+
+    const formulario = document.getElementById("formularioDarResena");
+    if (!formulario) return;
+    const descripcion = document.getElementById("descripcionResena");
+    descripcion.addEventListener("input", () => {
+        document.getElementById("contadorResena").textContent = `${descripcion.value.length} / 500`;
+    });
+    formulario.addEventListener("change", evento => {
+        if (evento.target.name !== "puntuacion") return;
+        document.getElementById("textoPuntuacion").textContent = textosPuntuacion[evento.target.value];
+        mostrarMensaje(document.getElementById("mensajeDarResena"), "");
+    });
+}
+
+function abrirResena(idUsuario, nombreUsuario) {
+    const formulario = document.getElementById("formularioDarResena");
+    formulario.reset();
+    document.getElementById("idReceptorResena").value = idUsuario;
+    document.getElementById("nombreResena").textContent = nombreUsuario || "esta persona";
+    document.getElementById("textoPuntuacion").textContent = "";
+    document.getElementById("contadorResena").textContent = "0 / 500";
+    mostrarMensaje(document.getElementById("mensajeDarResena"), "");
+    document.getElementById("dialogoDarResena").showModal();
+}
+
+function enviarResena() {
+    const formulario = document.getElementById("formularioDarResena");
+    const mensaje = document.getElementById("mensajeDarResena");
+    const botonEnviar = document.getElementById("botonEnviarResena");
+
+    if (!formulario.querySelector("input[name='puntuacion']:checked")) {
+        return mostrarErrorEnCampo(mensaje, formulario.querySelector("input[name='puntuacion']"), "Elegí de 1 a 5 estrellas.");
+    }
+
+    mostrarMensaje(mensaje, "");
+    botonEnviar.disabled = true;
+    const datos = new FormData(formulario);
+
+    pedirJson("/Resenas/Dar", { method: "POST", body: datos })
+        .then(respuesta => {
+            if (respuesta.resultado !== "ok") {
+                mostrarMensaje(mensaje, respuesta.mensaje);
+                return;
+            }
+            document.getElementById("dialogoDarResena").close();
+            // historial.js vuelve a pedir el historial a la vista (y avisa adentro del modal, si está abierto)
+            document.dispatchEvent(new CustomEvent("resenaPublicada", { detail: { idReceptor: datos.get("idReceptor"), mensaje: respuesta.mensaje } }));
+            if (!document.getElementById("dialogoHistorial")?.open) mostrarSnackbar(respuesta.mensaje, "exito");
+            // En el perfil de quien la recibió, la reseña y el promedio se ven enseguida
+            if (document.getElementById("perfil")?.dataset.idPerfil === datos.get("idReceptor")) cargarPerfil();
+        })
+        .catch(error => {
+            console.error(error);
+            mostrarMensaje(mensaje, "No pudimos publicar tu reseña. Revisá tu conexión e intentá de nuevo.");
+        })
+        .finally(() => { botonEnviar.disabled = false; });
+
+    return false;
+}
+
+
 function inicializarSitio() {
     inicializarEncabezadoConScroll();
     inicializarAvisoVerificacion();
@@ -1388,6 +1692,7 @@ function inicializarSitio() {
     inicializarBuscadorDeAyuda();
     inicializarAccesosDelPanel();
     inicializarCierreDeDialogos();
+    inicializarResenas();
     inicializarPerfil();
 }
 
