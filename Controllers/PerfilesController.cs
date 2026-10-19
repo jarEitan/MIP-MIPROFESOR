@@ -308,8 +308,8 @@ public class PerfilesController : Controller
 
     // ================= FOTOS =================
 
-    // Recorta al centro, achica a 100x100 y guarda como WEBP en wwwroot/uploads/perfiles/.
-    // Devuelve la URL ("/uploads/perfiles/...") o null si el archivo no es una imagen válida.
+    // Recorta al centro, achica a 100x100 y guarda como WEBP en wwwroot/userData/fotos-perfil/.
+    // Devuelve la URL ("/userData/fotos-perfil/...") o null si el archivo no es una imagen válida.
     private string? guardarFotoPerfil(IFormFile archivo, int idUsuario)
     {
         if (archivo.Length > pesoMaximoFoto) return null;
@@ -335,22 +335,22 @@ public class PerfilesController : Controller
                     {
                         if (webp == null) return null;
 
-                        string carpeta = Path.Combine(entorno.WebRootPath, "uploads", "perfiles");
+                        string carpeta = Path.Combine(entorno.WebRootPath, "userData", "fotos-perfil");
                         Directory.CreateDirectory(carpeta);
                         string nombreArchivo = $"perfil-{idUsuario}-{DateTime.Now:yyyyMMddHHmmssfff}.webp";
                         using (var escritura = System.IO.File.Create(Path.Combine(carpeta, nombreArchivo)))
                         {
                             webp.SaveTo(escritura);
                         }
-                        return $"/uploads/perfiles/{nombreArchivo}";
+                        return $"/userData/fotos-perfil/{nombreArchivo}";
                     }
                 }
             }
         }
     }
 
-    // Guarda la foto del DNI tal cual en App_Data/dni/ (fuera de wwwroot: no se puede abrir desde la web).
-    // Devuelve la ruta relativa ("App_Data/dni/...") o null si no es una imagen JPG, PNG o WEBP.
+    // Guarda la foto del DNI tal cual en wwwroot/userData/dni/ (Program.cs bloquea esa carpeta: no se puede abrir desde la web).
+    // Devuelve la URL ("/userData/dni/...") o null si no es una imagen JPG, PNG o WEBP.
     private string? guardarFotoDni(IFormFile archivo, int idUsuario)
     {
         if (archivo.Length > pesoMaximoFoto) return null;
@@ -373,22 +373,22 @@ public class PerfilesController : Controller
             }
             if (extension == null) return null;
 
-            string carpeta = Path.Combine(entorno.ContentRootPath, "App_Data", "dni");
+            string carpeta = Path.Combine(entorno.WebRootPath, "userData", "dni");
             Directory.CreateDirectory(carpeta);
             string nombreArchivo = $"dni-{idUsuario}-{Guid.NewGuid():N}{extension}";
             System.IO.File.WriteAllBytes(Path.Combine(carpeta, nombreArchivo), memoria.ToArray());
-            return $"App_Data/dni/{nombreArchivo}";
+            return $"/userData/dni/{nombreArchivo}";
         }
     }
 
-    // Borra una foto guardada por el sitio (solo dentro de uploads/perfiles o App_Data/dni)
+    // Borra una foto guardada por el sitio (solo dentro de userData/fotos-perfil o userData/dni)
     private void borrarArchivo(string? ruta)
     {
         if (string.IsNullOrWhiteSpace(ruta)) return;
 
         string? rutaCompleta = null;
-        if (ruta.StartsWith("/uploads/perfiles/")) rutaCompleta = Path.Combine(entorno.WebRootPath, "uploads", "perfiles", Path.GetFileName(ruta));
-        if (ruta.StartsWith("App_Data/dni/")) rutaCompleta = Path.Combine(entorno.ContentRootPath, "App_Data", "dni", Path.GetFileName(ruta));
+        if (ruta.StartsWith("/userData/fotos-perfil/")) rutaCompleta = Path.Combine(entorno.WebRootPath, "userData", "fotos-perfil", Path.GetFileName(ruta));
+        if (ruta.StartsWith("/userData/dni/")) rutaCompleta = Path.Combine(entorno.WebRootPath, "userData", "dni", Path.GetFileName(ruta));
         if (rutaCompleta == null) return;
 
         try
