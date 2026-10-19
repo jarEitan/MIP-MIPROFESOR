@@ -1,17 +1,13 @@
 # GUÍA DE ESTILO — cómo se escribe el código en MIP
 
-> Esta guía resume **la filosofía** con la que Eitan organiza su código (sacada de `TP-Sala-de-escape`, `bootstrap` y `TP06-ARTE`), no el código ni el estilo visual de esos proyectos.
-> Sirve para que quien lo toque después (humano o IA) pueda **debuggear y editar rápido** porque todo está donde espera encontrarlo.
-> Se lee junto con [systemPrompt.md](systemPrompt.md) (reglas) y [log.md](log.md) (historial y estado).
+> Filosofía de Eitan (de `TP-Sala-de-escape`, `bootstrap` y `TP06-ARTE`) para que todo esté donde se espera. Ver también [systemPrompt.md](systemPrompt.md) y [log.md](log.md).
 
----
 
 ## 1. La filosofía en una frase
 
 **Pocas clases, muy reutilizadas, que cambian de aspecto según dónde están.**
 Una clase base (`.boton`, `.card`, `.icono`) + un modificador de una palabra (`.principal`, `.coral`, `.celeste`) + selectores descendientes (`.portada .card h3`) para especializar sin inventar nombres nuevos.
 
----
 
 ## 2. CSS: un solo archivo, en orden fijo
 
@@ -72,31 +68,27 @@ Antes de crear una clase nueva: ¿se resuelve con una existente + un selector de
 - `site.css` no repite lo que Bootstrap ya da: solo color, borde, sombra, tipografía y detalles de marca.
 - Lo repetido se ata a **variables** (`--colorCoral`, `--colorTinta`, `--sombraMarcada`, `--bordeMarcado`, `--espacioSeccion`…), no a valores sueltos.
 
----
 
 ## 3. HTML / Razor
 
 - `<section class="zona">` para cada zona grande y **aislada**; `<div>` para los ítems de adentro.
 - Una sección = una clase propia (`<section class="pasos">`). El orden del HTML coincide con el orden del CSS.
 - Partials para lo que se repite (`_marcaLogo`, `_tarjetaProfesor`, `_preguntasFrecuentes`, `_encabezadoInvitado/Usuario`, `_piePagina`).
-- Los datos de prueba viven en el controlador con un comentario `// TODO BD:`; la vista nunca los inventa.
+- Los datos salen de la BD (SP); lo que falta conectar lleva `TODO BD:`. La vista nunca inventa datos.
 - Sesión: `@if (Context.Session.GetString("idUsuario") == null) { … }` (sintaxis de systemPrompt).
 - Íconos: `<i class="bi bi-nombre" aria-hidden="true"></i>` (Bootstrap Icons local).
 
----
 
 ## 4. JavaScript
 
-- Un solo archivo, `wwwroot/js/site.js`: **una función por cosa**, cada una sale temprano si su elemento no existe, y todas se llaman desde `inicializarSitio()`.
+- `site.js` (común) + un archivo por función grande (`catalogo.js`, `clases.js`, `historial.js`, `chat.js`). **Una función por cosa**, cada una sale temprano si su elemento no existe; en `site.js` todas se llaman desde `inicializarSitio()`.
 - Validación con el patrón del systemPrompt (`mensaje.innerHTML = "…"; mensaje.style.display = "block"; return false;`) mediante `mostrarMensaje` / `mostrarErrorEnCampo`.
-- Los `fetch` van comentados con `TODO BD` hasta que exista el endpoint.
 - Nombres de función = verbo + objeto: `validarRegistro`, `inicializarFiltrosCatalogo`, `enviarMensajeChat`.
 
----
 
 ## 5. Bootstrap 6 (alpha): lo que hay que saber para no perder tiempo
 
-Versión vendorizada en `wwwroot/lib/bootstrap/dist` (**6.0.0-alpha.1**). Es alpha: puede cambiar antes de la versión final.
+`wwwroot/lib/bootstrap/dist`, **6.0.0-alpha.1** (puede cambiar).
 
 1. **Los breakpoints son prefijos, no sufijos**: `md:col-6`, `lg:navbar-expand`, `sm:d-none`, `lg:order-2`. (En BS5 era `col-md-6`, `order-lg-2`.) Breakpoints: sm 576 · md 768 · lg 1024 · xl 1280 · 2xl 1536.
 2. **JS solo como módulo ES**: el layout lo carga con `<script type="module" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js">`. No sirve un `<script>` común ni jQuery.
@@ -106,7 +98,6 @@ Versión vendorizada en `wwwroot/lib/bootstrap/dist` (**6.0.0-alpha.1**). Es alp
 6. **Tokens**: el tema se arma con `--bs-*` y las clases `theme-*`. En `:root` se mapea `primary` = coral, `accent` = celeste, `danger` = magenta `#D51F47`, `inverse` = tinta. Los colores de enlace salen de `--bs-theme-fg`.
 7. `text-danger` ya no existe como en BS5: se usa `fg-danger`.
 
----
 
 ## 6. Antes de dar algo por terminado
 
