@@ -592,20 +592,18 @@ function inicializarAccesosDelPanel() {
     });
 }
 
-function guardarConfiguracion() {
-    const mensajeConfiguracion = document.getElementById("mensajeConfiguracion");
-    const exitoConfiguracion = document.getElementById("exitoConfiguracion");
-    const campoNombre = document.getElementById("configNombre");
-    const campoCorreo = document.getElementById("configCorreo");
-    exitoConfiguracion.hidden = true;
 
-    if (campoNombre.value.trim().length < 3) return mostrarErrorEnCampo(mensajeConfiguracion, campoNombre, "Ingresá tu nombre completo.");
-    if (!correoValido(campoCorreo.value.trim())) return mostrarErrorEnCampo(mensajeConfiguracion, campoCorreo, "Ingresá un correo electrónico válido.");
-
-    mostrarMensaje(mensajeConfiguracion, "");
-    // TODO BD: guardar con BD.actualizarPerfil(...)
-    exitoConfiguracion.hidden = false;
-    return false;
+// ================= DIÁLOGOS: el fondo solo cierra si el clic empezó y terminó en el fondo =================
+// Bootstrap cierra el <dialog> en el "click" cuyo objetivo es el propio <dialog> (el fondo). Si se aprieta dentro del
+// contenido y se suelta en el fondo, el navegador manda ese click al <dialog> y se cerraba. Acá se corta ese click.
+function inicializarCierreDeDialogos() {
+    let apretoEnElFondo = false;
+    document.addEventListener("pointerdown", evento => {
+        apretoEnElFondo = evento.target instanceof HTMLDialogElement;
+    }, true);
+    document.addEventListener("click", evento => {
+        if (evento.target instanceof HTMLDialogElement && !apretoEnElFondo) evento.stopPropagation();
+    }, true);
 }
 
 
@@ -1389,6 +1387,7 @@ function inicializarSitio() {
     inicializarBuscador();
     inicializarBuscadorDeAyuda();
     inicializarAccesosDelPanel();
+    inicializarCierreDeDialogos();
     inicializarPerfil();
 }
 

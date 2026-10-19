@@ -3183,15 +3183,6 @@ tr.resaltada td {
     }
 }
 
-/* Configuración */
-.panel form.card {
-    gap: 1.25rem;
-}
-
-.panel form.card .boton {
-    align-self: flex-start;
-}
-
 /* Diálogo de Bootstrap 6 (cancelar clase) */
 .dialog {
     --bs-dialog-width: min(28rem, 92vw);
