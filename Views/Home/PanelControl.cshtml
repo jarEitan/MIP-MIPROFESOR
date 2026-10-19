@@ -56,7 +56,7 @@
             <div>
                 <span class="pildora">@rolUsuario</span>
                 <h1>¡Hola, @nombreUsuario! 👋</h1>
-                <p>Gestioná tus clases, tus mensajes y la configuración de tu cuenta.</p>
+                <p>Gestioná tus clases y tus mensajes.</p>
             </div>
         </div>
     </div>
@@ -172,13 +172,6 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a class="card" href="#panelTabs" data-abrir-tab="tabHistorial">
-                            <span class="icono celeste"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
-                            <h3>Historial</h3>
-                            <p>Mirá tus clases pasadas.</p>
-                        </a>
-                    </div>
-                    <div class="col">
                         <a class="card" href="#panelTabs" data-abrir-tab="tabChat">
                             <span class="icono oscuro"><i class="bi bi-chat-dots" aria-hidden="true"></i></span>
                             <h3>Chat directo <span class="badge theme-primary" id="insigniaChat" hidden="@(mensajesSinLeer == 0)">@mensajesSinLeer</span></h3>
@@ -186,10 +179,10 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a class="card" href="#panelTabs" data-abrir-tab="tabConfiguracion">
-                            <span class="icono"><i class="bi bi-gear" aria-hidden="true"></i></span>
-                            <h3>Configuración</h3>
-                            <p>Actualizá tus datos.</p>
+                        <a class="card" href="#panelTabs" data-abrir-tab="tabHistorial">
+                            <span class="icono celeste"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
+                            <h3>Historial</h3>
+                            <p>Mirá tus clases pasadas.</p>
                         </a>
                     </div>
                 </div>
@@ -208,9 +201,8 @@
         <nav>
             <div class="nav nav-pills" role="tablist">
                 <button class="nav-link active" id="botonTabClases" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabClases" aria-controls="tabClases" aria-selected="true"><i class="bi bi-calendar-check" aria-hidden="true"></i> Mis clases</button>
-                <button class="nav-link" id="botonTabHistorial" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabHistorial" aria-controls="tabHistorial" aria-selected="false"><i class="bi bi-clock-history" aria-hidden="true"></i> Historial</button>
                 <button class="nav-link" id="botonTabChat" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabChat" aria-controls="tabChat" aria-selected="false"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chat directo</button>
-                <button class="nav-link" id="botonTabConfiguracion" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabConfiguracion" aria-controls="tabConfiguracion" aria-selected="false"><i class="bi bi-gear" aria-hidden="true"></i> Configuración</button>
+                <button class="nav-link" id="botonTabHistorial" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabHistorial" aria-controls="tabHistorial" aria-selected="false"><i class="bi bi-clock-history" aria-hidden="true"></i> Historial</button>
             </div>
         </nav>
 
@@ -303,15 +295,6 @@
                 }
             </div>
 
-            <!-- Historial de clases -->
-            @* El historial propio se pide con fetch a /Historial/Obtener/{id} y lo dibuja historial.js (la misma tabla del modal de los perfiles) *@
-            <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
-                <h2>Historial de clases</h2>
-                <div id="contenidoHistorialPanel" data-id-usuario="@Context.Session.GetString("idUsuario")">
-                    <p class="cargandoHistorial"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tu historial…</p>
-                </div>
-            </div>
-
             <!-- Chat directo -->
             <div class="tab-pane" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
                 <h2>Chat directo</h2>
@@ -340,50 +323,13 @@
                 </div>
             </div>
 
-            <!-- Configuración -->
-            <div class="tab-pane" id="tabConfiguracion" role="tabpanel" aria-labelledby="botonTabConfiguracion" tabindex="0">
-                <h2>Configuración de la cuenta</h2>
-                @* TODO BD: guardar con BD.actualizarPerfil(...) *@
-                <form class="card estatica" id="formularioConfiguracion" onsubmit="return guardarConfiguracion()" novalidate>
-                    <div class="row g-3">
-                        <div class="col-12 md:col-6 form-field">
-                            <label for="configNombre">Nombre completo</label>
-                            <input class="form-control" type="text" id="configNombre" value="@nombreUsuario" autocomplete="name" />
-                        </div>
-                        <div class="col-12 md:col-6 form-field">
-                            <label for="configCorreo">Correo electrónico</label>
-                            <input class="form-control" type="email" id="configCorreo" value="mateo.gomez@ejemplo.com" autocomplete="email" />
-                        </div>
-                        <div class="col-12 md:col-6 form-field">
-                            <label for="configColegio">Colegio vinculado</label>
-                            <select class="form-control" id="configColegio" data-buscable data-placeholder="Buscá tu colegio">
-                                <option selected>Belgrano Day School</option>
-                                <option>Colegio San Martín</option>
-                                <option>Nacional Buenos Aires</option>
-                            </select>
-                        </div>
-                        <div class="col-12 md:col-6 form-field">
-                            <label for="configNivel">Año / nivel</label>
-                            <select class="form-control" id="configNivel" data-buscable data-placeholder="Elegí tu nivel">
-                                <option>Secundario 1</option>
-                                <option>Secundario 2</option>
-                                <option>Secundario 3</option>
-                                <option selected>Secundario 4</option>
-                                <option>Secundario 5</option>
-                                <option>Secundario 6</option>
-                                <option>Terciario</option>
-                                <option>Universitario</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <p class="mensajeError" id="mensajeConfiguracion" role="alert"></p>
-                    <p class="mensajeExito" id="exitoConfiguracion" role="status" hidden>
-                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i> Cambios guardados.
-                    </p>
-
-                    <button class="boton principal" type="submit">Guardar cambios</button>
-                </form>
+            <!-- Historial de clases -->
+            @* El historial propio se pide con fetch a /Historial/Obtener/{id} y lo dibuja historial.js (la misma tabla del modal de los perfiles) *@
+            <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
+                <h2>Historial de clases</h2>
+                <div id="contenidoHistorialPanel" data-id-usuario="@Context.Session.GetString("idUsuario")">
+                    <p class="cargandoHistorial"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tu historial…</p>
+                </div>
             </div>
         </div>
     </div>

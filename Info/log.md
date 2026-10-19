@@ -15,7 +15,7 @@ Funcionalidades previstas (según prototipos de referencia):
 - Registro con rol **Alumno** (nombre, colegio, nivel) o **Profesor** (credenciales, materias, colegios, horarios).
 - **Catálogo** de profesores con filtro por materia, nivel y **colegio** ("Mi Colegio").
 - Reserva de clases **presenciales o virtuales**.
-- **Panel de Control** con 4 módulos: Administrar Clases, Historial, Chat Directo, Configuración.
+- **Panel de Control** con 3 módulos, en este orden: Administrar Clases, Chat Directo, Historial.
 - **Cancelar / Reubicar** clase: si es con anticipación se cancela sola; si está próxima abre chat con el profesor.
 - **Reseñas** de clases.
 - **Soporte**: preguntas frecuentes y formulario de contacto.
@@ -105,7 +105,7 @@ Views/Home/Catalogo                Buscador + filtros (materia, nivel, colegio, 
 Views/Home/Registrarse             Alumno / Profesor (`?rol=`)
 Views/Home/IniciarSesion           Ingreso
 Views/Home/Soporte                 Buscador de ayuda, 3 tarjetas, FAQ, formulario de contacto
-Views/Home/PanelControl            Saludo, métricas, pestañas: Administrar clases, Historial, Chat, Configuración
+Views/Home/PanelControl            Saludo, métricas, pestañas: Administrar clases, Chat, Historial
 Views/Home/QuienesSomos            Misión, problemas, equipo, identidad de marca (imágenes), proceso (Figma/Miro)
 Views/Home/Privacy                 Privacidad (usa .cabecera)
 wwwroot/css/site.css               ÚNICO CSS propio
@@ -155,7 +155,7 @@ Patrón: una función por módulo, todas llamadas desde `inicializarSitio()` en 
 | `validarIngreso()` | Valida y, si está bien, va a `/Home/PanelControl` (TODO BD) |
 | `inicializarBuscadorDeAyuda()` / `validarContacto()` | Soporte |
 | `inicializarAccesosDelPanel()` | `data-abrir-tab` abre la pestaña correspondiente |
-| `guardarConfiguracion()` | Panel de control (simulado hasta que haya BD). El chat está en `chat.js` (entrada 2026-10-16) |
+| `inicializarCierreDeDialogos()` | El fondo de un `<dialog>` solo lo cierra si el clic empezó y terminó en el fondo. El chat está en `chat.js` (entrada 2026-10-16) |
 
 La clase `jsActivo` se pone en `<html>` con un script inline en el `<head>`: lo que se revela al scroll solo se oculta si hay JS.
 
@@ -373,3 +373,7 @@ Claves: `idUsuario`, `nombreUsuario`, `inicialesUsuario`, `cantidadNotificacione
 - **`.gitignore`**: reemplaza `wwwroot/uploads/` y `App_Data/` por `wwwroot/userData/*/*` + `!wwwroot/userData/*/.gitkeep`: los archivos de los usuarios no se suben, las carpetas sí.
 - **Código**: `PerfilesController` guarda y borra en esas carpetas y en la BD queda la URL (`/userData/fotos-perfil/...` o `/userData/dni/...`). `Program.cs` suma `UseStaticFiles` (para servir las fotos subidas después de compilar) y un 404 para todo lo que cuelgue de `/userData/dni`: el DNI sigue sin poder abrirse por URL aunque ahora esté dentro de `wwwroot`.
 - **`MIP-BD.sql`**: las rutas de ejemplo (`privado/dni/...`, y las 2 fotos reales de la cuenta 57) apuntan a las carpetas nuevas. Si ya tenías esas 2 fotos, moverlas a mano: `wwwroot/uploads/perfiles/` → `wwwroot/userData/fotos-perfil/` y `App_Data/dni/` → `wwwroot/userData/dni/`.
+
+### 2026-10-19 — Modales: no se cierran al soltar afuera y se quita la pestaña Configuración
+- **Bug de los modales**: si se apretaba el mouse dentro de un modal y se soltaba afuera, el modal se cerraba. Bootstrap cierra el `<dialog>` con el `click` cuyo objetivo es el propio `<dialog>` (el fondo), y en ese caso el navegador manda el click al `<dialog>` aunque el clic haya empezado adentro. `inicializarCierreDeDialogos()` (`site.js`) guarda dónde empezó el clic (`pointerdown`, en captura) y frena el `click` sobre el fondo si no empezó también en el fondo. Está en un solo lugar y alcanza a todos los diálogos y al menú lateral (están en todas las páginas), sin tocar `bootstrap.bundle.min.js`.
+- **Pestaña Configuración del Panel de Control, eliminada**: la tarjeta de acceso rápido, el botón de la pestaña y su panel (`PanelControl.cshtml`), `guardarConfiguracion()` (`site.js`) y el bloque «Configuración» de `site.css`. El saludo ahora dice «Gestioná tus clases y tus mensajes.». Las pestañas (y las tarjetas de acceso rápido) quedan en este orden: Mis clases, Chat directo, Historial. No tenía controlador, ruta ni SP propios (era un formulario simulado), así que no hay nada que cambiar en la BD ni en `MIP-BD.sql`.
