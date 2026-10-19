@@ -273,21 +273,9 @@ function crearAvisoDelChat(icono, texto, etiqueta = "p") {
     return aviso;
 }
 
-// Al leer el chat desaparece su notificación de mensajes sin leer (lista y contador del Panel e insignia del header)
+// Al leer el chat desaparece su notificación de mensajes sin leer (quitarNotificacion está en clases.js)
 function quitarNotificacionDelChat(idOtroUsuario, cantidadNotificaciones) {
-    document.querySelector(`#notificaciones [data-tipo="mensajesSinLeer"][data-id-otro="${idOtroUsuario}"]`)?.remove();
-
-    const lista = document.querySelector("#notificaciones .listaNotificaciones");
-    const restantes = lista ? lista.children.length : 0;
-    const contador = document.getElementById("cantidadNotificacionesPanel");
-    if (contador) {
-        contador.textContent = restantes;
-        contador.hidden = restantes === 0;
-    }
-    if (lista && restantes === 0) {
-        lista.replaceWith(crearElemento("p", "sinNotificaciones", "No tenés nada pendiente. Acá vas a ver las solicitudes de amistad, los mensajes sin leer y las clases que esperan tu respuesta."));
-    }
-    actualizarInsigniaDeNotificaciones(cantidadNotificaciones);
+    quitarNotificacion(document.querySelector(`#notificaciones [data-tipo="mensajesSinLeer"][data-id-otro="${idOtroUsuario}"]`), cantidadNotificaciones);
 }
 
 // ----- Enviar -----

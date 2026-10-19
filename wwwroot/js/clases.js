@@ -53,6 +53,60 @@ function inicializarInsigniaDeNotificaciones() {
     setInterval(refrescar, 60000);
 }
 
+// Saca una notificación ya resuelta de la lista del Panel y pone al día el contador de la lista y la insignia del header
+function quitarNotificacion(item, cantidadNotificaciones) {
+    item?.remove();
+
+    const lista = document.querySelector("#notificaciones .listaNotificaciones");
+    const restantes = lista ? lista.children.length : 0;
+    const contador = document.getElementById("cantidadNotificacionesPanel");
+    if (contador) {
+        contador.textContent = restantes;
+        contador.hidden = restantes === 0;
+    }
+    if (lista && restantes === 0) {
+        lista.replaceWith(crearElemento("p", "sinNotificaciones", "No tenés nada pendiente. Acá vas a ver las solicitudes de amistad, los mensajes sin leer y las clases que esperan tu respuesta."));
+    }
+    actualizarInsigniaDeNotificaciones(cantidadNotificaciones);
+}
+
+// Solicitudes de amistad: se aceptan o rechazan desde la notificación misma. El clic se escucha en la sección
+// (no en cada botón) porque refrescarPanel() reemplaza la lista de notificaciones.
+function inicializarSolicitudesDeAmistad() {
+    document.getElementById("notificaciones")?.addEventListener("click", evento => {
+        const boton = evento.target.closest("[data-responder-amistad]");
+        if (!boton) return;
+        const item = boton.closest(".notificacion");
+        const nombre = item.dataset.nombre;
+        const aceptar = boton.dataset.responderAmistad === "aceptar";
+        const botones = item.querySelectorAll("[data-responder-amistad]");
+        botones.forEach(b => { b.disabled = true; });
+
+        enviarAccionDeClase("/Notificaciones/ResponderAmistad", { idOtroUsuario: item.dataset.idOtro, aceptar })
+            .then(({ ok, cuerpo }) => {
+                if (!ok && cuerpo.resultado !== "solicitudInexistente") {
+                    botones.forEach(b => { b.disabled = false; });
+                    mostrarSnackbar(cuerpo.mensaje || "No pudimos responder la solicitud. Probá de nuevo.", "error");
+                    return;
+                }
+                // el foco pasa a la notificación de al lado (o al título) para no perderlo al borrar el botón
+                const vecina = item.nextElementSibling || item.previousElementSibling;
+                const titulo = document.getElementById("tituloNotificaciones");
+                quitarNotificacion(item, cuerpo.cantidadNotificaciones);
+                if (vecina) vecina.querySelector("a, button")?.focus();
+                else if (titulo) { titulo.tabIndex = -1; titulo.focus(); }
+
+                if (!ok) mostrarSnackbar(cuerpo.mensaje, "info");
+                else mostrarSnackbar(aceptar ? `Ahora ${nombre} y vos son amigos.` : `Rechazaste la solicitud de ${nombre}.`, "exito");
+            })
+            .catch(error => {
+                console.error(error);
+                botones.forEach(b => { b.disabled = false; });
+                mostrarSnackbar("No pudimos responder la solicitud. Probá de nuevo.", "error");
+            });
+    });
+}
+
 // ----- Selector de día y hora (partial _selectorHorario) -----
 function horaEnTexto(hora, minutos) {
     return `${String(hora).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`;
@@ -464,6 +518,7 @@ function enviarReubicacionDeClase() {
 // ================= INICIALIZACIÓN =================
 function inicializarClases() {
     inicializarInsigniaDeNotificaciones();
+    inicializarSolicitudesDeAmistad();
     inicializarPedidoDeClase();
     inicializarAccionesDeClases();
 }

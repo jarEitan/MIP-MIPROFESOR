@@ -320,6 +320,15 @@ public class BD
             return connection.QuerySingle<int>("contarNotificaciones", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure);
         }
     }
+
+    // Acepta o rechaza una solicitud de amistad recibida. resultado: ok | solicitudInexistente
+    public string responderSolicitudAmistad(int idUsuario, int idOtroUsuario, bool aceptar)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<string>("responderSolicitudAmistad", new { idUsuario = idUsuario, idOtroUsuario = idOtroUsuario, aceptar = aceptar }, commandType: CommandType.StoredProcedure);
+        }
+    }
 }
 
 // Una fila (profesor, nombre) de las listas del SP obtenerCatalogo
