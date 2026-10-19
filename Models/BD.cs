@@ -10,6 +10,7 @@ namespace MIP_MIPROFESOR.Models;
 // Catálogo: stored procedure obtenerCatalogo (en MIP-BD.sql).
 // Likes: stored procedures obtenerLike y alternarLike (en MIP-BD.sql).
 // Clases y notificaciones: stored procedures en MIP-BD.sql (reglas y estados en Info/log.md, entrada 2026-10-14).
+// Chat: stored procedures enviarMensaje, obtenerConversaciones y obtenerChat (en MIP-BD.sql).
 public class BD
 {
     private static string connectionString = @"Server=localhost;Database=MIP;Integrated Security=True;TrustServerCertificate=True;";
@@ -92,7 +93,8 @@ public class BD
                 datos.idsMaterias = tablas.Read<int>().ToList();
                 datos.idsNiveles = tablas.Read<int>().ToList();
                 datos.idsModalidades = tablas.Read<int>().ToList();
-                datos.idsEscuelas = tablas.Read<int>().ToList();
+                datos.escuelas = tablas.Read<EscuelaUsuario>().ToList();
+                datos.idsEscuelas = datos.escuelas.Select(escuela => escuela.id).ToList();
                 datos.titulos = tablas.Read<string>().ToList();
                 return datos;
             }
@@ -260,9 +262,48 @@ public class BD
         }
     }
 
-    // ================= NOTIFICACIONES =================
+    // ================= CHAT =================
+    // Tabla Mensajes: cada mensaje tiene emisor, receptor y estado (No visto | Visto).
 
-    // Las notificaciones del usuario: primero las que piden una acción, después las nuevas, después las ya vistas
+    // Guarda un mensaje (queda No visto hasta que el receptor abre el chat)
+    public ResultadoMensaje enviarMensaje(int idEmisor, int idReceptor, string contenido)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoMensaje>("enviarMensaje", new { idEmisor = idEmisor, idReceptor = idReceptor, contenido = contenido }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    // Las personas con las que el usuario habló, la del último mensaje primero
+    public List<ConversacionChat> obtenerConversaciones(int idUsuario)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.Query<ConversacionChat>("obtenerConversaciones", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure).ToList();
+        }
+    }
+
+    // Todos los mensajes entre los dos, del más viejo al más nuevo. Los que idOtroUsuario le mandó
+    // a idUsuario y estaban No visto pasan a Visto (se llama cuando el usuario abre el chat).
+    public ResultadoChat obtenerChat(int idUsuario, int idOtroUsuario)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            using (var tablas = connection.QueryMultiple("obtenerChat", new { idUsuario = idUsuario, idOtroUsuario = idOtroUsuario }, commandType: CommandType.StoredProcedure))
+            {
+                UsuarioChat? otroUsuario = tablas.ReadFirstOrDefault<UsuarioChat>();
+                List<MensajeChat> mensajes = tablas.Read<MensajeChat>().ToList();
+                if (otroUsuario == null) return new ResultadoChat { encontrado = false };
+                return new ResultadoChat { encontrado = true, otroUsuario = otroUsuario, mensajes = mensajes };
+            }
+        }
+    }
+
+    // ================= NOTIFICACIONES =================
+    // Se calculan con lo que está a medio resolver: solicitudes de amistad, mensajes sin leer y clases
+    // que esperan una respuesta (función notificacionesDeUsuario). Desaparecen solas cuando se resuelven.
+
+    // Las notificaciones del usuario, la más reciente primero
     public List<NotificacionUsuario> obtenerNotificaciones(int idUsuario)
     {
         using (var connection = new SqlConnection(connectionString))
@@ -271,7 +312,7 @@ public class BD
         }
     }
 
-    // El número de la insignia del botón Panel de Control: pedidos por responder + novedades sin ver
+    // El número de la insignia del botón Panel de Control (cuántas notificaciones hay)
     public int contarNotificaciones(int idUsuario)
     {
         using (var connection = new SqlConnection(connectionString))
@@ -280,12 +321,12 @@ public class BD
         }
     }
 
-    // Las novedades pasan a vistas (se llama al abrir la lista). Devuelve lo que queda en la insignia
-    public int marcarNotificacionesVistas(int idUsuario)
+    // Acepta o rechaza una solicitud de amistad recibida. resultado: ok | solicitudInexistente
+    public string responderSolicitudAmistad(int idUsuario, int idOtroUsuario, bool aceptar)
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<int>("marcarNotificacionesVistas", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<string>("responderSolicitudAmistad", new { idUsuario = idUsuario, idOtroUsuario = idOtroUsuario, aceptar = aceptar }, commandType: CommandType.StoredProcedure);
         }
     }
 }

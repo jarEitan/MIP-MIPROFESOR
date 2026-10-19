@@ -25,7 +25,16 @@ public class DatosEdicion
     public List<int> idsNiveles { get; set; } = new List<int>();
     public List<int> idsModalidades { get; set; } = new List<int>();
     public List<int> idsEscuelas { get; set; } = new List<int>();
+    // Los mismos colegios con el año desde el que está ahí (solo lo cargan los profesores)
+    public List<EscuelaUsuario> escuelas { get; set; } = new List<EscuelaUsuario>();
     public List<string> titulos { get; set; } = new List<string>();
     // Lo que le falta para estar verificada (SP obtenerFaltantesVerificacion)
     public List<string> faltantes { get; set; } = new List<string>();
+}
+
+// Un colegio del usuario (tabla Escuelas_Usuarios). anioDesde = año de la columna "desde" (null en los alumnos)
+public class EscuelaUsuario
+{
+    public int id { get; set; }
+    public int? anioDesde { get; set; }
 }

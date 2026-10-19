@@ -71,16 +71,16 @@ public class HomeController : Controller
         string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
         if (!int.TryParse(idUsuarioSesion, out int idUsuario)) return RedirectToAction("IniciarSesion", "Sesion");
 
-        // Clases y notificaciones salen de la BD. Las notificaciones se leen ANTES de marcarlas como vistas:
-        // al entrar al Panel las novedades se muestran como nuevas y recién después pasan a vistas
-        // (los pedidos por responder siguen contando en la insignia hasta que se resuelven).
+        // Clases y notificaciones salen de la BD. Las notificaciones son lo que está a medio resolver
+        // (amistades, mensajes y clases): siguen contando en la insignia hasta que se resuelven.
+        // El chat no viene acá: lo pide chat.js con fetch a MensajesController.
         try
         {
             BD bd = new BD();
             ViewBag.misClases = bd.obtenerMisClases(idUsuario);
-            ViewBag.notificaciones = bd.obtenerNotificaciones(idUsuario);
-            int cantidadNotificaciones = bd.marcarNotificacionesVistas(idUsuario);
-            HttpContext.Session.SetString("cantidadNotificaciones", cantidadNotificaciones.ToString());
+            List<NotificacionUsuario> notificaciones = bd.obtenerNotificaciones(idUsuario);
+            ViewBag.notificaciones = notificaciones;
+            HttpContext.Session.SetString("cantidadNotificaciones", notificaciones.Count.ToString());
         }
         catch (Exception)
         {

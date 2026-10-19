@@ -91,14 +91,15 @@
                     }
                     else
                     {
-                        @* Botones sociales (Me gusta y Pedir clase ya funcionan): salen de las tablas Amigos, Chats/Mensajes, Resenas
-                           y Consultas_Soporte. Los que faltan muestran "Muy pronto" (sin sesión llevan a Iniciar sesión). *@
+                        @* Botones sociales (Me gusta, Pedir clase y Mensaje ya funcionan): salen de las tablas Amigos, Mensajes, Resenas
+                           y Consultas_Soporte. Los que faltan muestran "Muy pronto" (sin sesión llevan a Iniciar sesión).
+                           Mensaje abre el chat con esta persona en el Panel de Control (chat.js); sin sesión, el Panel lleva a Iniciar sesión. *@
                         <button class="boton principal" type="button" data-pedir-clase data-id-profesor="@idPerfil" data-nombre-profesor="" data-solo-profesor hidden>
                             <i class="bi bi-calendar-plus" aria-hidden="true"></i> Pedir clase
                         </button>
-                        <button class="boton contorno" type="button" data-proximamente="Enviar mensaje">
+                        <a class="boton contorno" asp-controller="Home" asp-action="PanelControl" asp-route-tab="chat" asp-route-chat="@idPerfil">
                             <i class="bi bi-chat-dots" aria-hidden="true"></i> Mensaje
-                        </button>
+                        </a>
                         <button class="boton contorno" type="button" data-proximamente="Agregar amigo">
                             <i class="bi bi-person-plus" aria-hidden="true"></i> Agregar amigo
                         </button>
@@ -216,6 +217,14 @@
                                 <label for="edicionEscuelas">@(esProfesor ? "Colegios en los que das clase" : "Tu colegio")</label>
                                 <select class="form-control" id="edicionEscuelas" data-buscable data-nombre-ids="idsEscuelas"
                                         data-placeholder="@(esProfesor ? "Buscá y elegí colegios" : "Buscá tu colegio")" multiple="@(esProfesor ? "multiple" : null)"></select>
+                                @if (esProfesor)
+                                {
+                                    @* Un campo de año por cada colegio elegido (site.js, dibujarAniosDeEscuelas) *@
+                                    <div class="aniosEscuelas" id="aniosEscuelas" hidden>
+                                        <p>¿Desde qué año das clase en cada uno? Solo el año.</p>
+                                        <div id="listaAniosEscuelas"></div>
+                                    </div>
+                                }
                             </div>
 
                             <div class="form-field">

@@ -19,6 +19,7 @@ public class PerfilesController : Controller
     private const int largoMaximoTitulo = 100;
     private const int cantidadMaximaTitulos = 10;
     private const int precioHoraMaximo = 10000000;
+    private const int anioMinimoEscuela = 1950;
     private const long pesoMaximoFoto = 5 * 1024 * 1024;
     private const int ladoFotoPerfil = 100;
 
@@ -214,7 +215,8 @@ public class PerfilesController : Controller
         edicion.idsMaterias = limpiarListaDeIds(edicion.idsMaterias);
         edicion.idsNiveles = limpiarListaDeIds(edicion.idsNiveles);
         edicion.idsModalidades = limpiarListaDeIds(edicion.idsModalidades);
-        edicion.idsEscuelas = limpiarListaDeIds(edicion.idsEscuelas);
+        // Los profesores mandan cada colegio con el año desde el que dan clase ahí ("20:2015,21:2019")
+        edicion.idsEscuelas = tipoUsuario == "profesor" ? limpiarEscuelasConAnio(edicion.idsEscuelas) : limpiarListaDeIds(edicion.idsEscuelas);
 
         // "|" es el separador de títulos en el SP
         edicion.titulos = (edicion.titulos ?? new List<string>())
@@ -242,6 +244,7 @@ public class PerfilesController : Controller
         if (edicion.titulos.Count > cantidadMaximaTitulos) return "Podés cargar hasta 10 títulos.";
         if (edicion.titulos.Any(titulo => titulo.Length > largoMaximoTitulo)) return "Cada título puede tener hasta 100 caracteres.";
         if (tipoUsuario == "alumno" && (contarIds(edicion.idsEscuelas) > 1 || contarIds(edicion.idsNiveles) > 1)) return "Como alumno podés elegir un solo colegio y un solo nivel.";
+        if (tipoUsuario == "profesor" && !aniosDeEscuelasValidos(edicion.idsEscuelas)) return mensajeDeResultado("anioColegioInvalido");
 
         // Descripción: HTML del editor, limpio. Si no tiene texto, se guarda vacía.
         string htmlDescripcion = limpiarDescripcion(edicion.descripcion ?? "").Trim();
@@ -267,6 +270,24 @@ public class PerfilesController : Controller
             .Distinct());
     }
 
+    // "20:2015, 21:2019,abc:3" → "20:2015,21:2019". Si un colegio vino sin año queda "21:" (y la validación lo frena)
+    private static string limpiarEscuelasConAnio(string? escuelas)
+    {
+        return string.Join(",", (escuelas ?? "").Split(',')
+            .Select(escuela => escuela.Split(':'))
+            .Where(partes => int.TryParse(partes[0].Trim(), out _))
+            .GroupBy(partes => int.Parse(partes[0].Trim()))
+            .Select(grupo => grupo.Key + ":" + (grupo.First().Length > 1 ? grupo.First()[1].Trim() : "")));
+    }
+
+    // Cada colegio tiene que tener un año entre 1950 y el año actual
+    private static bool aniosDeEscuelasValidos(string? escuelas)
+    {
+        if (string.IsNullOrEmpty(escuelas)) return true;
+        return escuelas.Split(',').All(escuela =>
+            int.TryParse(escuela.Split(':')[1], out int anio) && anio >= anioMinimoEscuela && anio <= DateTime.Today.Year);
+    }
+
     private static int contarIds(string? ids)
     {
         return string.IsNullOrEmpty(ids) ? 0 : ids.Split(',').Length;
@@ -279,6 +300,7 @@ public class PerfilesController : Controller
             case "mailExistente": return "Ese correo ya lo usa otra cuenta.";
             case "dniExistente": return "Ese DNI ya está registrado en otra cuenta.";
             case "opcionesInvalidas": return "Como alumno podés elegir un solo colegio y un solo nivel.";
+            case "anioColegioInvalido": return "Escribí desde qué año das clase en cada colegio (solo el año, por ejemplo 2018).";
             case "usuarioInexistente": return "No encontramos tu cuenta.";
             default: return "Revisá los datos e intentá de nuevo.";
         }
