@@ -27,6 +27,19 @@ app.UseSession();
 
 app.UseAuthorization();
 
+// Las fotos del DNI se guardan en wwwroot/userData/dni pero nunca se sirven por URL
+app.Use(async (contexto, siguiente) =>
+{
+    if (contexto.Request.Path.StartsWithSegments("/userData/dni"))
+    {
+        contexto.Response.StatusCode = StatusCodes.Status404NotFound;
+        return;
+    }
+    await siguiente();
+});
+
+// MapStaticAssets solo conoce los archivos que había al compilar: las fotos subidas después las sirve UseStaticFiles
+app.UseStaticFiles();
 app.MapStaticAssets();
 
 app.MapControllerRoute(

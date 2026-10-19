@@ -367,3 +367,9 @@ Claves: `idUsuario`, `nombreUsuario`, `inicialesUsuario`, `cantidadNotificacione
 - **Chat en celular**: la lista de conversaciones es horizontal; ahora cada una es más angosta y asoma la siguiente, así se nota que hay más.
 - **Para aplicarlo**: borrar la base `MIP` y correr `MIP-BD.sql` (trae las tablas, los SP y los datos).
 - Verificado con SQL Server 2022 y el sitio corriendo contra esa base: el script corre sin errores, login con `12345678`, ningún mensaje ni clase anterior a la inscripción de sus usuarios, toda reseña tiene una clase completada, aceptar y rechazar solicitudes (contadores, foco y recarga), chat y notificaciones a 1280 y 375 px sin errores de consola. `dotnet build` sin errores ni advertencias.
+
+### 2026-10-19 — Carpeta `wwwroot/userData` para fotos de perfil y DNI
+- **Carpetas**: `wwwroot/userData/fotos-perfil/` (fotos de perfil, WEBP 100×100) y `wwwroot/userData/dni/` (fotos del DNI). Cada una trae un `.gitkeep`, así existen al clonar el repo.
+- **`.gitignore`**: reemplaza `wwwroot/uploads/` y `App_Data/` por `wwwroot/userData/*/*` + `!wwwroot/userData/*/.gitkeep`: los archivos de los usuarios no se suben, las carpetas sí.
+- **Código**: `PerfilesController` guarda y borra en esas carpetas y en la BD queda la URL (`/userData/fotos-perfil/...` o `/userData/dni/...`). `Program.cs` suma `UseStaticFiles` (para servir las fotos subidas después de compilar) y un 404 para todo lo que cuelgue de `/userData/dni`: el DNI sigue sin poder abrirse por URL aunque ahora esté dentro de `wwwroot`.
+- **`MIP-BD.sql`**: las rutas de ejemplo (`privado/dni/...`, y las 2 fotos reales de la cuenta 57) apuntan a las carpetas nuevas. Si ya tenías esas 2 fotos, moverlas a mano: `wwwroot/uploads/perfiles/` → `wwwroot/userData/fotos-perfil/` y `App_Data/dni/` → `wwwroot/userData/dni/`.
