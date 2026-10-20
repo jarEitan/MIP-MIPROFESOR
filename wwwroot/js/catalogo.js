@@ -183,6 +183,12 @@ function crearTarjetaProfesor(profesor) {
     if (profesor.calificacion >= 4.8 && profesor.cantidadResenas >= 2) {
         nombre.append(crearElemento("span", "badge badge-subtle theme-primary", "Popular"));
     }
+    // Recomendación: amigos tuyos que ya completaron clases con este profesor (solo con sesión; ellos van primero)
+    if (profesor.amigosRecomiendan > 0) {
+        const recomendado = crearElemento("span", "badge badge-subtle theme-accent");
+        recomendado.append(crearIcono("bi-people-fill"), profesor.amigosRecomiendan === 1 ? " 1 amigo tomó clase" : ` ${profesor.amigosRecomiendan} amigos tomaron clase`);
+        nombre.append(recomendado);
+    }
     cuerpo.append(nombre);
 
     const colegios = crearElemento("p", "colegios");

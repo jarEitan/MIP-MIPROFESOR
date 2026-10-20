@@ -12,6 +12,8 @@ public class Profesor
     public int cantidadResenas { get; set; }
     public int precioHora { get; set; }
     public bool verificado { get; set; }
+    // Cuántos amigos del visitante completaron clases con este profesor (0 sin sesión)
+    public int amigosRecomiendan { get; set; }
     public List<string> materias { get; set; } = new List<string>();
     public List<string> niveles { get; set; } = new List<string>();
     public List<string> modalidades { get; set; } = new List<string>();

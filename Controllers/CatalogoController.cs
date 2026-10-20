@@ -8,7 +8,7 @@ namespace MIP_MIPROFESOR.Controllers;
 public class CatalogoController : Controller
 {
     // /Catalogo?busqueda=...&materia=...&colegio=...&modalidad=...&nivel=Secundario 1&nivel=Secundario 2&pagina=2&porPagina=15
-    // Los filtros de la URL solo preseleccionan el formulario (links de Inicio, "Mi Colegio" y búsquedas compartidas).
+    // Los filtros de la URL solo preseleccionan el formulario (links de Inicio y búsquedas compartidas).
     [HttpGet("Catalogo")]
     public IActionResult Index(string? busqueda, string? materia, string? colegio, string? modalidad, string[]? nivel, int pagina = 1, int porPagina = 10)
     {
@@ -46,7 +46,9 @@ public class CatalogoController : Controller
         try
         {
             string niveles = string.Join(",", nivel ?? new string[0]);
-            ResultadoCatalogo resultado = new BD().obtenerCatalogo(busqueda, materia, colegio, modalidad, niveles, pagina, porPagina);
+            // Con sesión, los profesores que eligieron tus amigos aparecen primero
+            int? idVisitante = int.TryParse(HttpContext.Session.GetString("idUsuario"), out int id) ? id : null;
+            ResultadoCatalogo resultado = new BD().obtenerCatalogo(busqueda, materia, colegio, modalidad, niveles, pagina, porPagina, idVisitante);
             return Json(new
             {
                 ok = true,
@@ -64,6 +66,7 @@ public class CatalogoController : Controller
                     resumen = profesor.resumen,
                     calificacion = profesor.calificacion,
                     cantidadResenas = profesor.cantidadResenas,
+                    amigosRecomiendan = profesor.amigosRecomiendan,
                     precioHora = profesor.precioHora,
                     materias = profesor.materias,
                     niveles = profesor.niveles,
