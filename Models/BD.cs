@@ -10,7 +10,8 @@ namespace MIP_MIPROFESOR.Models;
 // Catálogo: stored procedure obtenerCatalogo (en MIP-BD.sql).
 // Likes: stored procedures obtenerLike y alternarLike (en MIP-BD.sql).
 // Amigos: obtenerAmistad, cambiarAmistad y obtenerAmigos. Reseñas: darResena (en MIP-BD.sql).
-// Clases y notificaciones: stored procedures en MIP-BD.sql (reglas y estados en Info/log.md, entrada 2026-10-14).
+// Clases y notificaciones: stored procedures en MIP-BD.sql (reglas y estados en Info/log.md, entradas 2026-10-14 y 2026-10-20).
+// Agenda del profesor: tabla Disponibilidad y stored procedures obtenerDisponibilidad, guardarDisponibilidad, bloquearDia y desbloquearDia.
 // Chat: stored procedures enviarMensaje, obtenerConversaciones y obtenerChat (en MIP-BD.sql).
 public class BD
 {
@@ -218,12 +219,12 @@ public class BD
     // ================= CLASES (pedidos alumno → profesor) =================
     // Reglas y estados: Info/log.md, entrada 2026-10-14. Todos los SP devuelven una fila con "resultado".
 
-    // El alumno le pide una clase al profesor. fecha = hora de inicio
-    public ResultadoClase enviarPedidoClase(int idAlumno, int idProfesor, DateTime fecha)
+    // El alumno le pide una clase al profesor. fecha = hora de inicio. mensaje (opcional) va al chat del profesor
+    public ResultadoClase enviarPedidoClase(int idAlumno, int idProfesor, DateTime fecha, string? mensaje)
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoClase>("enviarPedidoClase", new { idAlumno = idAlumno, idProfesor = idProfesor, fecha = fecha }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoClase>("enviarPedidoClase", new { idAlumno = idAlumno, idProfesor = idProfesor, fecha = fecha, mensaje = mensaje }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -236,49 +237,78 @@ public class BD
         }
     }
 
-    // Cancela una clase Pendiente o Confirmada (cualquiera de los dos). muyCerca = hay que hablarlo por chat
-    public ResultadoClase cancelarClase(int idUsuario, int idClase)
+    // Cancela una clase. Confirmada con menos de 24 h: queda Pide cancelar y el otro tiene que aceptar (solicitudEnviada).
+    // motivo (opcional) va al chat de la otra persona
+    public ResultadoClase cancelarClase(int idUsuario, int idClase, string? motivo)
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoClase>("cancelarClase", new { idUsuario = idUsuario, idClase = idClase }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoClase>("cancelarClase", new { idUsuario = idUsuario, idClase = idClase, motivo = motivo }, commandType: CommandType.StoredProcedure);
         }
     }
 
-    // Cambia el horario: la clase vuelve a Pendiente y le toca responder al otro
-    public ResultadoClase reubicarClase(int idUsuario, int idClase, DateTime nuevaFecha)
+    // Propone otro horario. Pendiente / Rechazada: vuelve a Pendiente y le toca responder al otro. Confirmada: queda
+    // Pide cambio (sigue en su horario hasta que el otro acepte). motivo (opcional) va al chat
+    public ResultadoClase reubicarClase(int idUsuario, int idClase, DateTime nuevaFecha, string? motivo)
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            return connection.QuerySingle<ResultadoClase>("reubicarClase", new { idUsuario = idUsuario, idClase = idClase, nuevaFecha = nuevaFecha }, commandType: CommandType.StoredProcedure);
+            return connection.QuerySingle<ResultadoClase>("reubicarClase", new { idUsuario = idUsuario, idClase = idClase, nuevaFecha = nuevaFecha, motivo = motivo }, commandType: CommandType.StoredProcedure);
         }
     }
 
-    // Clases del Panel de Control (primero las activas, después el historial) + contadores
-    public MisClases obtenerMisClases(int idUsuario)
+    // Acepta o rechaza el pedido de cambio de horario o de cancelación de una clase confirmada
+    public ResultadoClase responderSolicitudClase(int idUsuario, int idClase, bool aceptar)
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            using (var tablas = connection.QueryMultiple("obtenerMisClases", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure))
-            {
-                MisClases misClases = new MisClases();
-                misClases.clases = tablas.Read<ClasePanel>().ToList();
-                ContadoresClasesCrudos contadores = tablas.ReadFirst<ContadoresClasesCrudos>();
-                misClases.pendientes = contadores.pendientes ?? 0;
-                misClases.proximas = contadores.proximas ?? 0;
-                misClases.completadas = contadores.completadas ?? 0;
-                return misClases;
-            }
+            return connection.QuerySingle<ResultadoClase>("responderSolicitudClase", new { idUsuario = idUsuario, idClase = idClase, aceptar = aceptar }, commandType: CommandType.StoredProcedure);
         }
     }
 
-    // Historial de clases de idUsuario (máximo 20, tope fijo en el SP). idVisitante = quien mira (null = sin sesión):
-    // si es el mismo usuario ve todo su historial; si es otro, solo las clases completadas.
-    public ResultadoHistorial obtenerHistorialClases(int idUsuario, int? idVisitante)
+    // Quien pidió el cambio o la cancelación lo retira: la clase vuelve a Confirmada
+    public ResultadoClase retirarSolicitudClase(int idUsuario, int idClase)
     {
         using (var connection = new SqlConnection(connectionString))
         {
-            using (var tablas = connection.QueryMultiple("obtenerHistorialClases", new { idUsuario = idUsuario, idVisitante = idVisitante }, commandType: CommandType.StoredProcedure))
+            return connection.QuerySingle<ResultadoClase>("retirarSolicitudClase", new { idUsuario = idUsuario, idClase = idClase }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    // "No se dio": pasa una clase Completada de las últimas 48 h a No concretada
+    public ResultadoClase marcarClaseNoConcretada(int idUsuario, int idClase)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoClase>("marcarClaseNoConcretada", new { idUsuario = idUsuario, idClase = idClase }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    // Todas las clases del usuario con fecha entre desde y hasta (días completos), en cualquier estado: el calendario del Panel
+    public List<ClaseCalendario> obtenerCalendarioClases(int idUsuario, DateTime desde, DateTime hasta)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.Query<ClaseCalendario>("obtenerCalendarioClases", new { idUsuario = idUsuario, desde = desde.Date, hasta = hasta.Date }, commandType: CommandType.StoredProcedure).ToList();
+        }
+    }
+
+    // Los contadores del Panel de Control (clases activas y completadas)
+    public ContadoresClases obtenerContadoresClases(int idUsuario)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ContadoresClases>("obtenerContadoresClases", new { idUsuario = idUsuario }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    // Historial de clases de idUsuario, de a cantidad desde la posición desde. idVisitante = quien mira (null = sin sesión):
+    // si es el mismo usuario ve todo su historial; si es otro, solo las clases completadas y con tope total de 20 (lo aplica el SP).
+    public ResultadoHistorial obtenerHistorialClases(int idUsuario, int? idVisitante, int desde, int cantidad)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            using (var tablas = connection.QueryMultiple("obtenerHistorialClases", new { idUsuario = idUsuario, idVisitante = idVisitante, desde = desde, cantidad = cantidad }, commandType: CommandType.StoredProcedure))
             {
                 ResultadoHistorial? resultado = tablas.ReadFirstOrDefault<ResultadoHistorial>();
                 if (resultado == null) return new ResultadoHistorial { encontrado = false };
@@ -299,6 +329,48 @@ public class BD
                 "obtenerHorariosOcupados",
                 new { idProfesor = idProfesor, idAlumno = idAlumno, desde = desde, hasta = hasta, idClaseExcluir = idClaseExcluir },
                 commandType: CommandType.StoredProcedure).ToList();
+        }
+    }
+
+    // ================= AGENDA DEL PROFESOR =================
+    // Tabla Disponibilidad: horario semanal (franjas) y días bloqueados. Un profesor sin franjas no configuró su agenda.
+
+    public AgendaProfesor obtenerDisponibilidad(int idProfesor)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            using (var tablas = connection.QueryMultiple("obtenerDisponibilidad", new { idProfesor = idProfesor }, commandType: CommandType.StoredProcedure))
+            {
+                AgendaProfesor agenda = new AgendaProfesor();
+                agenda.franjas = tablas.Read<FranjaSemanal>().ToList();
+                agenda.diasBloqueados = tablas.Read<DiaBloqueado>().ToList();
+                return agenda;
+            }
+        }
+    }
+
+    // Reemplaza el horario semanal. franjas: "1:14:00-21:00,1:09:00-12:00,6:09:00-13:00" (lunes = 1)
+    public string guardarDisponibilidad(int idProfesor, string franjas)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoAgenda>("guardarDisponibilidad", new { idProfesor = idProfesor, franjas = franjas }, commandType: CommandType.StoredProcedure).resultado;
+        }
+    }
+
+    public ResultadoAgenda bloquearDia(int idProfesor, DateTime fecha)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoAgenda>("bloquearDia", new { idProfesor = idProfesor, fecha = fecha.Date }, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    public ResultadoAgenda desbloquearDia(int idProfesor, DateTime fecha)
+    {
+        using (var connection = new SqlConnection(connectionString))
+        {
+            return connection.QuerySingle<ResultadoAgenda>("desbloquearDia", new { idProfesor = idProfesor, fecha = fecha.Date }, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -340,8 +412,9 @@ public class BD
     }
 
     // ================= NOTIFICACIONES =================
-    // Se calculan con lo que está a medio resolver: solicitudes de amistad, mensajes sin leer y clases
-    // que esperan una respuesta (función notificacionesDeUsuario). Desaparecen solas cuando se resuelven.
+    // Se calculan con lo que está a medio resolver (acciones: amistades, mensajes sin leer y clases que esperan una
+    // respuesta) y con las novedades de los últimos 3 días (noticias), función notificacionesDeUsuario.
+    // Las acciones desaparecen solas cuando se resuelven.
 
     // Las notificaciones del usuario, la más reciente primero
     public List<NotificacionUsuario> obtenerNotificaciones(int idUsuario)
@@ -352,7 +425,7 @@ public class BD
         }
     }
 
-    // El número de la insignia del botón Panel de Control (cuántas notificaciones hay)
+    // El número de la insignia del botón Panel de Control (cuántas notificaciones de acción hay; las noticias no cuentan)
     public int contarNotificaciones(int idUsuario)
     {
         using (var connection = new SqlConnection(connectionString))

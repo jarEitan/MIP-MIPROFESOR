@@ -1,30 +1,24 @@
-@* Panel de Control. Las clases y las notificaciones vienen de la BD (HomeController.PanelControl);
-   las acciones (aceptar, rechazar, reubicar, cancelar) se envían con fetch a ClasesController (clases.js)
-   y el chat se pide y se envía con fetch a MensajesController (chat.js). *@
+@* Panel de Control. Los contadores y las notificaciones vienen de la BD (HomeController.PanelControl). Las clases son un
+   calendario + agenda del día que dibuja calendario.js con fetch a /Clases/Calendario; las acciones (aceptar, rechazar,
+   cambiar horario, cancelar) se envían con fetch a ClasesController. La agenda del profesor es miAgenda.js, el chat
+   se pide y se envía con fetch a MensajesController (chat.js) y el historial es historial.js. *@
 @{
     ViewData["Title"] = "Panel de Control";
-    MisClases misClases = ViewBag.misClases ?? new MisClases();
+    ContadoresClases contadores = ViewBag.contadores ?? new ContadoresClases();
     List<NotificacionUsuario> notificaciones = ViewBag.notificaciones ?? new List<NotificacionUsuario>();
     bool errorBD = ViewBag.errorBD ?? false;
-    List<ClasePanel> clasesActivas = misClases.clases.Where(clase => clase.grupo != "historial").ToList();
-    int mensajesSinLeer = notificaciones.Where(notificacion => notificacion.tipo == "mensajesSinLeer").Sum(notificacion => notificacion.cantidad);
+    bool sinAgenda = ViewBag.sinAgenda ?? false;
+    // Acciones: cuentan en la insignia. Noticias: solo para enterarse (3 días)
+    List<NotificacionUsuario> acciones = notificaciones.Where(notificacion => notificacion.grupo == "accion").ToList();
+    List<NotificacionUsuario> noticias = notificaciones.Where(notificacion => notificacion.grupo == "noticia").ToList();
+    int mensajesSinLeer = acciones.Where(notificacion => notificacion.tipo == "mensajesSinLeer").Sum(notificacion => notificacion.cantidad);
     string nombreUsuario = ((Context.Session.GetString("nombre") ?? "") + " " + (Context.Session.GetString("apellido") ?? "")).Trim();
-    string rolUsuario = Context.Session.GetString("tipoUsuario") == "profesor" ? "Profesor" : "Alumno";
+    bool esProfesor = Context.Session.GetString("tipoUsuario") == "profesor";
+    string rolUsuario = esProfesor ? "Profesor" : "Alumno";
 }
 
 @functions {
     // "lunes 19 de octubre" / "hace 5 min": formato argentino (la cultura es-AR se fija en Program.cs)
-    static string textoDia(DateTime fecha)
-    {
-        string texto = fecha.ToString("dddd d 'de' MMMM");
-        return char.ToUpper(texto[0]) + texto.Substring(1);
-    }
-
-    static string textoHorario(DateTime inicio, DateTime fin)
-    {
-        return inicio.ToString("HH:mm") + " a " + fin.ToString("HH:mm") + " hs";
-    }
-
     static string tiempoRelativo(DateTime fecha)
     {
         TimeSpan pasado = DateTime.Now - fecha;
@@ -43,6 +37,12 @@
             case "mensajesSinLeer": return "bi-chat-dots";
             case "pedidoPorResponder": return "bi-calendar-plus";
             case "propuestaPorResponder": return "bi-arrow-repeat";
+            case "pideCambioPorResponder": return "bi-arrow-left-right";
+            case "pideCancelarPorResponder": return "bi-x-octagon";
+            case "claseConfirmada": return "bi-calendar-check";
+            case "claseCancelada": return "bi-calendar-x";
+            case "claseTerminada": return "bi-star";
+            case "claseNoConcretada": return "bi-calendar-minus";
             default: return "bi-calendar-x";
         }
     }
@@ -65,28 +65,42 @@
 @* Token para los fetch POST de las clases y del chat (clases.js y chat.js lo mandan en el encabezado) *@
 @Html.AntiForgeryToken()
 
+@* Aviso solo para profesores que todavía no configuraron su agenda (miAgenda.js lo oculta al guardarla) *@
+@if (sinAgenda)
+{
+    <section class="avisoAgenda" id="avisoSinAgenda">
+        <div class="container">
+            <div class="card estatica">
+                <span class="icono"><i class="bi bi-calendar-week" aria-hidden="true"></i></span>
+                <p><strong>Configurá tu agenda.</strong> Los alumnos pueden pedirte clases de 8 a 22 cualquier día. Elegí tus días y horarios para recibir solo pedidos que te sirvan.</p>
+                <a class="boton principal chico" href="#panelTabs" data-abrir-tab="tabAgenda">Configurar mi agenda</a>
+            </div>
+        </div>
+    </section>
+}
+
 <!-- ================= NOTIFICACIONES ================= -->
 <section class="notificaciones" id="notificaciones" aria-labelledby="tituloNotificaciones">
     <div class="container">
         <div class="card estatica">
             <h2 id="tituloNotificaciones">
-                <i class="bi bi-bell" aria-hidden="true"></i> Notificaciones
-                <span class="badge theme-primary" id="cantidadNotificacionesPanel" hidden="@(notificaciones.Count == 0)">@notificaciones.Count</span>
+                <i class="bi bi-bell" aria-hidden="true"></i> Requiere tu acción
+                <span class="badge theme-primary" id="cantidadNotificacionesPanel" hidden="@(acciones.Count == 0)">@acciones.Count</span>
             </h2>
 
             @if (errorBD)
             {
                 <p class="sinNotificaciones">No pudimos cargar tus notificaciones. Probá de nuevo en unos minutos.</p>
             }
-            else if (notificaciones.Count == 0)
+            else if (acciones.Count == 0)
             {
                 <p class="sinNotificaciones">No tenés nada pendiente. Acá vas a ver las solicitudes de amistad, los mensajes sin leer y las clases que esperan tu respuesta.</p>
             }
             else
             {
-                @* Cada notificación es algo a medio resolver: desaparece sola cuando se resuelve (al abrir el chat, responder la clase, etc.) *@
-                <ul class="listaNotificaciones">
-                    @foreach (var notificacion in notificaciones)
+                @* Cada notificación de acción es algo a medio resolver: desaparece sola cuando se resuelve (al abrir el chat, responder la clase, etc.) *@
+                <ul class="listaNotificaciones" id="listaAcciones">
+                    @foreach (var notificacion in acciones)
                     {
                         bool esChat = notificacion.tipo == "mensajesSinLeer";
                         bool esAmistad = notificacion.tipo == "solicitudAmistad";
@@ -137,6 +151,38 @@
                     }
                 </ul>
             }
+
+            @* Novedades: noticias de los últimos 3 días. No cuentan en la insignia ni esperan respuesta. Sin noticias no se muestra el bloque *@
+            @if (!errorBD && noticias.Count > 0)
+            {
+                <h2 class="tituloNovedades" id="tituloNovedades"><i class="bi bi-megaphone" aria-hidden="true"></i> Novedades</h2>
+                <ul class="listaNotificaciones listaNovedades" aria-labelledby="tituloNovedades">
+                    @foreach (var noticia in noticias)
+                    {
+                        string urlNoticia = Url.Action("PanelControl", "Home", new { tab = "clases", clase = noticia.idClase })!;
+                        <li class="notificacion noticia" data-tipo="@noticia.tipo">
+                            <span class="icono celeste"><i class="bi @iconoDeNotificacion(noticia.tipo)" aria-hidden="true"></i></span>
+                            <div class="textoNotificacion">
+                                <h3>@noticia.titulo</h3>
+                                <p>@noticia.mensaje</p>
+                                @if (noticia.fecha != null)
+                                {
+                                    <small>@tiempoRelativo(noticia.fecha.Value)</small>
+                                }
+                            </div>
+                            @if (noticia.destino == "resena")
+                            {
+                                @* Abre el diálogo Dar reseña del layout (site.js: inicializarResenas) *@
+                                <button class="boton principal chico" type="button" data-dar-resena data-id-usuario="@noticia.idOtroUsuario" data-nombre-usuario="@noticia.nombreOtro @noticia.apellidoOtro"><i class="bi bi-star" aria-hidden="true"></i> @noticia.textoBoton</button>
+                            }
+                            else
+                            {
+                                <a class="boton contorno chico" href="@urlNoticia">@noticia.textoBoton <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
         </div>
     </div>
 </section>
@@ -149,13 +195,13 @@
                 <div class="row g-3 lg:g-4">
                     <div class="col-6 lg:col-12">
                         <div class="card">
-                            <strong id="contadorClasesActivas">@(misClases.pendientes + misClases.proximas)</strong>
+                            <strong id="contadorClasesActivas">@(contadores.pendientes + contadores.proximas)</strong>
                             <span>Clases activas</span>
                         </div>
                     </div>
                     <div class="col-6 lg:col-12">
                         <div class="card oscura">
-                            <strong id="contadorClasesCompletadas">@misClases.completadas</strong>
+                            <strong id="contadorClasesCompletadas">@contadores.completadas</strong>
                             <span>Clases completadas</span>
                         </div>
                     </div>
@@ -167,8 +213,8 @@
                     <div class="col">
                         <a class="card" href="#panelTabs" data-abrir-tab="tabClases">
                             <span class="icono"><i class="bi bi-calendar-check" aria-hidden="true"></i></span>
-                            <h3>Administrar clases</h3>
-                            <p>Reubicá o cancelá tus clases.</p>
+                            <h3>Calendario de clases</h3>
+                            <p>Mirá tus clases por día y administralas.</p>
                         </a>
                     </div>
                     <div class="col">
@@ -178,6 +224,16 @@
                             <p>@(rolUsuario == "Alumno" ? "Hablá con tus profesores." : "Hablá con tus alumnos.")</p>
                         </a>
                     </div>
+                    @if (esProfesor)
+                    {
+                        <div class="col">
+                            <a class="card" href="#panelTabs" data-abrir-tab="tabAgenda">
+                                <span class="icono"><i class="bi bi-calendar-week" aria-hidden="true"></i></span>
+                                <h3>Mi agenda</h3>
+                                <p>Elegí cuándo das clases.</p>
+                            </a>
+                        </div>
+                    }
                     <div class="col">
                         <a class="card" href="#panelTabs" data-abrir-tab="tabHistorial">
                             <span class="icono celeste"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
@@ -201,99 +257,97 @@
         <nav>
             <div class="nav nav-pills" role="tablist">
                 <button class="nav-link active" id="botonTabClases" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabClases" aria-controls="tabClases" aria-selected="true"><i class="bi bi-calendar-check" aria-hidden="true"></i> Mis clases</button>
+                @if (esProfesor)
+                {
+                    <button class="nav-link" id="botonTabAgenda" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabAgenda" aria-controls="tabAgenda" aria-selected="false"><i class="bi bi-calendar-week" aria-hidden="true"></i> Mi agenda</button>
+                }
                 <button class="nav-link" id="botonTabChat" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabChat" aria-controls="tabChat" aria-selected="false"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chat directo</button>
                 <button class="nav-link" id="botonTabHistorial" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabHistorial" aria-controls="tabHistorial" aria-selected="false"><i class="bi bi-clock-history" aria-hidden="true"></i> Historial</button>
             </div>
         </nav>
 
         <div class="tab-content">
-            <!-- Mis clases programadas -->
+            <!-- Mis clases: calendario del mes + agenda del día (calendario.js, con fetch a /Clases/Calendario) -->
             <div class="tab-pane show active" id="tabClases" role="tabpanel" aria-labelledby="botonTabClases" tabindex="0">
-                <h2>Mis clases programadas</h2>
+                <h2>Mis clases</h2>
                 @if (errorBD)
                 {
                     <div class="card estatica estadoVacio"><p>No pudimos cargar tus clases. Probá de nuevo en unos minutos.</p></div>
                 }
-                else if (clasesActivas.Count == 0)
-                {
-                    <div class="card estatica estadoVacio">
-                        <span class="icono"><i class="bi bi-calendar-plus" aria-hidden="true"></i></span>
-                        <h3>Todavía no tenés clases programadas</h3>
-                        <p>@(rolUsuario == "Alumno" ? "Buscá un profesor en el catálogo y enviale un pedido de clase." : "Cuando un alumno te pida una clase, la vas a ver acá para aceptarla o rechazarla.")</p>
-                        @if (rolUsuario == "Alumno")
-                        {
-                            <a class="boton principal chico" asp-controller="Catalogo" asp-action="Index">Ir al catálogo</a>
-                        }
-                    </div>
-                }
                 else
                 {
-                    <div class="row row-cols-1 lg:row-cols-2 g-3 lg:g-4">
-                        @foreach (var clase in clasesActivas)
-                        {
-                            string nombreOtro = clase.nombreOtro + " " + clase.apellidoOtro;
-                            <div class="col" id="clase-@clase.id">
-                                <article class="card clase" data-clase data-id-clase="@clase.id" data-id-otro="@clase.idOtroUsuario"
-                                         data-nombre-otro="@nombreOtro" data-fecha-texto="@textoDia(clase.fecha), @clase.fecha.ToString("HH:mm") hs"
-                                         data-muy-cerca="@(clase.muyCerca ? "true" : "false")" data-estado="@clase.estado">
-                                    <header>
-                                        <span class="icono @(clase.estado == "Confirmada" ? "celeste" : "")"><i class="bi @(clase.estado == "Confirmada" ? "bi-calendar-check" : clase.estado == "Rechazada" ? "bi-calendar-x" : "bi-hourglass-split")" aria-hidden="true"></i></span>
-                                        @if (clase.estado == "Confirmada")
-                                        {
-                                            <span class="badge badge-subtle theme-success">Confirmada</span>
-                                        }
-                                        else if (clase.estado == "Rechazada")
-                                        {
-                                            <span class="badge badge-subtle theme-danger">Horario rechazado</span>
-                                        }
-                                        else if (clase.esperaA == "yo")
-                                        {
-                                            <span class="badge theme-primary">Te toca responder</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge badge-subtle theme-warning">Esperando respuesta</span>
-                                        }
-                                    </header>
-                                    <h3>Clase con <a asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario">@nombreOtro</a></h3>
-                                    <p>@(clase.miRol == "alumno" ? "Profesor" : "Alumno")</p>
-                                    <ul>
-                                        <li><i class="bi bi-calendar-event" aria-hidden="true"></i> @textoDia(clase.fecha)</li>
-                                        <li><i class="bi bi-clock" aria-hidden="true"></i> @textoHorario(clase.fecha, clase.fechaFin)</li>
-                                        @if (clase.estado == "Pendiente" && clase.esperaA == "otro")
-                                        {
-                                            <li><i class="bi bi-hourglass-split" aria-hidden="true"></i> Esperando que responda @clase.nombreOtro</li>
-                                        }
-                                        @if (clase.estado == "Rechazada")
-                                        {
-                                            <li><i class="bi bi-info-circle" aria-hidden="true"></i> @(clase.esperaA == "yo" ? $"{clase.nombreOtro} no aceptó este horario: proponé otro o cancelá la clase." : $"Rechazaste este horario. Esperando que {clase.nombreOtro} proponga otro o cancele.")</li>
-                                        }
-                                        <li><i class="bi bi-person" aria-hidden="true"></i> <a asp-controller="Home" asp-action="Perfil" asp-route-id="@clase.idOtroUsuario">Ver perfil de @clase.nombreOtro</a></li>
-                                    </ul>
-                                    <footer>
-                                        @if (clase.puedeResponder)
-                                        {
-                                            <button class="boton principal chico" type="button" data-accion-clase="aceptar"><i class="bi bi-check2" aria-hidden="true"></i> @(clase.miRol == "alumno" ? "Aceptar horario" : "Aceptar")</button>
-                                            <button class="boton contorno chico" type="button" data-accion-clase="rechazar"><i class="bi bi-x-lg" aria-hidden="true"></i> Rechazar</button>
-                                        }
-                                        @if (clase.puedeReubicar)
-                                        {
-                                            @* Proponer otro horario cuando hay algo que responder o rechazado; cambiar el horario si está confirmada o esperando *@
-                                            bool proponeOtro = clase.puedeResponder || clase.estado == "Rechazada";
-                                            bool reubicarEsLoPrincipal = clase.estado == "Rechazada" && clase.esperaA == "yo";
-                                            <button class="boton @(reubicarEsLoPrincipal ? "principal" : "contorno") chico" type="button" data-accion-clase="reubicar"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> @(proponeOtro ? "Proponer otro horario" : "Cambiar horario")</button>
-                                        }
-                                        @if (clase.puedeCancelar)
-                                        {
-                                            <button class="boton oscuro chico" type="button" data-accion-clase="cancelar"><i class="bi bi-x-circle" aria-hidden="true"></i> @(clase.estado == "Pendiente" ? "Cancelar pedido" : "Cancelar clase")</button>
-                                        }
-                                    </footer>
-                                </article>
+                    <div class="misClases" id="misClases" data-rol="@rolUsuario">
+                        @* Las clases a las que les toca responder a esta persona, de todo el calendario *@
+                        <section class="requiereAccion" id="clasesRequierenAccion" aria-labelledby="tituloRequiereAccion" hidden>
+                            <h3 id="tituloRequiereAccion"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Clases que requieren tu acción <span class="badge theme-danger" id="cantidadRequiereAccion"></span></h3>
+                            <ul id="listaRequiereAccion"></ul>
+                        </section>
+
+                        <div class="card estatica calendarioMes">
+                            <header>
+                                <h3 id="tituloMes" aria-live="polite"></h3>
+                                <div class="controlesMes">
+                                    <button class="boton contorno chico" type="button" id="botonMesAnterior" aria-label="Mes anterior"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+                                    <button class="boton contorno chico" type="button" id="botonHoy">Hoy</button>
+                                    <button class="boton contorno chico" type="button" id="botonMesSiguiente" aria-label="Mes siguiente"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+                                </div>
+                            </header>
+                            <div class="diasSemana" aria-hidden="true">
+                                <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
                             </div>
-                        }
+                            <div class="diasMes" id="diasMes" role="group" aria-labelledby="tituloMes">
+                                <p class="cargandoHistorial"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tus clases…</p>
+                            </div>
+                            <ul class="leyenda" aria-label="Referencias del calendario">
+                                <li><i class="linea azul" aria-hidden="true"></i> Está bien</li>
+                                <li><i class="linea azul punteada" aria-hidden="true"></i> Esperando al otro</li>
+                                <li><i class="linea rojo" aria-hidden="true"></i> Necesita tu acción</li>
+                                <li><i class="linea gris" aria-hidden="true"></i> No se dio o se canceló</li>
+                            </ul>
+                        </div>
+
+                        <div class="agendaDia" id="agendaDia" aria-live="polite"></div>
                     </div>
                 }
             </div>
+
+            @if (esProfesor)
+            {
+                <!-- Mi agenda: horario semanal y días bloqueados (miAgenda.js, con fetch a /Clases/MiAgenda) -->
+                <div class="tab-pane" id="tabAgenda" role="tabpanel" aria-labelledby="botonTabAgenda" tabindex="0">
+                    <h2>Mi agenda</h2>
+                    <p class="avisoSinAgenda" id="avisoSinAgendaPestana" hidden><i class="bi bi-info-circle" aria-hidden="true"></i> Todavía no configuraste tu agenda: los alumnos pueden pedirte clases de 8 a 22 cualquier día.</p>
+
+                    <div class="row g-3 lg:g-4 miAgenda" id="miAgenda">
+                        <div class="col-12 lg:col-7">
+                            <div class="card estatica">
+                                <h3>Horario semanal</h3>
+                                <p>Activá los días que das clases y elegí tus horarios. Cada clase dura 60 minutos.</p>
+                                <ul class="diasDeAgenda" id="listaDiasAgenda" aria-live="polite">
+                                    <li class="avisoChat"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tu agenda…</li>
+                                </ul>
+                                <p class="mensajeError" id="mensajeAgenda" role="alert"></p>
+                                <button class="boton principal" type="button" id="botonGuardarAgenda"><i class="bi bi-check2" aria-hidden="true"></i> Guardar agenda</button>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col-5">
+                            <div class="card estatica">
+                                <h3>Días bloqueados</h3>
+                                <p>Vacaciones, exámenes: nadie puede pedirte clases ese día.</p>
+                                <form class="bloquearDia" id="formularioBloquearDia" novalidate>
+                                    <div class="form-field">
+                                        <label for="campoDiaBloqueado">Día a bloquear</label>
+                                        <input class="form-control" type="date" id="campoDiaBloqueado" />
+                                    </div>
+                                    <button class="boton principal chico" type="submit"><i class="bi bi-slash-circle" aria-hidden="true"></i> Bloquear día</button>
+                                </form>
+                                <p class="mensajeError" id="mensajeBloqueo" role="alert"></p>
+                                <ul class="listaBloqueados" id="listaDiasBloqueados" aria-live="polite"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
 
             <!-- Chat directo -->
             <div class="tab-pane" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
@@ -336,7 +390,8 @@
 </section>
 
 <!-- ================= DIÁLOGO: CANCELAR CLASE (componente Dialog de Bootstrap 6) ================= -->
-@* Lo abre clases.js (data-accion-clase="cancelar") y escribe el texto según la clase: pedido sin aceptar o clase confirmada *@
+@* Lo abre calendario.js (data-accion-clase="cancelar") y escribe el texto según la clase: pedido sin aceptar, clase
+   confirmada con 24 h o más (se cancela) o con menos (se le pide a la otra persona que lo confirme) *@
 <dialog class="dialog" id="dialogoCancelarClase" aria-labelledby="tituloCancelarClase">
     <div class="dialog-header">
         <h2 class="dialog-title" id="tituloCancelarClase">¿Cancelar esta clase?</h2>
@@ -344,6 +399,10 @@
     </div>
     <div class="dialog-body">
         <p id="textoCancelarClase"></p>
+        <div class="form-field" id="campoMotivoCancelar">
+            <label for="motivoCancelar">Motivo (opcional)</label>
+            <textarea class="form-control" id="motivoCancelar" maxlength="500" rows="3" placeholder="Le llega por el chat a la otra persona"></textarea>
+        </div>
         <p class="mensajeError" id="mensajeCancelarClase" role="alert"></p>
     </div>
     <div class="dialog-footer">
@@ -352,8 +411,9 @@
     </div>
 </dialog>
 
-<!-- ================= DIÁLOGO: REUBICAR CLASE ================= -->
-@* Cualquiera de los dos propone otro horario; la clase vuelve a Pendiente y le toca responder al otro *@
+<!-- ================= DIÁLOGO: CAMBIAR HORARIO ================= -->
+@* Cualquiera de los dos propone otro horario. Una clase pendiente vuelve a Pendiente; una confirmada sigue en su horario
+   hasta que la otra persona acepte el nuevo *@
 <dialog class="dialog dialogoClase" id="dialogoReubicarClase" aria-labelledby="tituloReubicarClase">
     <form id="formularioReubicarClase" onsubmit="return enviarReubicacionDeClase()" novalidate>
         <div class="dialog-header">
@@ -361,8 +421,13 @@
             <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
         </div>
         <div class="dialog-body">
-            <p>Elegí el nuevo horario para tu clase con <strong id="nombreClaseAReubicar"></strong>. <strong id="nombreQuienResponde"></strong> tiene que confirmarlo.</p>
+            <p class="horarioActual"><i class="bi bi-clock" aria-hidden="true"></i> Horario actual: <strong id="horarioActualReubicar"></strong>, con <strong id="nombreClaseAReubicar"></strong>.</p>
+            <p id="textoQuienResponde"></p>
             <partial name="_selectorHorario" model='"reubicar"' />
+            <div class="form-field">
+                <label for="motivoReubicar">Motivo (opcional)</label>
+                <textarea class="form-control" id="motivoReubicar" maxlength="500" rows="2" placeholder="Le llega por el chat a la otra persona"></textarea>
+            </div>
             <p class="mensajeError" id="mensajeReubicarClase" role="alert"></p>
         </div>
         <div class="dialog-footer">
@@ -372,22 +437,29 @@
     </form>
 </dialog>
 
-<!-- ================= DIÁLOGO: LA CLASE EMPIEZA EN MENOS DE 24 H ================= -->
-<dialog class="dialog" id="dialogoClaseCercana" aria-labelledby="tituloClaseCercana">
+<!-- ================= DIÁLOGO: NO SE DIO ================= -->
+@* Lo abren calendario.js y historial.js (data-no-se-dio): una clase completada de las últimas 48 h pasa a No concretada *@
+<dialog class="dialog" id="dialogoNoSeDio" aria-labelledby="tituloNoSeDio">
     <div class="dialog-header">
-        <h2 class="dialog-title" id="tituloClaseCercana">La clase está muy próxima</h2>
+        <h2 class="dialog-title" id="tituloNoSeDio">¿La clase no se dio?</h2>
         <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Cerrar"></button>
     </div>
     <div class="dialog-body">
-        <p>Tu clase con <strong id="nombreClaseCercana"></strong> empieza en menos de 24 horas, así que no se cancela ni se cambia sola. Coordinalo por el chat con esa persona.</p>
+        <p id="textoNoSeDio"></p>
+        <p class="mensajeError" id="mensajeNoSeDio" role="alert"></p>
     </div>
     <div class="dialog-footer">
-        <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Cerrar</button>
-        <button type="button" class="boton principal chico" id="botonAbrirChatClaseCercana" data-bs-dismiss="dialog"><i class="bi bi-chat-dots" aria-hidden="true"></i> Ir al chat</button>
+        <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Volver</button>
+        <button type="button" class="boton principal chico" id="botonConfirmarNoSeDio">Sí, no se dio</button>
     </div>
 </dialog>
 
 @section Scripts {
     <script src="~/js/historial.js" asp-append-version="true"></script>
     <script src="~/js/chat.js" asp-append-version="true"></script>
+    <script src="~/js/calendario.js" asp-append-version="true"></script>
+    @if (esProfesor)
+    {
+        <script src="~/js/miAgenda.js" asp-append-version="true"></script>
+    }
 }

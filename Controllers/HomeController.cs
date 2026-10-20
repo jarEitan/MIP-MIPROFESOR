@@ -71,16 +71,18 @@ public class HomeController : Controller
         string? idUsuarioSesion = HttpContext.Session.GetString("idUsuario");
         if (!int.TryParse(idUsuarioSesion, out int idUsuario)) return RedirectToAction("IniciarSesion", "Sesion");
 
-        // Clases y notificaciones salen de la BD. Las notificaciones son lo que está a medio resolver
-        // (amistades, mensajes y clases): siguen contando en la insignia hasta que se resuelven.
-        // El chat no viene acá: lo pide chat.js con fetch a MensajesController.
+        // Los contadores y las notificaciones salen de la BD. Las de acción son lo que está a medio resolver (amistades,
+        // mensajes y clases): siguen contando en la insignia hasta que se resuelven; las noticias no cuentan.
+        // Las clases (calendario) las pide clases.js con fetch a ClasesController.Calendario y el chat, chat.js a MensajesController.
         try
         {
             BD bd = new BD();
-            ViewBag.misClases = bd.obtenerMisClases(idUsuario);
+            ViewBag.contadores = bd.obtenerContadoresClases(idUsuario);
             List<NotificacionUsuario> notificaciones = bd.obtenerNotificaciones(idUsuario);
             ViewBag.notificaciones = notificaciones;
-            HttpContext.Session.SetString("cantidadNotificaciones", notificaciones.Count.ToString());
+            HttpContext.Session.SetString("cantidadNotificaciones", notificaciones.Count(notificacion => notificacion.grupo == "accion").ToString());
+            // Un profesor sin franjas semanales todavía no configuró su agenda (aviso arriba del Panel)
+            ViewBag.sinAgenda = HttpContext.Session.GetString("tipoUsuario") == "profesor" && !bd.obtenerDisponibilidad(idUsuario).tieneAgenda;
         }
         catch (Exception)
         {

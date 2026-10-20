@@ -1,17 +1,18 @@
 // Historial de clases: la pestaña "Historial" del Panel de Control (el historial propio) y el modal
 // "Historial" del Perfil (el de cualquier usuario). Los dos piden los datos con fetch a HistorialController
 // y dibujan la MISMA tabla con dibujarHistorial(). Se carga solo en esas dos páginas, después de site.js y clases.js.
-// Qué clases se ven y cuántas (máximo 20) lo decide el SP obtenerHistorialClases, no esta página.
+// Qué clases se ven y cuántas por vez lo decide el servidor (SP obtenerHistorialClases): el propio, de a 20 y todas;
+// el de otra persona, solo las completadas, de a 10 y hasta 20 en total. "Ver más" pide la página siguiente.
 // Todo lo que viene de la base se inserta con textContent, nunca como HTML.
 
 // ----- Datos -----
-function pedirHistorial(idUsuario) {
-    return pedirJson(`/Historial/Obtener/${idUsuario}`);
+function pedirHistorial(idUsuario, desde) {
+    return pedirJson(`/Historial/Obtener/${idUsuario}?desde=${desde || 0}`);
 }
 
 // ----- Dibujo de la tabla (lo comparten el Panel y el modal) -----
-// opciones.esPanel: historial propio dentro del Panel. Suma la columna "Acción" (Pedir otra clase, solo alumnos)
-// y le pone id a cada fila para que las notificaciones puedan resaltarla.
+// opciones.esPanel: historial propio dentro del Panel. Suma la columna "Acción" (Pedir otra clase, solo alumnos, y
+// "No se dio") y le pone id a cada fila para que las notificaciones puedan resaltarla.
 function dibujarHistorial(contenedor, resultado, opciones) {
     contenedor.replaceChildren();
 
@@ -22,15 +23,15 @@ function dibujarHistorial(contenedor, resultado, opciones) {
 
     if (resultado.clases.length === 0) {
         contenedor.append(resultado.esPropio
-            ? crearEstadoVacioHistorial("Todavía no hay clases en tu historial", "Las clases completadas, canceladas y rechazadas aparecen acá.")
+            ? crearEstadoVacioHistorial("Todavía no hay clases en tu historial", "Las clases completadas, no concretadas y canceladas aparecen acá.")
             : crearEstadoVacioHistorial("Todavía no tiene clases completadas", "Cuando termine sus primeras clases, van a aparecer acá."));
         return;
     }
 
-    const conAccion = Boolean(opciones.esPanel) && resultado.tipoUsuario === "alumno";
+    const conAccion = Boolean(opciones.esPanel);
     // La contraparte de un alumno es un profesor, y al revés
     const columnaContraparte = resultado.tipoUsuario === "alumno" ? "Profesor" : "Alumno";
-    const columnas = [columnaContraparte, "Materia", "Colegio", "Puntuación", "Día"];
+    const columnas = [columnaContraparte, "Materia", "Colegio", "Puntuación", "Día y hora"];
     if (conAccion) columnas.push("Acción");
 
     const filaTitulos = crearElemento("tr");
@@ -43,7 +44,7 @@ function dibujarHistorial(contenedor, resultado, opciones) {
     encabezado.append(filaTitulos);
 
     const cuerpo = crearElemento("tbody");
-    resultado.clases.forEach(clase => cuerpo.append(crearFilaHistorial(clase, columnaContraparte, conAccion, opciones)));
+    resultado.clases.forEach(clase => cuerpo.append(crearFilaHistorial(clase, columnaContraparte, conAccion, opciones, resultado.tipoUsuario)));
 
     const tabla = crearElemento("table", "table");
     tabla.append(encabezado, cuerpo);
@@ -52,13 +53,45 @@ function dibujarHistorial(contenedor, resultado, opciones) {
     tarjeta.append(tabla);
     contenedor.append(tarjeta);
 
-    // El SP nunca manda más de 20: si llegaron 20 puede haber más viejas que no se pueden ver
-    if (resultado.clases.length >= 20) {
-        contenedor.append(crearElemento("p", "notaHistorial", "Se muestran las 20 clases más recientes."));
-    }
+    contenedor.append(crearPieDelHistorial(resultado, cuerpo, columnaContraparte, conAccion, opciones));
 }
 
-function crearFilaHistorial(clase, columnaContraparte, conAccion, opciones) {
+// "Mostrando 20 de 143 clases" y el botón "Ver más", que pide la página siguiente y la agrega a la tabla
+function crearPieDelHistorial(resultado, cuerpo, columnaContraparte, conAccion, opciones) {
+    const pie = crearElemento("div", "pieHistorial");
+    const nota = crearElemento("p", "notaHistorial");
+    const boton = crearElemento("button", "boton contorno chico");
+    boton.type = "button";
+    boton.append(crearIconoHistorial("bi-plus-lg"), " Ver más");
+    pie.append(nota, boton);
+
+    const actualizar = () => {
+        const mostradas = cuerpo.children.length;
+        nota.textContent = `Mostrando ${mostradas} de ${resultado.total} ${resultado.total === 1 ? "clase" : "clases"}.`;
+        boton.hidden = mostradas >= resultado.total;
+    };
+    actualizar();
+
+    boton.addEventListener("click", () => {
+        boton.disabled = true;
+        pedirHistorial(resultado.id, cuerpo.children.length)
+            .then(pagina => {
+                pagina.clases.forEach(clase => cuerpo.append(crearFilaHistorial(clase, columnaContraparte, conAccion, opciones, resultado.tipoUsuario)));
+                resultado.total = pagina.total;
+                actualizar();
+                // El foco queda en la primera fila nueva para no perder el lugar al agregar contenido
+                cuerpo.children[cuerpo.children.length - pagina.clases.length]?.querySelector("a, button")?.focus();
+            })
+            .catch(error => {
+                console.error(error);
+                nota.textContent = "No pudimos cargar más clases. Probá de nuevo.";
+            })
+            .finally(() => { boton.disabled = false; });
+    });
+    return pie;
+}
+
+function crearFilaHistorial(clase, columnaContraparte, conAccion, opciones, tipoUsuarioDueno) {
     const nombreOtro = `${clase.nombreOtro} ${clase.apellidoOtro}`;
     const fila = crearElemento("tr");
     if (opciones.esPanel) fila.id = `historial-${clase.id}`;
@@ -71,11 +104,13 @@ function crearFilaHistorial(clase, columnaContraparte, conAccion, opciones) {
     const celdaContraparte = crearCeldaHistorial(columnaContraparte);
     celdaContraparte.append(nombreEnNegrita);
 
-    // Cancelada y Rechazada solo aparecen en el historial propio: se marcan al lado del día
-    const diaYEstado = crearElemento("span", "", new Date(clase.dia).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }));
+    // Cancelada y No concretada solo aparecen en el historial propio: se marcan al lado del día, con el motivo
+    const inicio = new Date(clase.fecha);
+    const diaYEstado = crearElemento("span", "", `${inicio.toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" })} ${inicio.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", hour12: false })}`);
     if (clase.estado !== "Completada") diaYEstado.append(" ", crearElemento("span", "badge badge-subtle theme-danger", clase.estado));
-    const celdaDia = crearCeldaHistorial("Día");
+    const celdaDia = crearCeldaHistorial("Día y hora");
     celdaDia.append(diaYEstado);
+    if (clase.motivo) celdaDia.append(crearElemento("small", "motivoHistorial", clase.motivo));
 
     fila.append(
         celdaContraparte,
@@ -86,15 +121,31 @@ function crearFilaHistorial(clase, columnaContraparte, conAccion, opciones) {
     );
 
     if (conAccion) {
-        // Abre el diálogo "Pedir una clase" (clases.js) ya con ese profesor
-        const botonPedir = crearElemento("button", "boton principal chico");
-        botonPedir.type = "button";
-        botonPedir.dataset.pedirClase = "";
-        botonPedir.dataset.idProfesor = clase.idOtroUsuario;
-        botonPedir.dataset.nombreProfesor = nombreOtro;
-        botonPedir.append(crearIconoHistorial("bi-calendar-plus"), " Pedir otra clase");
         const celdaAccion = crearCeldaHistorial("Acción");
-        celdaAccion.append(botonPedir);
+        const botones = crearElemento("div", "botonesClase");
+        if (tipoUsuarioDueno === "alumno") {
+            // Abre el diálogo "Pedir una clase" (clases.js) ya con ese profesor
+            const botonPedir = crearElemento("button", "boton principal chico");
+            botonPedir.type = "button";
+            botonPedir.dataset.pedirClase = "";
+            botonPedir.dataset.idProfesor = clase.idOtroUsuario;
+            botonPedir.dataset.nombreProfesor = nombreOtro;
+            botonPedir.append(crearIconoHistorial("bi-calendar-plus"), " Pedir otra clase");
+            botones.append(botonPedir);
+        }
+        if (clase.puedeMarcarNoSeDio) {
+            // Hasta 48 h después de que terminó la clase (calendario.js: abrirNoSeDio)
+            const botonNoSeDio = crearElemento("button", "boton contorno chico");
+            botonNoSeDio.type = "button";
+            botonNoSeDio.dataset.noSeDio = "";
+            botonNoSeDio.dataset.idClase = clase.id;
+            botonNoSeDio.dataset.nombreOtro = nombreOtro;
+            botonNoSeDio.dataset.fechaTexto = textoFechaCorta(inicio);
+            botonNoSeDio.append(crearIconoHistorial("bi-calendar-minus"), " No se dio");
+            botones.append(botonNoSeDio);
+        }
+        if (botones.children.length > 0) celdaAccion.append(botones);
+        else celdaAccion.textContent = "–";
         fila.append(celdaAccion);
     }
     return fila;
@@ -227,6 +278,10 @@ function actualizarHistorialTrasResena(evento) {
 // ================= INICIALIZACIÓN =================
 function inicializarHistorial() {
     document.addEventListener("resenaPublicada", actualizarHistorialTrasResena);
+    document.addEventListener("click", evento => {
+        const boton = evento.target.closest("[data-no-se-dio]");
+        if (boton && typeof abrirNoSeDio === "function") abrirNoSeDio(boton.dataset.idClase, boton.dataset.nombreOtro, boton.dataset.fechaTexto);
+    });
     document.getElementById("botonHistorial")?.addEventListener("click", abrirHistorialDelPerfil);
     if (document.getElementById("contenidoHistorialPanel")) esperarHistorialPropio();
 }
