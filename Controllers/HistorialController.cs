@@ -7,16 +7,19 @@ namespace MIP_MIPROFESOR.Controllers;
 // Quien mira sale SIEMPRE de la sesión, nunca del pedido: el SP decide qué clases puede ver.
 public class HistorialController : Controller
 {
-    // GET /Historial/Obtener/5 → las últimas 20 clases del usuario 5 (no hace falta sesión).
-    // Mirando el propio ID se ve todo el historial; mirando el de otro, solo las clases completadas.
+    // GET /Historial/Obtener/5?desde=20 → las clases del usuario 5 a partir de la número "desde" (no hace falta sesión).
+    // Mirando el propio ID se ve todo el historial, de a 20; mirando el de otro, solo las clases completadas, de a 10
+    // y con tope total de 20 (el SP lo aplica). La cantidad la decide el servidor, no el pedido.
     // No se guarda en caché: la respuesta cambia según quién mira.
     [HttpGet]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Obtener(int id)
+    public IActionResult Obtener(int id, int desde = 0)
     {
+        int? idVisitante = obtenerIdUsuarioSesion();
+        int cantidad = idVisitante == id ? 20 : 10;
         try
         {
-            return Json(new BD().obtenerHistorialClases(id, obtenerIdUsuarioSesion()));
+            return Json(new BD().obtenerHistorialClases(id, idVisitante, Math.Max(desde, 0), cantidad));
         }
         catch (Exception)
         {

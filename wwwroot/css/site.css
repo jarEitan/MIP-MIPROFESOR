@@ -84,6 +84,8 @@
     --colorBorde: #E5E7EB;
     --colorTexto: #111827;
     --colorTextoSuave: #6B7280;
+    --colorAzul: #2563EB;
+    --colorAzulSuave: #EFF6FF;
     --colorExito: #047857;
     --colorExitoSuave: #D1FAE5;
     --colorAlerta: #92400E;
@@ -2755,6 +2757,35 @@ fieldset {
     color: var(--colorTextoSuave);
 }
 
+/* Novedades: noticias de los últimos 3 días, sin badge de "esperando respuesta" y con el borde más tenue */
+.notificaciones .tituloNovedades {
+    margin-top: 1.75rem;
+}
+
+.notificaciones .noticia {
+    border-color: var(--colorCelesteSuave);
+    background-color: var(--colorFondo);
+}
+
+/* Aviso "Configurá tu agenda" (solo profesores sin agenda) */
+.avisoAgenda {
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.avisoAgenda .card {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1rem;
+    border-color: var(--colorAzul);
+    background-color: var(--colorAzulSuave);
+}
+
+.avisoAgenda .card p {
+    flex: 1 1 16rem;
+    margin: 0;
+}
+
 .metricas {
     padding-block: clamp(1.75rem, 3vw, 2.5rem);
 }
@@ -2851,43 +2882,426 @@ fieldset {
     font-size: clamp(1.3rem, 1.1rem + .8vw, 1.6rem);
 }
 
-/* Tarjeta de clase programada */
-.clase header {
+/* Mis clases: lo que requiere acción, el calendario del mes y la agenda del día (los dibuja calendario.js).
+   Colores: azul = está bien, rojo = necesita tu acción, gris = terminó sin darse. El estado nunca va solo en el color:
+   siempre hay texto, y lo que espera al otro lleva línea punteada. */
+.misClases {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.requiereAccion {
+    padding: 1rem 1.15rem;
+    border: 2px solid var(--colorCoralOscuro);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorCoralSuave);
+}
+
+.requiereAccion h3 {
     display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0 0 .75rem;
+    font-size: 1.05rem;
+}
+
+.requiereAccion ul {
+    display: grid;
+    gap: .6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pedidoPendiente {
+    display: grid;
+    gap: .6rem;
+    padding: .75rem .9rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+}
+
+.pedidoPendiente .textoPedido {
+    display: grid;
+    gap: .15rem;
+    font-size: .9rem;
+}
+
+.pedidoPendiente .textoPedido span {
+    color: var(--colorTextoSuave);
+}
+
+.botonesClase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+.misClases .botonesClase .boton {
+    min-height: 2.75rem;
+}
+
+@media (width >= 768px) {
+    .pedidoPendiente {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+    }
+}
+
+/* Calendario del mes: lunes a domingo, una línea fina por clase (máximo 3 y "+N") */
+.calendarioMes {
+    padding: .6rem;
+}
+
+@media (width >= 768px) {
+    .calendarioMes {
+        padding: 1.25rem 1.5rem;
+    }
+}
+
+.calendarioMes header {
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: .75rem;
+    margin-bottom: .9rem;
 }
 
-.clase ul {
+.calendarioMes header h3 {
+    margin: 0;
+    font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem);
+}
+
+.calendarioMes .controlesMes {
+    display: flex;
+    gap: .5rem;
+}
+
+.calendarioMes .controlesMes .boton {
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+}
+
+.calendarioMes .diasSemana,
+.calendarioMes .diasMes {
     display: grid;
-    gap: .4rem;
-    font-size: .88rem;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: .2rem;
+}
+
+@media (width >= 768px) {
+    .calendarioMes .diasSemana,
+    .calendarioMes .diasMes {
+        gap: .4rem;
+    }
+}
+
+.calendarioMes .diasSemana span {
+    padding-bottom: .35rem;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--colorTextoSuave);
+}
+
+.calendarioMes .diasMes .cargandoHistorial,
+.calendarioMes .diasMes .mensajeErrorCalendario {
+    grid-column: 1 / -1;
+}
+
+.diasMes .dia {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    aspect-ratio: 1;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding: .25rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    font: inherit;
+    text-align: left;
+    color: var(--colorTinta);
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s;
+}
+
+@media (width >= 768px) {
+    .diasMes .dia {
+        aspect-ratio: auto;
+        min-height: 5.5rem;
+        padding: .5rem .6rem;
+    }
+}
+
+.diasMes .dia:hover {
+    background-color: var(--colorCelesteSuave);
+}
+
+.diasMes .dia .numero {
+    align-self: flex-start;
+    font-family: var(--fuenteMarca);
+    font-size: .85rem;
     font-weight: 600;
+    line-height: 1;
 }
 
-.clase li .bi {
-    margin-right: .45rem;
-    color: var(--colorCoralOscuro);
+.diasMes .dia.hoy {
+    border-color: var(--colorAzul);
 }
 
-.clase footer {
+.diasMes .dia.hoy .numero {
+    padding: .15rem .35rem;
+    border-radius: 999px;
+    background-color: var(--colorAzul);
+    color: #fff;
+}
+
+.diasMes .dia.pasado {
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+}
+
+.diasMes .dia.otroMes {
+    opacity: .5;
+}
+
+/* Día elegido: borde marcado y sombra desplazada, como los botones de marca */
+.diasMes .dia[aria-pressed="true"] {
+    border-color: var(--colorTinta);
+    background-color: var(--colorCelesteSuave);
+    box-shadow: 2px 2px 0 var(--colorTinta);
+}
+
+.diasMes .lineas {
+    display: grid;
+    gap: 3px;
+}
+
+.diasMes .lineas .mas {
+    font-size: .65rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--colorTextoSuave);
+}
+
+.linea {
+    --colorLinea: var(--colorAzul);
+    display: block;
+    height: 4px;
+    border-radius: 2px;
+    background-color: var(--colorLinea);
+}
+
+@media (width >= 768px) {
+    .diasMes .linea {
+        height: 6px;
+        border-radius: 3px;
+    }
+}
+
+.linea.rojo {
+    --colorLinea: var(--colorCoralOscuro);
+}
+
+.linea.gris {
+    --colorLinea: var(--colorTextoSuave);
+    opacity: .6;
+}
+
+/* Esperando que responda el otro: rayada, para no depender solo del color */
+.linea.punteada {
+    background: repeating-linear-gradient(90deg, var(--colorLinea) 0 6px, transparent 6px 9px);
+}
+
+.calendarioMes .leyenda {
     display: flex;
     flex-wrap: wrap;
-    gap: .75rem;
-    margin-top: auto;
-    padding-top: .5rem;
+    gap: .5rem 1.25rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
 }
 
-.clase h3 a {
+.calendarioMes .leyenda li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.calendarioMes .leyenda .linea {
+    width: 1.75rem;
+    height: 5px;
+}
+
+/* Agenda del día elegido: una fila por clase, ordenada por hora (hora a la izquierda, tarjeta con el color del estado) */
+.agendaDia header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .25rem 1rem;
+    margin-bottom: .9rem;
+}
+
+.agendaDia header h3 {
+    margin: 0;
+    font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem);
+}
+
+.agendaDia .cantidadDelDia {
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.agendaDia .estadoVacio .boton {
+    margin-top: .75rem;
+}
+
+.turnos {
+    display: grid;
+    gap: .9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.turno {
+    display: grid;
+    grid-template-columns: 3.4rem minmax(0, 1fr);
+    gap: .6rem;
+    align-items: start;
+}
+
+@media (width >= 768px) {
+    .turno {
+        grid-template-columns: 5.5rem minmax(0, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+.turno .horaTurno {
+    display: grid;
+    gap: .1rem;
+    padding-top: .9rem;
+    font-family: var(--fuenteMarca);
+    line-height: 1.1;
+    text-align: right;
+}
+
+.turno .horaTurno time {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.turno .horaTurno span {
+    font-size: .8rem;
+    color: var(--colorTextoSuave);
+}
+
+.turno .tarjetaTurno {
+    --colorEstado: var(--colorAzul);
+    display: grid;
+    gap: .6rem;
+    min-width: 0;
+    padding: .9rem 1rem;
+    border: 2px solid var(--colorTinta);
+    border-left: 8px solid var(--colorEstado);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorSuperficie);
+    box-shadow: 3px 3px 0 var(--colorTinta);
+}
+
+.turno.rojo .tarjetaTurno {
+    --colorEstado: var(--colorCoralOscuro);
+}
+
+.turno.gris .tarjetaTurno {
+    --colorEstado: var(--colorTextoSuave);
+}
+
+.turno.punteada .tarjetaTurno {
+    border-left-style: dashed;
+}
+
+.tarjetaTurno header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem .75rem;
+}
+
+.tarjetaTurno header h4 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.tarjetaTurno header h4 a {
     color: inherit;
     text-decoration: underline;
     text-decoration-color: var(--colorCoral);
     text-underline-offset: .2em;
 }
 
+.tarjetaTurno .rolTurno {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.tarjetaTurno .etiquetaEstado {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-left: auto;
+    padding: .15rem .65rem;
+    border: 1.5px solid currentColor;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.etiquetaEstado.azul {
+    background-color: var(--colorAzulSuave);
+    color: var(--colorAzul);
+}
+
+.etiquetaEstado.rojo {
+    background-color: var(--colorCoralSuave);
+    color: var(--colorCoralOscuro);
+}
+
+.etiquetaEstado.gris {
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+}
+
+.tarjetaTurno .detalleTurno {
+    display: grid;
+    gap: .3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: .88rem;
+    font-weight: 600;
+}
+
+.tarjetaTurno .detalleTurno .bi {
+    margin-right: .4rem;
+    color: var(--colorCoralOscuro);
+}
+
 /* La clase a la que lleva una notificación se resalta un momento */
-.col.resaltada .clase,
+.turno.resaltada .tarjetaTurno,
 tr.resaltada td {
     animation: resaltarClase 2.4s var(--curvaSuave) 2;
 }
@@ -2897,6 +3311,139 @@ tr.resaltada td {
         background-color: var(--colorCelesteSuave);
         box-shadow: var(--sombraMarcadaElevada);
     }
+}
+
+/* Mi agenda (profesores): horario semanal y días bloqueados */
+.miAgenda .card h3 {
+    margin-bottom: .35rem;
+    font-size: 1.15rem;
+}
+
+.miAgenda .card > p {
+    font-size: .9rem;
+    color: var(--colorTextoSuave);
+}
+
+.avisoSinAgenda {
+    margin-bottom: 1rem;
+    padding: .75rem 1rem;
+    border: 2px solid var(--colorAzul);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorAzulSuave);
+    font-weight: 600;
+}
+
+.diasDeAgenda {
+    display: grid;
+    gap: .6rem;
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+}
+
+.diaDeAgenda {
+    padding: .7rem .85rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioMedio);
+}
+
+.diaDeAgenda .encabezadoDia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem .6rem;
+}
+
+.diaDeAgenda .encabezadoDia strong {
+    min-width: 6.5rem;
+}
+
+.diaDeAgenda .encabezadoDia label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    cursor: pointer;
+}
+
+.diaDeAgenda .franjasDelDia {
+    display: grid;
+    justify-items: start;
+    gap: .6rem;
+    margin-top: .4rem;
+}
+
+.diaDeAgenda .franjaDeAgenda {
+    display: grid;
+    gap: .25rem;
+}
+
+.diaDeAgenda .selectoresDeFranja {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.diaDeAgenda .selectoresDeFranja .form-control {
+    width: auto;
+    min-width: 6.5rem;
+    min-height: 2.75rem;
+}
+
+.diaDeAgenda .selectoresDeFranja .boton {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    justify-content: center;
+}
+
+.diaDeAgenda .franjasDelDia > .boton {
+    min-height: 2.75rem;
+}
+
+.miAgenda .bloquearDia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: .75rem;
+}
+
+.miAgenda .bloquearDia .boton {
+    min-height: 2.75rem;
+}
+
+.listaBloqueados {
+    display: grid;
+    gap: .5rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.listaBloqueados li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem .75rem;
+    padding: .6rem .8rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    font-size: .9rem;
+}
+
+.listaBloqueados li small {
+    display: block;
+    font-weight: 600;
+    color: var(--colorCoralOscuro);
+}
+
+.listaBloqueados .sinBloqueos {
+    border-style: dashed;
+    color: var(--colorTextoSuave);
+}
+
+.listaBloqueados .boton {
+    min-height: 2.75rem;
 }
 
 
@@ -2969,11 +3516,31 @@ tr.resaltada td {
     white-space: nowrap;
 }
 
-/* Debajo de la tabla cuando hay 20 clases (el máximo que se puede ver) */
-.notaHistorial {
+/* Debajo de la tabla: "Mostrando 20 de 143 clases" y el botón "Ver más" */
+.pieHistorial {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem 1rem;
     margin-top: .75rem;
+}
+
+.notaHistorial {
+    margin: 0;
     font-size: .82rem;
     text-align: center;
+    color: var(--colorTextoSuave);
+}
+
+.pieHistorial .boton {
+    min-height: 2.75rem;
+}
+
+/* Motivo de una clase no concretada, debajo del día */
+.tabla .motivoHistorial {
+    display: block;
+    font-size: .75rem;
     color: var(--colorTextoSuave);
 }
 
@@ -3207,9 +3774,18 @@ tr.resaltada td {
     --bs-dialog-width: min(34rem, 94vw);
 }
 
+.dialogoClase form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: calc(100dvh - 56px);
+}
+
 .dialogoClase .dialog-body {
     display: grid;
     gap: 1rem;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .selectorHorario {
@@ -3232,7 +3808,117 @@ tr.resaltada td {
     font-size: .9rem;
 }
 
+.selectorHorario .resumenAgenda {
+    margin: 0;
+    padding: .6rem .8rem;
+    border-radius: var(--radioChico);
+    background-color: var(--colorCelesteSuave);
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--colorTinta);
+}
+
+.selectorHorario .resumenAgenda .bi {
+    margin-right: .4rem;
+}
+
+/* Tira de los próximos 28 días: scrollea por dentro (con las flechas), la página nunca se mueve hacia los costados */
+.tiraDias {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: .4rem;
+    align-items: stretch;
+}
+
+.tiraDias .flecha {
+    width: 2.75rem;
+    border: 2px solid var(--colorTinta);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
+    cursor: pointer;
+}
+
+.tiraDias .flecha:hover {
+    background-color: var(--colorCelesteSuave);
+}
+
+.tiraDias .dias {
+    /* relative: los textos visually-hidden de los días quedan dentro del scroll y no desbordan el diálogo */
+    position: relative;
+    display: flex;
+    gap: .4rem;
+    padding: .25rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+}
+
+.tiraDias .dias .ayudaFranjas {
+    align-self: center;
+    margin: 0;
+    font-size: .9rem;
+    color: var(--colorTextoSuave);
+}
+
+.tiraDias .diaTira {
+    display: grid;
+    flex: 0 0 3.6rem;
+    justify-items: center;
+    min-height: 4.25rem;
+    padding: .4rem .2rem;
+    border: 2px solid var(--colorTinta);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    font-family: var(--fuenteMarca);
+    color: var(--colorTinta);
+    line-height: 1.15;
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: background-color .15s, transform .15s var(--curvaRebote);
+}
+
+.tiraDias .diaTira strong {
+    font-size: 1.15rem;
+}
+
+.tiraDias .diaTira .nombreDia {
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.tiraDias .diaTira .mesDia {
+    font-size: .68rem;
+    color: var(--colorTextoSuave);
+}
+
+.tiraDias .diaTira:hover:not(:disabled) {
+    background-color: var(--colorCelesteSuave);
+    transform: translateY(-2px);
+}
+
+.tiraDias .diaTira[aria-pressed="true"] {
+    background-color: var(--colorCoral);
+    box-shadow: 2px 2px 0 var(--colorTinta);
+    color: #fff;
+}
+
+.tiraDias .diaTira[aria-pressed="true"] .mesDia {
+    color: inherit;
+}
+
+/* Sin horario (o bloqueado): tenue y tachado; el texto "sin horario" lo leen los lectores de pantalla */
+.tiraDias .diaTira:disabled {
+    border-color: var(--colorBorde);
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
 .selectorHorario .franja {
+    min-height: 2.75rem;
     padding: .45rem .25rem;
     border: 2px solid var(--colorTinta);
     border-radius: var(--radioChico);

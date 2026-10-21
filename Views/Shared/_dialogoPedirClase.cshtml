@@ -12,6 +12,11 @@
         <div class="dialog-body">
             <p>Elegí cuándo querés tener la clase con <strong id="nombreProfesorPedido"></strong>. Te avisamos apenas responda.</p>
             <partial name="_selectorHorario" model='"pedido"' />
+            <div class="form-field">
+                <label for="mensajePedido">Mensaje para el profesor (opcional)</label>
+                <textarea class="form-control" id="mensajePedido" maxlength="500" rows="2" placeholder="Ej.: Tengo prueba de derivadas"></textarea>
+                <small>Le llega por el chat junto con el pedido.</small>
+            </div>
             <p class="mensajeError" id="mensajePedirClase" role="alert"></p>
         </div>
 
