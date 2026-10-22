@@ -650,10 +650,6 @@ mark {
     margin-block: .6rem .4rem;
 }
 
-.encabezadoSeccion .pildora {
-    rotate: -2deg;
-}
-
 .encabezadoSeccion p {
     font-size: .95rem;
     color: var(--colorTextoSuave);
@@ -2598,10 +2594,18 @@ fieldset {
 }
 
 .acceso .card {
+    position: relative;
     gap: 1.1rem;
     padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
     border-color: var(--colorTinta);
     box-shadow: var(--sombraMarcada);
+}
+
+/* La pegatina de Registrarse asoma por la esquina superior de la tarjeta */
+.acceso .card > .pegatina {
+    position: absolute;
+    top: -1.5rem;
+    right: 1.5rem;
 }
 
 .acceso form {
@@ -2627,13 +2631,6 @@ fieldset {
 .acceso .encabezadoAcceso {
     display: grid;
     gap: .6rem;
-}
-
-.acceso .encabezadoAcceso .pildora {
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    justify-self: start;
 }
 
 .acceso .encabezadoAcceso p {
