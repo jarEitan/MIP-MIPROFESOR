@@ -989,13 +989,15 @@ legend {
     box-shadow: 0 0 0 4px rgba(92, 225, 230, .6);
 }
 
-/* Elegidos en tinta por el token --bs-control-checked-bg */
+/* Elegidos en tinta por el token --bs-control-checked-bg; la tilde va en blanco (primary-contrast es tinta) */
 .check {
     --bs-check-border-color: #6B7280;
+    --bs-theme-contrast: #fff;
 }
 
 .radio {
     --bs-radio-border-color: #6B7280;
+    --bs-theme-contrast: #fff;
 }
 
 fieldset {
@@ -1405,8 +1407,8 @@ fieldset {
     transition: background-color .15s, border-color .15s, transform .15s var(--curvaRebote);
 }
 
-.tiraDias .diaTira:hover:not(:disabled),
-.selectorHorario .franja:hover:not(:disabled) {
+.tiraDias .diaTira:hover:not(:disabled, [aria-pressed="true"]),
+.selectorHorario .franja:hover:not(:disabled, [aria-pressed="true"]) {
     border-color: var(--colorTinta);
     background-color: var(--colorCelesteSuave);
     transform: translateY(-2px);
@@ -4045,10 +4047,6 @@ tr.resaltada td {
     font-size: .68rem;
     font-weight: 400;
     text-align: right;
-}
-
-.chat .burbuja .detalleMensaje.visto .bi {
-    color: var(--colorCelesteOscuro);
 }
 
 .chat .redactar {
