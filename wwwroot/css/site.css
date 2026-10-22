@@ -2878,7 +2878,7 @@ fieldset {
 }
 
 /* ---------- 3.13 Soporte (resultado del buscador, accesos rápidos y contacto) y página de error ---------- */
-/* Cuántas preguntas encontró el buscador: es un dato, no un error (le gana al gris de .cabecera p) */
+/* Cuántas preguntas encontró el buscador: es un dato, no un error */
 .cabecera .resultadoAyuda {
     width: fit-content;
     margin-top: 1rem;
