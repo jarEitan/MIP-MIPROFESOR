@@ -277,34 +277,17 @@ main {
 /* =========================================================
    1) HEADER
    ========================================================= */
+/* La sombra está siempre puesta. site.js sigue sumando .conSombra al hacer scroll, pero ya no tiene reglas */
 .encabezado {
     position: sticky;
     top: 0;
     z-index: 1030;
-    border-bottom: 1px solid var(--colorBorde);
-    transition: box-shadow var(--duracionMedia) var(--curvaSuave);
-}
-
-/* El desenfoque va en un pseudo-elemento: si estuviera en el header, el drawer (position: fixed)
-   se posicionaría respecto del header y no de la pantalla */
-.encabezado::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-color: rgba(255, 255, 255, .92);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
-}
-
-/* Clase agregada por JS al hacer scroll */
-.encabezado.conSombra {
-    box-shadow: var(--sombraSuave);
+    background-color: var(--colorSuperficie);
+    box-shadow: 0 1px 0 rgba(17, 24, 39, .06), 0 10px 28px -16px rgba(17, 24, 39, .3);
 }
 
 .encabezado .navbar {
     --bs-navbar-padding-y: .35rem;
-    --bs-navbar-nav-link-padding-x: .85rem;
     min-height: var(--alturaEncabezado);
 }
 
@@ -334,75 +317,63 @@ main {
     transform: rotate(-12deg) scale(1.08);
 }
 
-.marcaLogo span {
+/* "Mi" en tinta y "Profesor" en coral (el pie pone "Mi" en blanco) */
+.marcaLogo > span {
     font-family: var(--fuenteTitulos);
     font-size: 1.3rem;
     font-weight: 400;
     letter-spacing: 0;
+    color: var(--colorTinta);
+}
+
+.marcaLogo > span > span {
     color: var(--colorCoral);
 }
 
-/* Botón hamburguesa (solo se ve antes de lg) */
+/* Botón hamburguesa (solo se ve antes de lg): círculo celeste */
 .encabezado .navbar-toggler {
     --bs-navbar-toggler-icon-size: 1.25rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.6rem;
-    height: 2.6rem;
+    width: 2.75rem;
+    height: 2.75rem;
     margin-left: auto;
     padding: 0;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioChico);
+    border: 0;
+    border-radius: 50%;
     background-color: var(--colorCeleste);
     color: var(--colorTinta);
-    box-shadow: 3px 3px 0 var(--colorTinta);
-    transition: transform var(--duracionRapida) var(--curvaSuave), box-shadow var(--duracionRapida) var(--curvaSuave);
+    transition: translate var(--duracionRapida) var(--curvaRebote);
 }
 
 .encabezado .navbar-toggler:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 var(--colorTinta);
+    translate: 0 -2px;
 }
 
 .encabezado .navbar-toggler:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--colorTinta);
+    translate: 0 1px;
 }
 
-/* Enlaces de navegación con subrayado animado */
+/* Enlaces de navegación en píldora; el de la página actual va en tinta */
 .encabezado .nav-link {
-    position: relative;
-    font-size: .9rem;
-    font-weight: 600;
-    color: #374151;
-    text-decoration: none;
-    transition: color var(--duracionRapida) ease;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border-radius: 999px;
+    font: 500 1.0625rem/1.2 var(--fuenteMarca);
+    color: var(--colorTexto);
+    transition: background-color var(--duracionRapida) ease, color var(--duracionRapida) ease;
 }
 
-.encabezado .nav-link::after {
-    content: "";
-    position: absolute;
-    left: var(--bs-nav-link-padding-x, .85rem);
-    right: var(--bs-nav-link-padding-x, .85rem);
-    bottom: .15rem;
-    height: 3px;
-    border-radius: 3px;
-    background-color: var(--colorCoral);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform var(--duracionMedia) var(--curvaSuave);
+.encabezado .nav-link:hover {
+    background-color: var(--colorCelesteSuave);
 }
 
-.encabezado .nav-link:hover,
+/* Va después del hover: el hover (sin capa) le ganaría al .active de Bootstrap */
 .encabezado .nav-link.active {
-    color: var(--colorCoralOscuro);
-}
-
-.encabezado .nav-link:hover::after,
-.encabezado .nav-link.active::after {
-    transform: scaleX(1);
-    transform-origin: left;
+    background-color: var(--colorTinta);
+    color: #fff;
 }
 
 .encabezado .acciones {
@@ -411,27 +382,25 @@ main {
     gap: .75rem;
 }
 
-/* Botón Panel de Control con insignia de notificaciones (header con sesión) */
+/* Botón Panel de Control con insignia de notificaciones (header con sesión). Sin notificaciones la insignia
+   sigue en el HTML (site.js la actualiza) y el atributo hidden la oculta */
 .encabezado .boton .badge {
-    position: relative;
     min-height: 1.15rem;
     padding: .2rem .4rem;
-    background-color: var(--colorCoralOscuro);
+    background-color: var(--colorMagenta);
     color: #fff;
     font-family: var(--fuenteTexto);
     font-weight: 800;
-}
-
-/* Sin notificaciones la insignia sigue en el HTML (site.js la actualiza) pero no se ve */
-.encabezado .boton .badge[hidden] {
-    display: none;
 }
 
 /* Nombre y foto del usuario: llevan al perfil */
 .encabezado .usuario {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: .6rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
     color: var(--colorTinta);
     font-weight: 700;
     text-decoration: none;
@@ -454,28 +423,6 @@ main {
     transform: scale(1.08) rotate(-4deg);
 }
 
-.encabezado .menu {
-    --bs-menu-min-width: 13rem;
-    --bs-menu-font-size: .9rem;
-    --bs-menu-bg: var(--colorSuperficie);
-    --bs-menu-box-shadow: var(--sombraMarcada);
-    --bs-menu-item-hover-bg: var(--colorCelesteSuave);
-    --bs-menu-item-border-radius: .5rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
-}
-
-.encabezado .menu .menu-header {
-    font-family: var(--fuenteMarca);
-    font-weight: 600;
-    color: var(--colorTinta);
-}
-
-.encabezado .menu .menu-item {
-    font-weight: 600;
-    text-decoration: none;
-}
-
 /* Antes de lg el menú es un drawer lateral.
    (@container y no @media: el navbar de Bootstrap 6 se expande según el ancho de su propio contenedor,
    que no cuenta la barra de scroll, así que el corte puede diferir unos píxeles del viewport) */
@@ -484,11 +431,10 @@ main {
         --bs-drawer-width: min(20rem, 88vw);
         --bs-drawer-inset: 0;
         --bs-drawer-border-radius: 0;
-        --bs-drawer-border-color: var(--colorTinta);
-        --bs-drawer-border-width: 2px;
+        --bs-drawer-border-width: 0;
         --bs-drawer-box-shadow: none;
         --bs-drawer-backdrop-bg: rgba(17, 24, 39, .45);
-        --bs-drawer-backdrop-blur: 4px;
+        --bs-drawer-backdrop-blur: 0;
     }
 
     .encabezado .drawer-header {
@@ -496,14 +442,14 @@ main {
         align-items: center;
         justify-content: space-between;
         padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--colorBorde);
+        background-color: var(--colorSuperficie);
     }
 
     .encabezado .drawer-title {
         font-family: var(--fuenteMarca);
         font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--colorCoral);
+        font-weight: 600;
+        color: var(--colorTinta);
     }
 
     .encabezado .drawer-body {
@@ -516,17 +462,6 @@ main {
     .encabezado .navbar-nav {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .encabezado .nav-link {
-        display: block;
-        padding: .85rem 0;
-        border-bottom: 1px solid var(--colorBorde);
-        font-size: 1.05rem;
-    }
-
-    .encabezado .nav-link::after {
-        display: none;
     }
 
     .encabezado .acciones {
@@ -547,6 +482,18 @@ main {
 
     .encabezado .acciones {
         margin-left: auto;
+    }
+}
+
+/* Entre 1024 y 1279 px el contenedor mide 960 px: con los cuatro links del alumno el header solo entra en una línea
+   si los links se achican y el nombre se oculta (el avatar lleva al perfil) */
+@container (1024px <= width < 1280px) {
+    .encabezado .nav-link {
+        padding-inline: .75rem;
+    }
+
+    .encabezado .usuario .nombreUsuario {
+        display: none;
     }
 }
 
@@ -1576,8 +1523,7 @@ fieldset {
 /* ---------- Aviso "Cuenta no verificada" (Pop up del UI Kit, debajo del header) ---------- */
 .avisoVerificacion {
     padding-block: .75rem;
-    background-color: var(--colorAlertaSuave);
-    border-bottom: var(--bordeMarcado);
+    background-color: var(--colorCeleste);
 }
 
 .avisoVerificacion .contenidoAviso {
@@ -1590,8 +1536,8 @@ fieldset {
 .avisoVerificacion .icono {
     width: 2.25rem;
     height: 2.25rem;
-    background-color: #FDE68A;
-    color: var(--colorAlerta);
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
 }
 
 .avisoVerificacion p {
@@ -5185,6 +5131,10 @@ tr.resaltada td {
     font-size: .88rem;
 }
 
+.pie .marcaLogo > span {
+    color: #fff;
+}
+
 .pie .eslogan {
     font-family: var(--fuenteTitulos);
     font-size: 1.1rem;
@@ -5194,9 +5144,7 @@ tr.resaltada td {
 
 .pie h5 {
     margin-bottom: .65rem;
-    font-size: .75rem;
-    letter-spacing: .12em;
-    text-transform: uppercase;
+    font: 600 1.0625rem var(--fuenteMarca);
     color: #fff;
 }
 
