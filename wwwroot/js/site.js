@@ -418,7 +418,11 @@ function inicializarRolesDeRegistro() {
         });
     };
 
-    formularioRegistro.querySelectorAll("input[name='tipoUsuario']").forEach(radio => radio.addEventListener("change", mostrarPanelDelRol));
+    // Al cambiar de rol el panel que aparece no vuelve a pegar sus pegatinas: el único momento animado es la carga
+    formularioRegistro.querySelectorAll("input[name='tipoUsuario']").forEach(radio => radio.addEventListener("change", () => {
+        formularioRegistro.closest(".acceso")?.classList.add("rolCambiado");
+        mostrarPanelDelRol();
+    }));
     mostrarPanelDelRol();
 }
 

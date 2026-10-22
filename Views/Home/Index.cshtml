@@ -33,10 +33,10 @@
                 </div>
             </div>
 
-            @* Plancha de pegatinas de ejemplo, solo decorativa: se pegan escalonadas al cargar (--retraso) *@
+            @* Plancha de pegatinas de ejemplo, solo decorativa: se pegan escalonadas al cargar (--retraso). La clase de cada una la ubica *@
             <div class="col-12 md:col-10 lg:col-6 mx-auto" aria-hidden="true">
                 <div class="plancha">
-                    <div class="pegatina" style="--giro:-4deg; --retraso:.15s">
+                    <div class="pegatina profe" style="--giro:-4deg; --retraso:.15s">
                         <div class="d-flex align-items-center gap-3">
                             <span class="avatar theme-primary">SM</span>
                             <div>
@@ -50,20 +50,20 @@
                         </div>
                     </div>
 
-                    <div class="pegatina celeste" style="--giro:5deg; --retraso:.3s">
+                    <div class="pegatina celeste confirmada" style="--giro:5deg; --retraso:.3s">
                         <span>Clase confirmada</span>
                         <strong>Física I: Dinámica</strong>
                         <p>Viernes, 18:30 hs</p>
                     </div>
 
-                    <div class="pegatina" style="--giro:-1.5deg; --retraso:.45s">
+                    <div class="pegatina charla" style="--giro:-1.5deg; --retraso:.45s">
                         <p class="burbuja">¿Tenés el programa del colegio a mano?</p>
                         <p class="burbuja propia">¡Sí! Te lo adjunto <i class="bi bi-paperclip"></i></p>
                     </div>
 
-                    <span class="pegatina redonda" style="--giro:-12deg; --retraso:.6s"><img src="~/img/logoChico.png" alt="" width="96" height="96" /></span>
+                    <span class="pegatina redonda isotipo" style="--giro:-12deg; --retraso:.6s"><img src="~/img/logoChico.png" alt="" width="96" height="96" /></span>
 
-                    <span class="pegatina" style="--giro:8deg; --retraso:.75s">I <i class="bi bi-heart-fill"></i> MIP</span>
+                    <span class="pegatina corazon" style="--giro:8deg; --retraso:.75s">I <i class="bi bi-heart-fill"></i> MIP</span>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
 <!-- ================= CINTA DE PALABRAS (decorativa) ================= -->
 <section class="cinta" aria-hidden="true">
     <div>
-        @* Se repite cuatro veces: la mitad (lo que se desplaza) tiene que cubrir hasta las pantallas anchas sin cortes *@
+        @* Se repite cuatro veces y se desplaza una copia: las otras tres cubren hasta las pantallas más anchas sin cortes *@
         @for (int repeticion = 0; repeticion < 4; repeticion++)
         {
             <ul>
