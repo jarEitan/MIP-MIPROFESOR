@@ -669,129 +669,104 @@ mark {
     color: var(--colorTextoSuave);
 }
 
-/* Píldora de marca */
+/* Píldora: solo para un dato real (el rol en el Perfil y en la lista de amigos) */
 .pildora {
-    display: inline-block;
-    padding: .28rem .75rem;
-    border: 1.5px solid var(--colorTinta);
+    display: inline-flex;
+    gap: .35rem;
+    padding: .2rem .8rem;
+    border: 0;
     border-radius: 999px;
     background-color: var(--colorCeleste);
-    color: var(--colorTinta);
-    font-size: .68rem;
-    font-weight: 700;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    color: var(--colorTexto);
+    font: 600 .875rem var(--fuenteMarca);
 }
 
-/* ---------- Botones de marca (borde marcado + sombra desplazada) ---------- */
+/* ---------- Botones de marca (píldora que sube al pasar el mouse) ---------- */
+/* .contorno es la base: no tiene regla propia pero el JS la usa */
 .boton {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: .45rem;
-    padding: .6rem 1.15rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioChico);
-    font-family: var(--fuenteMarca);
-    font-size: .95rem;
-    font-weight: 600;
-    line-height: 1.2;
+    gap: .5rem;
+    min-height: 3rem;
+    padding: 0 1.6rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: 999px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTexto);
+    font: 600 1.0625rem/1.2 var(--fuenteMarca);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
-    background-color: var(--colorSuperficie);
-    color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
-    transition: transform var(--duracionRapida) var(--curvaSuave), box-shadow var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) ease;
+    box-shadow: 0 6px 14px -8px rgba(17, 24, 39, .35);
+    transition: translate .2s var(--curvaRebote), box-shadow .2s var(--curvaRebote);
 }
 
 .boton:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--colorTinta);
-    color: var(--colorTinta);
+    translate: 0 -3px;
+    box-shadow: 0 12px 22px -10px rgba(17, 24, 39, .45);
 }
 
 .boton:active {
-    transform: translate(3px, 3px);
-    box-shadow: 1px 1px 0 var(--colorTinta);
+    translate: 0 1px;
+    box-shadow: 0 2px 6px -2px rgba(17, 24, 39, .4);
 }
 
 .boton.principal {
     background-color: var(--colorCoral);
-    color: #fff;
-}
-
-.boton.principal:hover {
-    background-color: var(--colorCoralOscuro);
-    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 8px 18px -8px rgba(213, 31, 71, .6);
 }
 
 .boton.secundario {
     background-color: var(--colorCeleste);
-}
-
-.boton.secundario:hover {
-    background-color: #45D4DA;
-}
-
-.boton.contorno:hover {
-    background-color: var(--colorCelesteSuave);
+    border-color: transparent;
+    box-shadow: 0 8px 18px -8px rgba(14, 116, 144, .6);
 }
 
 .boton.oscuro {
     background-color: var(--colorTinta);
-    border-color: var(--colorTinta);
+    border-color: transparent;
     color: #fff;
-    box-shadow: 4px 4px 0 var(--colorCeleste);
 }
 
-.boton.oscuro:hover {
-    background-color: var(--colorTintaSuave);
-    color: #fff;
-    box-shadow: 6px 6px 0 var(--colorCeleste);
-}
-
+/* Para fondos oscuros */
 .boton.claro {
     background-color: transparent;
-    border-color: #fff;
+    border-color: rgba(255, 255, 255, .55);
     color: #fff;
-    box-shadow: 4px 4px 0 rgba(255, 255, 255, .35);
-}
-
-.boton.claro:hover {
-    background-color: rgba(255, 255, 255, .12);
-    color: #fff;
-    box-shadow: 6px 6px 0 rgba(255, 255, 255, .5);
+    box-shadow: none;
 }
 
 .boton.chico {
-    padding: .4rem .85rem;
-    font-size: .85rem;
-    box-shadow: 3px 3px 0 var(--colorTinta);
+    min-height: 2.75rem;
+    padding: 0 1.1rem;
+    font-size: .9375rem;
 }
 
-.boton.chico:hover {
-    box-shadow: 5px 5px 0 var(--colorTinta);
-}
-
-.boton.oscuro.chico {
-    box-shadow: 3px 3px 0 var(--colorCeleste);
+/* Botones solo con ícono (Me gusta, Reseña, Copiar enlace) */
+.boton.botonIcono {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0;
 }
 
 /* ---------- Tarjeta (Bootstrap .card) ---------- */
 .card {
     --bs-card-border-radius: var(--radioGrande);
-    --bs-card-border-width: 2px;
+    --bs-card-border-width: 1.5px;
     --bs-card-border-color: var(--colorBorde);
     --bs-card-bg: var(--colorSuperficie);
     padding: 1.5rem;
     gap: .75rem;
-    border: 2px solid var(--colorBorde);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioGrande);
     background-color: var(--colorSuperficie);
     color: var(--colorTexto);
     text-decoration: none;
-    transition: border-color var(--duracionMedia) var(--curvaSuave), box-shadow var(--duracionMedia) var(--curvaSuave), translate var(--duracionMedia) var(--curvaSuave);
+    box-shadow: var(--sombraSuave);
+    transition: translate .25s var(--curvaRebote), box-shadow .25s var(--curvaRebote), border-color .25s var(--curvaRebote);
 }
 
 /* Dentro de una grilla (row > col > card) todas las tarjetas de la fila miden lo mismo */
@@ -799,10 +774,11 @@ mark {
     height: 100%;
 }
 
+/* La capa celeste plana es la única del sistema */
 .card:not(.estatica):hover {
-    translate: 0 -6px;
+    translate: -4px -4px;
     border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcadaElevada);
+    box-shadow: 6px 6px 0 var(--colorCeleste), 0 22px 36px -18px rgba(17, 24, 39, .3);
 }
 
 .card h2,
@@ -822,24 +798,25 @@ mark {
     color: var(--colorTextoSuave);
 }
 
+/* Sobre coral el texto va en tinta (el blanco no llega al contraste) */
 .card.coral {
     background-color: var(--colorCoral);
-    border-color: var(--colorTinta);
-    color: #fff;
-    box-shadow: var(--sombraMarcada);
+    border-color: transparent;
+    color: var(--colorTexto);
+    box-shadow: 0 24px 44px -24px rgba(213, 31, 71, .7);
 }
 
 .card.coral h2,
 .card.coral h3,
 .card.coral p {
-    color: #fff;
+    color: var(--colorTexto);
 }
 
 .card.oscura {
     background-color: var(--colorTinta);
-    border-color: var(--colorTinta);
+    border-color: transparent;
     color: #fff;
-    box-shadow: 4px 4px 0 var(--colorCeleste);
+    box-shadow: 0 24px 44px -24px rgba(17, 24, 39, .75);
 }
 
 .card.oscura h2,
@@ -848,27 +825,15 @@ mark {
 }
 
 .card.oscura p {
-    color: #D1D5DB;
+    color: #E5E7EB;
 }
 
-.card.coral:not(.estatica):hover {
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcadaElevada);
-}
-
-.card.oscura:not(.estatica):hover {
-    border-color: var(--colorTinta);
-    box-shadow: 7px 7px 0 var(--colorCeleste);
-}
-
-/* Tarjeta de "no hay nada todavía" (perfil inexistente, panel sin clases): centrada y con sombra marcada */
+/* Tarjeta de "no hay nada todavía" (perfil inexistente, panel sin clases): centrada */
 .card.estadoVacio {
     align-items: center;
     max-width: 32rem;
     margin-inline: auto;
     padding-block: 2.5rem;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
     text-align: center;
 }
 
@@ -876,49 +841,110 @@ mark {
     align-self: center;
 }
 
-/* Ícono cuadrado de las tarjetas */
+/* Ícono cuadrado de las tarjetas (al ícono le alcanza con 3:1) */
 .icono {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioChico);
+    width: 3rem;
+    height: 3rem;
+    border: 0;
+    border-radius: var(--radioMedio);
     background-color: var(--colorCoralSuave);
-    color: var(--colorCoralOscuro);
-    font-size: 1.2rem;
-    transition: transform var(--duracionMedia) var(--curvaRebote);
+    color: var(--colorMagenta);
+    font-size: 1.25rem;
+    transition: rotate var(--duracionMedia) var(--curvaRebote);
 }
 
 .icono.celeste {
     background-color: var(--colorCelesteSuave);
-    color: var(--colorCelesteOscuro);
-}
-
-.icono.oscuro {
-    background-color: #F3F4F6;
     color: var(--colorTinta);
 }
 
+.icono.oscuro {
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
 .card:hover .icono {
-    transform: rotate(-8deg) scale(1.08);
+    rotate: -8deg;
+}
+
+/* ---------- Pegatina: etiqueta troquelada y girada (--giro y --retraso van inline) ---------- */
+.pegatina {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem 1rem;
+    border-radius: 1.125rem;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTexto);
+    font-family: var(--fuenteMarca);
+    font-weight: 600;
+    box-shadow: var(--troquel);
+    rotate: var(--giro, -3deg);
+    transition: rotate .3s var(--curvaRebote), translate .3s var(--curvaRebote);
+}
+
+.pegatina:hover {
+    rotate: 0deg;
+    translate: 0 -6px;
+}
+
+.pegatina.coral {
+    background-color: var(--colorCoral);
+}
+
+.pegatina.celeste {
+    background-color: var(--colorCeleste);
+}
+
+.pegatina.magenta {
+    background-color: var(--colorMagenta);
+    color: #fff;
+}
+
+.pegatina.oscura {
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+/* El único momento animado: las pegatinas de la primera sección se pegan al cargar.
+   backwards (y no both) deja que el hover mueva rotate y translate */
+main > section:first-of-type .pegatina {
+    animation: pegarPegatina .5s var(--curvaRebote) var(--retraso, .15s) backwards;
+}
+
+/* Contenedor de pegatinas sueltas: el padding deja lugar al troquel */
+.plancha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem 1.25rem;
+    padding: 1rem;
 }
 
 /* ---------- Insignias y avatares (Bootstrap) ---------- */
 .badge {
     --bs-badge-border-radius: 999px;
-    --bs-badge-font-weight: 700;
-    letter-spacing: .01em;
+    --bs-badge-font-weight: 600;
+    font-family: var(--fuenteMarca);
+    letter-spacing: 0;
 }
 
 .avatar {
-    --bs-avatar-border-width: 2px;
-    --bs-avatar-border-color: var(--colorTinta);
-    --bs-avatar-font-weight: 800;
-    border: 2px solid var(--colorTinta);
+    --bs-avatar-border-width: 0;
+    --bs-avatar-font-weight: 600;
+    border: 0;
     flex-shrink: 0;
+    font-family: var(--fuenteMarca);
+}
+
+/* Aro del isotipo: se ve solo cuando el avatar muestra iniciales (sin troquel) */
+.avatar.theme-primary {
+    box-shadow: inset 0 0 0 .1875rem var(--colorCeleste);
 }
 
 .avatar img {
@@ -945,33 +971,31 @@ legend {
     color: var(--colorTextoSuave);
 }
 
+/* El borde #6B7280 da 4,8:1 sobre blanco; el gris de reposo de las tarjetas no llega a 3:1 */
 .form-control {
-    --bs-control-border-width: 2px;
-    --bs-control-border-color: #D1D5DB;
+    --bs-control-border-width: 1.5px;
+    --bs-control-border-color: #6B7280;
     --bs-control-border-radius: var(--radioChico);
     --bs-control-box-shadow: none;
     --bs-control-bg: var(--colorSuperficie);
     --bs-control-fg: var(--colorTexto);
-    --bs-control-font-size: .95rem;
+    --bs-control-font-size: 1rem;
     font-family: var(--fuenteTexto);
 }
 
 .form-control:focus {
     border-color: var(--colorTinta);
     outline: none;
-    box-shadow: 3px 3px 0 var(--colorCeleste);
+    box-shadow: 0 0 0 4px rgba(92, 225, 230, .6);
 }
 
+/* Elegidos en tinta por el token --bs-control-checked-bg */
 .check {
-    --bs-check-checked-bg: var(--colorCoral);
-    --bs-check-checked-border-color: var(--colorTinta);
-    --bs-check-border-color: var(--colorTinta);
+    --bs-check-border-color: #6B7280;
 }
 
 .radio {
-    --bs-radio-checked-bg: var(--colorCoral);
-    --bs-radio-checked-border-color: var(--colorTinta);
-    --bs-radio-border-color: var(--colorTinta);
+    --bs-radio-border-color: #6B7280;
 }
 
 fieldset {
@@ -979,14 +1003,14 @@ fieldset {
     gap: .6rem;
 }
 
-/* Mensajes de validación: se ven solo cuando el JS les escribe un texto */
+/* Mensajes de validación: se ven solo cuando el JS les escribe un texto (blanco sobre magenta, 5,1:1) */
 .mensajeError {
     margin-top: .75rem;
     padding: .6rem 1rem;
-    border-left: 4px solid var(--colorCoralOscuro);
-    border-radius: .5rem;
-    background-color: var(--colorCoralSuave);
-    color: var(--colorCoralOscuro);
+    border: 0;
+    border-radius: var(--radioChico);
+    background-color: var(--colorMagenta);
+    color: #fff;
     font-size: .875rem;
     font-weight: 600;
     animation: sacudirError .4s var(--curvaSuave);
@@ -1002,37 +1026,37 @@ fieldset {
     gap: .5rem;
     margin-top: .75rem;
     padding: .6rem 1rem;
-    border-left: 4px solid var(--colorExito);
-    border-radius: .5rem;
-    background-color: var(--colorExitoSuave);
-    color: var(--colorExito);
+    border-radius: var(--radioChico);
+    background-color: var(--colorExito);
+    color: #fff;
     font-size: .875rem;
     font-weight: 600;
 }
 
-/* Buscador con borde marcado (portada y soporte) */
+/* Buscador en píldora (portada y soporte) */
 .buscador {
     display: flex;
     align-items: center;
     gap: .5rem;
-    max-width: 34rem;
-    padding: .4rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
+    max-width: 36rem;
+    padding: .375rem .375rem .375rem 1.4rem;
+    border: 0;
+    border-radius: 999px;
     background-color: var(--colorSuperficie);
-    box-shadow: var(--sombraMarcada);
-    transition: box-shadow var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaSuave);
+    box-shadow: var(--sombraFlotante);
+    transition: box-shadow var(--duracionRapida) var(--curvaSuave);
 }
 
+/* El anillo tinta se suma porque el celeste solo no alcanza para el foco */
 .buscador:focus-within {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--colorCoral);
+    box-shadow: 0 0 0 2px var(--colorTinta), 0 0 0 6px rgba(92, 225, 230, .6), var(--sombraFlotante);
 }
 
 .buscador input {
     flex: 1;
     min-width: 0;
-    padding: .65rem .9rem;
+    min-height: 2.75rem;
+    padding: 0;
     border: 0;
     background: transparent;
     font: inherit;
@@ -1044,19 +1068,14 @@ fieldset {
     outline: none;
 }
 
-.buscador .boton {
-    padding: .65rem 1.25rem;
-    box-shadow: none;
-}
-
+/* El botón de adentro no se levanta */
 .buscador .boton:hover,
 .buscador .boton:active {
-    transform: none;
-    box-shadow: none;
+    translate: none;
 }
 
 .buscador + .mensajeError {
-    max-width: 34rem;
+    max-width: 36rem;
 }
 
 /* Fila de botones */
@@ -1083,8 +1102,8 @@ fieldset {
     margin-left: auto;
     border-radius: var(--radioMedio);
     border-bottom-right-radius: .25rem;
-    background-color: var(--colorCelesteSuave);
-    font-weight: 600;
+    background-color: var(--colorCoral);
+    font-weight: 700;
 }
 
 /* ".card p" pone gris a los párrafos: la burbuja conserva su texto oscuro */
@@ -1151,10 +1170,10 @@ fieldset {
     padding: .3rem;
     overflow-y: auto;
     overscroll-behavior: contain;
-    border: var(--bordeMarcado);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     background-color: var(--colorSuperficie);
-    box-shadow: 3px 3px 0 var(--colorTinta);
+    box-shadow: var(--sombraFlotante);
     list-style: none;
 }
 
@@ -1178,7 +1197,7 @@ fieldset {
 }
 
 .selectorBuscable .listaOpciones li .bi {
-    color: var(--colorCoralOscuro);
+    color: var(--colorTinta);
 }
 
 /* "Todas las materias", "Sin elegir": la opción que borra la elección */
@@ -1209,11 +1228,12 @@ fieldset {
     font-size: .8rem;
 }
 
+/* 24px de toque como mínimo (WCAG 2.5.8) */
 .selectorBuscable .etiquetasElegidas button {
     display: grid;
     place-items: center;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -1226,12 +1246,311 @@ fieldset {
     background-color: rgba(17, 24, 39, .12);
 }
 
-/* ---------- Tick de cuenta verificada ---------- */
+/* ---------- Tick de cuenta verificada (el celeste sobre blanco no llega a 3:1) ---------- */
 .tickVerificado {
-    color: var(--colorCelesteOscuro);
+    color: var(--colorTinta);
 }
 
-/* ---------- Snackbar (UI Kit): aviso corto abajo de la pantalla ---------- */
+/* ---------- Pestañas (nav-pills de Bootstrap) ---------- */
+.nav-pills {
+    --bs-nav-pills-bg: #fff;
+    --bs-nav-pills-padding: .3rem;
+    --bs-nav-pills-link-active-bg: var(--colorTinta);
+    --bs-nav-pills-link-active-color: #fff;
+    gap: .25rem;
+    border: 1.5px solid var(--colorBorde);
+    box-shadow: var(--sombraSuave);
+}
+
+.nav-pills .nav-link {
+    min-height: 2.75rem;
+    font: 600 1rem var(--fuenteMarca);
+    color: var(--colorTexto);
+}
+
+.nav-pills .nav-link:hover {
+    background-color: var(--colorCelesteSuave);
+}
+
+/* Va después del hover: el hover (sin capa) le ganaría al .active de Bootstrap */
+.nav-pills .nav-link.active {
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+/* ---------- Diálogo de Bootstrap 6: header blanco, sin borde y sin giro al abrir ---------- */
+.dialog {
+    --bs-dialog-width: min(28rem, 92vw);
+    --bs-dialog-color: var(--colorTexto);
+    --bs-dialog-border-width: 0;
+    --bs-dialog-border-radius: var(--radioGrande);
+    --bs-dialog-box-shadow: var(--sombraFlotante);
+    --bs-dialog-backdrop-bg: rgba(17, 24, 39, .5);
+    --bs-dialog-backdrop-blur: 0;
+    --bs-dialog-header-border-width: 0;
+}
+
+.dialog .dialog-title {
+    font: 600 1.375rem/1.25 var(--fuenteMarca);
+}
+
+/* La cruz de cerrar (diálogos, drawers y avisos) mide 24px como mínimo */
+.btn-close {
+    --bs-btn-close-size: 1.5rem;
+}
+
+/* Pedir y reubicar una clase: día + grilla de horas (las arma crearSelectorHorario en site.js) */
+.dialogoClase {
+    --bs-dialog-width: min(34rem, 94vw);
+}
+
+.dialogoClase form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: calc(100dvh - 56px);
+}
+
+.dialogoClase .dialog-body {
+    display: grid;
+    gap: 1rem;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.selectorHorario {
+    display: grid;
+    gap: 1rem;
+}
+
+.selectorHorario .franjas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(4.6rem, 1fr));
+    gap: .5rem;
+    max-height: 13rem;
+    padding: .25rem;
+    overflow-y: auto;
+}
+
+.selectorHorario .ayudaFranjas {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: .9rem;
+}
+
+.selectorHorario .resumenAgenda {
+    margin: 0;
+    padding: .6rem .8rem;
+    border-radius: var(--radioChico);
+    background-color: var(--colorCelesteSuave);
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--colorTinta);
+}
+
+.selectorHorario .resumenAgenda .bi {
+    margin-right: .4rem;
+}
+
+/* Tira de los próximos 28 días: scrollea por dentro (con las flechas), la página nunca se mueve hacia los costados */
+.tiraDias {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: .4rem;
+    align-items: stretch;
+}
+
+.tiraDias .flecha {
+    width: 2.75rem;
+    min-height: 2.75rem;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
+    cursor: pointer;
+}
+
+.tiraDias .flecha:hover {
+    border-color: var(--colorTinta);
+    background-color: var(--colorCelesteSuave);
+}
+
+.tiraDias .dias {
+    /* relative: los textos visually-hidden de los días quedan dentro del scroll y no desbordan el diálogo */
+    position: relative;
+    display: flex;
+    gap: .4rem;
+    padding: .25rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+}
+
+.tiraDias .dias .ayudaFranjas {
+    align-self: center;
+    margin: 0;
+    font-size: .9rem;
+    color: var(--colorTextoSuave);
+}
+
+/* Días y franjas comparten estados: blanco en reposo y tinta con texto blanco cuando está elegido */
+.tiraDias .diaTira,
+.selectorHorario .franja {
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    font-family: var(--fuenteMarca);
+    color: var(--colorTinta);
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s, transform .15s var(--curvaRebote);
+}
+
+.tiraDias .diaTira:hover:not(:disabled),
+.selectorHorario .franja:hover:not(:disabled) {
+    border-color: var(--colorTinta);
+    background-color: var(--colorCelesteSuave);
+    transform: translateY(-2px);
+}
+
+.tiraDias .diaTira[aria-pressed="true"],
+.selectorHorario .franja[aria-pressed="true"] {
+    border-color: var(--colorTinta);
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+/* Sin horario (o bloqueado): punteado, tenue y tachado; el texto "sin horario" lo leen los lectores de pantalla */
+.tiraDias .diaTira:disabled,
+.selectorHorario .franja:disabled {
+    border-style: dashed;
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+.tiraDias .diaTira {
+    display: grid;
+    flex: 0 0 3.6rem;
+    justify-items: center;
+    min-height: 4.25rem;
+    padding: .4rem .2rem;
+    line-height: 1.15;
+    scroll-snap-align: start;
+}
+
+.tiraDias .diaTira strong {
+    font-size: 1.15rem;
+}
+
+.tiraDias .diaTira .nombreDia {
+    font-size: .72rem;
+    font-weight: 600;
+}
+
+.tiraDias .diaTira .mesDia {
+    font-size: .68rem;
+    color: var(--colorTextoSuave);
+}
+
+.tiraDias .diaTira[aria-pressed="true"] .mesDia {
+    color: inherit;
+}
+
+.selectorHorario .franja {
+    min-height: 2.75rem;
+    padding: .45rem .25rem;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+/* Diálogo "Dar reseña" (_dialogoDarResena) */
+.dialogoResena .dialog-body {
+    display: grid;
+    gap: 1rem;
+}
+
+.dialogoResena .estrellasResena {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.dialogoResena .estrellasResena legend {
+    margin-bottom: .4rem;
+    font-size: .95rem;
+    font-weight: 600;
+}
+
+.dialogoResena .filaEstrellas {
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+}
+
+/* Se pintan las estrellas hasta la elegida (o hasta la que está bajo el mouse); las vacías en #6B7280 llegan a 3:1 */
+.dialogoResena .filaEstrellas label {
+    padding: .1rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: #6B7280;
+    cursor: pointer;
+    transition: color var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaRebote);
+}
+
+.dialogoResena .filaEstrellas:not(:has(label:hover)):has(input:checked) label,
+.dialogoResena .filaEstrellas:has(label:hover) label {
+    color: var(--colorCoral);
+}
+
+.dialogoResena .filaEstrellas:not(:has(label:hover)) label:has(input:checked) ~ label,
+.dialogoResena .filaEstrellas:has(label:hover) label:hover ~ label {
+    color: #6B7280;
+}
+
+.dialogoResena .filaEstrellas label:hover {
+    transform: scale(1.15);
+}
+
+/* El radio está oculto: el foco se dibuja en la estrella, con el mismo color que el foco global */
+.dialogoResena .filaEstrellas label:has(input:focus-visible) {
+    outline: 3px solid var(--colorFoco, var(--colorTinta));
+    outline-offset: 2px;
+    border-radius: var(--radioChico);
+}
+
+.dialogoResena .textoPuntuacion {
+    margin-left: .5rem;
+    font-family: var(--fuenteMarca);
+    font-weight: 600;
+    color: var(--colorMagenta);
+}
+
+.dialogoResena .form-field {
+    display: grid;
+    gap: .35rem;
+}
+
+.dialogoResena textarea {
+    resize: vertical;
+}
+
+.dialogoResena small {
+    justify-self: end;
+    color: var(--colorTextoSuave);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dialogoResena .filaEstrellas label {
+        transition: none;
+    }
+
+    .dialogoResena .filaEstrellas label:hover {
+        transform: none;
+    }
+}
+
+/* ---------- Snackbar (UI Kit): aviso corto abajo de la pantalla, entra subiendo sin girar ---------- */
 .snackbar {
     position: fixed;
     left: 50%;
@@ -1241,11 +1560,12 @@ fieldset {
     padding: .75rem 1.1rem;
     translate: -50% 1rem;
     opacity: 0;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
+    border: 0;
+    border-radius: 999px;
     background-color: var(--colorTinta);
-    box-shadow: 4px 4px 0 var(--colorCeleste);
+    box-shadow: var(--sombraFlotante);
     color: #fff;
+    font-family: var(--fuenteMarca);
     font-size: .92rem;
     font-weight: 600;
     text-align: center;
@@ -1259,12 +1579,10 @@ fieldset {
 
 .snackbar[data-tipo="exito"] {
     background-color: var(--colorExito);
-    box-shadow: 4px 4px 0 var(--colorTinta);
 }
 
 .snackbar[data-tipo="error"] {
-    background-color: var(--colorCoralOscuro);
-    box-shadow: 4px 4px 0 var(--colorTinta);
+    background-color: var(--colorMagenta);
 }
 
 /* ---------- Aviso "Cuenta no verificada" (Pop up del UI Kit, debajo del header) ---------- */
@@ -1344,6 +1662,10 @@ fieldset {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-6px); }
     75% { transform: translateX(6px); }
+}
+
+@keyframes pegarPegatina {
+    from { opacity: 0; scale: 1.18; translate: 0 -14px; rotate: 8deg; }
 }
 
 
@@ -1881,19 +2203,19 @@ fieldset {
 
 .preguntas .accordion-item {
     overflow: hidden;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioGrande);
     background-color: var(--colorSuperficie);
-    transition: box-shadow var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) ease;
+    box-shadow: var(--sombraSuave);
+    transition: border-color var(--duracionRapida) var(--curvaSuave);
 }
 
 .preguntas .accordion-item:hover {
-    box-shadow: 3px 3px 0 var(--colorTinta);
+    border-color: var(--colorTinta);
 }
 
-.preguntas .accordion-item[open] {
+.preguntas .accordion-item[open] > .accordion-header {
     background-color: var(--colorCelesteSuave);
-    box-shadow: var(--sombraMarcada);
 }
 
 .preguntas .accordion-header {
@@ -3714,11 +4036,12 @@ tr.resaltada td {
     overflow-wrap: anywhere;
 }
 
-/* Hora del mensaje y, en los propios, una tilde (enviado) o dos (visto) */
+/* Hora del mensaje y, en los propios, una tilde (enviado) o dos (visto); hereda el color porque el gris no se lee sobre coral */
 .chat .burbuja .detalleMensaje {
     display: block;
     margin-top: .2rem;
-    color: var(--colorTextoSuave);
+    color: inherit;
+    opacity: .75;
     font-size: .68rem;
     font-weight: 400;
     text-align: right;
@@ -3767,206 +4090,6 @@ tr.resaltada td {
     .chat .conversaciones div span {
         max-width: none;
     }
-}
-
-/* Diálogo de Bootstrap 6 (cancelar clase) */
-.dialog {
-    --bs-dialog-width: min(28rem, 92vw);
-    --bs-dialog-border-radius: var(--radioGrande);
-    --bs-dialog-border-width: 2px;
-    --bs-dialog-border-color: var(--colorTinta);
-    --bs-dialog-box-shadow: 8px 8px 0 var(--colorTinta);
-    --bs-dialog-backdrop-bg: rgba(17, 24, 39, .5);
-    --bs-dialog-backdrop-blur: 4px;
-}
-
-.dialog .dialog-title {
-    font-size: 1.25rem;
-}
-
-.dialog .dialog-body p {
-    color: var(--colorTextoSuave);
-}
-
-/* Pedir y reubicar una clase: día + grilla de horas (las arma crearSelectorHorario en site.js) */
-.dialogoClase {
-    --bs-dialog-width: min(34rem, 94vw);
-}
-
-.dialogoClase form {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    max-height: calc(100dvh - 56px);
-}
-
-.dialogoClase .dialog-body {
-    display: grid;
-    gap: 1rem;
-    min-height: 0;
-    overflow-y: auto;
-}
-
-.selectorHorario {
-    display: grid;
-    gap: 1rem;
-}
-
-.selectorHorario .franjas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(4.6rem, 1fr));
-    gap: .5rem;
-    max-height: 13rem;
-    padding: .25rem;
-    overflow-y: auto;
-}
-
-.selectorHorario .ayudaFranjas {
-    grid-column: 1 / -1;
-    margin: 0;
-    font-size: .9rem;
-}
-
-.selectorHorario .resumenAgenda {
-    margin: 0;
-    padding: .6rem .8rem;
-    border-radius: var(--radioChico);
-    background-color: var(--colorCelesteSuave);
-    font-size: .88rem;
-    font-weight: 600;
-    color: var(--colorTinta);
-}
-
-.selectorHorario .resumenAgenda .bi {
-    margin-right: .4rem;
-}
-
-/* Tira de los próximos 28 días: scrollea por dentro (con las flechas), la página nunca se mueve hacia los costados */
-.tiraDias {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: .4rem;
-    align-items: stretch;
-}
-
-.tiraDias .flecha {
-    width: 2.75rem;
-    border: 2px solid var(--colorTinta);
-    border-radius: var(--radioChico);
-    background-color: var(--colorSuperficie);
-    color: var(--colorTinta);
-    cursor: pointer;
-}
-
-.tiraDias .flecha:hover {
-    background-color: var(--colorCelesteSuave);
-}
-
-.tiraDias .dias {
-    /* relative: los textos visually-hidden de los días quedan dentro del scroll y no desbordan el diálogo */
-    position: relative;
-    display: flex;
-    gap: .4rem;
-    padding: .25rem;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    scrollbar-width: thin;
-}
-
-.tiraDias .dias .ayudaFranjas {
-    align-self: center;
-    margin: 0;
-    font-size: .9rem;
-    color: var(--colorTextoSuave);
-}
-
-.tiraDias .diaTira {
-    display: grid;
-    flex: 0 0 3.6rem;
-    justify-items: center;
-    min-height: 4.25rem;
-    padding: .4rem .2rem;
-    border: 2px solid var(--colorTinta);
-    border-radius: var(--radioChico);
-    background-color: var(--colorSuperficie);
-    font-family: var(--fuenteMarca);
-    color: var(--colorTinta);
-    line-height: 1.15;
-    scroll-snap-align: start;
-    cursor: pointer;
-    transition: background-color .15s, transform .15s var(--curvaRebote);
-}
-
-.tiraDias .diaTira strong {
-    font-size: 1.15rem;
-}
-
-.tiraDias .diaTira .nombreDia {
-    font-size: .72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.tiraDias .diaTira .mesDia {
-    font-size: .68rem;
-    color: var(--colorTextoSuave);
-}
-
-.tiraDias .diaTira:hover:not(:disabled) {
-    background-color: var(--colorCelesteSuave);
-    transform: translateY(-2px);
-}
-
-.tiraDias .diaTira[aria-pressed="true"] {
-    background-color: var(--colorCoral);
-    box-shadow: 2px 2px 0 var(--colorTinta);
-    color: #fff;
-}
-
-.tiraDias .diaTira[aria-pressed="true"] .mesDia {
-    color: inherit;
-}
-
-/* Sin horario (o bloqueado): tenue y tachado; el texto "sin horario" lo leen los lectores de pantalla */
-.tiraDias .diaTira:disabled {
-    border-color: var(--colorBorde);
-    background-color: var(--colorFondo);
-    color: var(--colorTextoSuave);
-    text-decoration: line-through;
-    cursor: not-allowed;
-}
-
-.selectorHorario .franja {
-    min-height: 2.75rem;
-    padding: .45rem .25rem;
-    border: 2px solid var(--colorTinta);
-    border-radius: var(--radioChico);
-    background-color: var(--colorSuperficie);
-    font-family: var(--fuenteMarca);
-    font-size: .9rem;
-    font-weight: 600;
-    color: var(--colorTinta);
-    cursor: pointer;
-    transition: background-color .15s, transform .15s var(--curvaRebote);
-}
-
-.selectorHorario .franja:hover:not(:disabled) {
-    background-color: var(--colorCelesteSuave);
-    transform: translateY(-2px);
-}
-
-.selectorHorario .franja[aria-pressed="true"] {
-    background-color: var(--colorCoral);
-    box-shadow: 2px 2px 0 var(--colorTinta);
-    color: #fff;
-}
-
-.selectorHorario .franja:disabled {
-    border-color: var(--colorBorde);
-    background-color: var(--colorFondo);
-    color: var(--colorTextoSuave);
-    text-decoration: line-through;
-    cursor: not-allowed;
 }
 
 /* ---------- 3.15 Quiénes somos ---------- */
@@ -4351,13 +4474,6 @@ tr.resaltada td {
     }
 }
 
-/* Botones solo con ícono (Me gusta, Reseña, Copiar enlace) */
-.boton.botonIcono {
-    width: 2.75rem;
-    padding-inline: 0;
-    justify-content: center;
-}
-
 /* Me gusta: corazón que salta, explosión de corazoncitos y contador que rebota (site.js: animarMeGusta) */
 .boton.botonMeGusta {
     position: relative;
@@ -4678,16 +4794,10 @@ tr.resaltada td {
     background-color: var(--colorExitoSuave);
 }
 
-/* Pestañas: Modificar perfil / Modificar cuenta */
+/* Pestañas: Modificar perfil / Modificar cuenta (los colores son los de .nav-pills) */
 .dialogoEdicion .pestanasEdicion {
-    --bs-nav-pills-bg: var(--colorSuperficie);
-    --bs-nav-pills-padding: .3rem;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .25rem;
-    border: var(--bordeMarcado);
-    border-radius: 999px;
-    box-shadow: 3px 3px 0 var(--colorTinta);
 }
 
 .dialogoEdicion .pestanasEdicion .nav-link {
@@ -4697,11 +4807,8 @@ tr.resaltada td {
     gap: .4rem;
     min-width: 0;
     padding: .55rem .5rem;
-    font-family: var(--fuenteMarca);
     font-size: clamp(.82rem, .75rem + .4vw, .95rem);
-    font-weight: 600;
     line-height: 1.2;
-    color: var(--colorTinta);
 }
 
 /* En celulares el ícono de la pestaña sobra: queda solo el texto */
@@ -4709,15 +4816,6 @@ tr.resaltada td {
     .dialogoEdicion .pestanasEdicion .nav-link .bi {
         display: none;
     }
-}
-
-.dialogoEdicion .pestanasEdicion .nav-link:hover {
-    background-color: var(--colorCelesteSuave);
-}
-
-.dialogoEdicion .pestanasEdicion .nav-link.active {
-    background-color: var(--colorCoral);
-    color: #fff;
 }
 
 /* Campos en vertical */
@@ -4759,11 +4857,6 @@ tr.resaltada td {
 .dialogoEdicion .editorTexto .ql-editor {
     min-height: 9rem;
     max-height: 18rem;
-}
-
-/* ".dialog .dialog-body p" pone gris los párrafos: el texto del editor queda oscuro */
-.dialogoEdicion .ql-editor p {
-    color: var(--colorTexto);
 }
 
 .dialogoEdicion .editorTexto:focus-within,
@@ -5088,91 +5181,6 @@ tr.resaltada td {
     flex: 1;
     min-width: 0;
     overflow-wrap: anywhere;
-}
-
-/* ---------- Diálogo "Dar reseña" (_dialogoDarResena) ---------- */
-.dialogoResena .dialog-body {
-    display: grid;
-    gap: 1rem;
-}
-
-.dialogoResena .estrellasResena {
-    margin: 0;
-    padding: 0;
-    border: 0;
-}
-
-.dialogoResena .estrellasResena legend {
-    margin-bottom: .4rem;
-    font-size: .95rem;
-    font-weight: 600;
-}
-
-.dialogoResena .filaEstrellas {
-    display: flex;
-    align-items: center;
-    gap: .2rem;
-}
-
-/* Se pintan las estrellas hasta la elegida (o hasta la que está bajo el mouse) */
-.dialogoResena .filaEstrellas label {
-    padding: .1rem;
-    font-size: 2rem;
-    line-height: 1;
-    color: var(--colorBorde);
-    cursor: pointer;
-    transition: color var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaRebote);
-}
-
-.dialogoResena .filaEstrellas:not(:has(label:hover)):has(input:checked) label,
-.dialogoResena .filaEstrellas:has(label:hover) label {
-    color: #F59E0B;
-}
-
-.dialogoResena .filaEstrellas:not(:has(label:hover)) label:has(input:checked) ~ label,
-.dialogoResena .filaEstrellas:has(label:hover) label:hover ~ label {
-    color: var(--colorBorde);
-}
-
-.dialogoResena .filaEstrellas label:hover {
-    transform: scale(1.15);
-}
-
-.dialogoResena .filaEstrellas label:has(input:focus-visible) {
-    outline: 3px solid var(--colorCeleste);
-    outline-offset: 2px;
-    border-radius: var(--radioChico);
-}
-
-.dialogoResena .textoPuntuacion {
-    margin-left: .5rem;
-    font-family: var(--fuenteMarca);
-    font-weight: 600;
-    color: var(--colorCoralOscuro);
-}
-
-.dialogoResena .form-field {
-    display: grid;
-    gap: .35rem;
-}
-
-.dialogoResena textarea {
-    resize: vertical;
-}
-
-.dialogoResena small {
-    justify-self: end;
-    color: var(--colorTextoSuave);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .dialogoResena .filaEstrellas label {
-        transition: none;
-    }
-
-    .dialogoResena .filaEstrellas label:hover {
-        transform: none;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
