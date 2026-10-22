@@ -4528,7 +4528,7 @@ tr.resaltada td {
 .perfil .cifras span {
     font-size: .9375rem;
     font-weight: 500;
-    color: var(--colorTextoSuave);
+    color: var(--colorTexto);
 }
 
 /* La cifra de amigos es un botón que abre la lista */
