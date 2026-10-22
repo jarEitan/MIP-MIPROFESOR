@@ -13,7 +13,7 @@
             <input type="search" id="campoAyuda" placeholder="Ej: cancelar una clase..." autocomplete="off" />
             <i class="bi bi-search" aria-hidden="true"></i>
         </form>
-        <p class="mensajeError" id="mensajeAyuda" role="status"></p>
+        <p class="resultadoAyuda" id="mensajeAyuda" role="status"></p>
     </div>
 </section>
 
@@ -26,7 +26,7 @@
                     <span class="icono"><i class="bi bi-calendar-check" aria-hidden="true"></i></span>
                     <h3>Gestión de clases</h3>
                     <p>Cancelaciones, reubicaciones y cómo coordinar con tu profesor.</p>
-                    <span class="enlace">Ver guía</span>
+                    <span class="enlace">Ver preguntas</span>
                 </a>
             </div>
             <div class="col">
@@ -34,7 +34,7 @@
                     <span class="icono celeste"><i class="bi bi-search" aria-hidden="true"></i></span>
                     <h3>Búsqueda y registro</h3>
                     <p>Cómo crear tu cuenta y filtrar profesores por colegio, materia y modalidad.</p>
-                    <span class="enlace">Ver guía</span>
+                    <span class="enlace">Ver preguntas</span>
                 </a>
             </div>
             <div class="col">
@@ -84,11 +84,11 @@
                     <div class="row g-3">
                         <div class="col-12 md:col-6 form-field">
                             <label for="contactoNombre">Nombre completo</label>
-                            <input class="form-control" type="text" id="contactoNombre" name="nombre" autocomplete="name" />
+                            <input class="form-control" type="text" id="contactoNombre" name="nombre" maxlength="100" autocomplete="name" />
                         </div>
                         <div class="col-12 md:col-6 form-field">
                             <label for="contactoCorreo">Correo electrónico</label>
-                            <input class="form-control" type="email" id="contactoCorreo" name="correo" autocomplete="email" />
+                            <input class="form-control" type="email" id="contactoCorreo" name="correo" maxlength="150" autocomplete="email" />
                         </div>
                         <div class="col-12 form-field">
                             <label for="contactoTipo">Tipo de consulta</label>
@@ -102,7 +102,7 @@
                         </div>
                         <div class="col-12 form-field">
                             <label for="contactoMensaje">Contanos qué pasó</label>
-                            <textarea class="form-control" id="contactoMensaje" name="mensaje" rows="5"></textarea>
+                            <textarea class="form-control" id="contactoMensaje" name="mensaje" rows="5" maxlength="1000"></textarea>
                         </div>
                     </div>
 

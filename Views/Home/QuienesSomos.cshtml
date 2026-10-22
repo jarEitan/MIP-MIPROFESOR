@@ -2,56 +2,102 @@
     ViewData["Title"] = "Quiénes somos";
 }
 
-<!-- ================= CABECERA ================= -->
-<section class="cabecera">
+<!-- ================= PRESENTACIÓN ================= -->
+<section class="presentacion">
     <div class="container">
-        <span class="pildora"><i class="bi bi-people" aria-hidden="true"></i> Quiénes somos</span>
-        <h1>El conocimiento <mark>nos conecta</mark></h1>
-        <p>MiProfesor nace para que aprender nunca dependa de la suerte: conectamos alumnos con profesores particulares de forma simple, rápida y confiable.</p>
-    </div>
-</section>
+        <div class="row align-items-center gy-5">
+            <div class="col-12 lg:col-7">
+                <h1>Quiénes <mark>somos</mark></h1>
+                <p>Esta es nuestra start-up, dedicada a ayudar a profesores y alumnos a conectarse</p>
+                <ul>
+                    <li><span class="icono"><i class="bi bi-backpack" aria-hidden="true"></i></span> Ayudar a los estudiantes a encontrar profesores particulares</li>
+                    <li><span class="icono celeste"><i class="bi bi-person-video3" aria-hidden="true"></i></span> Ayudar a los profesores particulares a encontrar estudiantes</li>
+                </ul>
+            </div>
 
-<!-- ================= MISIÓN, VISIÓN Y VALORES ================= -->
-<section class="mision">
-    <div class="container">
-        <div class="row g-3 lg:g-4">
-            <div class="col-12 md:col-6">
-                <div class="card coral">
-                    <span class="icono"><i class="bi bi-bullseye" aria-hidden="true"></i></span>
-                    <h2>Misión</h2>
-                    <p>Garantizar que todo alumno consiga un profesor particular sin complicaciones y que cada docente pueda enseñar a quien lo necesite.</p>
-                </div>
-            </div>
-            <div class="col-12 md:col-6">
-                <div class="card oscura">
-                    <span class="icono"><i class="bi bi-eye" aria-hidden="true"></i></span>
-                    <h2>Visión</h2>
-                    <p>Crear un espacio universal de enseñanza y aprendizaje, accesible sin importar la situación, el contexto, el precio o la disponibilidad horaria.</p>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card estatica valores">
-                    <h2>Nuestros valores</h2>
-                    <ul>
-                        <li><i class="bi bi-emoji-smile" aria-hidden="true"></i> Accesibilidad</li>
-                        <li><i class="bi bi-people" aria-hidden="true"></i> Comunidad</li>
-                        <li><i class="bi bi-patch-check" aria-hidden="true"></i> Profesionalismo</li>
-                        <li><i class="bi bi-lightbulb" aria-hidden="true"></i> Innovación</li>
-                        <li><i class="bi bi-arrows-move" aria-hidden="true"></i> Flexibilidad</li>
-                    </ul>
-                    <p>Creemos en una educación más cercana, personalizada y accesible. Porque detrás de cada duda hay una oportunidad de aprender, y detrás de cada alumno, un futuro por construir.</p>
+            @* Plancha decorativa: el único momento animado de la página (se pegan escalonadas con --retraso) *@
+            <div class="col-12 lg:col-5" aria-hidden="true">
+                <div class="plancha">
+                    <span class="pegatina redonda" style="--giro:-8deg; --retraso:.15s"><img src="~/img/logoChico.png" alt="" width="136" height="136" /></span>
+                    <span class="pegatina" style="--giro:7deg; --retraso:.3s">I <i class="bi bi-heart-fill"></i> MIP</span>
+                    <span class="pegatina celeste" style="--giro:-4deg; --retraso:.45s">Conexión</span>
+                    <span class="pegatina coral" style="--giro:3deg; --retraso:.6s">Aprendizaje</span>
+                    <span class="pegatina" style="--giro:-6deg; --retraso:.75s">Diversión</span>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ================= POR QUÉ NACE MIP ================= -->
+<!-- ================= MANIFIESTO (textual del Miro) ================= -->
+<section class="manifiesto">
+    <div class="container">
+        <article class="card estatica">
+            <h2>En miProfesor creemos que aprender nunca debería depender de la suerte.</h2>
+            <p>Por eso conectamos a estudiantes con profesores particulares de forma simple, rápida y confiable, para que cada persona encuentre el apoyo que necesita y cada docente pueda compartir su conocimiento con quienes más lo valoran.</p>
+            <p>Creemos en una educación más cercana, personalizada y accesible. En el poder de una buena explicación, de una clase que inspira y de un profesor que hace la diferencia.</p>
+            <p class="remate">Porque detrás de cada duda hay una oportunidad de aprender.<br />Y detrás de cada alumno, un futuro por construir.</p>
+        </article>
+    </div>
+</section>
+
+<!-- ================= MISIÓN Y VISIÓN ================= -->
+<section class="mision">
+    <div class="container">
+        <div class="encabezadoSeccion">
+            <h2>Misión y visión</h2>
+        </div>
+
+        <div class="row g-3 lg:g-4">
+            <div class="col-12 md:col-6">
+                <div class="card">
+                    <span class="icono"><i class="bi bi-bullseye" aria-hidden="true"></i></span>
+                    <h3>Misión</h3>
+                    <p>Garantizar que todo alumno consiga un profesor particular sin complicaciones y que cada docente pueda enseñar a quien lo necesite.</p>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="card">
+                    <span class="icono celeste"><i class="bi bi-eye" aria-hidden="true"></i></span>
+                    <h3>Visión</h3>
+                    <p>Crear un espacio universal de enseñanza y aprendizaje accesible, independientemente de la situación, el contexto, el precio o la disponibilidad horaria.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CÓMO SOMOS (atributos de marca del Miro) ================= -->
+<section class="atributos">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-12 lg:col-4">
+                <h2>Cómo somos</h2>
+                <p>Divertidos, flexibles e innovadores. Así nos ven y así nos queremos ver.</p>
+            </div>
+            <div class="col-12 lg:col-8">
+                <h3>Genéricos</h3>
+                <ul class="plancha">
+                    <li class="pegatina" style="--giro:-3deg"><i class="bi bi-universal-access" aria-hidden="true"></i> Accesibilidad</li>
+                    <li class="pegatina" style="--giro:2deg"><i class="bi bi-people" aria-hidden="true"></i> Comunidad</li>
+                    <li class="pegatina" style="--giro:-2deg"><i class="bi bi-patch-check" aria-hidden="true"></i> Profesionalismo</li>
+                </ul>
+                <h3>Específicos</h3>
+                <ul class="plancha">
+                    <li class="pegatina coral" style="--giro:3deg"><i class="bi bi-emoji-laughing" aria-hidden="true"></i> Divertido</li>
+                    <li class="pegatina coral" style="--giro:-3deg"><i class="bi bi-arrows-move" aria-hidden="true"></i> Flexible</li>
+                    <li class="pegatina coral" style="--giro:2deg"><i class="bi bi-lightbulb" aria-hidden="true"></i> Innovativo</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= POR QUÉ NACE MIP (quién lo detectó: Resumen MIP) ================= -->
 <section class="problemas">
     <div class="container">
         <div class="encabezadoSeccion">
-            <span class="pildora">El problema</span>
-            <h2>Por qué nace <mark>MiProfesor</mark></h2>
+            <h2>Por qué nace MiProfesor</h2>
             <p>Cuatro problemas reales que vivimos en primera persona.</p>
         </div>
 
@@ -61,6 +107,7 @@
                     <span class="icono"><i class="bi bi-person-hearts" aria-hidden="true"></i></span>
                     <h3>Menores de edad y tarifas rígidas</h3>
                     <p>Es difícil conseguir apoyo escolar adaptado para menores, con precios flexibles. MIP ofrece un entorno seguro y tarifas transparentes.</p>
+                    <p class="detectado"><span class="avatar avatar-sm theme-danger" aria-hidden="true">EG</span> Lo detectó <strong>Eitan</strong></p>
                 </div>
             </div>
             <div class="col">
@@ -68,6 +115,7 @@
                     <span class="icono celeste"><i class="bi bi-building" aria-hidden="true"></i></span>
                     <h3>Programas específicos de cada colegio</h3>
                     <p>Cuesta encontrar docentes que conozcan tu programa, y a ellos captar alumnos de su zona. El catálogo se indexa por colegio.</p>
+                    <p class="detectado"><span class="avatar avatar-sm theme-primary" aria-hidden="true">FM</span> Lo detectó <strong>Fran</strong></p>
                 </div>
             </div>
             <div class="col">
@@ -75,6 +123,7 @@
                     <span class="icono oscuro"><i class="bi bi-chat-quote" aria-hidden="true"></i></span>
                     <h3>Todo por el boca a boca</h3>
                     <p>Hoy se contrata a un profesor por contactos informales. MIP centraliza la oferta con perfiles claros y reputación comprobable.</p>
+                    <p class="detectado"><span class="avatar avatar-sm theme-inverse" aria-hidden="true">AC</span> Lo detectó <strong>Ari</strong></p>
                 </div>
             </div>
             <div class="col">
@@ -82,18 +131,18 @@
                     <span class="icono"><i class="bi bi-piggy-bank" aria-hidden="true"></i></span>
                     <h3>Refuerzo escolar caro</h3>
                     <p>Reforzar contenidos no debería costar de más. Mostramos precios por hora y coincidencias por zona y modalidad.</p>
+                    <p class="detectado"><span class="avatar avatar-sm theme-accent" aria-hidden="true">TS</span> Lo detectó <strong>Tobi</strong></p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ================= EQUIPO ================= -->
+<!-- ================= EQUIPO (el footer enlaza a #equipo) ================= -->
 <section class="equipo" id="equipo">
     <div class="container">
         <div class="encabezadoSeccion">
-            <span class="pildora">Equipo</span>
-            <h2>Las personas detrás de <mark>MIP</mark></h2>
+            <h2>Las personas detrás de MIP</h2>
         </div>
 
         <div class="row row-cols-1 sm:row-cols-2 lg:row-cols-4 g-3 lg:g-4">
@@ -133,102 +182,7 @@
     </div>
 </section>
 
-<!-- ================= IDENTIDAD DE MARCA ================= -->
-<section class="identidad">
-    <div class="container">
-        <div class="encabezadoSeccion">
-            <span class="pildora">Marca</span>
-            <h2>Nuestra <mark>identidad</mark></h2>
-            <p>Divertidos, flexibles e innovadores. Así nos ven y así nos queremos ver.</p>
-        </div>
-
-        <div class="row g-3 lg:g-4">
-            <div class="col-12 lg:col-6">
-                <figure class="card">
-                    <img src="~/img/signoIdentitario.webp" alt="Isotipo de MIP en color y en blanco y negro, junto con la paleta de colores de marca" width="512" height="197" loading="lazy" />
-                    <figcaption>Signo identificatorio: un círculo coral con borde celeste y la sigla MIP en negro.</figcaption>
-                </figure>
-            </div>
-            <div class="col-12 lg:col-6">
-                <figure class="card">
-                    <img src="~/img/atributosMarca.webp" alt="Atributos genéricos de la marca: accesibilidad, comunidad y profesionalismo. Atributos específicos: divertido, flexible e innovativo" width="512" height="315" loading="lazy" />
-                    <figcaption>Atributos de marca: accesibles, comunitarios y profesionales; divertidos, flexibles e innovadores.</figcaption>
-                </figure>
-            </div>
-            <div class="col-12 lg:col-6">
-                <figure class="card">
-                    <img src="~/img/merchandising.webp" alt="Papelería, remeras, gorras, tazas y stickers con la identidad de MIP" width="512" height="369" loading="lazy" />
-                    <figcaption>La marca en el mundo real: tarjetas, remeras, gorras, tazas, cuadernos y stickers.</figcaption>
-                </figure>
-            </div>
-            <div class="col-12 lg:col-6">
-                <div class="card estatica paleta">
-                    <h3>Paleta y tipografías</h3>
-                    <ul>
-                        <li style="--muestra: #FF5757"><span></span><strong>Coral</strong> #FF5757</li>
-                        <li style="--muestra: #5CE1E6"><span></span><strong>Cian</strong> #5CE1E6</li>
-                        <li style="--muestra: #D51F47"><span></span><strong>Magenta</strong> #D51F47</li>
-                        <li style="--muestra: #000000"><span></span><strong>Negro</strong> #000000</li>
-                        <li style="--muestra: #B3B3B3"><span></span><strong>Gris</strong> #B3B3B3</li>
-                    </ul>
-                    <p class="tipografias">
-                        <span class="titulares">Eras Bold ITC para titulares y logo</span>
-                        <span class="cifras">Fredoka para botones y cifras</span>
-                        <span>Plus Jakarta Sans para el texto</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ================= PROCESO DE DISEÑO: FIGMA, MIRO E IMÁGENES ================= -->
-<section class="proceso">
-    <div class="container">
-        <div class="encabezadoSeccion">
-            <span class="pildora">Cómo lo diseñamos</span>
-            <h2>Del tablero <mark>al prototipo</mark></h2>
-            <p>Mapa del sitio, flujos de usuario y prototipos: todo nace en Miro y Figma antes de convertirse en código.</p>
-        </div>
-
-        <div class="row g-3 lg:g-4">
-            <div class="col-12 md:col-6">
-                <figure class="card">
-                    <img src="~/img/mapaSitio.webp" alt="Mapa del sitio: inicio, perfil, catálogo, quiénes somos, panel de control y moderación" width="512" height="233" loading="lazy" />
-                    <figcaption><strong>Mapa del sitio.</strong> Inicio, catálogo, perfiles, panel de control, quiénes somos y soporte.</figcaption>
-                </figure>
-            </div>
-            <div class="col-12 md:col-6">
-                <figure class="card">
-                    <img src="~/img/flujosUsuario.webp" alt="Flujos de usuario: buscar profesor, crear una cuenta, buscar con amigos, cancelar o reubicar una clase y pedir ayuda al soporte" width="512" height="338" loading="lazy" />
-                    <figcaption><strong>Flujos de usuario.</strong> Buscar profesor, crear cuenta, cancelar o reubicar y pedir ayuda.</figcaption>
-                </figure>
-            </div>
-            <div class="col-12 md:col-6">
-                <figure class="card">
-                    <img src="~/img/prototipoMedio.webp" alt="Prototipo de fidelidad media en escala de grises con las vistas de registro, inicio, catálogo y soporte" width="512" height="211" loading="lazy" />
-                    <figcaption><strong>Prototipo medio.</strong> Registro, inicio, catálogo y soporte en escala de grises.</figcaption>
-                </figure>
-            </div>
-            <div class="col-12 md:col-6">
-                <figure class="card">
-                    <div class="duo">
-                        <img src="~/img/kitTipografiaColores.webp" alt="UI Kit de MIP: tipografía y colores" width="1779" height="2600" loading="lazy" />
-                        <img src="~/img/kitComponentes.webp" alt="UI Kit de MIP: campos de texto, dropdowns y botones" width="1779" height="1900" loading="lazy" />
-                    </div>
-                    <figcaption><strong>UI Kit.</strong> Tipografía, colores, campos de texto y botones del sistema de diseño.</figcaption>
-                </figure>
-            </div>
-        </div>
-
-        <div class="enlacesExternos">
-            <a class="boton oscuro" href="https://www.figma.com/design/HDhfuOx62CKtV0MSiQWDl4/MIP" target="_blank" rel="noopener noreferrer"><i class="bi bi-bounding-box-circles" aria-hidden="true"></i> Ver el prototipo en Figma</a>
-            <a class="boton contorno" href="https://miro.com/app/board/uXjVHVYvc3g=/" target="_blank" rel="noopener noreferrer"><i class="bi bi-kanban" aria-hidden="true"></i> Ver el tablero en Miro</a>
-        </div>
-    </div>
-</section>
-
-<!-- ================= CONTACTO ================= -->
+<!-- ================= LLAMADO FINAL ================= -->
 <section class="llamadoFinal">
     <div class="container">
         <div class="row align-items-center gy-4">

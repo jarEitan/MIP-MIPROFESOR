@@ -856,6 +856,24 @@ mark {
     color: #fff;
 }
 
+/* Redonda: el isotipo (logoChico.png) o un ícono grande; cada zona ajusta el tamaño */
+.pegatina.redonda {
+    justify-content: center;
+    width: 6rem;
+    height: 6rem;
+    padding: 0;
+    border-radius: 50%;
+}
+
+.pegatina.redonda img {
+    width: 100%;
+}
+
+/* I (corazón) MIP */
+.pegatina .bi-heart-fill {
+    color: var(--colorMagenta);
+}
+
 /* El único momento animado: las pegatinas de la primera sección se pegan al cargar.
    backwards (y no both) deja que el hover mueva rotate y translate */
 main > section:first-of-type .pegatina {
@@ -1565,11 +1583,6 @@ fieldset {
 
 
 /* ---------- Animaciones reutilizables ---------- */
-@keyframes flotarTarjeta {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 0 -12px; }
-}
-
 @keyframes desplazarCinta {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
@@ -1686,25 +1699,9 @@ fieldset {
     font-family: var(--fuenteTexto);
 }
 
-/* 4: el logo redondo */
-.portada .pegatina.redonda {
-    width: 6rem;
-    height: 6rem;
-    padding: 0;
-    border-radius: 50%;
-}
-
-.portada .pegatina.redonda img {
-    width: 100%;
-}
-
-/* 5: I (corazón) MIP */
+/* 4 es el logo (.pegatina.redonda). 5: I (corazón) MIP */
 .portada .plancha .pegatina:nth-child(5) {
     border-radius: 999px;
-}
-
-.portada .bi-heart-fill {
-    color: var(--colorMagenta);
 }
 
 @media (width >= 768px) {
@@ -2504,24 +2501,12 @@ fieldset {
 /* ---------- 3.12 Registro e inicio de sesión ---------- */
 .acceso {
     padding-block: clamp(2rem, 3.5vw, 3rem);
-    background-color: var(--colorFondo);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
-    background-size: 24px 24px;
+    background: var(--fondoLavado);
 }
 
 .acceso .card {
-    position: relative;
     gap: 1.1rem;
     padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
-}
-
-/* La pegatina de Registrarse asoma por la esquina superior de la tarjeta */
-.acceso .card > .pegatina {
-    position: absolute;
-    top: -1.5rem;
-    right: 1.5rem;
 }
 
 .acceso form {
@@ -2529,9 +2514,9 @@ fieldset {
     gap: 1rem;
 }
 
-/* La ilustración se estira hasta la altura del formulario */
+/* El panel queda arriba, al lado del comienzo del formulario (el de registro es largo) */
 .acceso .row {
-    align-items: stretch;
+    align-items: flex-start;
 }
 
 .acceso h1 {
@@ -2648,13 +2633,13 @@ fieldset {
 .acceso .numeroPaso {
     display: inline-grid;
     place-items: center;
-    width: 1.6rem;
-    height: 1.6rem;
-    border: var(--bordeMarcado);
+    width: 1.75rem;
+    height: 1.75rem;
     border-radius: 50%;
-    background-color: var(--colorCeleste);
-    font-size: .8rem;
-    font-weight: 800;
+    background-color: var(--colorTinta);
+    color: #fff;
+    font-size: .875rem;
+    font-weight: 600;
 }
 
 .acceso .terminos {
@@ -2665,6 +2650,13 @@ fieldset {
 
 .acceso .terminos label {
     font-weight: 600;
+}
+
+.acceso .terminos a {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: .2em;
 }
 
 /* Separador "¿Primera vez...?" y accesos al registro */
@@ -2691,7 +2683,7 @@ fieldset {
     gap: .75rem;
 }
 
-/* Elección de rol: dos tarjetas grandes */
+/* Elección de rol: dos tarjetas grandes con el borde de los campos */
 .acceso .roles {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2704,7 +2696,7 @@ fieldset {
     justify-items: center;
     gap: .2rem;
     padding: 1.1rem .5rem;
-    border: 2px solid #D1D5DB;
+    border: 2px solid #6B7280;
     border-radius: var(--radioMedio);
     text-align: center;
     cursor: pointer;
@@ -2738,10 +2730,10 @@ fieldset {
     transform: translateY(-2px);
 }
 
+/* El rol elegido es la única excepción a "lo elegido": borde tinta con fondo celeste suave */
 .acceso .roles label:has(input:checked) {
     border-color: var(--colorTinta);
     background-color: var(--colorCelesteSuave);
-    box-shadow: 3px 3px 0 var(--colorTinta);
 }
 
 /* Tilde en la tarjeta elegida */
@@ -2754,59 +2746,68 @@ fieldset {
     place-items: center;
     width: 1.4rem;
     height: 1.4rem;
-    border: var(--bordeMarcado);
     border-radius: 50%;
-    background-color: var(--colorCoral);
+    background-color: var(--colorTinta);
     font-size: .75rem;
     font-weight: 800;
     color: #fff;
 }
 
 .acceso .roles label:has(input:focus-visible) {
-    outline: 3px solid var(--colorCeleste);
+    outline: 3px solid var(--colorTinta);
     outline-offset: 3px;
 }
 
-/* El panel ilustrado del registro cambia según el rol (atributo hidden) */
-.acceso .ilustracion[hidden] {
-    display: none;
-}
-
-/* Panel ilustrado (se oculta en pantallas muy chicas para ir directo al formulario) */
+/* Panel de color plano con pegatinas: coral con texto tinta; .oscura (profesor) en tinta con texto blanco.
+   Se oculta debajo de lg para ir directo al formulario */
 .acceso .ilustracion {
-    display: grid;
-    height: 100%;
-    align-content: center;
-    justify-items: center;
-    gap: 1.25rem;
-    padding: clamp(1.75rem, 1rem + 3vw, 3rem);
-    border: var(--bordeMarcado);
-    border-radius: var(--radioGrande);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: clamp(2rem, 1rem + 3vw, 3rem);
+    border-radius: 1.75rem;
     background-color: var(--colorCoral);
-    box-shadow: var(--sombraMarcada);
-    text-align: center;
+    color: var(--colorTexto);
+    box-shadow: 0 24px 44px -24px rgba(213, 31, 71, .7);
+}
+
+.acceso .ilustracion.oscura {
+    background-color: var(--colorTinta);
     color: #fff;
+    box-shadow: 0 24px 44px -24px rgba(17, 24, 39, .75);
 }
 
-.acceso .ilustracion img {
-    width: clamp(5rem, 12vw, 7.5rem);
-    height: auto;
-    border-radius: 50%;
-    border: var(--bordeMarcado);
-    background-color: #fff;
-    animation: flotarTarjeta 6s ease-in-out infinite;
+.acceso .ilustracion .pegatina.redonda {
+    width: 6.5rem;
+    height: 6.5rem;
 }
 
+/* El lema (o el título del rol) es una pegatina, pero en Eras como todo h2 */
 .acceso .ilustracion h2 {
-    color: #fff;
-    font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2rem);
+    max-width: 30rem;
+    padding: 1rem 1.5rem;
+    border-radius: 1.375rem;
+    font-family: var(--fuenteTitulos);
+    font-size: clamp(1.75rem, .9rem + 1.6vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+}
+
+/* La última pegatina (I ❤ MIP o el valor del Miro) cierra el panel a la derecha */
+.acceso .ilustracion > .pegatina:last-child {
+    align-self: flex-end;
+    max-width: 20rem;
+    padding: .75rem 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.3;
 }
 
 .acceso .ilustracion ul {
     display: grid;
-    gap: .55rem;
-    text-align: left;
-    font-weight: 600;
+    gap: .75rem;
+    font-size: 1.05rem;
+    font-weight: 700;
 }
 
 .acceso .ilustracion li::before {
@@ -2824,13 +2825,31 @@ fieldset {
     font-weight: 800;
 }
 
+.acceso .ilustracion.oscura li::before {
+    background-color: var(--colorCeleste);
+}
+
 @media (width < 1024px) {
     .acceso .ilustracion {
         display: none;
     }
 }
 
-/* ---------- 3.13 Soporte: accesos rápidos y contacto ---------- */
+/* ---------- 3.13 Soporte (resultado del buscador, accesos rápidos y contacto) y página de error ---------- */
+/* Cuántas preguntas encontró el buscador: es un dato, no un error (le gana al gris de .cabecera p) */
+.cabecera .resultadoAyuda {
+    width: fit-content;
+    margin-top: 1rem;
+    border-radius: 999px;
+    color: var(--colorTinta);
+    font: 600 1rem var(--fuenteMarca);
+}
+
+.cabecera .resultadoAyuda:not(:empty) {
+    padding: .35rem 1rem;
+    background-color: var(--colorCelesteSuave);
+}
+
 .ayuda {
     background-color: var(--colorPapel);
 }
@@ -2841,19 +2860,12 @@ fieldset {
     color: var(--colorCoralOscuro);
 }
 
-.ayuda a.card:hover .enlace .bi {
-    display: inline-block;
-    transform: translateX(4px);
-}
-
 .contacto {
     background-color: var(--colorSuperficie);
 }
 
 .contacto form.card {
     gap: 1.25rem;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
 }
 
 .contacto .boton {
@@ -2862,6 +2874,49 @@ fieldset {
 
 .contacto form.card .boton {
     align-self: flex-start;
+}
+
+/* Página de error: lavado, centrada y con salidas a Inicio y a Soporte */
+.paginaError {
+    padding-block: clamp(3rem, 2rem + 5vw, 6rem);
+    background: var(--fondoLavado);
+    text-align: center;
+}
+
+.paginaError .container {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+}
+
+.paginaError .pegatina.redonda {
+    width: 7rem;
+    height: 7rem;
+    margin-bottom: .75rem;
+    font-size: 3.5rem;
+}
+
+.paginaError p {
+    max-width: 36rem;
+    color: var(--colorTextoSuave);
+}
+
+/* El código baja entero de renglón y, si no entra (celular), se corta adentro de su caja */
+.paginaError code {
+    display: inline-block;
+    max-width: 100%;
+    padding: .2rem .8rem;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
+    font: 500 .9rem var(--fuenteMarca);
+    overflow-wrap: anywhere;
+}
+
+.paginaError .acciones {
+    justify-content: center;
+    margin-top: .75rem;
 }
 
 /* ---------- 3.14 Panel de control ---------- */
@@ -3963,8 +4018,107 @@ tr.resaltada td {
 }
 
 /* ---------- 3.15 Quiénes somos ---------- */
-.mision {
-    background-color: var(--colorPapel);
+/* Presentación: lavado, texto a la izquierda y la plancha (el único momento animado) a la derecha */
+.presentacion {
+    background: var(--fondoLavado);
+}
+
+.presentacion h1 + p {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+    font-size: clamp(1.05rem, .95rem + .4vw, 1.3rem);
+    color: var(--colorTextoSuave);
+}
+
+.presentacion ul {
+    display: grid;
+    gap: .85rem;
+    margin-top: 2rem;
+}
+
+.presentacion li {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    font-weight: 700;
+}
+
+.presentacion .plancha {
+    font-size: clamp(1.15rem, 1rem + .6vw, 1.6rem);
+}
+
+.presentacion .plancha .pegatina:not(.redonda) {
+    padding: .7rem 1.4rem;
+    border-radius: 999px;
+}
+
+.presentacion .pegatina.redonda {
+    width: 8.5rem;
+    height: 8.5rem;
+}
+
+/* Desde lg las pegatinas se reparten por la columna; antes van sueltas en fila */
+@media (width >= 1024px) {
+    .presentacion .plancha {
+        position: relative;
+        display: block;
+        min-height: 25rem;
+    }
+
+    .presentacion .plancha .pegatina {
+        position: absolute;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(1) {
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(2) {
+        top: 2.75rem;
+        right: 1.25rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(3) {
+        top: 10.5rem;
+        right: 2rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(4) {
+        top: 15rem;
+        left: 1.25rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(5) {
+        bottom: 1.25rem;
+        right: 4rem;
+    }
+}
+
+/* Manifiesto: tarjeta blanca sobre coral plano */
+.manifiesto {
+    background-color: var(--colorCoral);
+}
+
+.manifiesto .card {
+    gap: 1.25rem;
+    max-width: 55rem;
+    margin-inline: auto;
+    padding: clamp(1.75rem, 1rem + 4vw, 3.5rem);
+    border-color: transparent;
+    box-shadow: var(--sombraFlotante);
+}
+
+.manifiesto .card p {
+    font-size: clamp(1rem, .95rem + .3vw, 1.2rem);
+}
+
+.manifiesto .card .remate {
+    padding-top: 1.5rem;
+    border-top: 1.5px dashed var(--colorBorde);
+    color: var(--colorTinta);
+    font-weight: 800;
+    line-height: 1.5;
 }
 
 .mision .card {
@@ -3972,42 +4126,50 @@ tr.resaltada td {
     padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
 }
 
-.mision .card.coral .icono,
-.mision .card.oscura .icono {
-    background-color: #fff;
+.mision .card p {
+    font-size: 1rem;
+}
+
+/* Cómo somos: celeste plano (el texto va en tinta) con los atributos en pegatinas quietas */
+.atributos {
+    background-color: var(--colorCeleste);
+}
+
+.atributos p {
+    margin-top: .75rem;
     color: var(--colorTinta);
 }
 
-.mision .valores ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .6rem;
+.atributos h3 {
+    font: 600 1.0625rem var(--fuenteMarca);
 }
 
-.mision .valores li {
-    display: inline-flex;
-    align-items: center;
-    gap: .45rem;
-    padding: .45rem .9rem;
-    border: var(--bordeMarcado);
+.atributos .plancha {
+    justify-content: flex-start;
+    margin-bottom: .75rem;
+    font-size: clamp(1.05rem, 1rem + .3vw, 1.3rem);
+}
+
+.atributos .pegatina {
+    padding: .65rem 1.3rem;
     border-radius: 999px;
-    background-color: var(--colorCelesteSuave);
-    font-weight: 700;
-    font-size: .88rem;
-    transition: transform var(--duracionRapida) var(--curvaRebote), background-color var(--duracionRapida) ease;
 }
 
-.mision .valores li:hover {
-    background-color: var(--colorCeleste);
-    transform: translateY(-3px) rotate(-2deg);
+/* Por qué nace: al pie de cada tarjeta, quién del equipo lo detectó */
+.problemas .card .detectado {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: auto;
+    padding-top: .9rem;
+    border-top: 1.5px dashed var(--colorBorde);
+    color: var(--colorTinta);
+    font-family: var(--fuenteMarca);
+    font-size: 1rem;
 }
 
-.problemas {
-    background-color: var(--colorSuperficie);
-}
-
-.equipo {
-    background-color: var(--colorFondo);
+.problemas .detectado strong {
+    font-weight: 600;
 }
 
 .equipo .card {
@@ -4015,118 +4177,18 @@ tr.resaltada td {
     text-align: center;
 }
 
+/* Avatares de iniciales sin troquel: aro interior y sombra suave */
 .equipo .avatar {
-    --bs-avatar-size: 5rem;
-    box-shadow: var(--sombraMarcada);
+    --bs-avatar-size: 5.5rem;
+    box-shadow: inset 0 0 0 .25rem var(--colorCeleste), 0 12px 24px -12px rgba(17, 24, 39, .5);
+}
+
+.equipo .avatar.theme-accent {
+    box-shadow: inset 0 0 0 .25rem var(--colorCoral), 0 12px 24px -12px rgba(17, 24, 39, .5);
 }
 
 .equipo .badge {
     margin-bottom: .25rem;
-}
-
-.identidad {
-    background-color: var(--colorPapel);
-}
-
-.identidad figure.card,
-.proceso figure.card {
-    gap: 1rem;
-    justify-content: space-between;
-}
-
-.identidad figure img,
-.proceso figure img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: contain;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioMedio);
-    background-color: #fff;
-}
-
-.identidad figcaption,
-.proceso figcaption {
-    font-size: .85rem;
-    line-height: 1.5;
-    color: var(--colorTextoSuave);
-}
-
-.identidad .paleta {
-    gap: 1rem;
-}
-
-.identidad .paleta ul {
-    display: grid;
-    gap: .6rem;
-}
-
-.identidad .paleta li {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    font-size: .9rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--colorTextoSuave);
-}
-
-.identidad .paleta li strong {
-    min-width: 4.5rem;
-    color: var(--colorTinta);
-}
-
-.identidad .paleta li span {
-    width: 2.25rem;
-    height: 2.25rem;
-    border: var(--bordeMarcado);
-    border-radius: 50%;
-    background-color: var(--muestra);
-    box-shadow: 2px 2px 0 var(--colorTinta);
-}
-
-.identidad .tipografias {
-    display: grid;
-    gap: .35rem;
-    padding-top: 1rem;
-    border-top: 2px dashed var(--colorBorde);
-    color: var(--colorTexto);
-}
-
-.identidad .tipografias .titulares {
-    font-family: var(--fuenteTitulos);
-    font-size: 1.6rem;
-    font-weight: 400;
-}
-
-.identidad .tipografias .cifras {
-    font-family: var(--fuenteMarca);
-    font-size: 1.15rem;
-    font-weight: 600;
-}
-
-.proceso {
-    background-color: var(--colorSuperficie);
-}
-
-/* El UI Kit son dos imágenes muy altas: se muestran lado a lado, recortadas desde arriba */
-.proceso .duo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .75rem;
-}
-
-.proceso .duo img {
-    height: clamp(11rem, 30vw, 17rem);
-    object-fit: cover;
-    object-position: top;
-}
-
-.proceso .enlacesExternos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2.5rem;
 }
 
 

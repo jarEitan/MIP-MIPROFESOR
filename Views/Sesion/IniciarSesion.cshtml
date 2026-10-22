@@ -50,14 +50,16 @@
             </div>
 
             <div class="col-12 lg:col-6 xl:col-7 lg:order-1">
+                @* Panel coral con pegatinas: se pegan escalonadas al cargar (--retraso) *@
                 <div class="ilustracion">
-                    <img src="~/img/logoChico.png" alt="" width="120" height="120" />
-                    <h2>El conocimiento nos conecta</h2>
+                    <span class="pegatina redonda" aria-hidden="true" style="--giro:-8deg; --retraso:.1s"><img src="~/img/logoChico.png" alt="" width="104" height="104" /></span>
+                    <h2 class="pegatina" style="--giro:-2deg; --retraso:.25s">El conocimiento nos conecta.</h2>
                     <ul>
                         <li>Seguí tus clases activas</li>
                         <li>Reubicá o cancelá sin vueltas</li>
                         <li>Hablá con tus profesores</li>
                     </ul>
+                    <span class="pegatina" aria-hidden="true" style="--giro:6deg; --retraso:.4s">I <i class="bi bi-heart-fill"></i> MIP</span>
                 </div>
             </div>
         </div>
