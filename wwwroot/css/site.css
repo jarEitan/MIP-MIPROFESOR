@@ -3370,7 +3370,6 @@ fieldset {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    aspect-ratio: 1;
     min-width: 0;
     min-height: 2.75rem;
     padding: .25rem;
@@ -3387,7 +3386,6 @@ fieldset {
 @media (width >= 768px) {
     .diasMes .dia {
         gap: .375rem;
-        aspect-ratio: auto;
         min-height: 4.125rem;
         padding: .375rem .45rem .5rem;
     }
@@ -3403,6 +3401,7 @@ fieldset {
     align-items: center;
     justify-content: center;
     align-self: flex-start;
+    flex-shrink: 0;
     min-width: 1.25rem;
     height: 1.25rem;
     border-radius: 999px;
@@ -3411,7 +3410,7 @@ fieldset {
     line-height: 1;
 }
 
-/* En el celular el día es un cuadrado de 44px: el número chico deja lugar a las líneas */
+/* En el celular el día mide 44px y crece si tiene muchas clases: el número chico deja lugar a las líneas */
 @media (width >= 768px) {
     .diasMes .dia .numero {
         min-width: 1.625rem;
@@ -3432,6 +3431,11 @@ fieldset {
 
 .diasMes .dia.otroMes .numero {
     color: var(--colorTextoSuave);
+}
+
+/* Sobre el celeste suave del hover el gris no llega a 4,5:1 */
+.diasMes .dia.otroMes:not([aria-pressed="true"]):hover .numero {
+    color: var(--colorTinta);
 }
 
 /* Día elegido: como todo lo elegido, fondo tinta con texto blanco; las líneas tinta pasan a blanco */
@@ -3985,6 +3989,11 @@ tr.resaltada td {
     color: var(--colorTextoSuave);
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* Sobre el celeste suave de la conversación abierta el gris no llega a 4,5:1 */
+.chat .conversaciones .conversacion.activa div span {
+    color: var(--colorTexto);
 }
 
 .chat .hilo {
