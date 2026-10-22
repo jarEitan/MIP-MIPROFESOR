@@ -5,7 +5,7 @@
 //
 // Bootstrap 6 es ESM y ya no expone window.bootstrap: sus componentes (drawer,
 // dialog, menu, tabs, acordeón) funcionan solos con los atributos
-// data-bs-* del HTML. Acá solo va la lógica propia de MIP (el carrusel es propio).
+// data-bs-* del HTML. Acá solo va la lógica propia de MIP.
 // =====================================================================
 
 
@@ -372,36 +372,6 @@ function inicializarEncabezadoConScroll() {
 
     actualizarSombraEncabezado();
     window.addEventListener("scroll", actualizarSombraEncabezado, { passive: true });
-}
-
-
-// ================= CARRUSEL: flechas de .carrusel =================
-// La pista ya se desliza con el dedo o el trackpad (scroll-snap en el CSS).
-// Las flechas avanzan de a una tarjeta y, desde la última, vuelven a la primera (y al revés).
-// El scroll suave lo da "scroll-behavior: smooth" del CSS, que se apaga con movimiento reducido.
-function inicializarCarruseles() {
-    document.querySelectorAll(".carrusel").forEach(carrusel => {
-        const pista = carrusel.querySelector(".pista");
-        if (!pista) return;
-
-        const moverCarrusel = direccion => {
-            const primeraTarjeta = pista.firstElementChild;
-            if (!primeraTarjeta) return;
-
-            const paso = primeraTarjeta.offsetWidth + parseFloat(getComputedStyle(pista).columnGap || 0);
-            const ultimaPosicion = pista.scrollWidth - pista.clientWidth;
-            let destino = pista.scrollLeft + direccion * paso;
-
-            // Margen de 2px por los redondeos del navegador
-            if (direccion > 0 && pista.scrollLeft >= ultimaPosicion - 2) destino = 0;
-            if (direccion < 0 && pista.scrollLeft <= 2) destino = ultimaPosicion;
-
-            pista.scrollTo({ left: destino });
-        };
-
-        carrusel.querySelector("[data-carrusel='anterior']")?.addEventListener("click", () => moverCarrusel(-1));
-        carrusel.querySelector("[data-carrusel='siguiente']")?.addEventListener("click", () => moverCarrusel(1));
-    });
 }
 
 
@@ -1646,7 +1616,6 @@ function inicializarSitio() {
     inicializarEncabezadoConScroll();
     inicializarAvisoVerificacion();
     inicializarSelectoresBuscables();
-    inicializarCarruseles();
     inicializarRolesDeRegistro();
     inicializarVerContrasena();
     inicializarBuscador();
