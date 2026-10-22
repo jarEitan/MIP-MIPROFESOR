@@ -31,6 +31,7 @@ Cambian las animaciones, la organización de las páginas, las sombras, los degr
 5. La **portada tiene fondo claro**, con un degradado tranquilo y una textura chica. El título usa los **colores de texto del sitio actual**: tinta, con la frase clave en coral y el subrayado celeste tipo marcador.
 6. Los bloques **Para alumnos / Para profesores** tienen la misma información que hoy, en colores planos.
 7. **Quiénes somos se rehace de cero**, con información lógica y sin imágenes del Miro.
+9. **Exactamente los tonos del sitio** (pedido del 2026-10-22): no entra ningún color nuevo. Todo sale de los tokens y valores que ya usa `site.css`; las transparencias se arman con el RGB de esos mismos tonos. Por eso el texto suave sigue en #6B7280 y los bordes en #E5E7EB, aunque las maquetas muestren otros grises.
 8. Los textos usan las **frases del Miro tal cual** (`/mnt/project-files/rediseno/frases-miro.md`). Nada robótico ni con cara de IA, y nada de cifras o testimonios inventados.
 
 ## 3. Sistema visual
@@ -40,7 +41,7 @@ Cambian las animaciones, la organización de las páginas, las sombras, los degr
 | Token | Valor | Uso |
 |---|---|---|
 | `--colorTinta` / `--colorTexto` | #111827 (sin cambios) | todo el texto y lo "elegido" |
-| `--colorTextoSuave` | #374151 | párrafos, fechas, ayudas (10,3:1) |
+| `--colorTextoSuave` | #6B7280 (sin cambios) | párrafos, fechas, ayudas (4,8:1) |
 | `--colorMagenta` | #D51F47 | alertas, "te toca a vos", hover de links (`--colorCoralOscuro` queda como alias hasta la limpieza) |
 | `--colorBorde` | #E5E7EB | borde de reposo de tarjetas y botones |
 | body | #FFFFFF | fondo general (`#F9FAFB` solo detrás del Perfil) |

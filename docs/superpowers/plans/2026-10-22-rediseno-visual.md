@@ -33,10 +33,16 @@ Las maquetas están en https://claude.ai/artifact/RSfgcvS2uTzyBPxgYU6CaD, un art
   - breakpoints como prefijo.
 - **Paleta:**
   - coral #FF5757, celeste #5CE1E6, magenta #D51F47 y tinta #111827 (texto, nunca #000);
-  - texto suave #374151;
+  - texto suave #6B7280 (`--colorTextoSuave`, sin cambios);
   - borde de reposo #E5E7EB;
   - borde de campos #6B7280;
   - #B3B3B3 solo como decoración, nunca para texto ni para el borde de un control.
+- **Tonos exactos del sitio** (pedido de Jarsou, 2026-10-22):
+  - no se agrega ningún color nuevo; todo hex de `site.css` tiene que estar en `/tmp/mipprueba/tonos-base.txt` (los 44 que ya usa el sitio);
+  - las transparencias usan el RGB de esos tonos (tinta 17,24,39; coral 255,87,87; celeste 92,225,230; magenta 213,31,71; celesteOscuro 14,116,144; blanco);
+  - donde `sistema-unificado.json` o una maqueta digan #374151 como texto suave, o #ECECEC, #EDEDED, #F0F0F0, #FFE5E5, #EFFBFC o #FFF4F4, se usa el token existente: `--colorTextoSuave`, `--colorBorde`, `--colorCoralSuave` o `--colorCelesteSuave`;
+  - cada tarea lo comprueba antes del commit con:
+    `comm -13 /tmp/mipprueba/tonos-base.txt <(grep -oiE '#[0-9a-f]{6}\b|#[0-9a-f]{3}\b' wwwroot/css/site.css | tr a-f A-F | sort -u)`, que tiene que salir vacío.
 - **Tipografía:**
   - Eras Bold ITC solo en h1, h2, logo y lema;
   - Fredoka en botones, etiquetas, cifras y precios;
@@ -198,7 +204,6 @@ node /tmp/mipprueba/verificar.js --paginas soporte,catalogo --anchos 1280 --cheq
 Se espera FALLA: sombras `4px 4px 0` y foco celeste.
 
 - [ ] **Step 2: Cambiar el `:root` con los valores exactos de la tabla 3.1 del spec.**
-  - `--colorTextoSuave: #374151`.
   - `--colorMagenta: #D51F47` y `--colorCoralOscuro: var(--colorMagenta)`.
   - `--sombraSuave`, `--sombraFlotante`, `--troquel` y `--fondoLavado`, copiados del spec.
   - Alias: `--bordeMarcado: 1.5px solid var(--colorBorde)`, `--sombraMarcada: var(--sombraSuave)` y `--sombraMarcadaElevada: var(--sombraFlotante)`.
@@ -394,7 +399,7 @@ git commit -am "Rediseño 5/11: sin cejas, mark solo en h1 y sin flechas"
 - `materiasDestacadas` sigue llegando del controlador y la vista deja de usarla.
 
 **Portada** (`.portada > .container`):
-- `--fondoLavado`, `border: 1.5px solid #F0F0F0`, `border-radius: 2.25rem`, `padding: clamp(1.5rem,4vw,3.5rem)` y `box-shadow: 0 30px 60px -36px rgba(17,24,39,.35)`.
+- `--fondoLavado`, `border: 1.5px solid var(--colorBorde)`, `border-radius: 2.25rem`, `padding: clamp(1.5rem,4vw,3.5rem)` y `box-shadow: 0 30px 60px -36px rgba(17,24,39,.35)`.
 - h1: `El conocimiento <mark>nos conecta.</mark>`.
 - p: `En miProfesor creemos que aprender nunca debería depender de la suerte.`
 - `.composicion` pasa a `.plancha` con 5 `.pegatina`, cada una con `style="--giro:…; --retraso:…"`:
