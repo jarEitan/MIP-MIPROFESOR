@@ -2108,19 +2108,11 @@ fieldset {
     }
 }
 
-/* ---------- 3.10 Cabecera de página (Catálogo, Soporte, Quiénes somos) ---------- */
+/* ---------- 3.10 Cabecera de página (Catálogo, Soporte, Privacidad, Quiénes somos) ---------- */
 .cabecera {
     overflow: hidden;
     padding-block: clamp(2rem, 3.5vw, 3rem);
-    background-color: var(--colorSuperficie);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
-    background-size: 24px 24px;
-    border-bottom: var(--bordeMarcado);
-    text-align: center;
-}
-
-.cabecera .container {
-    max-width: 50rem;
+    background: var(--fondoLavado);
 }
 
 .cabecera h1 {
@@ -2129,43 +2121,46 @@ fieldset {
 
 .cabecera p {
     max-width: 38rem;
-    margin-inline: auto;
     color: var(--colorTextoSuave);
 }
 
-.cabecera.oscura {
-    background-color: var(--colorTinta);
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, .1) 1px, transparent 0);
-}
-
-.cabecera.oscura h1 {
-    color: #fff;
-}
-
-.cabecera.oscura p {
-    color: #D1D5DB;
-}
-
-.cabecera.oscura .buscador {
-    box-shadow: 4px 4px 0 var(--colorCeleste);
-}
-
-.cabecera.oscura .buscador:focus-within {
-    box-shadow: 6px 6px 0 var(--colorCoral);
-}
-
 .cabecera .buscador {
-    margin: 1.75rem auto 0;
-}
-
-.cabecera .buscador + .mensajeError {
-    margin-inline: auto;
+    margin-top: 1.75rem;
 }
 
 .cabecera .buscador .bi {
     margin-right: .9rem;
     font-size: 1.1rem;
     color: var(--colorTextoSuave);
+}
+
+/* Plancha del Catálogo: tres pegatinas sueltas. La columna se oculta antes de md (d-none md:d-block en la vista) */
+.cabecera .plancha {
+    position: relative;
+    display: block;
+    min-height: 14.5rem;
+}
+
+.cabecera .plancha .pegatina {
+    position: absolute;
+    padding: .75rem 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.cabecera .plancha .pegatina:nth-child(1) {
+    top: 1.75rem;
+    left: 2rem;
+}
+
+.cabecera .plancha .pegatina:nth-child(2) {
+    top: 5.75rem;
+    right: 1.5rem;
+}
+
+.cabecera .plancha .pegatina:nth-child(3) {
+    bottom: 1.4rem;
+    left: 5rem;
 }
 
 /* ---------- 3.11 Catálogo ---------- */
@@ -2196,7 +2191,7 @@ fieldset {
     font-family: var(--fuenteMarca);
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--colorCoral);
+    color: var(--colorTinta);
 }
 
 .catalogo .drawer-body {
@@ -2265,10 +2260,18 @@ fieldset {
     text-align: center;
 }
 
+.catalogo .sinResultados .boton {
+    align-self: center;
+}
+
 /* Lista del catálogo: una tarjeta horizontal por profesor (la arma catalogo.js) */
 .catalogo .listaProfesores {
     display: grid;
     gap: 1rem;
+}
+
+#listaProfesores[aria-busy="true"] {
+    opacity: .45;
 }
 
 .profesorFila {
@@ -2392,6 +2395,7 @@ fieldset {
 .catalogo .paginador .porPagina {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: .75rem;
     font-weight: 700;
 }
@@ -2403,13 +2407,14 @@ fieldset {
 }
 
 .catalogo .paginador .numero {
-    min-width: 2.25rem;
-    height: 2.25rem;
+    min-width: 2.75rem;
+    height: 2.75rem;
     padding: 0 .5rem;
     border: 2px solid var(--colorBorde);
-    border-radius: .6rem;
+    border-radius: 999px;
     background-color: var(--colorSuperficie);
-    font-weight: 700;
+    font-family: var(--fuenteMarca);
+    font-weight: 600;
     color: var(--colorTinta);
 }
 
@@ -2418,8 +2423,8 @@ fieldset {
 }
 
 .catalogo .paginador .numero.activo {
-    border-color: var(--colorCoral);
-    background-color: var(--colorCoral);
+    border-color: var(--colorTinta);
+    background-color: var(--colorTinta);
     color: #fff;
 }
 

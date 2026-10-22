@@ -14,8 +14,21 @@
 <!-- ================= CABECERA ================= -->
 <section class="cabecera">
     <div class="container">
-        <h1>Encontrá a tu profesor</h1>
-        <p>Filtrá por materia, colegio, modalidad y nivel. Todos los precios son por hora y los ves antes de contactar.</p>
+        <div class="row align-items-center g-4">
+            <div class="col-12 md:col-7">
+                <h1>Encontrá a tu profesor</h1>
+                <p>Filtrá por materia, colegio, modalidad y nivel. Todos los precios son por hora y los ves antes de contactar.</p>
+            </div>
+
+            @* Pegatinas decorativas: la visibilidad responsive va en la columna, nunca sobre .pegatina *@
+            <div class="col-12 md:col-5 d-none md:d-block" aria-hidden="true">
+                <div class="plancha">
+                    <span class="pegatina coral" style="--giro:-5deg; --retraso:.15s">Flexible</span>
+                    <span class="pegatina" style="--giro:4deg; --retraso:.3s">Comunidad</span>
+                    <span class="pegatina celeste" style="--giro:-2deg; --retraso:.45s">Accesibilidad</span>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -103,6 +116,7 @@
                     <span class="icono"><i class="bi bi-emoji-neutral" aria-hidden="true"></i></span>
                     <h3>No encontramos profesores con esos filtros</h3>
                     <p>Probá quitando algún filtro o buscando otra materia.</p>
+                    <button class="boton contorno chico" type="reset" form="formularioFiltros">Limpiar filtros</button>
                 </div>
 
                 <div class="card estatica sinResultados" id="errorCatalogo" hidden>
