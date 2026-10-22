@@ -3370,7 +3370,6 @@ fieldset {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: .375rem;
     aspect-ratio: 1;
     min-width: 0;
     min-height: 2.75rem;
@@ -3387,6 +3386,7 @@ fieldset {
 
 @media (width >= 768px) {
     .diasMes .dia {
+        gap: .375rem;
         aspect-ratio: auto;
         min-height: 4.125rem;
         padding: .375rem .45rem .5rem;
@@ -3403,12 +3403,21 @@ fieldset {
     align-items: center;
     justify-content: center;
     align-self: flex-start;
-    min-width: 1.625rem;
-    height: 1.625rem;
+    min-width: 1.25rem;
+    height: 1.25rem;
     border-radius: 999px;
-    font-size: .875rem;
+    font-size: .8125rem;
     font-weight: 600;
     line-height: 1;
+}
+
+/* En el celular el día es un cuadrado de 44px: el número chico deja lugar a las líneas */
+@media (width >= 768px) {
+    .diasMes .dia .numero {
+        min-width: 1.625rem;
+        height: 1.625rem;
+        font-size: .875rem;
+    }
 }
 
 .diasMes .dia.hoy .numero {
