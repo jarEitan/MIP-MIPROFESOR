@@ -84,8 +84,6 @@
     --colorBorde: #E5E7EB;
     --colorTexto: #111827;
     --colorTextoSuave: #6B7280;
-    --colorAzul: #2563EB;
-    --colorAzulSuave: #EFF6FF;
     --colorExito: #047857;
     --colorExitoSuave: #D1FAE5;
     --colorAlerta: #92400E;
@@ -2936,89 +2934,200 @@ fieldset {
 }
 
 /* ---------- 3.14 Panel de control ---------- */
+/* Saludo: caja con el lavado, el avatar (sin troquel), el rol y los dos contadores como pegatinas */
+.bienvenida {
+    padding-block: 1.5rem 0;
+}
+
 .saludo {
-    padding-block: clamp(2rem, 4vw, 3.5rem);
-    background-color: var(--colorSuperficie);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
-    background-size: 24px 24px;
-    border-bottom: var(--bordeMarcado);
-}
-
-.saludo h1 {
-    margin-block: .6rem .35rem;
-    font-size: clamp(1.6rem, 1.2rem + 2vw, 2.5rem);
-}
-
-.saludo p {
-    max-width: 38rem;
-    color: var(--colorTextoSuave);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem 2rem;
+    padding: clamp(1.25rem, .8rem + 1.6vw, 1.875rem) clamp(1.25rem, .5rem + 2.6vw, 2.5rem);
+    border: 1.5px solid var(--colorBorde);
+    border-radius: 2rem;
+    background: var(--fondoLavado);
+    box-shadow: 0 30px 60px -36px rgba(17, 24, 39, .35);
 }
 
 .saludo .avatar {
-    --bs-avatar-size: clamp(4rem, 3rem + 3vw, 5.5rem);
-    box-shadow: var(--sombraMarcada);
+    --bs-avatar-size: clamp(4.5rem, 3.6rem + 2.6vw, 6.5rem);
+    --bs-avatar-font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.25rem);
+    rotate: -4deg;
+    /* Aro por fuera: un inset queda tapado por la <img> de la foto */
+    box-shadow: 0 0 0 .375rem var(--colorCeleste), 0 12px 24px -12px rgba(17, 24, 39, .5);
+    animation: pegarPegatina .5s var(--curvaRebote) .15s backwards;
 }
 
-/* Notificaciones del Panel: una fila por cosa pendiente (amistad, mensajes, clase) con su botón para ir a resolverla */
+.saludo .textoSaludo {
+    display: flex;
+    flex: 1 1 20rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+    min-width: 0;
+}
+
+.saludo .textoSaludo .pegatina {
+    padding: .25rem .875rem;
+    border-radius: 999px;
+    font-size: .9375rem;
+}
+
+.saludo h1 {
+    margin-top: .25rem;
+    font-size: clamp(2rem, 1.3rem + 2.4vw, 3.25rem);
+    line-height: 1;
+}
+
+.saludo p {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--colorTextoSuave);
+}
+
+.saludo .plancha {
+    gap: 1.5rem;
+    padding: .5rem;
+}
+
+.saludo .contador {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .25rem;
+    min-width: 8rem;
+    padding: .875rem 1.25rem;
+}
+
+.saludo .contador strong {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.saludo .contador span {
+    font-size: .9375rem;
+}
+
+/* Aviso "Configurá tu agenda" (solo profesores sin agenda): celeste plano */
+.avisoAgenda {
+    padding-block: 1.5rem 0;
+}
+
+.avisoAgenda .card {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1rem;
+    border-color: transparent;
+    background-color: var(--colorCeleste);
+}
+
+.avisoAgenda .card p {
+    flex: 1 1 16rem;
+    margin: 0;
+    color: var(--colorTexto);
+}
+
+/* Notificaciones: "Requiere tu acción" (banda magenta) y "Novedades" en dos columnas, cada una con su lista */
 .notificaciones {
-    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+    padding-block: 1.5rem 0;
+}
+
+.columnasNotificaciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.notificaciones .card {
+    flex: 2 1 30rem;
+    gap: 0;
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.notificaciones .novedades {
+    flex: 1 1 18rem;
 }
 
 .notificaciones .card h2 {
     display: flex;
     align-items: center;
     gap: .6rem;
-    font-size: clamp(1.2rem, 1.05rem + .6vw, 1.45rem);
+    padding: 1rem 1.25rem .25rem;
+    font: 600 1.25rem/1.2 var(--fuenteMarca);
+}
+
+.notificaciones .acciones h2 {
+    padding-block: .875rem;
+    background-color: var(--colorMagenta);
+    color: #fff;
+}
+
+.notificaciones .acciones h2 .badge {
+    background-color: #fff;
+    color: var(--colorTinta);
+    font-size: .9375rem;
 }
 
 .notificaciones .sinNotificaciones {
+    padding: 1rem 1.25rem 1.25rem;
     color: var(--colorTextoSuave);
 }
 
 .notificaciones .listaNotificaciones {
-    display: grid;
-    gap: .75rem;
     max-height: 26rem;
-    margin: 0;
-    padding: 0 .25rem .25rem 0;
+    padding: .125rem 1.25rem .25rem;
     overflow-y: auto;
-    list-style: none;
+}
+
+/* En pantallas grandes la lista se corta antes: así el calendario asoma en la primera pantalla */
+@media (width >= 1024px) {
+    .notificaciones .listaNotificaciones {
+        max-height: 15rem;
+    }
 }
 
 .notificaciones .notificacion {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
     align-items: center;
-    gap: .75rem 1rem;
-    padding: .85rem 1rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorSuperficie);
+    gap: .75rem .875rem;
+    padding-block: .8rem;
 }
 
-.notificaciones .notificacion .boton {
+.notificaciones .notificacion + .notificacion {
+    border-top: 1px solid var(--colorBorde);
+}
+
+.notificaciones .notificacion .icono {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.15rem;
+}
+
+.notificaciones .acciones .notificacion > .boton,
+.notificaciones .accionesNotificacion {
     grid-column: 1 / -1;
     justify-self: start;
-}
-
-/* Solicitud de amistad: Rechazar y Aceptar en la misma notificación */
-.notificaciones .textoNotificacion a {
-    white-space: nowrap;
 }
 
 .notificaciones .accionesNotificacion {
     display: flex;
     flex-wrap: wrap;
     gap: .5rem;
-    grid-column: 1 / -1;
 }
 
 @media (width >= 768px) {
-    .notificaciones .notificacion {
-        grid-template-columns: auto 1fr auto;
+    .notificaciones .acciones .notificacion {
+        grid-template-columns: 2.75rem minmax(0, 1fr) auto;
     }
 
-    .notificaciones .notificacion .boton,
+    .notificaciones .acciones .notificacion > .boton,
     .notificaciones .accionesNotificacion {
         grid-column: auto;
         justify-self: end;
@@ -3030,109 +3139,57 @@ fieldset {
     flex-wrap: wrap;
     align-items: center;
     gap: .5rem;
-    margin: 0;
     font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
 }
 
 .notificaciones .textoNotificacion p {
-    margin: .15rem 0 0;
-    font-size: .92rem;
+    margin-top: .2rem;
+    font-size: .9375rem;
+    line-height: 1.45;
+}
+
+.notificaciones .textoNotificacion a:not(.boton) {
+    white-space: nowrap;
 }
 
 .notificaciones .textoNotificacion small {
-    color: var(--colorTextoSuave);
+    font-size: .8125rem;
+    white-space: nowrap;
 }
 
-/* Novedades: noticias de los últimos 3 días, sin badge de "esperando respuesta" y con el borde más tenue */
-.notificaciones .tituloNovedades {
-    margin-top: 1.75rem;
-}
-
+/* Novedades: el botón va debajo del texto */
 .notificaciones .noticia {
-    border-color: var(--colorCelesteSuave);
-    background-color: var(--colorFondo);
+    align-items: start;
 }
 
-/* Aviso "Configurá tu agenda" (solo profesores sin agenda) */
-.avisoAgenda {
-    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+.notificaciones .noticia .boton {
+    margin-top: .625rem;
 }
 
-.avisoAgenda .card {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .75rem 1rem;
-    border-color: var(--colorAzul);
-    background-color: var(--colorAzulSuave);
-}
-
-.avisoAgenda .card p {
-    flex: 1 1 16rem;
-    margin: 0;
-}
-
-.metricas {
-    padding-block: clamp(1.75rem, 3vw, 2.5rem);
-}
-
-.metricas .card strong {
-    font-family: var(--fuenteMarca);
-    font-size: clamp(2.25rem, 1.6rem + 2vw, 3rem);
-    font-weight: 700;
-    line-height: 1;
-}
-
-.metricas .card > span {
-    font-size: .85rem;
-    font-weight: 700;
-    color: var(--colorTextoSuave);
-}
-
-.metricas .card.oscura > span {
-    color: #D1D5DB;
-}
-
-.metricas .accesos .card {
-    padding: 1.15rem;
-}
-
-.metricas .accesos h3 {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-}
-
+/* Pestañas: la base de .nav-pills (bloque 2) ya pone la barra blanca y la activa en tinta */
 .panel {
-    padding-top: 1rem;
+    padding-top: 2rem;
 }
 
+/* El padding de abajo deja entera la sombra de la barra (overflow la cortaría) */
 .panel nav {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     overflow-x: auto;
-    padding: 0 .25rem .5rem 0;
+    padding: 0 .25rem .75rem 0;
 }
 
 .panel .nav-pills {
-    --bs-nav-pills-bg: var(--colorSuperficie);
-    --bs-nav-pills-padding: .3rem;
-    --bs-nav-pills-link-active-bg: var(--colorCoral);
-    border: var(--bordeMarcado);
-    box-shadow: 3px 3px 0 var(--colorTinta);
     flex-wrap: nowrap;
-    gap: .25rem;
 }
 
 .panel .nav-link {
     display: inline-flex;
     align-items: center;
     gap: .45rem;
-    padding: .55rem 1rem;
-    font-family: var(--fuenteMarca);
-    font-size: .95rem;
-    font-weight: 600;
+    padding: .55rem 1.1rem;
     white-space: nowrap;
-    color: var(--colorTinta);
 }
 
 /* En pantallas chicas las pestañas pasan a una grilla de 2 columnas (sin scroll horizontal) */
@@ -3154,32 +3211,41 @@ fieldset {
     }
 }
 
-.panel .nav-link:hover {
-    background-color: var(--colorCelesteSuave);
-}
-
-.panel .nav-link.active {
-    background-color: var(--colorCoral);
-    color: #fff;
-}
-
-.panel .tab-pane > h2 {
-    margin-bottom: 1.25rem;
-    font-size: clamp(1.3rem, 1.1rem + .8vw, 1.6rem);
-}
-
 /* Mis clases: lo que requiere acción, el calendario del mes y la agenda del día (los dibuja calendario.js).
-   Colores: azul = está bien, rojo = necesita tu acción, gris = terminó sin darse. El estado nunca va solo en el color:
-   siempre hay texto, y lo que espera al otro lleva línea punteada. */
+   Colores: azul = está bien (tinta), rojo = necesita tu acción (magenta), gris = terminó sin darse. El estado nunca va
+   solo en el color: siempre hay texto, y lo que espera al otro lleva línea punteada.
+   Desde lg el calendario va a la izquierda y, a la derecha, lo que requiere acción y la agenda del día elegido. */
 .misClases {
     display: grid;
     gap: 1.25rem;
 }
 
+@media (width >= 1024px) {
+    .misClases {
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "calendario requiere" "calendario agenda";
+        align-items: start;
+        gap: 1.25rem 1.5rem;
+    }
+
+    .misClases .requiereAccion {
+        grid-area: requiere;
+    }
+
+    .misClases .calendarioMes {
+        grid-area: calendario;
+    }
+
+    .misClases .agendaDia {
+        grid-area: agenda;
+    }
+}
+
+/* Coral suave, sin una segunda banda magenta (la de las notificaciones ya avisa) */
 .requiereAccion {
-    padding: 1rem 1.15rem;
-    border: 2px solid var(--colorCoralOscuro);
-    border-radius: var(--radioMedio);
+    padding: 1rem 1.25rem 1.25rem;
+    border-radius: var(--radioGrande);
     background-color: var(--colorCoralSuave);
 }
 
@@ -3188,61 +3254,66 @@ fieldset {
     align-items: center;
     gap: .5rem;
     margin: 0 0 .75rem;
-    font-size: 1.05rem;
+    font: 600 1.125rem/1.2 var(--fuenteMarca);
+}
+
+.requiereAccion h3 .bi {
+    color: var(--colorMagenta);
 }
 
 .requiereAccion ul {
     display: grid;
     gap: .6rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+}
+
+/* Al costado del calendario la lista no empuja la agenda del día fuera de la vista */
+@media (width >= 1024px) {
+    .requiereAccion ul {
+        max-height: 22rem;
+        overflow-y: auto;
+    }
 }
 
 .pedidoPendiente {
-    display: grid;
-    gap: .6rem;
-    padding: .75rem .9rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioChico);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem 1rem;
+    padding: .75rem 1rem;
+    border-radius: var(--radioMedio);
     background-color: var(--colorSuperficie);
 }
 
 .pedidoPendiente .textoPedido {
-    display: grid;
-    gap: .15rem;
-    font-size: .9rem;
+    flex: 1 1 14rem;
+    font-size: .9375rem;
+    line-height: 1.45;
+}
+
+.pedidoPendiente .textoPedido strong {
+    font: 600 1rem var(--fuenteMarca);
 }
 
 .pedidoPendiente .textoPedido span {
+    display: block;
     color: var(--colorTextoSuave);
 }
 
 .botonesClase {
     display: flex;
     flex-wrap: wrap;
-    gap: .6rem;
+    gap: .5rem;
 }
 
-.misClases .botonesClase .boton {
-    min-height: 2.75rem;
-}
-
-@media (width >= 768px) {
-    .pedidoPendiente {
-        grid-template-columns: 1fr auto;
-        align-items: center;
-    }
-}
-
-/* Calendario del mes: lunes a domingo, una línea fina por clase (máximo 3 y "+N") */
+/* Calendario del mes: lunes a domingo, una línea por clase (máximo 3 y "+N") */
 .calendarioMes {
-    padding: .6rem;
+    padding: .75rem;
 }
 
 @media (width >= 768px) {
     .calendarioMes {
-        padding: 1.25rem 1.5rem;
+        padding: 1.25rem;
     }
 }
 
@@ -3252,12 +3323,12 @@ fieldset {
     align-items: center;
     justify-content: space-between;
     gap: .75rem;
-    margin-bottom: .9rem;
+    margin-bottom: .875rem;
 }
 
-.calendarioMes header h3 {
-    margin: 0;
-    font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem);
+.calendarioMes header h3,
+.agendaDia header h3 {
+    font: 600 clamp(1.25rem, 1.1rem + .5vw, 1.5rem)/1.2 var(--fuenteMarca);
 }
 
 .calendarioMes .controlesMes {
@@ -3266,32 +3337,27 @@ fieldset {
 }
 
 .calendarioMes .controlesMes .boton {
-    justify-content: center;
     min-width: 2.75rem;
-    min-height: 2.75rem;
 }
 
 .calendarioMes .diasSemana,
 .calendarioMes .diasMes {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: .2rem;
+    gap: .25rem;
 }
 
 @media (width >= 768px) {
     .calendarioMes .diasSemana,
     .calendarioMes .diasMes {
-        gap: .4rem;
+        gap: .375rem;
     }
 }
 
 .calendarioMes .diasSemana span {
-    padding-bottom: .35rem;
-    font-size: .68rem;
-    font-weight: 700;
-    letter-spacing: .04em;
+    padding-bottom: .375rem;
+    font: 600 .875rem var(--fuenteMarca);
     text-align: center;
-    text-transform: uppercase;
     color: var(--colorTextoSuave);
 }
 
@@ -3304,14 +3370,15 @@ fieldset {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: .375rem;
     aspect-ratio: 1;
     min-width: 0;
     min-height: 2.75rem;
     padding: .25rem;
-    border: 2px solid var(--colorBorde);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     background-color: var(--colorSuperficie);
-    font: inherit;
+    font-family: var(--fuenteMarca);
     text-align: left;
     color: var(--colorTinta);
     cursor: pointer;
@@ -3321,32 +3388,32 @@ fieldset {
 @media (width >= 768px) {
     .diasMes .dia {
         aspect-ratio: auto;
-        min-height: 5.5rem;
-        padding: .5rem .6rem;
+        min-height: 4.125rem;
+        padding: .375rem .45rem .5rem;
     }
 }
 
 .diasMes .dia:hover {
+    border-color: var(--colorTinta);
     background-color: var(--colorCelesteSuave);
 }
 
 .diasMes .dia .numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     align-self: flex-start;
-    font-family: var(--fuenteMarca);
-    font-size: .85rem;
+    min-width: 1.625rem;
+    height: 1.625rem;
+    border-radius: 999px;
+    font-size: .875rem;
     font-weight: 600;
     line-height: 1;
 }
 
-.diasMes .dia.hoy {
-    border-color: var(--colorAzul);
-}
-
 .diasMes .dia.hoy .numero {
-    padding: .15rem .35rem;
-    border-radius: 999px;
-    background-color: var(--colorAzul);
-    color: #fff;
+    background-color: var(--colorCoral);
+    color: var(--colorTinta);
 }
 
 .diasMes .dia.pasado {
@@ -3354,15 +3421,28 @@ fieldset {
     color: var(--colorTextoSuave);
 }
 
-.diasMes .dia.otroMes {
-    opacity: .5;
+.diasMes .dia.otroMes .numero {
+    color: var(--colorTextoSuave);
 }
 
-/* Día elegido: borde marcado y sombra desplazada, como los botones de marca */
+/* Día elegido: como todo lo elegido, fondo tinta con texto blanco; las líneas tinta pasan a blanco */
 .diasMes .dia[aria-pressed="true"] {
     border-color: var(--colorTinta);
-    background-color: var(--colorCelesteSuave);
-    box-shadow: 2px 2px 0 var(--colorTinta);
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+.diasMes .dia[aria-pressed="true"] .numero,
+.diasMes .dia[aria-pressed="true"] .mas {
+    color: inherit;
+}
+
+.diasMes .dia.hoy[aria-pressed="true"] .numero {
+    color: var(--colorTinta);
+}
+
+.diasMes .dia[aria-pressed="true"] .linea.azul {
+    --colorLinea: #fff;
 }
 
 .diasMes .lineas {
@@ -3378,7 +3458,7 @@ fieldset {
 }
 
 .linea {
-    --colorLinea: var(--colorAzul);
+    --colorLinea: var(--colorTinta);
     display: block;
     height: 4px;
     border-radius: 2px;
@@ -3393,27 +3473,26 @@ fieldset {
 }
 
 .linea.rojo {
-    --colorLinea: var(--colorCoralOscuro);
+    --colorLinea: var(--colorMagenta);
 }
 
 .linea.gris {
     --colorLinea: var(--colorTextoSuave);
-    opacity: .6;
 }
 
 /* Esperando que responda el otro: rayada, para no depender solo del color */
 .linea.punteada {
-    background: repeating-linear-gradient(90deg, var(--colorLinea) 0 6px, transparent 6px 9px);
+    background: linear-gradient(90deg, var(--colorLinea) 6px, transparent 0) 0 0 / 10px 100%;
 }
 
 .calendarioMes .leyenda {
     display: flex;
     flex-wrap: wrap;
-    gap: .5rem 1.25rem;
+    gap: .5rem 1.375rem;
     margin: 1rem 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: .82rem;
+    padding-top: .875rem;
+    border-top: 1px solid var(--colorBorde);
+    font-size: .875rem;
     font-weight: 600;
     color: var(--colorTextoSuave);
 }
@@ -3425,8 +3504,9 @@ fieldset {
 }
 
 .calendarioMes .leyenda .linea {
-    width: 1.75rem;
-    height: 5px;
+    width: 1.625rem;
+    height: 6px;
+    border-radius: 3px;
 }
 
 /* Agenda del día elegido: una fila por clase, ordenada por hora (hora a la izquierda, tarjeta con el color del estado) */
@@ -3434,17 +3514,12 @@ fieldset {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: .25rem 1rem;
-    margin-bottom: .9rem;
-}
-
-.agendaDia header h3 {
-    margin: 0;
-    font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem);
+    gap: .25rem .75rem;
+    margin-bottom: 1rem;
 }
 
 .agendaDia .cantidadDelDia {
-    font-size: .9rem;
+    font-size: .875rem;
     font-weight: 600;
     color: var(--colorTextoSuave);
 }
@@ -3455,29 +3530,19 @@ fieldset {
 
 .turnos {
     display: grid;
-    gap: .9rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    gap: .875rem;
 }
 
 .turno {
     display: grid;
-    grid-template-columns: 3.4rem minmax(0, 1fr);
-    gap: .6rem;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: .75rem;
     align-items: start;
-}
-
-@media (width >= 768px) {
-    .turno {
-        grid-template-columns: 5.5rem minmax(0, 1fr);
-        gap: 1.25rem;
-    }
 }
 
 .turno .horaTurno {
     display: grid;
-    gap: .1rem;
+    gap: .125rem;
     padding-top: .9rem;
     font-family: var(--fuenteMarca);
     line-height: 1.1;
@@ -3485,30 +3550,30 @@ fieldset {
 }
 
 .turno .horaTurno time {
-    font-size: 1.1rem;
+    font-size: 1.125rem;
     font-weight: 700;
 }
 
 .turno .horaTurno span {
-    font-size: .8rem;
+    font-size: .8125rem;
     color: var(--colorTextoSuave);
 }
 
 .turno .tarjetaTurno {
-    --colorEstado: var(--colorAzul);
+    --colorEstado: var(--colorTinta);
     display: grid;
-    gap: .6rem;
+    gap: .625rem;
     min-width: 0;
-    padding: .9rem 1rem;
-    border: 2px solid var(--colorTinta);
-    border-left: 8px solid var(--colorEstado);
+    padding: .875rem 1rem;
+    border: 1.5px solid var(--colorBorde);
+    border-left: 6px solid var(--colorEstado);
     border-radius: var(--radioMedio);
     background-color: var(--colorSuperficie);
-    box-shadow: 3px 3px 0 var(--colorTinta);
+    box-shadow: var(--sombraSuave);
 }
 
 .turno.rojo .tarjetaTurno {
-    --colorEstado: var(--colorCoralOscuro);
+    --colorEstado: var(--colorMagenta);
 }
 
 .turno.gris .tarjetaTurno {
@@ -3523,47 +3588,47 @@ fieldset {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: .35rem .75rem;
+    gap: .375rem .625rem;
 }
 
 .tarjetaTurno header h4 {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1.0625rem;
 }
 
 .tarjetaTurno header h4 a {
     color: inherit;
     text-decoration: underline;
     text-decoration-color: var(--colorCoral);
+    text-decoration-thickness: 2px;
     text-underline-offset: .2em;
 }
 
 .tarjetaTurno .rolTurno {
-    font-size: .8rem;
+    font-size: .8125rem;
     font-weight: 600;
     color: var(--colorTextoSuave);
 }
 
+/* Etiqueta plana y derecha (no es una pegatina) */
 .tarjetaTurno .etiquetaEstado {
     display: inline-flex;
     align-items: center;
-    gap: .35rem;
+    gap: .375rem;
     margin-left: auto;
-    padding: .15rem .65rem;
-    border: 1.5px solid currentColor;
+    padding: .25rem .75rem;
     border-radius: 999px;
-    font-size: .78rem;
-    font-weight: 700;
+    font: 600 .875rem var(--fuenteMarca);
 }
 
 .etiquetaEstado.azul {
-    background-color: var(--colorAzulSuave);
-    color: var(--colorAzul);
+    background-color: var(--colorCeleste);
+    color: var(--colorTinta);
 }
 
 .etiquetaEstado.rojo {
-    background-color: var(--colorCoralSuave);
-    color: var(--colorCoralOscuro);
+    background-color: var(--colorMagenta);
+    color: #fff;
 }
 
 .etiquetaEstado.gris {
@@ -3573,17 +3638,14 @@ fieldset {
 
 .tarjetaTurno .detalleTurno {
     display: grid;
-    gap: .3rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: .88rem;
+    gap: .25rem;
+    font-size: .875rem;
     font-weight: 600;
 }
 
 .tarjetaTurno .detalleTurno .bi {
     margin-right: .4rem;
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 /* La clase a la que lleva una notificación se resalta un momento */
@@ -3595,7 +3657,7 @@ tr.resaltada td {
 @keyframes resaltarClase {
     50% {
         background-color: var(--colorCelesteSuave);
-        box-shadow: var(--sombraMarcadaElevada);
+        box-shadow: var(--sombraFlotante);
     }
 }
 
@@ -3610,12 +3672,12 @@ tr.resaltada td {
     color: var(--colorTextoSuave);
 }
 
+/* Celeste plano, como el aviso de arriba */
 .avisoSinAgenda {
     margin-bottom: 1rem;
     padding: .75rem 1rem;
-    border: 2px solid var(--colorAzul);
     border-radius: var(--radioMedio);
-    background-color: var(--colorAzulSuave);
+    background-color: var(--colorCeleste);
     font-weight: 600;
 }
 
@@ -3802,6 +3864,13 @@ tr.resaltada td {
     white-space: nowrap;
 }
 
+/* El nombre lleva al perfil: 44px de toque sin agrandar la fila */
+.tabla .table td strong a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+}
+
 /* Debajo de la tabla: "Mostrando 20 de 143 clases" y el botón "Ver más" */
 .pieHistorial {
     display: flex;
@@ -3886,8 +3955,8 @@ tr.resaltada td {
 }
 
 .chat .conversaciones .conversacion.activa {
-    border-bottom-color: var(--colorCoral);
-    background-color: var(--colorSuperficie);
+    border-bottom-color: var(--colorTinta);
+    background-color: var(--colorCelesteSuave);
 }
 
 .chat .conversaciones .conversacion .badge {
@@ -3981,12 +4050,13 @@ tr.resaltada td {
     overflow-wrap: anywhere;
 }
 
-/* Hora del mensaje y, en los propios, una tilde (enviado) o dos (visto); hereda el color porque el gris no se lee sobre coral */
+/* Hora del mensaje y, en los propios, una tilde (enviado) o dos (visto); hereda el color porque el gris no se lee sobre coral.
+   Con opacidad .85 la tinta sobre coral queda a 4,8:1 (con .75 era 4,1:1) */
 .chat .burbuja .detalleMensaje {
     display: block;
     margin-top: .2rem;
     color: inherit;
-    opacity: .75;
+    opacity: .85;
     font-size: .68rem;
     font-weight: 400;
     text-align: right;
@@ -4025,7 +4095,7 @@ tr.resaltada td {
     }
 
     .chat .conversaciones .conversacion.activa {
-        border-left-color: var(--colorCoral);
+        border-left-color: var(--colorTinta);
     }
 
     .chat .conversaciones div span {
@@ -5338,7 +5408,8 @@ tr.resaltada td {
     }
 
     /* Sin animación las pegatinas se ven desde el primer cuadro (con .01ms arrancaban en opacidad 0 hasta pintar) */
-    main > section:first-of-type .pegatina {
+    main > section:first-of-type .pegatina,
+    .saludo .avatar {
         animation: none;
     }
 }

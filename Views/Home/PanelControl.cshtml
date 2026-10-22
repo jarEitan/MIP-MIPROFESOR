@@ -49,14 +49,25 @@
 }
 
 <!-- ================= SALUDO ================= -->
-<section class="saludo">
+@* El único momento animado: las pegatinas (rol y contadores) se pegan al cargar. Los contadores los reescribe refrescarPanel (clases.js) *@
+<section class="bienvenida">
     <div class="container">
-        <div class="d-flex flex-column sm:flex-row sm:align-items-center gap-3 sm:gap-4">
+        <div class="saludo">
             <partial name="_avatarUsuario" model='"avatar-xl"' />
-            <div>
-                <span class="pildora">@rolUsuario</span>
-                <h1>¡Hola, @nombreUsuario! 👋</h1>
+            <div class="textoSaludo">
+                <span class="pegatina celeste" style="--giro: 3deg; --retraso: .3s">@rolUsuario</span>
+                <h1>¡Hola, @nombreUsuario!</h1>
                 <p>Gestioná tus clases y tus mensajes.</p>
+            </div>
+            <div class="plancha">
+                <div class="pegatina contador" style="--giro: -2deg; --retraso: .45s">
+                    <strong id="contadorClasesActivas">@(contadores.pendientes + contadores.proximas)</strong>
+                    <span>Clases activas</span>
+                </div>
+                <div class="pegatina oscura contador" style="--giro: 2.5deg; --retraso: .6s">
+                    <strong id="contadorClasesCompletadas">@contadores.completadas</strong>
+                    <span>Clases completadas</span>
+                </div>
             </div>
         </div>
     </div>
@@ -80,173 +91,112 @@
 }
 
 <!-- ================= NOTIFICACIONES ================= -->
+@* Dos columnas dentro de #notificaciones: refrescarPanel (clases.js) reemplaza su contenido entero *@
 <section class="notificaciones" id="notificaciones" aria-labelledby="tituloNotificaciones">
     <div class="container">
-        <div class="card estatica">
-            <h2 id="tituloNotificaciones">
-                <i class="bi bi-bell" aria-hidden="true"></i> Requiere tu acción
-                <span class="badge theme-primary" id="cantidadNotificacionesPanel" hidden="@(acciones.Count == 0)">@acciones.Count</span>
-            </h2>
+        <div class="columnasNotificaciones">
+            <div class="card estatica acciones">
+                <h2 id="tituloNotificaciones">
+                    <i class="bi bi-bell" aria-hidden="true"></i> Requiere tu acción
+                    <span class="badge" id="cantidadNotificacionesPanel" hidden="@(acciones.Count == 0)">@acciones.Count</span>
+                </h2>
 
-            @if (errorBD)
+                @if (errorBD)
+                {
+                    <p class="sinNotificaciones">No pudimos cargar tus notificaciones. Probá de nuevo en unos minutos.</p>
+                }
+                else if (acciones.Count == 0)
+                {
+                    <p class="sinNotificaciones">No tenés nada pendiente. Acá vas a ver las solicitudes de amistad, los mensajes sin leer y las clases que esperan tu respuesta.</p>
+                }
+                else
+                {
+                    @* Cada notificación de acción es algo a medio resolver: desaparece sola cuando se resuelve (al abrir el chat, responder la clase, etc.) *@
+                    <ul class="listaNotificaciones" id="listaAcciones">
+                        @foreach (var notificacion in acciones)
+                        {
+                            bool esChat = notificacion.tipo == "mensajesSinLeer";
+                            bool esAmistad = notificacion.tipo == "solicitudAmistad";
+                            string urlDestino = notificacion.destino == "perfil"
+                                ? Url.Action("Perfil", "Home", new { id = notificacion.idOtroUsuario })!
+                                : esChat
+                                    ? Url.Action("PanelControl", "Home", new { tab = "chat", chat = notificacion.idOtroUsuario })!
+                                    : Url.Action("PanelControl", "Home", new { tab = "clases", clase = notificacion.idClase })!;
+                            <li class="notificacion" data-tipo="@notificacion.tipo" data-id-otro="@notificacion.idOtroUsuario" data-nombre="@notificacion.nombreOtro">
+                                <span class="icono @(esChat ? "celeste" : "")"><i class="bi @iconoDeNotificacion(notificacion.tipo)" aria-hidden="true"></i></span>
+                                <div class="textoNotificacion">
+                                    <h3>
+                                        @notificacion.titulo
+                                        @if (esChat)
+                                        {
+                                            <span class="badge theme-primary">@(notificacion.cantidad == 1 ? "1 sin leer" : $"{notificacion.cantidad} sin leer")</span>
+                                        }
+                                    </h3>
+                                    <p>
+                                        @notificacion.mensaje
+                                        @if (esAmistad)
+                                        {
+                                            <a href="@urlDestino">Ver perfil</a>
+                                        }
+                                        @if (notificacion.fecha != null)
+                                        {
+                                            <small>· @tiempoRelativo(notificacion.fecha.Value)</small>
+                                        }
+                                    </p>
+                                </div>
+                                @if (esAmistad)
+                                {
+                                    @* La solicitud se responde acá mismo (clases.js → /Notificaciones/ResponderAmistad) *@
+                                    <div class="accionesNotificacion">
+                                        <button class="boton contorno chico" type="button" data-responder-amistad="rechazar" aria-label="Rechazar la solicitud de @notificacion.nombreOtro @notificacion.apellidoOtro">Rechazar</button>
+                                        <button class="boton principal chico" type="button" data-responder-amistad="aceptar" aria-label="Aceptar la solicitud de @notificacion.nombreOtro @notificacion.apellidoOtro"><i class="bi bi-check-lg" aria-hidden="true"></i> Aceptar</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a class="boton principal chico" href="@urlDestino">@notificacion.textoBoton</a>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+
+            @* Novedades: noticias de los últimos 3 días. No cuentan en la insignia ni esperan respuesta. Sin noticias no se muestra la columna *@
+            @if (!errorBD && noticias.Count > 0)
             {
-                <p class="sinNotificaciones">No pudimos cargar tus notificaciones. Probá de nuevo en unos minutos.</p>
-            }
-            else if (acciones.Count == 0)
-            {
-                <p class="sinNotificaciones">No tenés nada pendiente. Acá vas a ver las solicitudes de amistad, los mensajes sin leer y las clases que esperan tu respuesta.</p>
-            }
-            else
-            {
-                @* Cada notificación de acción es algo a medio resolver: desaparece sola cuando se resuelve (al abrir el chat, responder la clase, etc.) *@
-                <ul class="listaNotificaciones" id="listaAcciones">
-                    @foreach (var notificacion in acciones)
-                    {
-                        bool esChat = notificacion.tipo == "mensajesSinLeer";
-                        bool esAmistad = notificacion.tipo == "solicitudAmistad";
-                        string urlDestino = notificacion.destino == "perfil"
-                            ? Url.Action("Perfil", "Home", new { id = notificacion.idOtroUsuario })!
-                            : esChat
-                                ? Url.Action("PanelControl", "Home", new { tab = "chat", chat = notificacion.idOtroUsuario })!
-                                : Url.Action("PanelControl", "Home", new { tab = "clases", clase = notificacion.idClase })!;
-                        <li class="notificacion" data-tipo="@notificacion.tipo" data-id-otro="@notificacion.idOtroUsuario" data-nombre="@notificacion.nombreOtro">
-                            <span class="icono @(esChat ? "celeste" : "")"><i class="bi @iconoDeNotificacion(notificacion.tipo)" aria-hidden="true"></i></span>
-                            <div class="textoNotificacion">
-                                <h3>
-                                    @notificacion.titulo
-                                    @if (esChat)
+                <div class="card estatica novedades">
+                    <h2 id="tituloNovedades"><i class="bi bi-megaphone" aria-hidden="true"></i> Novedades</h2>
+                    <ul class="listaNotificaciones" aria-labelledby="tituloNovedades">
+                        @foreach (var noticia in noticias)
+                        {
+                            string urlNoticia = Url.Action("PanelControl", "Home", new { tab = "clases", clase = noticia.idClase })!;
+                            <li class="notificacion noticia" data-tipo="@noticia.tipo">
+                                <span class="icono celeste"><i class="bi @iconoDeNotificacion(noticia.tipo)" aria-hidden="true"></i></span>
+                                <div class="textoNotificacion">
+                                    <h3>@noticia.titulo</h3>
+                                    <p>
+                                        @noticia.mensaje
+                                        @if (noticia.fecha != null)
+                                        {
+                                            <small>· @tiempoRelativo(noticia.fecha.Value)</small>
+                                        }
+                                    </p>
+                                    @if (noticia.destino == "resena")
                                     {
-                                        <span class="badge theme-primary">@(notificacion.cantidad == 1 ? "1 sin leer" : $"{notificacion.cantidad} sin leer")</span>
+                                        @* Abre el diálogo Dar reseña del layout (site.js: inicializarResenas) *@
+                                        <button class="boton principal chico" type="button" data-dar-resena data-id-usuario="@noticia.idOtroUsuario" data-nombre-usuario="@noticia.nombreOtro @noticia.apellidoOtro"><i class="bi bi-star" aria-hidden="true"></i> @noticia.textoBoton</button>
                                     }
                                     else
                                     {
-                                        <span class="badge badge-subtle theme-warning">Esperando tu respuesta</span>
+                                        <a class="boton contorno chico" href="@urlNoticia">@noticia.textoBoton</a>
                                     }
-                                </h3>
-                                <p>
-                                    @notificacion.mensaje
-                                    @if (esAmistad)
-                                    {
-                                        <a href="@urlDestino">Ver perfil</a>
-                                    }
-                                </p>
-                                @if (notificacion.fecha != null)
-                                {
-                                    <small>@tiempoRelativo(notificacion.fecha.Value)</small>
-                                }
-                            </div>
-                            @if (esAmistad)
-                            {
-                                @* La solicitud se responde acá mismo (clases.js → /Notificaciones/ResponderAmistad) *@
-                                <div class="accionesNotificacion">
-                                    <button class="boton contorno chico" type="button" data-responder-amistad="rechazar" aria-label="Rechazar la solicitud de @notificacion.nombreOtro @notificacion.apellidoOtro">Rechazar</button>
-                                    <button class="boton principal chico" type="button" data-responder-amistad="aceptar" aria-label="Aceptar la solicitud de @notificacion.nombreOtro @notificacion.apellidoOtro"><i class="bi bi-check-lg" aria-hidden="true"></i> Aceptar</button>
                                 </div>
-                            }
-                            else
-                            {
-                                <a class="boton principal chico" href="@urlDestino">@notificacion.textoBoton <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-                            }
-                        </li>
-                    }
-                </ul>
-            }
-
-            @* Novedades: noticias de los últimos 3 días. No cuentan en la insignia ni esperan respuesta. Sin noticias no se muestra el bloque *@
-            @if (!errorBD && noticias.Count > 0)
-            {
-                <h2 class="tituloNovedades" id="tituloNovedades"><i class="bi bi-megaphone" aria-hidden="true"></i> Novedades</h2>
-                <ul class="listaNotificaciones listaNovedades" aria-labelledby="tituloNovedades">
-                    @foreach (var noticia in noticias)
-                    {
-                        string urlNoticia = Url.Action("PanelControl", "Home", new { tab = "clases", clase = noticia.idClase })!;
-                        <li class="notificacion noticia" data-tipo="@noticia.tipo">
-                            <span class="icono celeste"><i class="bi @iconoDeNotificacion(noticia.tipo)" aria-hidden="true"></i></span>
-                            <div class="textoNotificacion">
-                                <h3>@noticia.titulo</h3>
-                                <p>@noticia.mensaje</p>
-                                @if (noticia.fecha != null)
-                                {
-                                    <small>@tiempoRelativo(noticia.fecha.Value)</small>
-                                }
-                            </div>
-                            @if (noticia.destino == "resena")
-                            {
-                                @* Abre el diálogo Dar reseña del layout (site.js: inicializarResenas) *@
-                                <button class="boton principal chico" type="button" data-dar-resena data-id-usuario="@noticia.idOtroUsuario" data-nombre-usuario="@noticia.nombreOtro @noticia.apellidoOtro"><i class="bi bi-star" aria-hidden="true"></i> @noticia.textoBoton</button>
-                            }
-                            else
-                            {
-                                <a class="boton contorno chico" href="@urlNoticia">@noticia.textoBoton <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-                            }
-                        </li>
-                    }
-                </ul>
-            }
-        </div>
-    </div>
-</section>
-
-<!-- ================= MÉTRICAS Y ACCESOS RÁPIDOS ================= -->
-<section class="metricas">
-    <div class="container">
-        <div class="row g-3 lg:g-4">
-            <div class="col-12 lg:col-4">
-                <div class="row g-3 lg:g-4">
-                    <div class="col-6 lg:col-12">
-                        <div class="card">
-                            <strong id="contadorClasesActivas">@(contadores.pendientes + contadores.proximas)</strong>
-                            <span>Clases activas</span>
-                        </div>
-                    </div>
-                    <div class="col-6 lg:col-12">
-                        <div class="card oscura">
-                            <strong id="contadorClasesCompletadas">@contadores.completadas</strong>
-                            <span>Clases completadas</span>
-                        </div>
-                    </div>
+                            </li>
+                        }
+                    </ul>
                 </div>
-            </div>
-
-            <div class="col-12 lg:col-8">
-                <div class="row row-cols-2 g-3 lg:g-4 accesos">
-                    <div class="col">
-                        <a class="card" href="#panelTabs" data-abrir-tab="tabClases">
-                            <span class="icono"><i class="bi bi-calendar-check" aria-hidden="true"></i></span>
-                            <h3>Calendario de clases</h3>
-                            <p>Mirá tus clases por día y administralas.</p>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a class="card" href="#panelTabs" data-abrir-tab="tabChat">
-                            <span class="icono oscuro"><i class="bi bi-chat-dots" aria-hidden="true"></i></span>
-                            <h3>Chat directo <span class="badge theme-primary" id="insigniaChat" hidden="@(mensajesSinLeer == 0)">@mensajesSinLeer</span></h3>
-                            <p>@(rolUsuario == "Alumno" ? "Hablá con tus profesores." : "Hablá con tus alumnos.")</p>
-                        </a>
-                    </div>
-                    @if (esProfesor)
-                    {
-                        <div class="col">
-                            <a class="card" href="#panelTabs" data-abrir-tab="tabAgenda">
-                                <span class="icono"><i class="bi bi-calendar-week" aria-hidden="true"></i></span>
-                                <h3>Mi agenda</h3>
-                                <p>Elegí cuándo das clases.</p>
-                            </a>
-                        </div>
-                    }
-                    <div class="col">
-                        <a class="card" href="#panelTabs" data-abrir-tab="tabHistorial">
-                            <span class="icono celeste"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
-                            <h3>Historial</h3>
-                            <p>Mirá tus clases pasadas.</p>
-                        </a>
-                    </div>
-                </div>
-
-                <p class="ayudaExtra">
-                    ¿Necesitás ayuda con algo? <a asp-controller="Home" asp-action="Soporte">Ir a Soporte <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-                </p>
-            </div>
+            }
         </div>
     </div>
 </section>
@@ -261,7 +211,7 @@
                 {
                     <button class="nav-link" id="botonTabAgenda" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabAgenda" aria-controls="tabAgenda" aria-selected="false"><i class="bi bi-calendar-week" aria-hidden="true"></i> Mi agenda</button>
                 }
-                <button class="nav-link" id="botonTabChat" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabChat" aria-controls="tabChat" aria-selected="false"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chat directo</button>
+                <button class="nav-link" id="botonTabChat" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabChat" aria-controls="tabChat" aria-selected="false"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chat directo <span class="badge theme-primary" id="insigniaChat" hidden="@(mensajesSinLeer == 0)">@mensajesSinLeer</span></button>
                 <button class="nav-link" id="botonTabHistorial" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#tabHistorial" aria-controls="tabHistorial" aria-selected="false"><i class="bi bi-clock-history" aria-hidden="true"></i> Historial</button>
             </div>
         </nav>
@@ -269,7 +219,7 @@
         <div class="tab-content">
             <!-- Mis clases: calendario del mes + agenda del día (calendario.js, con fetch a /Clases/Calendario) -->
             <div class="tab-pane show active" id="tabClases" role="tabpanel" aria-labelledby="botonTabClases" tabindex="0">
-                <h2>Mis clases</h2>
+                <h2 class="visually-hidden">Mis clases</h2>
                 @if (errorBD)
                 {
                     <div class="card estatica estadoVacio"><p>No pudimos cargar tus clases. Probá de nuevo en unos minutos.</p></div>
@@ -315,7 +265,7 @@
             {
                 <!-- Mi agenda: horario semanal y días bloqueados (miAgenda.js, con fetch a /Clases/MiAgenda) -->
                 <div class="tab-pane" id="tabAgenda" role="tabpanel" aria-labelledby="botonTabAgenda" tabindex="0">
-                    <h2>Mi agenda</h2>
+                    <h2 class="visually-hidden">Mi agenda</h2>
                     <p class="avisoSinAgenda" id="avisoSinAgendaPestana" hidden><i class="bi bi-info-circle" aria-hidden="true"></i> Todavía no configuraste tu agenda: los alumnos pueden pedirte clases de 8 a 22 cualquier día.</p>
 
                     <div class="row g-3 lg:g-4 miAgenda" id="miAgenda">
@@ -351,7 +301,7 @@
 
             <!-- Chat directo -->
             <div class="tab-pane" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
-                <h2>Chat directo</h2>
+                <h2 class="visually-hidden">Chat directo</h2>
                 @* Todo con fetch (chat.js → MensajesController): la lista de conversaciones, el chat abierto (al abrirlo,
                    los mensajes que te mandaron pasan a Visto) y el envío. Mientras la pestaña está a la vista se actualiza sola. *@
                 <div class="card estatica chat" id="chat">
@@ -380,12 +330,14 @@
             <!-- Historial de clases -->
             @* El historial propio se pide con fetch a /Historial/Obtener/{id} y lo dibuja historial.js (la misma tabla del modal de los perfiles) *@
             <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
-                <h2>Historial de clases</h2>
+                <h2 class="visually-hidden">Historial de clases</h2>
                 <div id="contenidoHistorialPanel" data-id-usuario="@Context.Session.GetString("idUsuario")">
                     <p class="cargandoHistorial"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tu historial…</p>
                 </div>
             </div>
         </div>
+
+        <p class="ayudaExtra">¿Necesitás ayuda con algo? <a asp-controller="Home" asp-action="Soporte">Ir a Soporte</a></p>
     </div>
 </section>
 
