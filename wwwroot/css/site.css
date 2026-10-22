@@ -1627,6 +1627,22 @@ fieldset {
     margin-top: 1.75rem;
 }
 
+/* En el celular el panel cede ancho para que el placeholder del buscador se lea entero */
+@media (width < 576px) {
+    .portada > .container {
+        padding-inline: .75rem;
+    }
+
+    .portada .buscador {
+        padding-left: 1rem;
+    }
+
+    .portada .buscador .boton {
+        width: 3rem;
+        padding-inline: 0;
+    }
+}
+
 /* Plancha: debajo de md las pegatinas van sueltas; desde md se superponen (posiciones más abajo) */
 .portada .plancha .pegatina:nth-child(-n + 3) {
     flex-direction: column;
@@ -1729,9 +1745,9 @@ fieldset {
 }
 
 @media (width >= 1024px) {
-    /* En dos columnas "conocimiento" tiene que entrar en media portada */
+    /* En dos columnas "conocimiento" tiene que entrar en media portada: el tope sigue al contenedor, que no crece con vw */
     .portada h1 {
-        font-size: min(5.8vw, 5rem);
+        font-size: min(5.8vw, 3.8rem);
     }
 
     .portada .buscador,
@@ -1742,6 +1758,12 @@ fieldset {
 
     .portada .acciones {
         justify-content: flex-start;
+    }
+}
+
+@media (width >= 1280px) {
+    .portada h1 {
+        font-size: min(5.8vw, 4.8rem);
     }
 }
 
