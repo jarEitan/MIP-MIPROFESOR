@@ -71,7 +71,7 @@
 :root {
     /* Paleta de marca */
     --colorCoral: #FF5757;
-    --colorCoralOscuro: #D51F47;
+    --colorMagenta: #D51F47;
     --colorCoralSuave: #FFE8E8;
     --colorCeleste: #5CE1E6;
     --colorCelesteOscuro: #0E7490;
@@ -100,11 +100,13 @@
     --radioChico: .75rem;
     --radioMedio: 1rem;
     --radioGrande: 1.5rem;
-    --bordeMarcado: 2px solid var(--colorTinta);
-    --sombraMarcada: 4px 4px 0 var(--colorTinta);
-    --sombraMarcadaElevada: 7px 7px 0 var(--colorTinta);
-    --sombraSuave: 0 10px 30px -12px rgba(17, 24, 39, .18);
-    --sombraFlotante: 0 24px 48px -16px rgba(17, 24, 39, .28);
+    --sombraSuave: 0 1px 2px rgba(17, 24, 39, .05), 0 10px 28px -14px rgba(17, 24, 39, .22);
+    --sombraFlotante: 0 2px 4px rgba(17, 24, 39, .06), 0 24px 44px -20px rgba(17, 24, 39, .35);
+    --troquel: 0 0 0 5px #fff, 0 0 0 6.5px rgba(17, 24, 39, .14), 0 18px 30px -14px rgba(17, 24, 39, .35);
+    --fondoLavado: radial-gradient(circle, rgba(17, 24, 39, .07) 1.2px, transparent 1.7px) 0 0 / 22px 22px,
+        radial-gradient(42rem 30rem at 100% 0%, rgba(255, 87, 87, .16), transparent 62%),
+        radial-gradient(36rem 26rem at 0% 100%, rgba(92, 225, 230, .24), transparent 62%),
+        var(--colorSuperficie);
 
     /* Movimiento */
     --curvaSuave: cubic-bezier(.2, .8, .2, 1);
@@ -113,31 +115,31 @@
     --duracionMedia: .45s;
 
     /* Medidas fluidas */
-    --espacioSeccion: clamp(1.75rem, 3.5vw, 3rem);
+    --espacioSeccion: clamp(2.5rem, 2rem + 3vw, 4.5rem);
     --alturaEncabezado: 4rem;
 
     /* ---- Bootstrap 6: se pisan sus tokens para que TODOS sus componentes salgan con la paleta de MIP ---- */
     --bs-body-font-family: var(--fuenteTexto);
-    --bs-body-font-size: .9375rem;
+    --bs-body-font-size: 1rem;
     --bs-body-line-height: 1.6;
-    --bs-link-color: var(--colorCoralOscuro);
-    --bs-link-hover-color: var(--colorCoral);
+    --bs-link-color: var(--colorTinta);
+    --bs-link-hover-color: var(--colorMagenta);
     --bs-border-color: var(--colorBorde);
-    --bs-focus-ring-color: var(--colorCeleste);
-    --bs-control-checked-bg: var(--colorCoral);
+    --bs-focus-ring-color: var(--colorTinta);
+    --bs-control-checked-bg: var(--colorTinta);
 
     --bs-primary-base: var(--colorCoral);
-    --bs-primary-fg: var(--colorCoralOscuro);
+    --bs-primary-fg: var(--colorTinta);
     --bs-primary-fg-emphasis: #8E1230;
     --bs-primary-bg: var(--colorCoral);
     --bs-primary-bg-subtle: var(--colorCoralSuave);
     --bs-primary-bg-muted: #FFD0D0;
     --bs-primary-border: #FFA3A3;
     --bs-primary-focus-ring: var(--colorCeleste);
-    --bs-primary-contrast: #FFFFFF;
+    --bs-primary-contrast: var(--colorTinta);
 
     --bs-accent-base: var(--colorCeleste);
-    --bs-accent-fg: var(--colorCelesteOscuro);
+    --bs-accent-fg: var(--colorTinta);
     --bs-accent-fg-emphasis: #0B5566;
     --bs-accent-bg: var(--colorCeleste);
     --bs-accent-bg-subtle: var(--colorCelesteSuave);
@@ -146,10 +148,10 @@
     --bs-accent-focus-ring: var(--colorCeleste);
     --bs-accent-contrast: var(--colorTinta);
 
-    --bs-danger-base: var(--colorCoralOscuro);
-    --bs-danger-fg: var(--colorCoralOscuro);
+    --bs-danger-base: var(--colorMagenta);
+    --bs-danger-fg: var(--colorMagenta);
     --bs-danger-fg-emphasis: #8E1230;
-    --bs-danger-bg: var(--colorCoralOscuro);
+    --bs-danger-bg: var(--colorMagenta);
     --bs-danger-bg-subtle: #FDE4EA;
     --bs-danger-bg-muted: #FBC9D4;
     --bs-danger-border: #F4A0B3;
@@ -181,6 +183,12 @@
     --bs-inverse-bg-muted: var(--colorBorde);
     --bs-inverse-border: #D1D5DB;
     --bs-inverse-contrast: #FFFFFF;
+
+    /* alias de migración: se borran en la etapa 11 */
+    --colorCoralOscuro: var(--colorMagenta);
+    --bordeMarcado: 1.5px solid var(--colorBorde);
+    --sombraMarcada: var(--sombraSuave);
+    --sombraMarcadaElevada: var(--sombraFlotante);
 }
 
 html {
@@ -210,7 +218,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--colorFondo);
+    background-color: var(--colorSuperficie);
     color: var(--colorTexto);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -218,6 +226,7 @@ body {
 
 main {
     flex: 1 0 auto;
+    overflow-x: clip;
 }
 
 ::selection {
@@ -226,8 +235,17 @@ main {
 }
 
 :focus-visible {
-    outline: 3px solid var(--colorCeleste);
+    outline: 3px solid var(--colorFoco, var(--colorTinta));
     outline-offset: 3px;
+}
+
+/* Sobre fondos oscuros el foco es celeste */
+.pie,
+.llamadoFinal,
+.card.oscura,
+.ilustracion.oscura,
+.snackbar {
+    --colorFoco: var(--colorCeleste);
 }
 
 [hidden] {
@@ -567,13 +585,14 @@ h1, h2 {
 }
 
 h1 {
-    font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
-    line-height: 1.1;
+    font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+    line-height: .96;
     letter-spacing: -.01em;
 }
 
 h2 {
-    font-size: clamp(1.35rem, 1rem + 1.5vw, 2.125rem);
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.75rem);
+    line-height: 1.05;
     letter-spacing: 0;
 }
 
@@ -5268,6 +5287,7 @@ tr.resaltada td {
     *::before,
     *::after {
         animation-duration: .01ms !important;
+        animation-delay: 0s !important;
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
         scroll-behavior: auto !important;
