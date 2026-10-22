@@ -6,7 +6,7 @@
 ## 1. La filosofía en una frase
 
 **Pocas clases, muy reutilizadas, que cambian de aspecto según dónde están.**
-Una clase base (`.boton`, `.card`, `.icono`) + un modificador de una palabra (`.principal`, `.coral`, `.celeste`) + selectores descendientes (`.portada .card h3`) para especializar sin inventar nombres nuevos.
+Una clase base (`.boton`, `.card`, `.icono`) + un modificador de una palabra (`.principal`, `.coral`, `.celeste`) + selectores descendientes (`.perfiles .card li`) para especializar sin inventar nombres nuevos.
 
 
 ## 2. CSS: un solo archivo, en orden fijo
@@ -47,15 +47,15 @@ Los comentarios explican **por qué** (un bug de Bootstrap, una decisión de dis
 
 | Base | Modificadores | Se especializa con |
 |---|---|---|
-| `.boton` | `.principal` `.secundario` `.contorno` `.oscuro` `.claro` `.chico` | `.portada .boton`, `.llamadoFinal .boton` |
-| `.card` | `.coral` `.oscura` `.estatica` (sin levitar) `.estadoVacio` | `.funciones .card`, `.perfiles .card.oscura` |
-| `.icono` | `.celeste` `.oscuro` (base: coral suave con ícono magenta) | `.pasos .icono` |
+| `.boton` | `.principal` `.secundario` `.contorno` `.oscuro` `.claro` `.chico` | `.buscador .boton`, `.acceso .boton.completo` |
+| `.card` | `.coral` `.oscura` `.estatica` (sin levitar) `.estadoVacio` | `.perfiles .card.oscura`, `.manifiesto .card` |
+| `.icono` | `.celeste` `.oscuro` (base: coral suave con ícono magenta) | `.perfiles .card .icono`, `.notificaciones .notificacion .icono` |
 | `.pegatina` | `.coral` `.celeste` `.magenta` `.oscura` `.redonda` (sin modificador: blanca) | `.cabecera .pegatina`, `.saludo .plancha` |
 | `.plancha` | — | contenedor de pegatinas sueltas, con margen para el troquel |
 | `.pildora` | — | solo un dato real (el rol en el Perfil y en la lista de amigos) |
 | `.encabezadoSeccion` | — | h2 + p centrados al inicio de cada sección |
 | `.cabecera` | — | portada clara de Catálogo, Soporte y Privacidad (Quiénes somos usa `.presentacion`) |
-| `.badge`, `.avatar`, `.burbuja` | — | `.chat .burbuja`, `.portada .burbuja` |
+| `.badge`, `.avatar`, `.burbuja` | — | `.destacados .colegios .badge`, `.saludo .avatar`, `.chat .burbuja` |
 
 Antes de crear una clase nueva: ¿se resuelve con una existente + un selector descendiente? Si sí, no se crea.
 
@@ -64,11 +64,11 @@ Antes de crear una clase nueva: ¿se resuelve con una existente + un selector de
 - **Tonos exactos**: no se agrega ningún hex. Todo sale de los tokens de `:root`; las transparencias usan el RGB de esos tonos (tinta 17,24,39 · coral 255,87,87 · celeste 92,225,230 · magenta 213,31,71).
 - **60/20/20**: 60 % colores planos con sombras suaves, 20 % degradados tranquilos y 20 % texturas, siempre ligeras. Texto sobre coral y celeste: tinta, nunca blanco; el blanco va solo sobre tinta, magenta o verde de éxito.
 - **Lo elegido** (link activo, pestaña activa, día y franja elegidos, página actual, check) = fondo tinta con texto blanco. Única excepción: el rol elegido en Registrarse (borde tinta, fondo celeste suave).
-- **Un solo momento animado por página**: `pegarPegatina`, en `main > section:first-of-type .pegatina`. Quedan la cinta, `sacudirError`, el Me gusta y el hover/press. Con `prefers-reduced-motion` todo queda quieto y visible.
+- **Un solo momento animado por página**: `pegarPegatina`, en las `.pegatina` de `main > section:first-of-type` y en el avatar de esa misma sección en el Panel (`.saludo`) y el Perfil (`.cabeceraPerfil`). Quedan la cinta, `sacudirError`, el Me gusta y el hover/press. Con `prefers-reduced-motion` todo queda quieto y visible.
 - **Dos texturas**: la franja de `.perfil .portadaPerfil` y `--fondoLavado` (solo en `.portada > .container`, `.cabecera`, `.saludo`, `.acceso`, `.paginaError`, `.presentacion`). Lo demás es plano.
 - **`mark`**: solo en un h1 por página y en el h2 de `.llamadoFinal`.
 - **Prohibido**: cejas (píldoras en mayúsculas sobre los títulos), flechas `bi-arrow-right` pegadas a los links, emojis en el HTML (el corazón es `<i class="bi bi-heart-fill">`), cifras o testimonios inventados.
-- **Toque**: todo control interactivo mide 44 px (`btn-close` y quitar etiqueta, 24 px).
+- **Toque**: todo control interactivo mide 44 px, también campos, selects y los nombres que llevan a un perfil (`btn-close` y quitar etiqueta, 24 px). Los links dentro de una frase quedan afuera.
 
 ### Tipografías (una variable por rol, en `:root`)
 - `--fuenteTitulos` → **Eras Bold ITC**: solo `h1`, `h2`, logo y lema. No se usa en `h3` ni en texto corrido.
