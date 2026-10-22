@@ -77,9 +77,7 @@
     --colorCelesteOscuro: #0E7490;
     --colorCelesteSuave: #DDF8F9;
     --colorTinta: #111827;
-    --colorTintaSuave: #1F2937;
     --colorFondo: #F9FAFB;
-    --colorPapel: #FFF7F2;
     --colorSuperficie: #FFFFFF;
     --colorBorde: #E5E7EB;
     --colorTexto: #111827;
@@ -181,12 +179,6 @@
     --bs-inverse-bg-muted: var(--colorBorde);
     --bs-inverse-border: #D1D5DB;
     --bs-inverse-contrast: #FFFFFF;
-
-    /* alias de migración: se borran en la etapa 11 */
-    --colorCoralOscuro: var(--colorMagenta);
-    --bordeMarcado: 1.5px solid var(--colorBorde);
-    --sombraMarcada: var(--sombraSuave);
-    --sombraMarcadaElevada: var(--sombraFlotante);
 }
 
 html {
@@ -257,7 +249,7 @@ main {
     left: .5rem;
     z-index: 2000;
     padding: .6rem 1rem;
-    border: var(--bordeMarcado);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     background-color: var(--colorCeleste);
     color: var(--colorTinta);
@@ -1519,16 +1511,6 @@ fieldset {
     color: var(--colorTextoSuave);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .dialogoResena .filaEstrellas label {
-        transition: none;
-    }
-
-    .dialogoResena .filaEstrellas label:hover {
-        transform: none;
-    }
-}
-
 /* ---------- Snackbar (UI Kit): aviso corto abajo de la pantalla, entra subiendo sin girar ---------- */
 .snackbar {
     position: fixed;
@@ -2571,7 +2553,7 @@ fieldset {
 }
 
 .acceso .campoConIcono:focus-within > .bi {
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 .acceso .campoConIcono .verContrasena {
@@ -2725,7 +2707,7 @@ fieldset {
 
 .acceso .roles .bi {
     font-size: 1.75rem;
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 .acceso .roles strong {
@@ -2865,13 +2847,13 @@ fieldset {
 }
 
 .ayuda {
-    background-color: var(--colorPapel);
+    background-color: var(--colorSuperficie);
 }
 
 .ayuda a.card .enlace {
     margin-top: auto;
     font-weight: 700;
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 .contacto {
@@ -3795,7 +3777,7 @@ tr.resaltada td {
 .listaBloqueados li small {
     display: block;
     font-weight: 600;
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 .listaBloqueados .sinBloqueos {
@@ -3826,7 +3808,7 @@ tr.resaltada td {
 }
 
 .tabla .table th {
-    border-bottom: var(--bordeMarcado);
+    border-bottom: 1.5px solid var(--colorBorde);
     background-color: var(--colorFondo);
     font-size: .72rem;
     letter-spacing: .06em;
@@ -3870,7 +3852,7 @@ tr.resaltada td {
 .tabla .estrellas {
     display: inline-flex;
     gap: .1rem;
-    color: #F59E0B;
+    color: var(--colorCoral);
 }
 
 .tabla .table td .boton {
@@ -4368,7 +4350,7 @@ tr.resaltada td {
     align-items: start;
     gap: .9rem 1rem;
     background-color: var(--colorAlertaSuave);
-    box-shadow: var(--sombraMarcada);
+    box-shadow: var(--sombraSuave);
 }
 
 .perfil .avisoPerfil .icono {
@@ -4737,7 +4719,7 @@ tr.resaltada td {
 }
 
 .perfil .descripcion a {
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
     font-weight: 600;
 }
 
@@ -4772,7 +4754,7 @@ tr.resaltada td {
 }
 
 .perfil .resena a:hover {
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 .perfil .estrellas {
@@ -4817,7 +4799,7 @@ tr.resaltada td {
 }
 
 .perfil .reportarPerfil:hover {
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 /* ---------- Modal "Editar perfil" ---------- */
@@ -4920,7 +4902,7 @@ tr.resaltada td {
 
 .dialogoEdicion .form-field small.excedido {
     font-weight: 700;
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 /* Editor de texto enriquecido (Quill) con el borde del sitio */
@@ -5042,7 +5024,7 @@ tr.resaltada td {
 .dialogoRecorte .areaRecorte {
     height: min(52vh, 22rem);
     overflow: hidden;
-    border: var(--bordeMarcado);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioMedio);
     background-color: var(--colorTinta);
 }
@@ -5290,7 +5272,7 @@ tr.resaltada td {
 
 .dialogoAmigos .listaAmigos a:hover {
     border-color: var(--colorTinta);
-    background-color: var(--colorPapel);
+    background-color: var(--colorCelesteSuave);
 }
 
 .dialogoAmigos .listaAmigos .avatar {
@@ -5367,6 +5349,7 @@ tr.resaltada td {
 .pie h5 {
     margin-bottom: .65rem;
     font: 600 1.0625rem var(--fuenteMarca);
+    letter-spacing: normal;
     color: #fff;
 }
 
@@ -5429,5 +5412,9 @@ tr.resaltada td {
     main > section:first-of-type .pegatina,
     .saludo .avatar {
         animation: none;
+    }
+
+    .dialogoResena .filaEstrellas label:hover {
+        transform: none;
     }
 }
