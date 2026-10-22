@@ -95,7 +95,7 @@
 <section class="notificaciones" id="notificaciones" aria-labelledby="tituloNotificaciones">
     <div class="container">
         <div class="columnasNotificaciones">
-            <div class="card estatica acciones">
+            <div class="card estatica pendientes">
                 <h2 id="tituloNotificaciones">
                     <i class="bi bi-bell" aria-hidden="true"></i> Requiere tu acción
                     <span class="badge" id="cantidadNotificacionesPanel" hidden="@(acciones.Count == 0)">@acciones.Count</span>
@@ -359,7 +359,7 @@
     </div>
     <div class="dialog-footer">
         <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Volver</button>
-        <button type="button" class="boton principal chico" id="botonConfirmarCancelacion">Sí, cancelar</button>
+        <button type="button" class="boton oscuro chico" id="botonConfirmarCancelacion">Sí, cancelar</button>
     </div>
 </dialog>
 
@@ -402,7 +402,7 @@
     </div>
     <div class="dialog-footer">
         <button type="button" class="boton contorno chico" data-bs-dismiss="dialog">Volver</button>
-        <button type="button" class="boton principal chico" id="botonConfirmarNoSeDio">Sí, no se dio</button>
+        <button type="button" class="boton oscuro chico" id="botonConfirmarNoSeDio">Sí, no se dio</button>
     </div>
 </dialog>
 
