@@ -378,6 +378,7 @@ main {
 
 .encabezado .acciones {
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     gap: .75rem;
 }
@@ -486,8 +487,20 @@ main {
 }
 
 /* Entre 1024 y 1279 px el contenedor mide 960 px: con los cuatro links del alumno el header solo entra en una línea
-   si los links se achican y el nombre se oculta (el avatar lleva al perfil) */
+   si los links se achican, los huecos se cierran y el nombre se oculta (el avatar lleva al perfil) */
 @container (1024px <= width < 1280px) {
+    .encabezado .container {
+        gap: .5rem;
+    }
+
+    .encabezado .navbar-nav {
+        margin-left: .5rem;
+    }
+
+    .encabezado .acciones {
+        gap: .5rem;
+    }
+
     .encabezado .nav-link {
         padding-inline: .75rem;
     }
