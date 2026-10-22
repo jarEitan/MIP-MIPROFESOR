@@ -375,40 +375,6 @@ function inicializarEncabezadoConScroll() {
 }
 
 
-// ================= ANIMACIONES: revelar elementos al entrar en pantalla =================
-// Marca con ".revelar" los títulos, tarjetas y figuras de cada sección (menos la portada)
-// y les agrega ".visible" cuando entran en pantalla. Sin JS, todo se ve igual.
-// Un carrusel aparece entero: sus tarjetas no se revelan solas porque las que están
-// fuera de la pista quedarían invisibles al deslizarlas.
-function inicializarRevelarAlScroll() {
-    const elementosParaRevelar = document.querySelectorAll(
-        "main section:not(.portada):not(.cinta) :is(.encabezadoSeccion, .card, figure, .accordion, .enlacesExternos, .colegios, .nav-pills, .carrusel):not(.pista > *)"
-    );
-
-    elementosParaRevelar.forEach(elemento => {
-        // Escalona las tarjetas hermanas para que entren una tras otra
-        const posicion = Array.from(elemento.parentElement.children).indexOf(elemento);
-        elemento.style.setProperty("--retraso", `${Math.min(posicion, 5) * 0.08}s`);
-        elemento.classList.add("revelar");
-    });
-
-    if (!("IntersectionObserver" in window)) {
-        elementosParaRevelar.forEach(elemento => elemento.classList.add("visible"));
-        return;
-    }
-
-    const observadorDeVisibilidad = new IntersectionObserver((entradas, observador) => {
-        entradas.forEach(entrada => {
-            if (!entrada.isIntersecting) return;
-            entrada.target.classList.add("visible");
-            observador.unobserve(entrada.target);
-        });
-    }, { threshold: 0.12, rootMargin: "0px 0px -30px 0px" });
-
-    elementosParaRevelar.forEach(elemento => observadorDeVisibilidad.observe(elemento));
-}
-
-
 // ================= CARRUSEL: flechas de .carrusel =================
 // La pista ya se desliza con el dedo o el trackpad (scroll-snap en el CSS).
 // Las flechas avanzan de a una tarjeta y, desde la última, vuelven a la primera (y al revés).
@@ -696,11 +662,8 @@ function mostrarPerfil(perfil) {
     }
 }
 
-// Lo que llega por fetch aparece después de inicializarRevelarAlScroll(): se marca visible
-// a mano (la transición de .revelar igual se ve) para no depender del IntersectionObserver
 function mostrarContenidoCargado(contenido) {
     contenido.hidden = false;
-    [contenido, ...contenido.querySelectorAll(".revelar")].forEach(elemento => elemento.classList.add("visible"));
 }
 
 // Foto de perfil o, si no tiene, la primera letra del nombre y del apellido
@@ -906,7 +869,6 @@ function mostrarAvisoVerificacionPerfil(verificado, faltantes) {
         itemFaltante.textContent = faltante.charAt(0).toUpperCase() + faltante.slice(1);
         return itemFaltante;
     }));
-    if (!avisoPerfil.hidden) avisoPerfil.classList.add("revelar", "visible");
 }
 
 // ----- Copiar enlace y botones sociales -----
@@ -1684,7 +1646,6 @@ function inicializarSitio() {
     inicializarEncabezadoConScroll();
     inicializarAvisoVerificacion();
     inicializarSelectoresBuscables();
-    inicializarRevelarAlScroll();
     inicializarCarruseles();
     inicializarRolesDeRegistro();
     inicializarVerContrasena();

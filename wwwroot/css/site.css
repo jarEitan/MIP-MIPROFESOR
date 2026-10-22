@@ -427,16 +427,6 @@ main {
     display: none;
 }
 
-.encabezado .boton .badge::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    background-color: var(--colorCoral);
-    animation: pulsoExpansivo 1.4s cubic-bezier(0, 0, .2, 1) infinite;
-}
-
 /* Nombre y foto del usuario: llevan al perfil */
 .encabezado .usuario {
     display: flex;
@@ -1620,44 +1610,14 @@ fieldset {
 
 
 /* ---------- Animaciones reutilizables ---------- */
-.animarEntrada {
-    animation: aparecerDesdeAbajo .8s var(--curvaSuave) both;
-    animation-delay: var(--retraso, 0s);
-}
-
-/* Solo se oculta si JS está activo (clase puesta en <html>), así nunca queda contenido invisible */
-.jsActivo .revelar:not(.visible) {
-    opacity: 0;
-    transform: translateY(1.75rem);
-}
-
-.revelar {
-    transition: opacity .7s var(--curvaSuave) var(--retraso, 0s), transform .7s var(--curvaSuave) var(--retraso, 0s), border-color var(--duracionMedia) var(--curvaSuave), box-shadow var(--duracionMedia) var(--curvaSuave), translate var(--duracionMedia) var(--curvaSuave);
-}
-
-@keyframes aparecerDesdeAbajo {
-    from { opacity: 0; transform: translateY(1.5rem); }
-    to { opacity: 1; transform: none; }
-}
-
 @keyframes flotarTarjeta {
     0%, 100% { translate: 0 0; }
     50% { translate: 0 -12px; }
 }
 
-@keyframes flotarFigura {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -20px) scale(1.06); }
-    66% { transform: translate(-20px, 15px) scale(.96); }
-}
-
 @keyframes desplazarCinta {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
-}
-
-@keyframes pulsoExpansivo {
-    75%, 100% { transform: scale(2); opacity: 0; }
 }
 
 @keyframes sacudirError {
@@ -1690,7 +1650,6 @@ fieldset {
     filter: blur(60px);
     opacity: .45;
     pointer-events: none;
-    animation: flotarFigura 18s ease-in-out infinite;
 }
 
 .portada .figura.coral {
@@ -1758,12 +1717,12 @@ fieldset {
     height: auto;
     border: var(--bordeMarcado);
     box-shadow: var(--sombraFlotante);
-    animation: aparecerDesdeAbajo .9s var(--curvaSuave) both, flotarTarjeta 6s ease-in-out infinite;
+    animation: flotarTarjeta 6s ease-in-out infinite;
 }
 
-.portada .composicion .card:nth-child(1) { animation-delay: .3s, 1.2s; }
-.portada .composicion .card:nth-child(2) { animation-delay: .45s, 2.2s; }
-.portada .composicion .card:nth-child(3) { animation-delay: .6s, 3.2s; }
+.portada .composicion .card:nth-child(1) { animation-delay: 1.2s; }
+.portada .composicion .card:nth-child(2) { animation-delay: 2.2s; }
+.portada .composicion .card:nth-child(3) { animation-delay: 3.2s; }
 
 .portada .composicion strong {
     color: var(--colorTinta);
@@ -5297,10 +5256,5 @@ tr.resaltada td {
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
         scroll-behavior: auto !important;
-    }
-
-    .jsActivo .revelar:not(.visible) {
-        opacity: 1;
-        transform: none;
     }
 }
