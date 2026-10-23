@@ -1641,8 +1641,8 @@ fieldset {
 }
 
 .portada h1 {
-    margin-block: 1.25rem 1rem;
-    font-size: clamp(2.6rem, 1.4rem + 5vw, 5.25rem);
+    margin-block: 0 1rem;
+    font-size: min(9.6vw, 4.5rem);
 }
 
 .portada h1 + p {
@@ -1678,7 +1678,7 @@ fieldset {
     }
 }
 
-/* Plancha: debajo de md las pegatinas van sueltas; desde md se superponen (posiciones más abajo) */
+/* Plancha: pegatinas superpuestas en todas las pantallas; en el celular quedan cuatro */
 .portada .plancha :is(.profe, .confirmada, .charla) {
     flex-direction: column;
     align-items: flex-start;
@@ -1728,19 +1728,56 @@ fieldset {
     border-radius: 999px;
 }
 
-@media (width >= 768px) {
-    .portada .plancha {
-        position: relative;
-        display: block;
-        min-height: 29.5rem;
-    }
+.portada .plancha {
+    position: relative;
+    display: block;
+    min-height: 17rem;
+}
 
-    .portada .plancha .pegatina {
-        position: absolute;
+.portada .plancha .pegatina {
+    position: absolute;
+}
+
+/* "Tutorías entre colegios" queda pegada en la esquina de la tarjeta de Sofía */
+.portada .plancha .tutorias {
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding: .4rem .9rem;
+    font-size: .875rem;
+}
+
+@media (width < 768px) {
+    .portada .plancha :is(.charla, .corazon) {
+        display: none;
     }
 
     .portada .plancha .profe {
-        top: 1.25rem;
+        top: 1.75rem;
+        left: 0;
+        width: 15.5rem;
+    }
+
+    .portada .plancha .confirmada {
+        top: 10.5rem;
+        right: 0;
+    }
+
+    .portada .plancha .isotipo {
+        top: 11.5rem;
+        left: .5rem;
+        width: 4.5rem;
+        height: 4.5rem;
+    }
+}
+
+@media (width >= 768px) {
+    .portada .plancha {
+        min-height: 29.5rem;
+    }
+
+    .portada .plancha .profe {
+        top: 1.75rem;
         left: .6rem;
     }
 
@@ -1777,9 +1814,9 @@ fieldset {
 }
 
 @media (width >= 1024px) {
-    /* En dos columnas "conocimiento" tiene que entrar en media portada: el tope sigue al contenedor, que no crece con vw */
+    /* En dos columnas «El conocimiento» entra en un renglón (medido: 7,96 em de ancho) */
     .portada h1 {
-        font-size: min(5.8vw, 3.8rem);
+        font-size: min(5vw, 4rem);
     }
 
     .portada .buscador,
@@ -1790,12 +1827,6 @@ fieldset {
 
     .portada .acciones {
         justify-content: flex-start;
-    }
-}
-
-@media (width >= 1280px) {
-    .portada h1 {
-        font-size: min(5.8vw, 4.8rem);
     }
 }
 
@@ -1829,9 +1860,12 @@ fieldset {
 }
 
 .cinta li::after {
-    content: "✦";
+    content: "";
+    width: .5rem;
+    height: .5rem;
     margin-left: 2.5rem;
-    color: #fff;
+    border-radius: 50%;
+    background-color: #fff;
 }
 
 /* ---------- 3.3 Inicio: cómo funciona ---------- */
