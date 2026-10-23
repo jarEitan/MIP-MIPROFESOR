@@ -361,20 +361,6 @@ function inicializarAvisoVerificacion() {
     });
 }
 
-// ================= HEADER: sombra al hacer scroll =================
-function inicializarEncabezadoConScroll() {
-    const encabezado = document.getElementById("encabezado");
-    if (!encabezado) return;
-
-    const actualizarSombraEncabezado = () => {
-        encabezado.classList.toggle("conSombra", window.scrollY > 8);
-    };
-
-    actualizarSombraEncabezado();
-    window.addEventListener("scroll", actualizarSombraEncabezado, { passive: true });
-}
-
-
 // ================= INICIO: validación del buscador =================
 // Se llama desde onsubmit del formulario. El envío va a Catalogo?busqueda=...
 function validarBusqueda() {
@@ -1613,7 +1599,6 @@ function enviarResena() {
 
 
 function inicializarSitio() {
-    inicializarEncabezadoConScroll();
     inicializarAvisoVerificacion();
     inicializarSelectoresBuscables();
     inicializarRolesDeRegistro();
