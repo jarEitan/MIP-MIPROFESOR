@@ -40,7 +40,7 @@ Diseño: [Figma](https://www.figma.com/design/HDhfuOx62CKtV0MSiQWDl4/MIP), [Miro
 - **Plancha de pegatinas**: tarjetas blancas con borde gris y sombra suave, pegatinas troqueladas y giradas, texto tinta sobre coral y celeste, lo elegido en tinta con texto blanco; sin bordes negros en reposo. Reglas completas en la [guía](guiaDeEstilo.md) (sección 2).
 - Solo dos texturas: la franja del Perfil y `--fondoLavado`. `<mark>` celeste solo en un h1 por página y en el h2 de `.llamadoFinal`; sigla "MIP" gigante en el footer.
 - Tamaños con `clamp()`; la raíz sube a 112,5 % desde 1536px y 125 % desde 1920px. Header y filtros usan `@container`.
-- Animaciones: solo `pegarPegatina` (pegatinas de la primera sección de cada página y el avatar del saludo del Panel y del titular del Perfil), cinta de palabras, `sacudirError`, Me gusta y hover/press. Con `prefers-reduced-motion` todo queda quieto y visible.
+- Animaciones: sin animaciones de entrada (desde el 2026-10-23). Quedan la cinta de palabras, `girarCarga`, `sacudirError`, Me gusta, `resaltarClase` y el hover de lo clickeable dentro de `@media (hover: hover)`. Con `prefers-reduced-motion` todo queda quieto y visible.
 - ⚠️ Nunca poner `backdrop-filter`, `transform` ni `filter` en el header (rompe los `position: fixed` del drawer).
 
 ## 4. Archivos
