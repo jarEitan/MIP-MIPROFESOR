@@ -95,29 +95,29 @@
             </div>
 
             <div class="col-12 lg:col-6 xl:col-7 lg:order-1">
-                @* El panel cambia según el rol elegido (data-solo-rol); sus pegatinas se pegan al mostrarse (--retraso) *@
+                @* El panel cambia según el rol elegido (data-solo-rol) *@
                 <div class="ilustracion" data-solo-rol="alumno" hidden="@(rol == "alumno" ? null : "hidden")">
-                    <span class="pegatina redonda" aria-hidden="true" style="--giro:-8deg; --retraso:.1s"><img src="~/img/logoChico.png" alt="" width="104" height="104" /></span>
-                    <h2 class="pegatina" style="--giro:-2deg; --retraso:.25s">En miProfesor creemos que aprender nunca debería depender de la suerte.</h2>
+                    <span class="pegatina redonda" aria-hidden="true" style="--giro:-8deg"><img src="~/img/logoChico.png" alt="" width="104" height="104" /></span>
+                    <h2 class="pegatina" style="--giro:-2deg">En miProfesor creemos que aprender nunca debería depender de la suerte.</h2>
                     <ul>
                         <li>Profesores de tu propio colegio</li>
                         <li>Clases presenciales o virtuales</li>
                         <li>Chat directo para coordinar</li>
                         <li>Sin intermediarios opacos</li>
                     </ul>
-                    <span class="pegatina celeste" style="--giro:3deg; --retraso:.4s">Ayudar a los estudiantes a encontrar profesores particulares</span>
+                    <span class="pegatina celeste" style="--giro:3deg">Ayudar a los estudiantes a encontrar profesores particulares</span>
                 </div>
 
                 <div class="ilustracion oscura" data-solo-rol="profesor" hidden="@(rol == "profesor" ? null : "hidden")">
-                    <span class="pegatina redonda" aria-hidden="true" style="--giro:-8deg; --retraso:.1s"><img src="~/img/logoChico.png" alt="" width="104" height="104" /></span>
-                    <h2 class="pegatina" style="--giro:-2deg; --retraso:.25s">Compartí lo que sabés con quien lo necesita</h2>
+                    <span class="pegatina redonda" aria-hidden="true" style="--giro:-8deg"><img src="~/img/logoChico.png" alt="" width="104" height="104" /></span>
+                    <h2 class="pegatina" style="--giro:-2deg">Compartí lo que sabés con quien lo necesita</h2>
                     <ul>
                         <li>Armá tu perfil con tus materias y precios</li>
                         <li>Elegí tus días y horarios</li>
                         <li>Hablá directo con tus alumnos</li>
                         <li>Verificá tu cuenta y ganá confianza</li>
                     </ul>
-                    <span class="pegatina celeste" style="--giro:3deg; --retraso:.4s">Ayudar a los profesores particulares a encontrar estudiantes</span>
+                    <span class="pegatina celeste" style="--giro:3deg">Ayudar a los profesores particulares a encontrar estudiantes</span>
                 </div>
             </div>
         </div>

@@ -49,22 +49,22 @@
 }
 
 <!-- ================= SALUDO ================= -->
-@* El único momento animado: las pegatinas (rol y contadores) se pegan al cargar. Los contadores los reescribe refrescarPanel (clases.js) *@
+@* Pegatinas del encabezado (rol y contadores). Los contadores los reescribe refrescarPanel (clases.js) *@
 <section class="bienvenida">
     <div class="container">
         <div class="saludo">
             <partial name="_avatarUsuario" model='"avatar-xl"' />
             <div class="textoSaludo">
-                <span class="pegatina celeste" style="--giro: 3deg; --retraso: .3s">@rolUsuario</span>
+                <span class="pegatina celeste" style="--giro: 3deg">@rolUsuario</span>
                 <h1>¡Hola, @nombreUsuario!</h1>
                 <p>Gestioná tus clases y tus mensajes.</p>
             </div>
             <div class="plancha">
-                <div class="pegatina contador" style="--giro: -2deg; --retraso: .45s">
+                <div class="pegatina contador" style="--giro: -2deg">
                     <strong id="contadorClasesActivas">@(contadores.pendientes + contadores.proximas)</strong>
                     <span>Clases activas</span>
                 </div>
-                <div class="pegatina oscura contador" style="--giro: 2.5deg; --retraso: .6s">
+                <div class="pegatina oscura contador" style="--giro: 2.5deg">
                     <strong id="contadorClasesCompletadas">@contadores.completadas</strong>
                     <span>Clases completadas</span>
                 </div>
@@ -218,7 +218,7 @@
 
         <div class="tab-content">
             <!-- Mis clases: calendario del mes + agenda del día (calendario.js, con fetch a /Clases/Calendario) -->
-            <div class="tab-pane show active" id="tabClases" role="tabpanel" aria-labelledby="botonTabClases" tabindex="0">
+            <div class="tab-pane tab-pane-instant show active" id="tabClases" role="tabpanel" aria-labelledby="botonTabClases" tabindex="0">
                 <h2 class="visually-hidden">Mis clases</h2>
                 @if (errorBD)
                 {
@@ -264,7 +264,7 @@
             @if (esProfesor)
             {
                 <!-- Mi agenda: horario semanal y días bloqueados (miAgenda.js, con fetch a /Clases/MiAgenda) -->
-                <div class="tab-pane" id="tabAgenda" role="tabpanel" aria-labelledby="botonTabAgenda" tabindex="0">
+                <div class="tab-pane tab-pane-instant" id="tabAgenda" role="tabpanel" aria-labelledby="botonTabAgenda" tabindex="0">
                     <h2 class="visually-hidden">Mi agenda</h2>
                     <p class="avisoSinAgenda" id="avisoSinAgendaPestana" hidden><i class="bi bi-info-circle" aria-hidden="true"></i> Todavía no configuraste tu agenda: los alumnos pueden pedirte clases de 8 a 22 cualquier día.</p>
 
@@ -300,7 +300,7 @@
             }
 
             <!-- Chat directo -->
-            <div class="tab-pane" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
+            <div class="tab-pane tab-pane-instant" id="tabChat" role="tabpanel" aria-labelledby="botonTabChat" tabindex="0">
                 <h2 class="visually-hidden">Chat directo</h2>
                 @* Todo con fetch (chat.js → MensajesController): la lista de conversaciones, el chat abierto (al abrirlo,
                    los mensajes que te mandaron pasan a Visto) y el envío. Mientras la pestaña está a la vista se actualiza sola. *@
@@ -329,7 +329,7 @@
 
             <!-- Historial de clases -->
             @* El historial propio se pide con fetch a /Historial/Obtener/{id} y lo dibuja historial.js (la misma tabla del modal de los perfiles) *@
-            <div class="tab-pane" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
+            <div class="tab-pane tab-pane-instant" id="tabHistorial" role="tabpanel" aria-labelledby="botonTabHistorial" tabindex="0">
                 <h2 class="visually-hidden">Historial de clases</h2>
                 <div id="contenidoHistorialPanel" data-id-usuario="@Context.Session.GetString("idUsuario")">
                     <p class="cargandoHistorial"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tu historial…</p>

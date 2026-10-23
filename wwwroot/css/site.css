@@ -816,7 +816,7 @@ mark {
     rotate: -8deg;
 }
 
-/* ---------- Pegatina: etiqueta troquelada y girada (--giro y --retraso van inline) ---------- */
+/* ---------- Pegatina: etiqueta troquelada y girada (--giro va inline) ---------- */
 .pegatina {
     display: inline-flex;
     align-items: center;
@@ -871,12 +871,6 @@ mark {
 /* I (corazón) MIP */
 .pegatina .bi-heart-fill {
     color: var(--colorMagenta);
-}
-
-/* El único momento animado: las pegatinas de la primera sección (y el avatar del saludo del Panel y del
-   titular del Perfil) se pegan al cargar. backwards (y no both) deja que el hover mueva rotate y translate */
-main > section:first-of-type :is(.pegatina, .saludo .avatar, .cabeceraPerfil .avatar) {
-    animation: pegarPegatina .5s var(--curvaRebote) var(--retraso, .15s) backwards;
 }
 
 /* Contenedor de pegatinas sueltas: el padding deja lugar al troquel */
@@ -1278,13 +1272,6 @@ fieldset {
     display: none;
 }
 
-/* Sin display el fundido de entrada de Bootstrap necesita de dónde partir */
-@starting-style {
-    .dialog[open] {
-        opacity: 0;
-    }
-}
-
 .dialog .dialog-title {
     font: 600 1.375rem/1.25 var(--fuenteMarca);
 }
@@ -1614,10 +1601,6 @@ fieldset {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-6px); }
     75% { transform: translateX(6px); }
-}
-
-@keyframes pegarPegatina {
-    from { opacity: 0; scale: 1.18; translate: 0 -14px; rotate: 8deg; }
 }
 
 /* Íconos de "Cargando…" (Panel, chat, Perfil y sus diálogos) */
@@ -2864,11 +2847,6 @@ fieldset {
 
 .acceso .ilustracion.oscura li::before {
     background-color: var(--colorCeleste);
-}
-
-/* Al cambiar de rol el panel nuevo aparece quieto (site.js suma .rolCambiado): el único momento animado es la carga */
-.acceso.rolCambiado .ilustracion .pegatina {
-    animation: none;
 }
 
 @media (width < 1024px) {
@@ -5459,8 +5437,6 @@ tr.resaltada td {
         scroll-behavior: auto !important;
     }
 
-    /* Sin animación las pegatinas se ven desde el primer cuadro (con .01ms arrancaban en opacidad 0 hasta pintar) */
-    main > section:first-of-type :is(.pegatina, .saludo .avatar, .cabeceraPerfil .avatar),
     .boton.botonMeGusta .saltoCorazon,
     .perfil .cifras strong.rebote,
     .cargandoHistorial .bi,
