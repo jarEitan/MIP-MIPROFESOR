@@ -2284,6 +2284,16 @@ fieldset {
     max-width: 38rem;
 }
 
+/* En el Catálogo la cabecera es más baja: se viene a buscar y el primer profesor tiene que verse sin scroll */
+.cabecera:has(+ .catalogo) {
+    padding-block: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.cabecera:has(+ .catalogo) h1 {
+    margin-top: 0;
+    font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3rem);
+}
+
 .cabecera .buscador {
     margin-top: 1.75rem;
 }
@@ -2298,48 +2308,29 @@ fieldset {
 .cabecera .plancha {
     position: relative;
     display: block;
-    min-height: 14.5rem;
+    min-height: 11rem;
 }
 
 .cabecera .plancha .pegatina {
     position: absolute;
-    padding: .75rem 1.5rem;
-    font-size: 1.5rem;
+    padding: .6rem 1.25rem;
+    font-size: 1.25rem;
     line-height: 1.2;
 }
 
 .cabecera .plancha .pegatina:nth-child(1) {
-    top: 1.75rem;
-    left: 2rem;
+    top: .5rem;
+    left: 1.5rem;
 }
 
 .cabecera .plancha .pegatina:nth-child(2) {
-    top: 5.75rem;
-    right: 1.5rem;
+    top: 4.25rem;
+    right: 1rem;
 }
 
 .cabecera .plancha .pegatina:nth-child(3) {
-    bottom: 1.4rem;
-    left: 5rem;
-}
-
-/* Con la columna angosta (md a lg) las tres casi se tocan: más alto y más separadas, para que cada troquel respire */
-@media (768px <= width < 1280px) {
-    .cabecera .plancha {
-        min-height: 17rem;
-    }
-
-    .cabecera .plancha .pegatina:nth-child(1) {
-        top: 1.5rem;
-    }
-
-    .cabecera .plancha .pegatina:nth-child(2) {
-        top: 7rem;
-    }
-
-    .cabecera .plancha .pegatina:nth-child(3) {
-        bottom: 1.25rem;
-    }
+    bottom: .5rem;
+    left: 4rem;
 }
 
 /* ---------- 3.11 Catálogo ---------- */
@@ -2487,7 +2478,26 @@ fieldset {
     font-size: .85rem;
 }
 
-/* Columna derecha: modalidad, precio y botones */
+/* En el celular la foto va al lado del nombre y del colegio; materias, resumen y datos usan todo el ancho */
+@media (width < 768px) {
+    .profesorFila {
+        gap: .6rem .9rem;
+    }
+
+    .profesorFila .avatar {
+        grid-row: span 2;
+    }
+
+    .profesorFila .cuerpo {
+        display: contents;
+    }
+
+    .profesorFila .cuerpo > :not(.nombre, .colegios) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Columna derecha: precio y botones */
 .profesorFila .lateral {
     grid-column: 1 / -1;
     display: grid;
@@ -2498,25 +2508,8 @@ fieldset {
     border-top: 2px dashed var(--colorBorde);
 }
 
-.profesorFila .modalidades {
-    grid-column: 1;
-}
-
 .profesorFila .importe {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    justify-self: end;
-}
-
-.profesorFila .etiquetaModalidad {
-    font-size: .7rem;
-    font-weight: 700;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--colorTextoSuave);
-}
-
-.profesorFila .importe {
+    grid-column: 1 / -1;
     font-size: .8rem;
 }
 
@@ -2535,15 +2528,8 @@ fieldset {
         text-align: right;
     }
 
-    .profesorFila .modalidades,
     .profesorFila .importe {
         grid-column: auto;
-        grid-row: auto;
-        justify-self: end;
-    }
-
-    .profesorFila .modalidades {
-        justify-content: flex-end;
     }
 
     .profesorFila .lateral .boton {
