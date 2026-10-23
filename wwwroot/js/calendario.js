@@ -287,7 +287,7 @@ function dibujarAgendaDelDia() {
     contenedor.replaceChildren(encabezado);
 
     if (clases.length === 0) {
-        const vacio = crearElemento("div", "card estatica estadoVacio");
+        const vacio = crearElemento("div", "card estadoVacio");
         vacio.append(crearElemento("p", "", "No tenés clases este día."));
         if (document.getElementById("misClases").dataset.rol === "Alumno") {
             const buscar = crearElemento("a", "boton principal chico", "Buscar profesor");
@@ -309,7 +309,7 @@ function crearTurno(clase, delDia) {
     const fin = leerFechaLocal(clase.fechaFin);
     const [iconoEstado, textoEstado] = estadoDeClase(clase);
 
-    const turno = crearElemento("li", `turno ${lineaDeClase(clase)}`);
+    const turno = crearElemento("li", "turno");
     turno.id = `clase-${clase.id}`;
     marcarComoClase(turno, clase);
 
@@ -329,7 +329,7 @@ function crearTurno(clase, delDia) {
     etiqueta.append(crearIcono(iconoEstado), ` ${textoEstado}`);
     const encabezado = crearElemento("header");
     encabezado.append(nombre, rol, etiqueta);
-    tarjeta.append(encabezado);
+    tarjeta.append(crearElemento("i", `linea ${lineaDeClase(clase)}`), encabezado);
 
     const detalles = crearElemento("ul", "detalleTurno");
     const pedido = textoDePedido(clase);

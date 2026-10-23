@@ -6,7 +6,7 @@
 ## 1. La filosofía en una frase
 
 **Pocas clases, muy reutilizadas, que cambian de aspecto según dónde están.**
-Una clase base (`.boton`, `.card`, `.icono`) + un modificador de una palabra (`.principal`, `.coral`, `.celeste`) + selectores descendientes (`.portada .card h3`) para especializar sin inventar nombres nuevos.
+Una clase base (`.boton`, `.card`, `.icono`) + un modificador de una palabra (`.principal`, `.coral`, `.celeste`) + selectores descendientes (`.perfiles .card li`) para especializar sin inventar nombres nuevos.
 
 
 ## 2. CSS: un solo archivo, en orden fijo
@@ -17,8 +17,8 @@ Una clase base (`.boton`, `.card`, `.icono`) + un modificador de una palabra (`.
 |---|---|
 | `0) VARIABLES Y BASE` | `@font-face`, `:root` con la marca, mapeo a los tokens `--bs-*`, escala en pantallas grandes |
 | `1) HEADER` | Encabezado, logo, menú, drawer móvil, menú de usuario |
-| `2) ETIQUETAS GENERALES Y COMPONENTES REUTILIZABLES` | `section`, `h1…h5`, `mark`, `a`, `.pildora`, `.boton`, `.card`, `.icono`, `.badge`, `.avatar`, formularios, `.buscador`, `.burbuja`, animaciones |
-| `3) MAIN` | Una sub-sección por zona **en el orden en que aparecen en la página** (`.portada`, `.cinta`, `.pasos`, `.perfiles`, `.funciones`, `.destacados`, `.opiniones`, `.preguntas`, `.llamadoFinal`, luego cada página: `.catalogo`, `.acceso`, `.ayuda`, `.panel`, `.mision`, `.equipo`, `.identidad`, `.proceso`) |
+| `2) ETIQUETAS GENERALES Y COMPONENTES REUTILIZABLES` | `section`, `h1…h5`, `mark`, `a`, `.pildora`, `.boton`, `.card`, `.icono`, `.pegatina`, `.plancha`, `.badge`, `.avatar`, formularios, `.buscador`, `.burbuja`, animaciones |
+| `3) MAIN` | Una sub-sección por zona **en el orden en que aparecen en la página** (`.portada`, `.cinta`, `.pasos`, `.perfiles`, `.frases`, `.destacados`, `.preguntas`, `.llamadoFinal`, luego cada página: `.cabecera`, `.catalogo`, `.acceso`, `.ayuda`, `.saludo` y `.panel`, `.presentacion`, `.mision`, `.equipo`, `.perfil`) |
 | `4) FOOTER` | `.pie` |
 | `5) ACCESIBILIDAD DE MOVIMIENTO` | `prefers-reduced-motion` |
 
@@ -47,15 +47,28 @@ Los comentarios explican **por qué** (un bug de Bootstrap, una decisión de dis
 
 | Base | Modificadores | Se especializa con |
 |---|---|---|
-| `.boton` | `.principal` `.secundario` `.contorno` `.oscuro` `.claro` `.chico` | `.portada .boton`, `.llamadoFinal .boton` |
-| `.card` | `.coral` `.oscura` `.estatica` (sin levitar) | `.funciones .card`, `.perfiles .card.oscura` |
-| `.icono` | `.coral` `.celeste` `.oscuro` | `.pasos .icono` |
-| `.pildora` | — | `.cabecera .pildora` |
-| `.encabezadoSeccion` | — | píldora + h2 + p centrados al inicio de cada sección |
-| `.cabecera` | `.oscura` | portada interna de Catálogo, Soporte, Quiénes somos, Privacidad |
-| `.badge`, `.avatar`, `.burbuja` | — | `.chat .burbuja`, `.portada .burbuja` |
+| `.boton` | `.principal` `.secundario` `.contorno` `.oscuro` `.claro` `.chico` | `.buscador .boton`, `.acceso .boton.completo` |
+| `.card` | `.coral` `.oscura` `.estadoVacio`. Solo levitan las que se abren: `a.card`, `.profesor`, `.profesorFila` | `.perfiles .card.oscura`, `.manifiesto .card` |
+| `.icono` | `.celeste` `.oscuro` (base: coral suave con ícono magenta) | `.perfiles .card .icono`, `.notificaciones .notificacion .icono` |
+| `.pegatina` | `.coral` `.celeste` `.magenta` `.oscura` `.redonda` (sin modificador: blanca) | `.cabecera .pegatina`, `.saludo .plancha` |
+| `.plancha` | — | contenedor de pegatinas sueltas, con margen para el troquel |
+| `.pildora` | — | solo un dato real (el rol en el Perfil y en la lista de amigos) |
+| `.encabezadoSeccion` | — | h2 + p centrados al inicio de cada sección |
+| `.cabecera` | — | portada clara de Catálogo, Soporte y Privacidad (Quiénes somos usa `.presentacion`) |
+| `.badge`, `.avatar`, `.burbuja` | — | `.destacados .colegios .badge`, `.saludo .avatar`, `.chat .burbuja` |
 
 Antes de crear una clase nueva: ¿se resuelve con una existente + un selector descendiente? Si sí, no se crea.
+
+### Reglas visuales (dirección D · Plancha de pegatinas)
+- **Tokens nuevos**: `--troquel` (anillo gris de las pegatinas), `--fondoLavado` (puntos + brillo coral y celeste), `--colorFoco` (anillo de foco: tinta, y celeste sobre fondo oscuro), `--sombraSuave` (tarjetas), `--sombraFlotante` (buscador, diálogos), `--sombraCoral` (tarjeta coral), `--sombraTinta` (tarjeta oscura), `--sombraPanel` (contenedores con lavado), `--sombraAvatar` (avatares) y `--anilloFoco` (foco de los campos).
+- **Tonos exactos**: no se agrega ningún hex. Todo sale de los tokens de `:root`; las transparencias usan el RGB de esos tonos (tinta 17,24,39 · coral 255,87,87 · celeste 92,225,230 · magenta 213,31,71).
+- **60/20/20**: 60 % colores planos con sombras suaves, 20 % degradados tranquilos y 20 % texturas, siempre ligeras. Texto sobre coral y celeste: tinta, nunca blanco; el blanco va solo sobre tinta, magenta o verde de éxito.
+- **Lo elegido** (link activo, pestaña activa, día y franja elegidos, página actual, check) = fondo tinta con texto blanco. Única excepción: el rol elegido en Registrarse (borde tinta, fondo celeste suave).
+- **Sin animaciones de entrada**: nada se anima al cargar ni al abrir un diálogo o una pestaña (`tab-pane-instant`). Quedan las que dicen algo: cinta, `girarCarga`, `sacudirError`, Me gusta, `resaltarClase`. Hover solo en lo clickeable y dentro de `@media (hover: hover)`; una sola curva, `--curvaSuave`.
+- **Dos texturas**: la franja de `.perfil .portadaPerfil` y `--fondoLavado` (solo en `.portada > .container`, `.cabecera`, `.saludo`, `.acceso`, `.paginaError`, `.presentacion`). Lo demás es plano.
+- **`mark`**: solo en un h1 por página y en el h2 de `.llamadoFinal`.
+- **Prohibido**: cejas (píldoras en mayúsculas sobre los títulos), flechas `bi-arrow-right` pegadas a los links, emojis en el HTML (el corazón es `<i class="bi bi-heart-fill">`), bordes de color de un solo lado, el ✦, cifras o testimonios inventados.
+- **Toque**: todo control interactivo mide 44 px, también campos, selects y los nombres que llevan a un perfil (`btn-close` y quitar etiqueta, 24 px). Los links dentro de una frase quedan afuera.
 
 ### Tipografías (una variable por rol, en `:root`)
 - `--fuenteTitulos` → **Eras Bold ITC**: solo `h1`, `h2`, logo y lema. No se usa en `h3` ni en texto corrido.
@@ -66,7 +79,7 @@ Antes de crear una clase nueva: ¿se resuelve con una existente + un selector de
 ### Bootstrap hace el layout, el CSS propio hace la marca
 - Grilla, espaciado, alineación y visibilidad van **en el HTML** con utilidades de Bootstrap (`row`, `col-*`, `d-flex`, `gap-3`, `md:col-6`).
 - `site.css` no repite lo que Bootstrap ya da: solo color, borde, sombra, tipografía y detalles de marca.
-- Lo repetido se ata a **variables** (`--colorCoral`, `--colorTinta`, `--sombraMarcada`, `--bordeMarcado`, `--espacioSeccion`…), no a valores sueltos.
+- Lo repetido se ata a **variables** (`--colorCoral`, `--colorTinta`, `--sombraSuave`, `--troquel`, `--espacioSeccion`…), no a valores sueltos.
 
 
 ## 3. HTML / Razor

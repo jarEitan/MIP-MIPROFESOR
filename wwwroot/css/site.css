@@ -71,21 +71,17 @@
 :root {
     /* Paleta de marca */
     --colorCoral: #FF5757;
-    --colorCoralOscuro: #D51F47;
+    --colorMagenta: #D51F47;
     --colorCoralSuave: #FFE8E8;
     --colorCeleste: #5CE1E6;
     --colorCelesteOscuro: #0E7490;
     --colorCelesteSuave: #DDF8F9;
     --colorTinta: #111827;
-    --colorTintaSuave: #1F2937;
     --colorFondo: #F9FAFB;
-    --colorPapel: #FFF7F2;
     --colorSuperficie: #FFFFFF;
     --colorBorde: #E5E7EB;
     --colorTexto: #111827;
     --colorTextoSuave: #6B7280;
-    --colorAzul: #2563EB;
-    --colorAzulSuave: #EFF6FF;
     --colorExito: #047857;
     --colorExitoSuave: #D1FAE5;
     --colorAlerta: #92400E;
@@ -100,44 +96,50 @@
     --radioChico: .75rem;
     --radioMedio: 1rem;
     --radioGrande: 1.5rem;
-    --bordeMarcado: 2px solid var(--colorTinta);
-    --sombraMarcada: 4px 4px 0 var(--colorTinta);
-    --sombraMarcadaElevada: 7px 7px 0 var(--colorTinta);
-    --sombraSuave: 0 10px 30px -12px rgba(17, 24, 39, .18);
-    --sombraFlotante: 0 24px 48px -16px rgba(17, 24, 39, .28);
+    --sombraSuave: 0 1px 2px rgba(17, 24, 39, .05), 0 10px 28px -14px rgba(17, 24, 39, .22);
+    --sombraFlotante: 0 2px 4px rgba(17, 24, 39, .06), 0 24px 44px -20px rgba(17, 24, 39, .35);
+    --sombraCoral: 0 24px 44px -24px rgba(213, 31, 71, .7);
+    --sombraTinta: 0 24px 44px -24px rgba(17, 24, 39, .75);
+    --sombraPanel: 0 30px 60px -36px rgba(17, 24, 39, .35);
+    --sombraAvatar: 0 12px 24px -12px rgba(17, 24, 39, .5);
+    --anilloFoco: 0 0 0 4px rgba(92, 225, 230, .6);
+    --troquel: 0 0 0 5px #fff, 0 0 0 6.5px rgba(17, 24, 39, .14), 0 18px 30px -14px rgba(17, 24, 39, .35);
+    --fondoLavado: radial-gradient(circle, rgba(17, 24, 39, .07) 1.2px, transparent 1.7px) 0 0 / 22px 22px,
+        radial-gradient(42rem 30rem at 100% 0%, rgba(255, 87, 87, .16), transparent 62%),
+        radial-gradient(36rem 26rem at 0% 100%, rgba(92, 225, 230, .24), transparent 62%),
+        var(--colorSuperficie);
 
     /* Movimiento */
     --curvaSuave: cubic-bezier(.2, .8, .2, 1);
-    --curvaRebote: cubic-bezier(.34, 1.56, .64, 1);
     --duracionRapida: .2s;
     --duracionMedia: .45s;
 
     /* Medidas fluidas */
-    --espacioSeccion: clamp(1.75rem, 3.5vw, 3rem);
+    --espacioSeccion: clamp(2.5rem, 2rem + 3vw, 4.5rem);
     --alturaEncabezado: 4rem;
 
     /* ---- Bootstrap 6: se pisan sus tokens para que TODOS sus componentes salgan con la paleta de MIP ---- */
     --bs-body-font-family: var(--fuenteTexto);
-    --bs-body-font-size: .9375rem;
+    --bs-body-font-size: 1rem;
     --bs-body-line-height: 1.6;
-    --bs-link-color: var(--colorCoralOscuro);
-    --bs-link-hover-color: var(--colorCoral);
+    --bs-link-color: var(--colorTinta);
+    --bs-link-hover-color: var(--colorMagenta);
     --bs-border-color: var(--colorBorde);
-    --bs-focus-ring-color: var(--colorCeleste);
-    --bs-control-checked-bg: var(--colorCoral);
+    --bs-focus-ring-color: var(--colorTinta);
+    --bs-control-checked-bg: var(--colorTinta);
 
     --bs-primary-base: var(--colorCoral);
-    --bs-primary-fg: var(--colorCoralOscuro);
+    --bs-primary-fg: var(--colorTinta);
     --bs-primary-fg-emphasis: #8E1230;
     --bs-primary-bg: var(--colorCoral);
     --bs-primary-bg-subtle: var(--colorCoralSuave);
     --bs-primary-bg-muted: #FFD0D0;
     --bs-primary-border: #FFA3A3;
     --bs-primary-focus-ring: var(--colorCeleste);
-    --bs-primary-contrast: #FFFFFF;
+    --bs-primary-contrast: var(--colorTinta);
 
     --bs-accent-base: var(--colorCeleste);
-    --bs-accent-fg: var(--colorCelesteOscuro);
+    --bs-accent-fg: var(--colorTinta);
     --bs-accent-fg-emphasis: #0B5566;
     --bs-accent-bg: var(--colorCeleste);
     --bs-accent-bg-subtle: var(--colorCelesteSuave);
@@ -146,10 +148,10 @@
     --bs-accent-focus-ring: var(--colorCeleste);
     --bs-accent-contrast: var(--colorTinta);
 
-    --bs-danger-base: var(--colorCoralOscuro);
-    --bs-danger-fg: var(--colorCoralOscuro);
+    --bs-danger-base: var(--colorMagenta);
+    --bs-danger-fg: var(--colorMagenta);
     --bs-danger-fg-emphasis: #8E1230;
-    --bs-danger-bg: var(--colorCoralOscuro);
+    --bs-danger-bg: var(--colorMagenta);
     --bs-danger-bg-subtle: #FDE4EA;
     --bs-danger-bg-muted: #FBC9D4;
     --bs-danger-border: #F4A0B3;
@@ -210,7 +212,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--colorFondo);
+    background-color: var(--colorSuperficie);
     color: var(--colorTexto);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -218,6 +220,7 @@ body {
 
 main {
     flex: 1 0 auto;
+    overflow-x: clip;
 }
 
 ::selection {
@@ -226,8 +229,17 @@ main {
 }
 
 :focus-visible {
-    outline: 3px solid var(--colorCeleste);
+    outline: 3px solid var(--colorFoco, var(--colorTinta));
     outline-offset: 3px;
+}
+
+/* Sobre fondos oscuros el foco es celeste */
+.pie,
+.llamadoFinal,
+.card.oscura,
+.ilustracion.oscura,
+.snackbar {
+    --colorFoco: var(--colorCeleste);
 }
 
 [hidden] {
@@ -241,7 +253,7 @@ main {
     left: .5rem;
     z-index: 2000;
     padding: .6rem 1rem;
-    border: var(--bordeMarcado);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     background-color: var(--colorCeleste);
     color: var(--colorTinta);
@@ -259,34 +271,17 @@ main {
 /* =========================================================
    1) HEADER
    ========================================================= */
+/* La sombra está siempre puesta */
 .encabezado {
     position: sticky;
     top: 0;
     z-index: 1030;
-    border-bottom: 1px solid var(--colorBorde);
-    transition: box-shadow var(--duracionMedia) var(--curvaSuave);
-}
-
-/* El desenfoque va en un pseudo-elemento: si estuviera en el header, el drawer (position: fixed)
-   se posicionaría respecto del header y no de la pantalla */
-.encabezado::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-color: rgba(255, 255, 255, .92);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
-}
-
-/* Clase agregada por JS al hacer scroll */
-.encabezado.conSombra {
-    box-shadow: var(--sombraSuave);
+    background-color: var(--colorSuperficie);
+    box-shadow: 0 1px 0 rgba(17, 24, 39, .06), 0 10px 28px -16px rgba(17, 24, 39, .3);
 }
 
 .encabezado .navbar {
     --bs-navbar-padding-y: .35rem;
-    --bs-navbar-nav-link-padding-x: .85rem;
     min-height: var(--alturaEncabezado);
 }
 
@@ -309,121 +304,104 @@ main {
     height: 2.5rem;
     border-radius: 50%;
     object-fit: cover;
-    transition: transform var(--duracionMedia) var(--curvaRebote);
+    transition: transform var(--duracionMedia) var(--curvaSuave);
 }
 
-.marcaLogo:hover img {
-    transform: rotate(-12deg) scale(1.08);
+@media (hover: hover) {
+    .marcaLogo:hover img {
+        transform: rotate(-12deg) scale(1.08);
+    }
 }
 
-.marcaLogo span {
+/* "Mi" en tinta y "Profesor" en coral (el pie pone "Mi" en blanco) */
+.marcaLogo > span {
     font-family: var(--fuenteTitulos);
     font-size: 1.3rem;
     font-weight: 400;
     letter-spacing: 0;
+    color: var(--colorTinta);
+}
+
+.marcaLogo > span > span {
     color: var(--colorCoral);
 }
 
-/* Botón hamburguesa (solo se ve antes de lg) */
+/* Botón hamburguesa (solo se ve antes de lg): círculo celeste */
 .encabezado .navbar-toggler {
     --bs-navbar-toggler-icon-size: 1.25rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.6rem;
-    height: 2.6rem;
+    width: 2.75rem;
+    height: 2.75rem;
     margin-left: auto;
     padding: 0;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioChico);
+    border: 0;
+    border-radius: 50%;
     background-color: var(--colorCeleste);
     color: var(--colorTinta);
-    box-shadow: 3px 3px 0 var(--colorTinta);
-    transition: transform var(--duracionRapida) var(--curvaSuave), box-shadow var(--duracionRapida) var(--curvaSuave);
+    transition: translate var(--duracionRapida) var(--curvaSuave);
 }
 
-.encabezado .navbar-toggler:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 var(--colorTinta);
+@media (hover: hover) {
+    .encabezado .navbar-toggler:hover {
+        translate: 0 -2px;
+    }
 }
 
 .encabezado .navbar-toggler:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--colorTinta);
+    translate: 0 1px;
 }
 
-/* Enlaces de navegación con subrayado animado */
+/* Enlaces de navegación en píldora; el de la página actual va en tinta */
 .encabezado .nav-link {
-    position: relative;
-    font-size: .9rem;
-    font-weight: 600;
-    color: #374151;
-    text-decoration: none;
-    transition: color var(--duracionRapida) ease;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border-radius: 999px;
+    font: 500 1.0625rem/1.2 var(--fuenteMarca);
+    color: var(--colorTexto);
+    transition: background-color var(--duracionRapida) ease, color var(--duracionRapida) ease;
 }
 
-.encabezado .nav-link::after {
-    content: "";
-    position: absolute;
-    left: var(--bs-nav-link-padding-x, .85rem);
-    right: var(--bs-nav-link-padding-x, .85rem);
-    bottom: .15rem;
-    height: 3px;
-    border-radius: 3px;
-    background-color: var(--colorCoral);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform var(--duracionMedia) var(--curvaSuave);
+@media (hover: hover) {
+    .encabezado .nav-link:hover {
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
-.encabezado .nav-link:hover,
+/* Va después del hover: el hover (sin capa) le ganaría al .active de Bootstrap */
 .encabezado .nav-link.active {
-    color: var(--colorCoralOscuro);
-}
-
-.encabezado .nav-link:hover::after,
-.encabezado .nav-link.active::after {
-    transform: scaleX(1);
-    transform-origin: left;
+    background-color: var(--colorTinta);
+    color: #fff;
 }
 
 .encabezado .acciones {
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     gap: .75rem;
 }
 
-/* Botón Panel de Control con insignia de notificaciones (header con sesión) */
+/* Botón Panel de Control con insignia de notificaciones (header con sesión). Sin notificaciones la insignia
+   sigue en el HTML (site.js la actualiza) y el atributo hidden la oculta */
 .encabezado .boton .badge {
-    position: relative;
     min-height: 1.15rem;
     padding: .2rem .4rem;
-    background-color: var(--colorCoralOscuro);
+    background-color: var(--colorMagenta);
     color: #fff;
     font-family: var(--fuenteTexto);
     font-weight: 800;
-}
-
-/* Sin notificaciones la insignia sigue en el HTML (site.js la actualiza) pero no se ve */
-.encabezado .boton .badge[hidden] {
-    display: none;
-}
-
-.encabezado .boton .badge::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    background-color: var(--colorCoral);
-    animation: pulsoExpansivo 1.4s cubic-bezier(0, 0, .2, 1) infinite;
 }
 
 /* Nombre y foto del usuario: llevan al perfil */
 .encabezado .usuario {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: .6rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
     color: var(--colorTinta);
     font-weight: 700;
     text-decoration: none;
@@ -439,33 +417,13 @@ main {
 .encabezado .usuario .avatar {
     --bs-avatar-size: 2.5rem;
     cursor: pointer;
-    transition: transform var(--duracionRapida) var(--curvaRebote);
+    transition: transform var(--duracionRapida) var(--curvaSuave);
 }
 
-.encabezado .usuario .avatar:hover {
-    transform: scale(1.08) rotate(-4deg);
-}
-
-.encabezado .menu {
-    --bs-menu-min-width: 13rem;
-    --bs-menu-font-size: .9rem;
-    --bs-menu-bg: var(--colorSuperficie);
-    --bs-menu-box-shadow: var(--sombraMarcada);
-    --bs-menu-item-hover-bg: var(--colorCelesteSuave);
-    --bs-menu-item-border-radius: .5rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
-}
-
-.encabezado .menu .menu-header {
-    font-family: var(--fuenteMarca);
-    font-weight: 600;
-    color: var(--colorTinta);
-}
-
-.encabezado .menu .menu-item {
-    font-weight: 600;
-    text-decoration: none;
+@media (hover: hover) {
+    .encabezado .usuario .avatar:hover {
+        transform: scale(1.08) rotate(-4deg);
+    }
 }
 
 /* Antes de lg el menú es un drawer lateral.
@@ -476,11 +434,10 @@ main {
         --bs-drawer-width: min(20rem, 88vw);
         --bs-drawer-inset: 0;
         --bs-drawer-border-radius: 0;
-        --bs-drawer-border-color: var(--colorTinta);
-        --bs-drawer-border-width: 2px;
+        --bs-drawer-border-width: 0;
         --bs-drawer-box-shadow: none;
         --bs-drawer-backdrop-bg: rgba(17, 24, 39, .45);
-        --bs-drawer-backdrop-blur: 4px;
+        --bs-drawer-backdrop-blur: 0;
     }
 
     .encabezado .drawer-header {
@@ -488,14 +445,14 @@ main {
         align-items: center;
         justify-content: space-between;
         padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--colorBorde);
+        background-color: var(--colorSuperficie);
     }
 
     .encabezado .drawer-title {
         font-family: var(--fuenteMarca);
         font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--colorCoral);
+        font-weight: 600;
+        color: var(--colorTinta);
     }
 
     .encabezado .drawer-body {
@@ -505,23 +462,7 @@ main {
         padding: .5rem 1.25rem 1.5rem;
     }
 
-    .encabezado .navbar-nav {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .encabezado .nav-link {
-        display: block;
-        padding: .85rem 0;
-        border-bottom: 1px solid var(--colorBorde);
-        font-size: 1.05rem;
-    }
-
-    .encabezado .nav-link::after {
-        display: none;
-    }
-
-    .encabezado .acciones {
+    .encabezado :is(.navbar-nav, .acciones) {
         flex-direction: column;
         align-items: stretch;
     }
@@ -539,6 +480,30 @@ main {
 
     .encabezado .acciones {
         margin-left: auto;
+    }
+}
+
+/* Entre 1024 y 1279 px el contenedor mide 960 px: con los cuatro links del alumno el header solo entra en una línea
+   si los links se achican, los huecos se cierran y el nombre se oculta (el avatar lleva al perfil) */
+@container (1024px <= width < 1280px) {
+    .encabezado .container {
+        gap: .5rem;
+    }
+
+    .encabezado .navbar-nav {
+        margin-left: .5rem;
+    }
+
+    .encabezado .acciones {
+        gap: .5rem;
+    }
+
+    .encabezado .nav-link {
+        padding-inline: .75rem;
+    }
+
+    .encabezado .usuario .nombreUsuario {
+        display: none;
     }
 }
 
@@ -567,13 +532,14 @@ h1, h2 {
 }
 
 h1 {
-    font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
-    line-height: 1.1;
+    font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+    line-height: .96;
     letter-spacing: -.01em;
 }
 
 h2 {
-    font-size: clamp(1.35rem, 1rem + 1.5vw, 2.125rem);
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.75rem);
+    line-height: 1.05;
     letter-spacing: 0;
 }
 
@@ -591,11 +557,19 @@ a {
 }
 
 /* Los enlaces dentro de texto sí se subrayan */
-p a {
+:is(p, label) a {
     font-weight: 700;
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: .2em;
+}
+
+/* Un nombre que lleva al perfil (tarjetas de profesor, agenda, chat y reseñas): 44px de toque sin agrandar
+   la línea; el margen negativo descuenta el padding del alto */
+:is(h3, h4, .hilo strong, .resena header) > a {
+    display: inline-block;
+    padding-block: .8rem;
+    margin-block: -.8rem;
 }
 
 ul, ol {
@@ -641,138 +615,107 @@ mark {
     margin-block: .6rem .4rem;
 }
 
-.encabezadoSeccion .pildora {
-    rotate: -2deg;
-}
-
 .encabezadoSeccion p {
     font-size: .95rem;
     color: var(--colorTextoSuave);
 }
 
-/* Píldora de marca */
+/* Píldora: solo para un dato real (el rol en el Perfil y en la lista de amigos) */
 .pildora {
-    display: inline-block;
-    padding: .28rem .75rem;
-    border: 1.5px solid var(--colorTinta);
+    display: inline-flex;
+    gap: .35rem;
+    padding: .2rem .8rem;
+    border: 0;
     border-radius: 999px;
     background-color: var(--colorCeleste);
-    color: var(--colorTinta);
-    font-size: .68rem;
-    font-weight: 700;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    color: var(--colorTexto);
+    font: 600 .875rem var(--fuenteMarca);
 }
 
-/* ---------- Botones de marca (borde marcado + sombra desplazada) ---------- */
+/* ---------- Botones de marca (píldora que sube al pasar el mouse) ---------- */
+/* .contorno es la base: no tiene regla propia pero el JS la usa */
 .boton {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: .45rem;
-    padding: .6rem 1.15rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioChico);
-    font-family: var(--fuenteMarca);
-    font-size: .95rem;
-    font-weight: 600;
-    line-height: 1.2;
+    gap: .5rem;
+    min-height: 3rem;
+    padding: 0 1.6rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: 999px;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTexto);
+    font: 600 1.0625rem/1.2 var(--fuenteMarca);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
-    background-color: var(--colorSuperficie);
-    color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
-    transition: transform var(--duracionRapida) var(--curvaSuave), box-shadow var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) ease;
+    box-shadow: 0 6px 14px -8px rgba(17, 24, 39, .35);
+    transition: translate .2s var(--curvaSuave), box-shadow .2s var(--curvaSuave);
 }
 
-.boton:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--colorTinta);
-    color: var(--colorTinta);
+@media (hover: hover) {
+    .boton:hover {
+        translate: 0 -3px;
+        box-shadow: 0 12px 22px -10px rgba(17, 24, 39, .45);
+    }
 }
 
 .boton:active {
-    transform: translate(3px, 3px);
-    box-shadow: 1px 1px 0 var(--colorTinta);
+    translate: 0 1px;
+    box-shadow: 0 2px 6px -2px rgba(17, 24, 39, .4);
 }
 
 .boton.principal {
     background-color: var(--colorCoral);
-    color: #fff;
-}
-
-.boton.principal:hover {
-    background-color: var(--colorCoralOscuro);
-    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 8px 18px -8px rgba(213, 31, 71, .6);
 }
 
 .boton.secundario {
     background-color: var(--colorCeleste);
-}
-
-.boton.secundario:hover {
-    background-color: #45D4DA;
-}
-
-.boton.contorno:hover {
-    background-color: var(--colorCelesteSuave);
+    border-color: transparent;
+    box-shadow: 0 8px 18px -8px rgba(14, 116, 144, .6);
 }
 
 .boton.oscuro {
     background-color: var(--colorTinta);
-    border-color: var(--colorTinta);
+    border-color: transparent;
     color: #fff;
-    box-shadow: 4px 4px 0 var(--colorCeleste);
 }
 
-.boton.oscuro:hover {
-    background-color: var(--colorTintaSuave);
-    color: #fff;
-    box-shadow: 6px 6px 0 var(--colorCeleste);
-}
-
+/* Para fondos oscuros */
 .boton.claro {
     background-color: transparent;
-    border-color: #fff;
+    border-color: rgba(255, 255, 255, .55);
     color: #fff;
-    box-shadow: 4px 4px 0 rgba(255, 255, 255, .35);
-}
-
-.boton.claro:hover {
-    background-color: rgba(255, 255, 255, .12);
-    color: #fff;
-    box-shadow: 6px 6px 0 rgba(255, 255, 255, .5);
+    box-shadow: none;
 }
 
 .boton.chico {
-    padding: .4rem .85rem;
-    font-size: .85rem;
-    box-shadow: 3px 3px 0 var(--colorTinta);
+    min-height: 2.75rem;
+    padding: 0 1.1rem;
+    font-size: .9375rem;
 }
 
-.boton.chico:hover {
-    box-shadow: 5px 5px 0 var(--colorTinta);
-}
-
-.boton.oscuro.chico {
-    box-shadow: 3px 3px 0 var(--colorCeleste);
+/* Botones solo con ícono (Me gusta, Reseña, Copiar enlace) */
+.boton.botonIcono {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0;
 }
 
 /* ---------- Tarjeta (Bootstrap .card) ---------- */
 .card {
-    --bs-card-border-radius: var(--radioGrande);
-    --bs-card-border-width: 2px;
-    --bs-card-border-color: var(--colorBorde);
-    --bs-card-bg: var(--colorSuperficie);
     padding: 1.5rem;
     gap: .75rem;
-    border: 2px solid var(--colorBorde);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioGrande);
     background-color: var(--colorSuperficie);
     color: var(--colorTexto);
     text-decoration: none;
-    transition: border-color var(--duracionMedia) var(--curvaSuave), box-shadow var(--duracionMedia) var(--curvaSuave), translate var(--duracionMedia) var(--curvaSuave);
+    box-shadow: var(--sombraSuave);
+    transition: translate .25s var(--curvaSuave), box-shadow .25s var(--curvaSuave), border-color .25s var(--curvaSuave);
 }
 
 /* Dentro de una grilla (row > col > card) todas las tarjetas de la fila miden lo mismo */
@@ -780,21 +723,21 @@ mark {
     height: 100%;
 }
 
-.card:not(.estatica):hover {
-    translate: 0 -6px;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcadaElevada);
+@media (hover: hover) {
+    /* La capa celeste plana es la única del sistema */
+    .card:is(a, .profesor, .profesorFila):hover {
+        translate: -4px -4px;
+        border-color: var(--colorTinta);
+        box-shadow: 6px 6px 0 var(--colorCeleste), 0 22px 36px -18px rgba(17, 24, 39, .3);
+    }
 }
 
-.card h2,
-.card h3 {
+.card :is(h2, h3) {
     margin: 0;
 }
 
 /* Insignias, píldoras y botones dentro de una tarjeta no se estiran a lo ancho */
-.card > .badge,
-.card > .pildora,
-.card > .boton {
+.card > :is(.badge, .pildora, .boton) {
     align-self: flex-start;
 }
 
@@ -803,53 +746,39 @@ mark {
     color: var(--colorTextoSuave);
 }
 
+/* Sobre coral el texto va en tinta (el blanco no llega al contraste) */
 .card.coral {
     background-color: var(--colorCoral);
-    border-color: var(--colorTinta);
-    color: #fff;
-    box-shadow: var(--sombraMarcada);
+    border-color: transparent;
+    color: var(--colorTexto);
+    box-shadow: var(--sombraCoral);
 }
 
-.card.coral h2,
-.card.coral h3,
-.card.coral p {
-    color: #fff;
+.card.coral :is(h2, h3, p) {
+    color: var(--colorTexto);
 }
 
 .card.oscura {
     background-color: var(--colorTinta);
-    border-color: var(--colorTinta);
+    border-color: transparent;
     color: #fff;
-    box-shadow: 4px 4px 0 var(--colorCeleste);
+    box-shadow: var(--sombraTinta);
 }
 
-.card.oscura h2,
-.card.oscura h3 {
+.card.oscura :is(h2, h3) {
     color: #fff;
 }
 
 .card.oscura p {
-    color: #D1D5DB;
+    color: #E5E7EB;
 }
 
-.card.coral:not(.estatica):hover {
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcadaElevada);
-}
-
-.card.oscura:not(.estatica):hover {
-    border-color: var(--colorTinta);
-    box-shadow: 7px 7px 0 var(--colorCeleste);
-}
-
-/* Tarjeta de "no hay nada todavía" (perfil inexistente, panel sin clases): centrada y con sombra marcada */
+/* Tarjeta de "no hay nada todavía" (perfil inexistente, panel sin clases): centrada */
 .card.estadoVacio {
     align-items: center;
     max-width: 32rem;
     margin-inline: auto;
     padding-block: 2.5rem;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
     text-align: center;
 }
 
@@ -857,49 +786,119 @@ mark {
     align-self: center;
 }
 
-/* Ícono cuadrado de las tarjetas */
+/* Ícono cuadrado de las tarjetas (al ícono le alcanza con 3:1) */
 .icono {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioChico);
+    width: 3rem;
+    height: 3rem;
+    border: 0;
+    border-radius: var(--radioMedio);
     background-color: var(--colorCoralSuave);
-    color: var(--colorCoralOscuro);
-    font-size: 1.2rem;
-    transition: transform var(--duracionMedia) var(--curvaRebote);
+    color: var(--colorMagenta);
+    font-size: 1.25rem;
 }
 
 .icono.celeste {
     background-color: var(--colorCelesteSuave);
-    color: var(--colorCelesteOscuro);
-}
-
-.icono.oscuro {
-    background-color: #F3F4F6;
     color: var(--colorTinta);
 }
 
-.card:hover .icono {
-    transform: rotate(-8deg) scale(1.08);
+.icono.oscuro {
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+/* ---------- Pegatina: etiqueta troquelada y girada (--giro va inline) ---------- */
+.pegatina {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem 1rem;
+    border-radius: 1.125rem;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTexto);
+    font-family: var(--fuenteMarca);
+    font-weight: 600;
+    box-shadow: var(--troquel);
+    rotate: var(--giro, -3deg);
+}
+
+.pegatina.coral {
+    background-color: var(--colorCoral);
+}
+
+.pegatina.celeste {
+    background-color: var(--colorCeleste);
+}
+
+.pegatina.magenta {
+    background-color: var(--colorMagenta);
+    color: #fff;
+}
+
+.pegatina.oscura {
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+/* Redonda: el isotipo (logoChico.png) o un ícono grande; cada zona ajusta el tamaño */
+.pegatina.redonda {
+    justify-content: center;
+    width: 6rem;
+    height: 6rem;
+    padding: 0;
+    border-radius: 50%;
+}
+
+.pegatina.redonda img {
+    width: 100%;
+}
+
+/* I (corazón) MIP */
+.pegatina .bi-heart-fill {
+    color: var(--colorMagenta);
+}
+
+/* Contenedor de pegatinas sueltas: el padding deja lugar al troquel */
+.plancha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem 1.25rem;
+    padding: 1rem;
 }
 
 /* ---------- Insignias y avatares (Bootstrap) ---------- */
 .badge {
     --bs-badge-border-radius: 999px;
-    --bs-badge-font-weight: 700;
-    letter-spacing: .01em;
+    --bs-badge-font-weight: 600;
+    font-family: var(--fuenteMarca);
+    letter-spacing: 0;
 }
 
 .avatar {
-    --bs-avatar-border-width: 2px;
-    --bs-avatar-border-color: var(--colorTinta);
-    --bs-avatar-font-weight: 800;
-    border: 2px solid var(--colorTinta);
+    --bs-avatar-border-width: 0;
+    --bs-avatar-font-weight: 600;
+    border: 0;
     flex-shrink: 0;
+    font-family: var(--fuenteMarca);
+}
+
+/* Aro del isotipo: se ve solo cuando el avatar muestra iniciales (sin troquel) */
+.avatar.theme-primary {
+    box-shadow: inset 0 0 0 .1875rem var(--colorCeleste);
+}
+
+/* Avatares grandes que pueden tener foto (saludo del Panel, titular del Perfil y vista previa de Editar perfil):
+   el aro va por fuera, porque un inset queda tapado por la <img> */
+.saludo .avatar,
+.perfil .cabeceraPerfil .avatar,
+.dialogoEdicion .vistaPreviaFoto .avatar {
+    box-shadow: 0 0 0 .375rem var(--colorCeleste), var(--sombraAvatar);
 }
 
 .avatar img {
@@ -926,33 +925,35 @@ legend {
     color: var(--colorTextoSuave);
 }
 
+/* El borde #6B7280 da 4,8:1 sobre blanco; el gris de reposo de las tarjetas no llega a 3:1 */
 .form-control {
-    --bs-control-border-width: 2px;
-    --bs-control-border-color: #D1D5DB;
+    --bs-control-border-width: 1.5px;
+    --bs-control-border-color: var(--colorTextoSuave);
     --bs-control-border-radius: var(--radioChico);
     --bs-control-box-shadow: none;
     --bs-control-bg: var(--colorSuperficie);
     --bs-control-fg: var(--colorTexto);
-    --bs-control-font-size: .95rem;
+    --bs-control-font-size: 1rem;
+    /* 44px como todo control (inputs y selects) */
+    --bs-control-min-height: 2.75rem;
     font-family: var(--fuenteTexto);
 }
 
 .form-control:focus {
     border-color: var(--colorTinta);
     outline: none;
-    box-shadow: 3px 3px 0 var(--colorCeleste);
+    box-shadow: var(--anilloFoco);
 }
 
+/* Elegidos en tinta por el token --bs-control-checked-bg; la tilde va en blanco (primary-contrast es tinta) */
 .check {
-    --bs-check-checked-bg: var(--colorCoral);
-    --bs-check-checked-border-color: var(--colorTinta);
-    --bs-check-border-color: var(--colorTinta);
+    --bs-check-border-color: var(--colorTextoSuave);
+    --bs-theme-contrast: #fff;
 }
 
 .radio {
-    --bs-radio-checked-bg: var(--colorCoral);
-    --bs-radio-checked-border-color: var(--colorTinta);
-    --bs-radio-border-color: var(--colorTinta);
+    --bs-radio-border-color: var(--colorTextoSuave);
+    --bs-theme-contrast: #fff;
 }
 
 fieldset {
@@ -960,14 +961,14 @@ fieldset {
     gap: .6rem;
 }
 
-/* Mensajes de validación: se ven solo cuando el JS les escribe un texto */
+/* Mensajes de validación: se ven solo cuando el JS les escribe un texto (blanco sobre magenta, 5,1:1) */
 .mensajeError {
     margin-top: .75rem;
     padding: .6rem 1rem;
-    border-left: 4px solid var(--colorCoralOscuro);
-    border-radius: .5rem;
-    background-color: var(--colorCoralSuave);
-    color: var(--colorCoralOscuro);
+    border: 0;
+    border-radius: var(--radioChico);
+    background-color: var(--colorMagenta);
+    color: #fff;
     font-size: .875rem;
     font-weight: 600;
     animation: sacudirError .4s var(--curvaSuave);
@@ -983,37 +984,37 @@ fieldset {
     gap: .5rem;
     margin-top: .75rem;
     padding: .6rem 1rem;
-    border-left: 4px solid var(--colorExito);
-    border-radius: .5rem;
-    background-color: var(--colorExitoSuave);
-    color: var(--colorExito);
+    border-radius: var(--radioChico);
+    background-color: var(--colorExito);
+    color: #fff;
     font-size: .875rem;
     font-weight: 600;
 }
 
-/* Buscador con borde marcado (portada y soporte) */
+/* Buscador en píldora (portada y soporte) */
 .buscador {
     display: flex;
     align-items: center;
     gap: .5rem;
-    max-width: 34rem;
-    padding: .4rem;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
+    max-width: 36rem;
+    padding: .375rem .375rem .375rem 1.4rem;
+    border: 0;
+    border-radius: 999px;
     background-color: var(--colorSuperficie);
-    box-shadow: var(--sombraMarcada);
-    transition: box-shadow var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaSuave);
+    box-shadow: var(--sombraFlotante);
+    transition: box-shadow var(--duracionRapida) var(--curvaSuave);
 }
 
+/* El anillo tinta se suma porque el celeste solo no alcanza para el foco */
 .buscador:focus-within {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--colorCoral);
+    box-shadow: 0 0 0 2px var(--colorTinta), 0 0 0 6px rgba(92, 225, 230, .6), var(--sombraFlotante);
 }
 
 .buscador input {
     flex: 1;
     min-width: 0;
-    padding: .65rem .9rem;
+    min-height: 2.75rem;
+    padding: 0;
     border: 0;
     background: transparent;
     font: inherit;
@@ -1025,19 +1026,19 @@ fieldset {
     outline: none;
 }
 
-.buscador .boton {
-    padding: .65rem 1.25rem;
-    box-shadow: none;
+@media (hover: hover) {
+    /* El botón de adentro no se levanta */
+    .buscador .boton:hover {
+        translate: none;
+    }
 }
 
-.buscador .boton:hover,
 .buscador .boton:active {
-    transform: none;
-    box-shadow: none;
+    translate: none;
 }
 
 .buscador + .mensajeError {
-    max-width: 34rem;
+    max-width: 36rem;
 }
 
 /* Fila de botones */
@@ -1064,8 +1065,8 @@ fieldset {
     margin-left: auto;
     border-radius: var(--radioMedio);
     border-bottom-right-radius: .25rem;
-    background-color: var(--colorCelesteSuave);
-    font-weight: 600;
+    background-color: var(--colorCoral);
+    font-weight: 700;
 }
 
 /* ".card p" pone gris a los párrafos: la burbuja conserva su texto oscuro */
@@ -1094,7 +1095,7 @@ fieldset {
 }
 
 .selectorBuscable .campoSelector .form-control {
-    padding-right: 2.6rem;
+    padding-right: 2.75rem;
     cursor: pointer;
 }
 
@@ -1102,14 +1103,15 @@ fieldset {
     cursor: text;
 }
 
+/* 44px de toque, pegado al borde derecho del campo (la flecha queda donde estaba) */
 .selectorBuscable .desplegar {
     position: absolute;
     top: 50%;
-    right: .35rem;
+    right: 0;
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.75rem;
+    height: 2.75rem;
     transform: translateY(-50%);
     border: 0;
     border-radius: var(--radioChico);
@@ -1132,10 +1134,10 @@ fieldset {
     padding: .3rem;
     overflow-y: auto;
     overscroll-behavior: contain;
-    border: var(--bordeMarcado);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     background-color: var(--colorSuperficie);
-    box-shadow: 3px 3px 0 var(--colorTinta);
+    box-shadow: var(--sombraFlotante);
     list-style: none;
 }
 
@@ -1159,7 +1161,7 @@ fieldset {
 }
 
 .selectorBuscable .listaOpciones li .bi {
-    color: var(--colorCoralOscuro);
+    color: var(--colorTinta);
 }
 
 /* "Todas las materias", "Sin elegir": la opción que borra la elección */
@@ -1173,7 +1175,7 @@ fieldset {
     cursor: default;
 }
 
-/* Etiquetas de lo elegido (selector múltiple) */
+/* Etiquetas de lo elegido (selector múltiple): como todo lo elegido, tinta con texto blanco; el foco va en celeste */
 .selectorBuscable .etiquetasElegidas {
     display: flex;
     flex-wrap: wrap;
@@ -1181,20 +1183,23 @@ fieldset {
 }
 
 .selectorBuscable .etiquetasElegidas .badge {
+    --colorFoco: var(--colorCeleste);
     display: inline-flex;
     align-items: center;
     gap: .2rem;
     padding: .3em .35em .3em .75em;
-    border: 1.5px solid var(--colorTinta);
-    color: var(--colorTinta);
+    border: 0;
+    background-color: var(--colorTinta);
+    color: #fff;
     font-size: .8rem;
 }
 
+/* 24px de toque como mínimo (WCAG 2.5.8) */
 .selectorBuscable .etiquetasElegidas button {
     display: grid;
     place-items: center;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -1203,2570 +1208,75 @@ fieldset {
     cursor: pointer;
 }
 
-.selectorBuscable .etiquetasElegidas button:hover {
-    background-color: rgba(17, 24, 39, .12);
+@media (hover: hover) {
+    .selectorBuscable .etiquetasElegidas button:hover {
+        background-color: rgba(255, 255, 255, .2);
+    }
 }
 
-/* ---------- Tick de cuenta verificada ---------- */
+/* El anillo va adentro de la etiqueta: afuera el celeste quedaría sobre blanco */
+.selectorBuscable .etiquetasElegidas button:focus-visible {
+    outline-offset: -3px;
+}
+
+/* ---------- Tick de cuenta verificada (el celeste sobre blanco no llega a 3:1) ---------- */
 .tickVerificado {
-    color: var(--colorCelesteOscuro);
-}
-
-/* ---------- Snackbar (UI Kit): aviso corto abajo de la pantalla ---------- */
-.snackbar {
-    position: fixed;
-    left: 50%;
-    bottom: 1.25rem;
-    z-index: 1100;
-    max-width: min(30rem, calc(100vw - 2rem));
-    padding: .75rem 1.1rem;
-    translate: -50% 1rem;
-    opacity: 0;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorTinta);
-    box-shadow: 4px 4px 0 var(--colorCeleste);
-    color: #fff;
-    font-size: .92rem;
-    font-weight: 600;
-    text-align: center;
-    transition: opacity var(--duracionRapida) ease, translate var(--duracionRapida) var(--curvaSuave);
-}
-
-.snackbar.visible {
-    translate: -50% 0;
-    opacity: 1;
-}
-
-.snackbar[data-tipo="exito"] {
-    background-color: var(--colorExito);
-    box-shadow: 4px 4px 0 var(--colorTinta);
-}
-
-.snackbar[data-tipo="error"] {
-    background-color: var(--colorCoralOscuro);
-    box-shadow: 4px 4px 0 var(--colorTinta);
-}
-
-/* ---------- Aviso "Cuenta no verificada" (Pop up del UI Kit, debajo del header) ---------- */
-.avisoVerificacion {
-    padding-block: .75rem;
-    background-color: var(--colorAlertaSuave);
-    border-bottom: var(--bordeMarcado);
-}
-
-.avisoVerificacion .contenidoAviso {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .6rem 1rem;
-}
-
-.avisoVerificacion .icono {
-    width: 2.25rem;
-    height: 2.25rem;
-    background-color: #FDE68A;
-    color: var(--colorAlerta);
-}
-
-.avisoVerificacion p {
-    flex: 1 1 16rem;
-    font-size: .9rem;
     color: var(--colorTinta);
 }
 
-.avisoVerificacion p strong {
-    margin-right: .25rem;
+/* ---------- Pestañas (nav-pills de Bootstrap) ---------- */
+.nav-pills {
+    --bs-nav-pills-bg: #fff;
+    --bs-nav-pills-padding: .3rem;
+    --bs-nav-pills-link-active-bg: var(--colorTinta);
+    --bs-nav-pills-link-active-color: #fff;
+    gap: .25rem;
+    border: 1.5px solid var(--colorBorde);
+    box-shadow: var(--sombraSuave);
 }
 
-
-/* ---------- Animaciones reutilizables ---------- */
-.animarEntrada {
-    animation: aparecerDesdeAbajo .8s var(--curvaSuave) both;
-    animation-delay: var(--retraso, 0s);
-}
-
-/* Solo se oculta si JS está activo (clase puesta en <html>), así nunca queda contenido invisible */
-.jsActivo .revelar:not(.visible) {
-    opacity: 0;
-    transform: translateY(1.75rem);
-}
-
-.revelar {
-    transition: opacity .7s var(--curvaSuave) var(--retraso, 0s), transform .7s var(--curvaSuave) var(--retraso, 0s), border-color var(--duracionMedia) var(--curvaSuave), box-shadow var(--duracionMedia) var(--curvaSuave), translate var(--duracionMedia) var(--curvaSuave);
-}
-
-@keyframes aparecerDesdeAbajo {
-    from { opacity: 0; transform: translateY(1.5rem); }
-    to { opacity: 1; transform: none; }
-}
-
-@keyframes flotarTarjeta {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 0 -12px; }
-}
-
-@keyframes flotarFigura {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -20px) scale(1.06); }
-    66% { transform: translate(-20px, 15px) scale(.96); }
-}
-
-@keyframes desplazarCinta {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-}
-
-@keyframes pulsoExpansivo {
-    75%, 100% { transform: scale(2); opacity: 0; }
-}
-
-@keyframes sacudirError {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    75% { transform: translateX(6px); }
-}
-
-
-/* =========================================================
-   3) MAIN
-   ========================================================= */
-
-/* ---------- 3.1 Inicio: portada / buscador ---------- */
-.portada {
-    overflow: hidden;
-    padding-block: clamp(2rem, 4vw, 3.5rem) clamp(2.5rem, 5vw, 4.25rem);
-    background-color: var(--colorSuperficie);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
-    background-size: 24px 24px;
-}
-
-.portada .figura {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: .45;
-    pointer-events: none;
-    animation: flotarFigura 18s ease-in-out infinite;
-}
-
-.portada .figura.coral {
-    top: -8rem;
-    right: -6rem;
-    width: clamp(16rem, 35vw, 30rem);
-    aspect-ratio: 1;
-    background-color: var(--colorCoral);
-}
-
-.portada .figura.celeste {
-    bottom: -8rem;
-    left: -6rem;
-    width: clamp(14rem, 30vw, 26rem);
-    aspect-ratio: 1;
-    background-color: var(--colorCeleste);
-    animation-delay: -6s;
-}
-
-.portada .pildora {
-    padding: .35rem .9rem;
-    font-size: .75rem;
-}
-
-.portada h1 {
-    margin-block: 1.25rem 1rem;
-    font-size: clamp(2.1rem, 1.3rem + 3.2vw, 3.6rem);
-}
-
-.portada h1 + p {
-    max-width: 34rem;
-    margin-bottom: 1.5rem;
-    font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
-    color: var(--colorTextoSuave);
-}
-
-.portada .buscador,
-.portada .buscador + .mensajeError {
-    margin-inline: auto;
-}
-
-.portada h1 + p {
-    margin-inline: auto;
-}
-
-.portada .acciones {
-    justify-content: center;
-    margin-top: 1.75rem;
-}
-
-.portada .boton {
-    padding: .75rem 1.5rem;
-    font-size: 1rem;
-}
-
-/* Composición de tarjetas ilustrativas */
-.portada .composicion {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.portada .composicion .card {
-    height: auto;
-    border: var(--bordeMarcado);
-    box-shadow: var(--sombraFlotante);
-    animation: aparecerDesdeAbajo .9s var(--curvaSuave) both, flotarTarjeta 6s ease-in-out infinite;
-}
-
-.portada .composicion .card:nth-child(1) { animation-delay: .3s, 1.2s; }
-.portada .composicion .card:nth-child(2) { animation-delay: .45s, 2.2s; }
-.portada .composicion .card:nth-child(3) { animation-delay: .6s, 3.2s; }
-
-.portada .composicion strong {
-    color: var(--colorTinta);
-}
-
-.portada .composicion p {
-    font-size: .8rem;
-}
-
-.portada .composicion .burbuja + .burbuja {
-    margin-top: .5rem;
-}
-
-/* Desde md las tarjetas se superponen en una composición */
-@media (width >= 768px) {
-    .portada .composicion {
-        position: relative;
-        display: block;
-        min-height: 26rem;
-    }
-
-    .portada .composicion .card {
-        position: absolute;
-    }
-
-    .portada .composicion .card:nth-child(1) {
-        top: 0;
-        left: 4%;
-        width: 70%;
-        rotate: -2deg;
-        z-index: 2;
-    }
-
-    .portada .composicion .card:nth-child(2) {
-        top: 42%;
-        right: 0;
-        width: 55%;
-        rotate: 3deg;
-        z-index: 3;
-    }
-
-    .portada .composicion .card:nth-child(3) {
-        bottom: 0;
-        left: 0;
-        width: 58%;
-        rotate: -1deg;
-        z-index: 1;
-    }
-}
-
-@media (width >= 1024px) {
-    .portada .buscador,
-    .portada .buscador + .mensajeError,
-    .portada h1 + p {
-        margin-inline: 0;
-    }
-
-    .portada .acciones {
-        justify-content: flex-start;
-    }
-}
-
-/* ---------- 3.2 Inicio: cinta de materias ---------- */
-.cinta {
-    overflow: hidden;
-    padding-block: .8rem;
-    border-block: var(--bordeMarcado);
-    background-color: var(--colorTinta);
-}
-
-.cinta > div {
-    display: flex;
-    width: max-content;
-    animation: desplazarCinta 35s linear infinite;
-}
-
-.cinta ul {
-    display: flex;
-    flex-shrink: 0;
-}
-
-.cinta li {
-    display: flex;
-    align-items: center;
-    padding-inline: 1.25rem;
-    color: #fff;
-    font-family: var(--fuenteMarca);
-    font-size: clamp(.95rem, .9rem + .3vw, 1.15rem);
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.cinta li::after {
-    content: "✦";
-    margin-left: 2.5rem;
-    color: var(--colorCeleste);
-}
-
-/* ---------- 3.3 Inicio: cómo funciona ---------- */
-.pasos {
-    background-color: var(--colorSuperficie);
-}
-
-.pasos .numero {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: var(--bordeMarcado);
-    border-radius: 50%;
-    background-color: var(--colorCoral);
-    color: #fff;
-    font-family: var(--fuenteMarca);
-    font-size: 1.35rem;
-    font-weight: 700;
-    box-shadow: 3px 3px 0 var(--colorTinta);
-    transition: transform var(--duracionMedia) var(--curvaRebote);
-}
-
-.pasos .card:hover .numero {
-    transform: rotate(-10deg) scale(1.1);
-}
-
-.pasos li:nth-child(2) .numero {
-    background-color: var(--colorCeleste);
-    color: var(--colorTinta);
-}
-
-.pasos li:nth-child(3) .numero {
-    background-color: var(--colorTinta);
-}
-
-/* ---------- 3.4 Inicio: perfiles alumno / profesor ---------- */
-.perfiles {
-    border-block: var(--bordeMarcado);
-    background-color: var(--colorPapel);
-}
-
-.perfiles .card {
-    gap: 1rem;
-    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
-}
-
-.perfiles .card ul {
-    display: grid;
-    gap: .55rem;
-    margin-bottom: .5rem;
-}
-
-.perfiles .card li {
-    display: flex;
-    align-items: flex-start;
-    gap: .6rem;
-    font-size: .92rem;
-    font-weight: 600;
-}
-
-.perfiles .card li::before {
-    content: "✓";
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 1.35rem;
-    height: 1.35rem;
-    border-radius: 50%;
-    background-color: #fff;
-    color: var(--colorTinta);
-    font-size: .75rem;
-    font-weight: 800;
-}
-
-.perfiles .card.oscura li::before {
-    background-color: var(--colorCeleste);
-}
-
-.perfiles .card .boton {
-    align-self: flex-start;
-}
-
-.perfiles .card .icono {
-    background-color: #fff;
-    color: var(--colorTinta);
-}
-
-/* ---------- 3.5 Inicio: funcionalidades ---------- */
-.funciones {
-    background-color: var(--colorSuperficie);
-}
-
-/* ---------- 3.6 Inicio: profesores destacados ---------- */
-.destacados {
-    background-color: var(--colorFondo);
-}
-
-.destacados .colegios {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: .6rem;
-    margin-top: 1.5rem;
-}
-
-.destacados .colegios > span {
-    font-size: .85rem;
-    font-weight: 700;
-    color: var(--colorTextoSuave);
-}
-
-.destacados .colegios .badge {
-    padding: .5em .9em;
-    border: 2px solid var(--colorTinta);
-    background-color: var(--colorSuperficie);
-    color: var(--colorTinta);
-    font-size: .8rem;
-    transition: background-color var(--duracionRapida) ease, transform var(--duracionRapida) var(--curvaRebote);
-}
-
-.destacados .colegios .badge:hover {
-    background-color: var(--colorCelesteSuave);
-    transform: translateY(-2px);
-}
-
-/* Tarjeta de profesor: .profesor es la vertical (Inicio) y .profesorFila la horizontal (Catálogo); comparten estos estilos */
-.profesor {
-    gap: .9rem;
-}
-
-.profesor header {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: .75rem;
-}
-
-.profesor header > div {
-    flex: 1 1 8rem;
-    min-width: 0;
-}
-
-.profesor h3,
-.profesorFila h3 {
-    font-size: 1.05rem;
-}
-
-.profesor h3 a,
-.profesorFila h3 a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.profesor h3 a:hover,
-.profesorFila h3 a:hover {
-    text-decoration: underline;
-}
-
-.profesor header p {
-    font-size: .8rem;
-}
-
-.profesor .etiquetas,
-.profesorFila .etiquetas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .4rem;
-}
-
-.profesor > p {
-    flex-grow: 1;
-}
-
-.profesor .datos,
-.profesorFila .datos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .35rem 1rem;
-    font-size: .8rem;
-    font-weight: 600;
+.nav-pills .nav-link {
+    min-height: 2.75rem;
+    font: 600 1rem var(--fuenteMarca);
     color: var(--colorTexto);
 }
 
-.profesor .datos .bi-star-fill,
-.profesorFila .datos .bi-star-fill {
-    color: #F59E0B;
-}
-
-.profesor .datos .bi,
-.profesorFila .datos .bi {
-    margin-right: .15rem;
-}
-
-.profesor footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .75rem;
-    padding-top: .9rem;
-    border-top: 2px dashed var(--colorBorde);
-}
-
-.profesor footer p {
-    font-size: .8rem;
-}
-
-.profesor footer strong,
-.profesorFila .importe strong {
-    font-family: var(--fuenteMarca);
-    font-size: 1.3rem;
-    color: var(--colorTinta);
-}
-
-/* ---------- 3.7 Carrusel propio (reutilizable) y opiniones del Inicio ---------- */
-/* .carrusel > .pista con las tarjetas + .controles con las flechas (site.js: inicializarCarruseles).
-   La pista se desliza sola con scroll-snap; --tarjetasVisibles cambia según el ancho */
-.carrusel {
-    --tarjetasVisibles: 1;
-    --separacionTarjetas: 1.25rem;
-}
-
-.carrusel .pista {
-    display: flex;
-    gap: var(--separacionTarjetas);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    /* Aire para que el borde, la sombra marcada y el salto del hover no se corten */
-    padding: .75rem .75rem 1rem .25rem;
-    scroll-padding-inline: .25rem;
-}
-
-.carrusel .pista::-webkit-scrollbar {
-    display: none;
-}
-
-.carrusel .pista > * {
-    flex: 0 0 calc((100% - (var(--tarjetasVisibles) - 1) * var(--separacionTarjetas)) / var(--tarjetasVisibles));
-    min-width: 0;
-    scroll-snap-align: start;
-}
-
-.carrusel .controles {
-    display: flex;
-    justify-content: center;
-    gap: .75rem;
-    margin-top: .5rem;
-}
-
-.carrusel .controles .btn-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: var(--bordeMarcado);
-    border-radius: 50%;
-    background-color: var(--colorSuperficie);
-    color: var(--colorTinta);
-    box-shadow: 3px 3px 0 var(--colorTinta);
-    transition: transform var(--duracionRapida) var(--curvaSuave), box-shadow var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) ease;
-}
-
-.carrusel .controles .btn-icon:hover {
-    background-color: var(--colorCeleste);
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 var(--colorTinta);
-}
-
-.carrusel .controles .btn-icon:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--colorTinta);
-}
-
-@media (width >= 768px) {
-    .carrusel {
-        --tarjetasVisibles: 2;
-    }
-}
-
-@media (width >= 1280px) {
-    .carrusel {
-        --tarjetasVisibles: 3;
-    }
-}
-
-.opiniones {
-    border-block: var(--bordeMarcado);
-    background-color: var(--colorPapel);
-}
-
-.opiniones figure.card {
-    gap: 1rem;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
-}
-
-.opiniones .estrellas {
-    font-size: 1.1rem;
-    letter-spacing: .15em;
-    color: #F59E0B;
-}
-
-.opiniones blockquote {
-    flex-grow: 1;
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.6;
-    color: var(--colorTinta);
-}
-
-.opiniones figcaption {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-}
-
-.opiniones figcaption div {
-    display: grid;
-    line-height: 1.3;
-}
-
-.opiniones figcaption span:not(.avatar) {
-    font-size: .8rem;
-    color: var(--colorTextoSuave);
-}
-
-/* ---------- 3.8 Preguntas frecuentes (acordeón de Bootstrap 6: details/summary) ---------- */
-.preguntas {
-    background-color: var(--colorSuperficie);
-}
-
-.preguntas .accordion {
-    --bs-accordion-gap: .85rem;
-    display: grid;
-    gap: .85rem;
-}
-
-.preguntas .accordion-item {
-    overflow: hidden;
-    border: var(--bordeMarcado);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorSuperficie);
-    transition: box-shadow var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) ease;
-}
-
-.preguntas .accordion-item:hover {
-    box-shadow: 3px 3px 0 var(--colorTinta);
-}
-
-.preguntas .accordion-item[open] {
-    background-color: var(--colorCelesteSuave);
-    box-shadow: var(--sombraMarcada);
-}
-
-.preguntas .accordion-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    border: 0;
-    background-color: transparent;
-    color: var(--colorTinta);
-    font-size: .98rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.preguntas .accordion-body {
-    padding: 0 1.25rem 1.25rem;
-    font-size: .92rem;
-    line-height: 1.7;
-    color: #374151;
-}
-
-.preguntas .accordion-icon {
-    width: 1.1rem;
-    height: 1.1rem;
-    stroke-width: 2.5;
-}
-
-/* ---------- 3.9 Llamado final (Inicio y Quiénes somos) ---------- */
-.llamadoFinal {
-    overflow: hidden;
-    padding-block: clamp(1.5rem, 2.5vw, 2.25rem);
-    background-color: var(--colorTinta);
-    color: #fff;
-}
-
-.llamadoFinal::before {
-    content: "";
-    position: absolute;
-    top: -40%;
-    right: -8%;
-    width: clamp(16rem, 36vw, 30rem);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background-color: var(--colorCoral);
-    filter: blur(80px);
-    opacity: .35;
-    pointer-events: none;
-}
-
-.llamadoFinal .container {
-    position: relative;
-}
-
-.llamadoFinal h2 {
-    color: #fff;
-}
-
-.llamadoFinal p {
-    max-width: 34rem;
-    margin: .4rem auto 0;
-    color: #D1D5DB;
-}
-
-.llamadoFinal .acciones {
-    justify-content: center;
-}
-
-@media (width >= 1024px) {
-    .llamadoFinal p {
-        margin-inline: 0;
-    }
-
-    .llamadoFinal .acciones {
-        justify-content: flex-end;
-    }
-}
-
-/* ---------- 3.10 Cabecera de página (Catálogo, Soporte, Quiénes somos) ---------- */
-.cabecera {
-    overflow: hidden;
-    padding-block: clamp(2rem, 3.5vw, 3rem);
-    background-color: var(--colorSuperficie);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
-    background-size: 24px 24px;
-    border-bottom: var(--bordeMarcado);
-    text-align: center;
-}
-
-.cabecera .container {
-    max-width: 50rem;
-}
-
-.cabecera h1 {
-    margin-block: 1rem .75rem;
-}
-
-.cabecera p {
-    max-width: 38rem;
-    margin-inline: auto;
-    color: var(--colorTextoSuave);
-}
-
-.cabecera.oscura {
-    background-color: var(--colorTinta);
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, .1) 1px, transparent 0);
-}
-
-.cabecera.oscura h1 {
-    color: #fff;
-}
-
-.cabecera.oscura p {
-    color: #D1D5DB;
-}
-
-.cabecera.oscura .buscador {
-    box-shadow: 4px 4px 0 var(--colorCeleste);
-}
-
-.cabecera.oscura .buscador:focus-within {
-    box-shadow: 6px 6px 0 var(--colorCoral);
-}
-
-.cabecera .buscador {
-    margin: 1.75rem auto 0;
-}
-
-.cabecera .buscador + .mensajeError {
-    margin-inline: auto;
-}
-
-.cabecera .buscador .bi {
-    margin-right: .9rem;
-    font-size: 1.1rem;
-    color: var(--colorTextoSuave);
-}
-
-/* ---------- 3.11 Catálogo ---------- */
-.catalogo .cantidad {
-    margin-bottom: 1rem;
-    font-weight: 700;
-    color: var(--colorTextoSuave);
-}
-
-/* Filtros: drawer lateral antes de lg; desde lg Bootstrap lo deja en línea (lg:drawer) y
-   la tarjeta con borde la dibuja el formulario */
-.catalogo .filtros > .boton {
-    width: 100%;
-}
-
-.catalogo .lg\:drawer {
-    --bs-drawer-width: min(21rem, 90vw);
-    --bs-drawer-inset: 0;
-    --bs-drawer-border-radius: 0;
-    --bs-drawer-border-color: var(--colorTinta);
-    --bs-drawer-border-width: 2px;
-    --bs-drawer-box-shadow: none;
-    --bs-drawer-backdrop-bg: rgba(17, 24, 39, .45);
-    --bs-drawer-backdrop-blur: 4px;
-}
-
-.catalogo .drawer-title {
-    font-family: var(--fuenteMarca);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--colorCoral);
-}
-
-.catalogo .drawer-body {
-    padding: 1.25rem;
-    overflow-y: auto;
-}
-
-.catalogo form {
-    display: grid;
-    align-content: start;
-    gap: 1.1rem;
-}
-
-.catalogo legend {
-    float: none;
-    margin-bottom: .1rem;
-}
-
-.catalogo form .boton.chico {
-    justify-self: start;
-}
-
-@media (width < 1024px) {
-    .catalogo .drawer-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--colorBorde);
-    }
-}
-
-@media (width >= 1024px) {
-    .catalogo .filtros {
-        position: sticky;
-        top: calc(var(--alturaEncabezado) + 1.25rem);
-    }
-
-    .catalogo .filtros > .boton {
-        display: none;
-    }
-
-    .catalogo .drawer-body {
-        display: block;
-        padding: 0;
-    }
-
-    /* Misma tarjeta que los profesores. overflow visible: la lista de opciones de los selectores no se corta */
-    .catalogo .lg\:drawer,
-    .catalogo .drawer-body {
-        overflow: visible;
-    }
-
-    .catalogo form {
-        padding: 1.25rem;
-        border: 2px solid var(--colorBorde);
-        border-radius: var(--radioGrande);
-        background-color: var(--colorSuperficie);
-    }
-}
-
-.catalogo .sinResultados {
-    align-items: center;
-    height: auto;
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-}
-
-/* Lista del catálogo: una tarjeta horizontal por profesor (la arma catalogo.js) */
-.catalogo .listaProfesores {
-    display: grid;
-    gap: 1rem;
-}
-
-.profesorFila {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1rem 1.25rem;
-    align-items: start;
-}
-
-.profesorFila .avatar {
-    --bs-avatar-size: 3.5rem;
-    --bs-avatar-border-radius: .9rem;
-    border-radius: .9rem;
-}
-
-.profesorFila .cuerpo {
-    display: grid;
-    gap: .55rem;
-    min-width: 0;
-}
-
-.profesorFila .nombre {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: .5rem;
-}
-
-.profesorFila .colegios {
-    font-size: .8rem;
-    color: var(--colorTextoSuave);
-}
-
-.profesorFila .resumen {
-    font-size: .85rem;
-}
-
-.profesorFila:hover {
-    translate: 0 -3px;
-}
-
-/* Columna derecha: modalidad, precio y botones */
-.profesorFila .lateral {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .5rem .75rem;
-    align-items: center;
-    padding-top: .9rem;
-    border-top: 2px dashed var(--colorBorde);
-}
-
-.profesorFila .modalidades {
-    grid-column: 1;
-}
-
-.profesorFila .importe {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    justify-self: end;
-}
-
-.profesorFila .etiquetaModalidad {
-    font-size: .7rem;
-    font-weight: 700;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--colorTextoSuave);
-}
-
-.profesorFila .importe {
-    font-size: .8rem;
-}
-
-@media (width >= 768px) {
-    .profesorFila {
-        grid-template-columns: auto 1fr 11rem;
-        align-items: start;
-    }
-
-    .profesorFila .lateral {
-        grid-column: auto;
-        grid-template-columns: 1fr;
-        justify-items: end;
-        padding: 0;
-        border-top: 0;
-        text-align: right;
-    }
-
-    .profesorFila .modalidades,
-    .profesorFila .importe {
-        grid-column: auto;
-        grid-row: auto;
-        justify-self: end;
-    }
-
-    .profesorFila .modalidades {
-        justify-content: flex-end;
-    }
-
-    .profesorFila .lateral .boton {
-        width: 100%;
-    }
-}
-
-/* Paginación del catálogo: flechas, número de página y tarjetas por página */
-.catalogo .paginador {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.catalogo .paginador[hidden] {
-    display: none;
-}
-
-.catalogo .paginador .paginas,
-.catalogo .paginador .porPagina {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    font-weight: 700;
-}
-
-.catalogo .paginador .numerosPagina {
-    display: flex;
-    align-items: center;
-    gap: .35rem;
-}
-
-.catalogo .paginador .numero {
-    min-width: 2.25rem;
-    height: 2.25rem;
-    padding: 0 .5rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: .6rem;
-    background-color: var(--colorSuperficie);
-    font-weight: 700;
-    color: var(--colorTinta);
-}
-
-.catalogo .paginador .numero:hover {
-    border-color: var(--colorCoral);
-}
-
-.catalogo .paginador .numero.activo {
-    border-color: var(--colorCoral);
-    background-color: var(--colorCoral);
-    color: #fff;
-}
-
-.catalogo .paginador .puntos {
-    color: var(--colorTextoSuave);
-}
-
-.catalogo .paginador button:disabled {
-    opacity: .4;
-    cursor: not-allowed;
-}
-
-.catalogo .paginador .porPagina label {
-    font-size: .85rem;
-    color: var(--colorTextoSuave);
-}
-
-.catalogo .paginador .porPagina select {
-    width: auto;
-}
-
-/* ---------- 3.12 Registro e inicio de sesión ---------- */
-.acceso {
-    padding-block: clamp(2rem, 3.5vw, 3rem);
-    background-color: var(--colorFondo);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
-    background-size: 24px 24px;
-}
-
-.acceso .card {
-    gap: 1.1rem;
-    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
-}
-
-.acceso form {
-    display: grid;
-    gap: 1rem;
-}
-
-/* La ilustración se estira hasta la altura del formulario */
-.acceso .row {
-    align-items: stretch;
-}
-
-.acceso h1 {
-    font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
-}
-
-.acceso .alternativa {
-    text-align: center;
-    font-size: .9rem;
-}
-
-/* Encabezado de las pantallas de acceso */
-.acceso .encabezadoAcceso {
-    display: grid;
-    gap: .6rem;
-}
-
-.acceso .encabezadoAcceso .pildora {
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    justify-self: start;
-}
-
-.acceso .encabezadoAcceso p {
-    color: var(--colorTextoSuave);
-}
-
-/* Campo con ícono a la izquierda (y botón de ver contraseña a la derecha) */
-.acceso .campoConIcono {
-    position: relative;
-}
-
-.acceso .campoConIcono > .bi {
-    position: absolute;
-    top: 50%;
-    left: .95rem;
-    transform: translateY(-50%);
-    font-size: 1.05rem;
-    color: var(--colorTextoSuave);
-    pointer-events: none;
-}
-
-.acceso .campoConIcono .form-control {
-    padding-left: 2.6rem;
-}
-
-.acceso .campoConIcono:focus-within > .bi {
-    color: var(--colorCoralOscuro);
-}
-
-.acceso .campoConIcono .verContrasena {
-    position: absolute;
-    top: 50%;
-    right: .4rem;
-    display: grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    transform: translateY(-50%);
-    border: 0;
-    border-radius: var(--radioChico);
-    background: transparent;
-    color: var(--colorTextoSuave);
-    cursor: pointer;
-}
-
-.acceso .campoConIcono .verContrasena:hover {
-    background-color: var(--colorCelesteSuave);
-    color: var(--colorTinta);
-}
-
-.acceso .campoConIcono:has(.verContrasena) .form-control {
-    padding-right: 2.9rem;
-}
-
-/* Nombre y apellido lado a lado */
-.acceso .filaDoble {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .75rem;
-}
-
-@media (width < 480px) {
-    .acceso .filaDoble {
-        grid-template-columns: 1fr;
-    }
-}
-
-.acceso .paso {
-    display: grid;
-    gap: .75rem;
-}
-
-.acceso .datosCuenta {
-    gap: .9rem;
-}
-
-.acceso .datosCuenta .tituloPaso {
-    margin-bottom: 0;
-}
-
-/* Botón de ancho completo */
-.acceso .boton.completo {
-    width: 100%;
-    padding-block: .8rem;
-    font-size: 1.05rem;
-}
-
-/* Pasos numerados del registro */
-.acceso .tituloPaso {
-    display: flex;
-    align-items: center;
-    gap: .55rem;
-    font-family: var(--fuenteMarca);
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--colorTinta);
-}
-
-.acceso .numeroPaso {
-    display: inline-grid;
-    place-items: center;
-    width: 1.6rem;
-    height: 1.6rem;
-    border: var(--bordeMarcado);
-    border-radius: 50%;
-    background-color: var(--colorCeleste);
-    font-size: .8rem;
-    font-weight: 800;
-}
-
-.acceso .terminos {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-}
-
-.acceso .terminos label {
-    font-weight: 600;
-}
-
-/* Separador "¿Primera vez...?" y accesos al registro */
-.acceso .separador {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    font-size: .85rem;
-    font-weight: 600;
-    color: var(--colorTextoSuave);
-}
-
-.acceso .separador::before,
-.acceso .separador::after {
-    content: "";
-    flex: 1;
-    height: 2px;
-    background-color: #E5E7EB;
-}
-
-.acceso .opcionesRegistro {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .75rem;
-}
-
-/* Elección de rol: dos tarjetas grandes */
-.acceso .roles {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .75rem;
-}
-
-.acceso .roles label {
-    position: relative;
-    display: grid;
-    justify-items: center;
-    gap: .2rem;
-    padding: 1.1rem .5rem;
-    border: 2px solid #D1D5DB;
-    border-radius: var(--radioMedio);
-    text-align: center;
-    cursor: pointer;
-    transition: border-color var(--duracionRapida) ease, background-color var(--duracionRapida) ease, box-shadow var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaSuave);
-}
-
-.acceso .roles input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.acceso .roles .bi {
-    font-size: 1.75rem;
-    color: var(--colorCoralOscuro);
-}
-
-.acceso .roles strong {
-    font-family: var(--fuenteMarca);
-    font-size: 1rem;
-}
-
-.acceso .roles span {
-    font-size: .8rem;
-    font-weight: 500;
-    color: var(--colorTextoSuave);
-}
-
-.acceso .roles label:hover {
-    border-color: var(--colorTinta);
-    transform: translateY(-2px);
-}
-
-.acceso .roles label:has(input:checked) {
-    border-color: var(--colorTinta);
-    background-color: var(--colorCelesteSuave);
-    box-shadow: 3px 3px 0 var(--colorTinta);
-}
-
-/* Tilde en la tarjeta elegida */
-.acceso .roles label:has(input:checked)::after {
-    content: "✓";
-    position: absolute;
-    top: .5rem;
-    right: .5rem;
-    display: grid;
-    place-items: center;
-    width: 1.4rem;
-    height: 1.4rem;
-    border: var(--bordeMarcado);
-    border-radius: 50%;
-    background-color: var(--colorCoral);
-    font-size: .75rem;
-    font-weight: 800;
-    color: #fff;
-}
-
-.acceso .roles label:has(input:focus-visible) {
-    outline: 3px solid var(--colorCeleste);
-    outline-offset: 3px;
-}
-
-/* El panel ilustrado del registro cambia según el rol (atributo hidden) */
-.acceso .ilustracion[hidden] {
-    display: none;
-}
-
-/* Panel ilustrado (se oculta en pantallas muy chicas para ir directo al formulario) */
-.acceso .ilustracion {
-    display: grid;
-    height: 100%;
-    align-content: center;
-    justify-items: center;
-    gap: 1.25rem;
-    padding: clamp(1.75rem, 1rem + 3vw, 3rem);
-    border: var(--bordeMarcado);
-    border-radius: var(--radioGrande);
-    background-color: var(--colorCoral);
-    box-shadow: var(--sombraMarcada);
-    text-align: center;
-    color: #fff;
-}
-
-.acceso .ilustracion img {
-    width: clamp(5rem, 12vw, 7.5rem);
-    height: auto;
-    border-radius: 50%;
-    border: var(--bordeMarcado);
-    background-color: #fff;
-    animation: flotarTarjeta 6s ease-in-out infinite;
-}
-
-.acceso .ilustracion h2 {
-    color: #fff;
-    font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2rem);
-}
-
-.acceso .ilustracion ul {
-    display: grid;
-    gap: .55rem;
-    text-align: left;
-    font-weight: 600;
-}
-
-.acceso .ilustracion li::before {
-    content: "✓";
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.35rem;
-    height: 1.35rem;
-    margin-right: .6rem;
-    border-radius: 50%;
-    background-color: #fff;
-    color: var(--colorTinta);
-    font-size: .75rem;
-    font-weight: 800;
-}
-
-@media (width < 1024px) {
-    .acceso .ilustracion {
-        display: none;
-    }
-}
-
-/* ---------- 3.13 Soporte: accesos rápidos y contacto ---------- */
-.ayuda {
-    background-color: var(--colorPapel);
-}
-
-.ayuda a.card .enlace {
-    margin-top: auto;
-    font-weight: 700;
-    color: var(--colorCoralOscuro);
-}
-
-.ayuda a.card:hover .enlace .bi {
-    display: inline-block;
-    transform: translateX(4px);
-}
-
-.contacto {
-    background-color: var(--colorSuperficie);
-}
-
-.contacto form.card {
-    gap: 1.25rem;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcada);
-}
-
-.contacto .boton {
-    justify-self: start;
-}
-
-.contacto form.card .boton {
-    align-self: flex-start;
-}
-
-/* ---------- 3.14 Panel de control ---------- */
-.saludo {
-    padding-block: clamp(2rem, 4vw, 3.5rem);
-    background-color: var(--colorSuperficie);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .08) 1px, transparent 0);
-    background-size: 24px 24px;
-    border-bottom: var(--bordeMarcado);
-}
-
-.saludo h1 {
-    margin-block: .6rem .35rem;
-    font-size: clamp(1.6rem, 1.2rem + 2vw, 2.5rem);
-}
-
-.saludo p {
-    max-width: 38rem;
-    color: var(--colorTextoSuave);
-}
-
-.saludo .avatar {
-    --bs-avatar-size: clamp(4rem, 3rem + 3vw, 5.5rem);
-    box-shadow: var(--sombraMarcada);
-}
-
-/* Notificaciones del Panel: una fila por cosa pendiente (amistad, mensajes, clase) con su botón para ir a resolverla */
-.notificaciones {
-    padding-top: clamp(1.5rem, 3vw, 2.25rem);
-}
-
-.notificaciones .card h2 {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    font-size: clamp(1.2rem, 1.05rem + .6vw, 1.45rem);
-}
-
-.notificaciones .sinNotificaciones {
-    color: var(--colorTextoSuave);
-}
-
-.notificaciones .listaNotificaciones {
-    display: grid;
-    gap: .75rem;
-    max-height: 26rem;
-    margin: 0;
-    padding: 0 .25rem .25rem 0;
-    overflow-y: auto;
-    list-style: none;
-}
-
-.notificaciones .notificacion {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: .75rem 1rem;
-    padding: .85rem 1rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorSuperficie);
-}
-
-.notificaciones .notificacion .boton {
-    grid-column: 1 / -1;
-    justify-self: start;
-}
-
-/* Solicitud de amistad: Rechazar y Aceptar en la misma notificación */
-.notificaciones .textoNotificacion a {
-    white-space: nowrap;
-}
-
-.notificaciones .accionesNotificacion {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
-    grid-column: 1 / -1;
-}
-
-@media (width >= 768px) {
-    .notificaciones .notificacion {
-        grid-template-columns: auto 1fr auto;
-    }
-
-    .notificaciones .notificacion .boton,
-    .notificaciones .accionesNotificacion {
-        grid-column: auto;
-        justify-self: end;
-    }
-}
-
-.notificaciones .textoNotificacion h3 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .5rem;
-    margin: 0;
-    font-size: 1rem;
-}
-
-.notificaciones .textoNotificacion p {
-    margin: .15rem 0 0;
-    font-size: .92rem;
-}
-
-.notificaciones .textoNotificacion small {
-    color: var(--colorTextoSuave);
-}
-
-/* Novedades: noticias de los últimos 3 días, sin badge de "esperando respuesta" y con el borde más tenue */
-.notificaciones .tituloNovedades {
-    margin-top: 1.75rem;
-}
-
-.notificaciones .noticia {
-    border-color: var(--colorCelesteSuave);
-    background-color: var(--colorFondo);
-}
-
-/* Aviso "Configurá tu agenda" (solo profesores sin agenda) */
-.avisoAgenda {
-    padding-top: clamp(1.5rem, 3vw, 2.25rem);
-}
-
-.avisoAgenda .card {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .75rem 1rem;
-    border-color: var(--colorAzul);
-    background-color: var(--colorAzulSuave);
-}
-
-.avisoAgenda .card p {
-    flex: 1 1 16rem;
-    margin: 0;
-}
-
-.metricas {
-    padding-block: clamp(1.75rem, 3vw, 2.5rem);
-}
-
-.metricas .card strong {
-    font-family: var(--fuenteMarca);
-    font-size: clamp(2.25rem, 1.6rem + 2vw, 3rem);
-    font-weight: 700;
-    line-height: 1;
-}
-
-.metricas .card > span {
-    font-size: .85rem;
-    font-weight: 700;
-    color: var(--colorTextoSuave);
-}
-
-.metricas .card.oscura > span {
-    color: #D1D5DB;
-}
-
-.metricas .accesos .card {
-    padding: 1.15rem;
-}
-
-.metricas .accesos h3 {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-}
-
-.panel {
-    padding-top: 1rem;
-}
-
-.panel nav {
-    margin-bottom: 1.5rem;
-    overflow-x: auto;
-    padding: 0 .25rem .5rem 0;
-}
-
-.panel .nav-pills {
-    --bs-nav-pills-bg: var(--colorSuperficie);
-    --bs-nav-pills-padding: .3rem;
-    --bs-nav-pills-link-active-bg: var(--colorCoral);
-    border: var(--bordeMarcado);
-    box-shadow: 3px 3px 0 var(--colorTinta);
-    flex-wrap: nowrap;
-    gap: .25rem;
-}
-
-.panel .nav-link {
-    display: inline-flex;
-    align-items: center;
-    gap: .45rem;
-    padding: .55rem 1rem;
-    font-family: var(--fuenteMarca);
-    font-size: .95rem;
-    font-weight: 600;
-    white-space: nowrap;
-    color: var(--colorTinta);
-}
-
-/* En pantallas chicas las pestañas pasan a una grilla de 2 columnas (sin scroll horizontal) */
-@media (width < 768px) {
-    .panel nav {
-        overflow: visible;
-        padding: 0 4px 4px 0;
-    }
-
-    .panel .nav-pills {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-radius: 1.5rem;
-    }
-
-    .panel .nav-link {
-        justify-content: center;
-        padding-inline: .5rem;
-    }
-}
-
-.panel .nav-link:hover {
-    background-color: var(--colorCelesteSuave);
-}
-
-.panel .nav-link.active {
-    background-color: var(--colorCoral);
-    color: #fff;
-}
-
-.panel .tab-pane > h2 {
-    margin-bottom: 1.25rem;
-    font-size: clamp(1.3rem, 1.1rem + .8vw, 1.6rem);
-}
-
-/* Mis clases: lo que requiere acción, el calendario del mes y la agenda del día (los dibuja calendario.js).
-   Colores: azul = está bien, rojo = necesita tu acción, gris = terminó sin darse. El estado nunca va solo en el color:
-   siempre hay texto, y lo que espera al otro lleva línea punteada. */
-.misClases {
-    display: grid;
-    gap: 1.25rem;
-}
-
-.requiereAccion {
-    padding: 1rem 1.15rem;
-    border: 2px solid var(--colorCoralOscuro);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorCoralSuave);
-}
-
-.requiereAccion h3 {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    margin: 0 0 .75rem;
-    font-size: 1.05rem;
-}
-
-.requiereAccion ul {
-    display: grid;
-    gap: .6rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.pedidoPendiente {
-    display: grid;
-    gap: .6rem;
-    padding: .75rem .9rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioChico);
-    background-color: var(--colorSuperficie);
-}
-
-.pedidoPendiente .textoPedido {
-    display: grid;
-    gap: .15rem;
-    font-size: .9rem;
-}
-
-.pedidoPendiente .textoPedido span {
-    color: var(--colorTextoSuave);
-}
-
-.botonesClase {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .6rem;
-}
-
-.misClases .botonesClase .boton {
-    min-height: 2.75rem;
-}
-
-@media (width >= 768px) {
-    .pedidoPendiente {
-        grid-template-columns: 1fr auto;
-        align-items: center;
-    }
-}
-
-/* Calendario del mes: lunes a domingo, una línea fina por clase (máximo 3 y "+N") */
-.calendarioMes {
-    padding: .6rem;
-}
-
-@media (width >= 768px) {
-    .calendarioMes {
-        padding: 1.25rem 1.5rem;
-    }
-}
-
-.calendarioMes header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: .75rem;
-    margin-bottom: .9rem;
-}
-
-.calendarioMes header h3 {
-    margin: 0;
-    font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem);
-}
-
-.calendarioMes .controlesMes {
-    display: flex;
-    gap: .5rem;
-}
-
-.calendarioMes .controlesMes .boton {
-    justify-content: center;
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-}
-
-.calendarioMes .diasSemana,
-.calendarioMes .diasMes {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: .2rem;
-}
-
-@media (width >= 768px) {
-    .calendarioMes .diasSemana,
-    .calendarioMes .diasMes {
-        gap: .4rem;
-    }
-}
-
-.calendarioMes .diasSemana span {
-    padding-bottom: .35rem;
-    font-size: .68rem;
-    font-weight: 700;
-    letter-spacing: .04em;
-    text-align: center;
-    text-transform: uppercase;
-    color: var(--colorTextoSuave);
-}
-
-.calendarioMes .diasMes .cargandoHistorial,
-.calendarioMes .diasMes .mensajeErrorCalendario {
-    grid-column: 1 / -1;
-}
-
-.diasMes .dia {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    aspect-ratio: 1;
-    min-width: 0;
-    min-height: 2.75rem;
-    padding: .25rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioChico);
-    background-color: var(--colorSuperficie);
-    font: inherit;
-    text-align: left;
-    color: var(--colorTinta);
-    cursor: pointer;
-    transition: background-color .15s, border-color .15s;
-}
-
-@media (width >= 768px) {
-    .diasMes .dia {
-        aspect-ratio: auto;
-        min-height: 5.5rem;
-        padding: .5rem .6rem;
-    }
-}
-
-.diasMes .dia:hover {
-    background-color: var(--colorCelesteSuave);
-}
-
-.diasMes .dia .numero {
-    align-self: flex-start;
-    font-family: var(--fuenteMarca);
-    font-size: .85rem;
-    font-weight: 600;
-    line-height: 1;
-}
-
-.diasMes .dia.hoy {
-    border-color: var(--colorAzul);
-}
-
-.diasMes .dia.hoy .numero {
-    padding: .15rem .35rem;
-    border-radius: 999px;
-    background-color: var(--colorAzul);
-    color: #fff;
-}
-
-.diasMes .dia.pasado {
-    background-color: var(--colorFondo);
-    color: var(--colorTextoSuave);
-}
-
-.diasMes .dia.otroMes {
-    opacity: .5;
-}
-
-/* Día elegido: borde marcado y sombra desplazada, como los botones de marca */
-.diasMes .dia[aria-pressed="true"] {
-    border-color: var(--colorTinta);
-    background-color: var(--colorCelesteSuave);
-    box-shadow: 2px 2px 0 var(--colorTinta);
-}
-
-.diasMes .lineas {
-    display: grid;
-    gap: 3px;
-}
-
-.diasMes .lineas .mas {
-    font-size: .65rem;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--colorTextoSuave);
-}
-
-.linea {
-    --colorLinea: var(--colorAzul);
-    display: block;
-    height: 4px;
-    border-radius: 2px;
-    background-color: var(--colorLinea);
-}
-
-@media (width >= 768px) {
-    .diasMes .linea {
-        height: 6px;
-        border-radius: 3px;
-    }
-}
-
-.linea.rojo {
-    --colorLinea: var(--colorCoralOscuro);
-}
-
-.linea.gris {
-    --colorLinea: var(--colorTextoSuave);
-    opacity: .6;
-}
-
-/* Esperando que responda el otro: rayada, para no depender solo del color */
-.linea.punteada {
-    background: repeating-linear-gradient(90deg, var(--colorLinea) 0 6px, transparent 6px 9px);
-}
-
-.calendarioMes .leyenda {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem 1.25rem;
-    margin: 1rem 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: .82rem;
-    font-weight: 600;
-    color: var(--colorTextoSuave);
-}
-
-.calendarioMes .leyenda li {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-}
-
-.calendarioMes .leyenda .linea {
-    width: 1.75rem;
-    height: 5px;
-}
-
-/* Agenda del día elegido: una fila por clase, ordenada por hora (hora a la izquierda, tarjeta con el color del estado) */
-.agendaDia header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: .25rem 1rem;
-    margin-bottom: .9rem;
-}
-
-.agendaDia header h3 {
-    margin: 0;
-    font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem);
-}
-
-.agendaDia .cantidadDelDia {
-    font-size: .9rem;
-    font-weight: 600;
-    color: var(--colorTextoSuave);
-}
-
-.agendaDia .estadoVacio .boton {
-    margin-top: .75rem;
-}
-
-.turnos {
-    display: grid;
-    gap: .9rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.turno {
-    display: grid;
-    grid-template-columns: 3.4rem minmax(0, 1fr);
-    gap: .6rem;
-    align-items: start;
-}
-
-@media (width >= 768px) {
-    .turno {
-        grid-template-columns: 5.5rem minmax(0, 1fr);
-        gap: 1.25rem;
-    }
-}
-
-.turno .horaTurno {
-    display: grid;
-    gap: .1rem;
-    padding-top: .9rem;
-    font-family: var(--fuenteMarca);
-    line-height: 1.1;
-    text-align: right;
-}
-
-.turno .horaTurno time {
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
-.turno .horaTurno span {
-    font-size: .8rem;
-    color: var(--colorTextoSuave);
-}
-
-.turno .tarjetaTurno {
-    --colorEstado: var(--colorAzul);
-    display: grid;
-    gap: .6rem;
-    min-width: 0;
-    padding: .9rem 1rem;
-    border: 2px solid var(--colorTinta);
-    border-left: 8px solid var(--colorEstado);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorSuperficie);
-    box-shadow: 3px 3px 0 var(--colorTinta);
-}
-
-.turno.rojo .tarjetaTurno {
-    --colorEstado: var(--colorCoralOscuro);
-}
-
-.turno.gris .tarjetaTurno {
-    --colorEstado: var(--colorTextoSuave);
-}
-
-.turno.punteada .tarjetaTurno {
-    border-left-style: dashed;
-}
-
-.tarjetaTurno header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .35rem .75rem;
-}
-
-.tarjetaTurno header h4 {
-    margin: 0;
-    font-size: 1.05rem;
-}
-
-.tarjetaTurno header h4 a {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: var(--colorCoral);
-    text-underline-offset: .2em;
-}
-
-.tarjetaTurno .rolTurno {
-    font-size: .8rem;
-    font-weight: 600;
-    color: var(--colorTextoSuave);
-}
-
-.tarjetaTurno .etiquetaEstado {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    margin-left: auto;
-    padding: .15rem .65rem;
-    border: 1.5px solid currentColor;
-    border-radius: 999px;
-    font-size: .78rem;
-    font-weight: 700;
-}
-
-.etiquetaEstado.azul {
-    background-color: var(--colorAzulSuave);
-    color: var(--colorAzul);
-}
-
-.etiquetaEstado.rojo {
-    background-color: var(--colorCoralSuave);
-    color: var(--colorCoralOscuro);
-}
-
-.etiquetaEstado.gris {
-    background-color: var(--colorFondo);
-    color: var(--colorTextoSuave);
-}
-
-.tarjetaTurno .detalleTurno {
-    display: grid;
-    gap: .3rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: .88rem;
-    font-weight: 600;
-}
-
-.tarjetaTurno .detalleTurno .bi {
-    margin-right: .4rem;
-    color: var(--colorCoralOscuro);
-}
-
-/* La clase a la que lleva una notificación se resalta un momento */
-.turno.resaltada .tarjetaTurno,
-tr.resaltada td {
-    animation: resaltarClase 2.4s var(--curvaSuave) 2;
-}
-
-@keyframes resaltarClase {
-    50% {
+@media (hover: hover) {
+    .nav-pills .nav-link:hover {
         background-color: var(--colorCelesteSuave);
-        box-shadow: var(--sombraMarcadaElevada);
     }
 }
 
-/* Mi agenda (profesores): horario semanal y días bloqueados */
-.miAgenda .card h3 {
-    margin-bottom: .35rem;
-    font-size: 1.15rem;
+/* Va después del hover: el hover (sin capa) le ganaría al .active de Bootstrap */
+.nav-pills .nav-link.active {
+    background-color: var(--colorTinta);
+    color: #fff;
 }
 
-.miAgenda .card > p {
-    font-size: .9rem;
-    color: var(--colorTextoSuave);
-}
-
-.avisoSinAgenda {
-    margin-bottom: 1rem;
-    padding: .75rem 1rem;
-    border: 2px solid var(--colorAzul);
-    border-radius: var(--radioMedio);
-    background-color: var(--colorAzulSuave);
-    font-weight: 600;
-}
-
-.diasDeAgenda {
-    display: grid;
-    gap: .6rem;
-    margin: 1rem 0;
-    padding: 0;
-    list-style: none;
-}
-
-.diaDeAgenda {
-    padding: .7rem .85rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioMedio);
-}
-
-.diaDeAgenda .encabezadoDia {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .4rem .6rem;
-}
-
-.diaDeAgenda .encabezadoDia strong {
-    min-width: 6.5rem;
-}
-
-.diaDeAgenda .encabezadoDia label {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-    cursor: pointer;
-}
-
-.diaDeAgenda .franjasDelDia {
-    display: grid;
-    justify-items: start;
-    gap: .6rem;
-    margin-top: .4rem;
-}
-
-.diaDeAgenda .franjaDeAgenda {
-    display: grid;
-    gap: .25rem;
-}
-
-.diaDeAgenda .selectoresDeFranja {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .5rem;
-}
-
-.diaDeAgenda .selectoresDeFranja .form-control {
-    width: auto;
-    min-width: 6.5rem;
-    min-height: 2.75rem;
-}
-
-.diaDeAgenda .selectoresDeFranja .boton {
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    justify-content: center;
-}
-
-.diaDeAgenda .franjasDelDia > .boton {
-    min-height: 2.75rem;
-}
-
-.miAgenda .bloquearDia {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    gap: .75rem;
-}
-
-.miAgenda .bloquearDia .boton {
-    min-height: 2.75rem;
-}
-
-.listaBloqueados {
-    display: grid;
-    gap: .5rem;
-    margin: 1rem 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.listaBloqueados li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: .5rem .75rem;
-    padding: .6rem .8rem;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioChico);
-    font-size: .9rem;
-}
-
-.listaBloqueados li small {
-    display: block;
-    font-weight: 600;
-    color: var(--colorCoralOscuro);
-}
-
-.listaBloqueados .sinBloqueos {
-    border-style: dashed;
-    color: var(--colorTextoSuave);
-}
-
-.listaBloqueados .boton {
-    min-height: 2.75rem;
-}
-
-
-/* Historial: tabla (la dibuja historial.js en la pestaña del Panel y en el modal del Perfil);
-   en pantallas chicas cada fila se apila usando data-etiqueta */
-.card.tabla {
-    height: auto;
-    padding: 0;
-    overflow: hidden;
-}
-
-.tabla .table {
-    --bs-table-bg: transparent;
-    --bs-table-cell-padding-x: 1.1rem;
-    --bs-table-cell-padding-y: .85rem;
-    --bs-table-cell-vertical-align: middle;
-    margin: 0;
-    font-size: .9rem;
-}
-
-.tabla .table th {
-    border-bottom: var(--bordeMarcado);
-    background-color: var(--colorFondo);
-    font-size: .72rem;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: var(--colorTextoSuave);
-}
-
-@media (width < 768px) {
-    .tabla .table thead {
-        display: none;
-    }
-
-    .tabla .table tr {
-        display: grid;
-        gap: .35rem;
-        padding: 1rem 1.1rem;
-        border-bottom: 1px solid var(--colorBorde);
-    }
-
-    .tabla .table td {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 0;
-        border: 0;
-        text-align: right;
-    }
-
-    .tabla .table td::before {
-        content: attr(data-etiqueta);
-        font-size: .72rem;
-        font-weight: 700;
-        letter-spacing: .06em;
-        text-transform: uppercase;
-        color: var(--colorTextoSuave);
-    }
-}
-
-/* Puntuación: las estrellas de la última reseña que se dejó a esa persona */
-.tabla .estrellas {
-    display: inline-flex;
-    gap: .1rem;
-    color: #F59E0B;
-}
-
-.tabla .table td .boton {
-    white-space: nowrap;
-}
-
-/* Debajo de la tabla: "Mostrando 20 de 143 clases" y el botón "Ver más" */
-.pieHistorial {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: .5rem 1rem;
-    margin-top: .75rem;
-}
-
-.notaHistorial {
-    margin: 0;
-    font-size: .82rem;
-    text-align: center;
-    color: var(--colorTextoSuave);
-}
-
-.pieHistorial .boton {
-    min-height: 2.75rem;
-}
-
-/* Motivo de una clase no concretada, debajo del día */
-.tabla .motivoHistorial {
-    display: block;
-    font-size: .75rem;
-    color: var(--colorTextoSuave);
-}
-
-/* "Cargando tu historial…" mientras llega el fetch */
-.cargandoHistorial {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    padding-block: 1.5rem;
-    font-weight: 600;
-    color: var(--colorTextoSuave);
-}
-
-.cargandoHistorial .bi {
-    animation: girarCarga 1s linear infinite;
-}
-
-/* Chat directo */
-.panel .chat {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 0;
-    overflow: hidden;
-}
-
-.chat .conversaciones {
-    display: flex;
-    margin: 0;
-    padding: 0;
-    overflow-x: auto;
-    border-bottom: 2px solid var(--colorBorde);
-    background-color: var(--colorFondo);
-    list-style: none;
-}
-
-.chat .conversaciones li {
-    flex-shrink: 0;
-}
-
-.chat .conversaciones .conversacion {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    width: 100%;
-    padding: .9rem 1.1rem;
-    border: 0;
-    border-bottom: 3px solid transparent;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-}
-
-.chat .conversaciones .conversacion:hover {
-    background-color: var(--colorSuperficie);
-}
-
-.chat .conversaciones .conversacion.activa {
-    border-bottom-color: var(--colorCoral);
-    background-color: var(--colorSuperficie);
-}
-
-.chat .conversaciones .conversacion .badge {
-    margin-left: auto;
-}
-
-.chat .conversaciones div {
-    display: grid;
-    min-width: 0;
-    line-height: 1.3;
-}
-
-.chat .conversaciones div span {
-    max-width: 9.5rem; /* en celular la lista es horizontal: así asoma la conversación siguiente */
-    overflow: hidden;
-    font-size: .78rem;
-    color: var(--colorTextoSuave);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.chat .hilo {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    min-height: 24rem;
-}
-
-.chat .hilo header {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    padding: .9rem 1.25rem;
-    border-bottom: 2px solid var(--colorBorde);
-}
-
-.chat .hilo header div {
-    display: grid;
-    line-height: 1.3;
-}
-
-.chat .hilo header strong a {
-    color: inherit;
-}
-
-.chat .hilo header span:not(.avatar) {
-    font-size: .78rem;
-    color: var(--colorTextoSuave);
-}
-
-.chat .mensajes {
-    display: flex;
-    flex-direction: column;
-    gap: .6rem;
-    min-height: 16rem;
-    padding: 1.25rem;
-    overflow-y: auto;
-    max-height: 22rem;
-}
-
-/* Avisos del chat: cargando, sin conversaciones, sin mensajes, error */
-.chat .avisoChat {
-    margin: auto 0;
-    padding: 1rem 1.1rem;
-    color: var(--colorTextoSuave);
-    font-size: .9rem;
-    text-align: center;
-}
-
-.chat .conversaciones .avisoChat {
-    flex: 1 1 auto;
-}
-
-.chat .avisoChat .bi-arrow-repeat {
-    display: inline-block;
-    animation: girarCarga 1s linear infinite;
-}
-
-/* Separador de día entre los mensajes ("Hoy", "Ayer", "Lunes 12 de octubre") */
-.chat .diaChat {
-    align-self: center;
-    margin: .4rem 0 0;
-    padding: .15rem .7rem;
-    border-radius: 999px;
-    background-color: var(--colorFondo);
-    color: var(--colorTextoSuave);
-    font-size: .72rem;
-    font-weight: 700;
-}
-
-.chat .burbuja {
-    overflow-wrap: anywhere;
-}
-
-/* Hora del mensaje y, en los propios, una tilde (enviado) o dos (visto) */
-.chat .burbuja .detalleMensaje {
-    display: block;
-    margin-top: .2rem;
-    color: var(--colorTextoSuave);
-    font-size: .68rem;
-    font-weight: 400;
-    text-align: right;
-}
-
-.chat .burbuja .detalleMensaje.visto .bi {
-    color: var(--colorCelesteOscuro);
-}
-
-.chat .redactar {
-    display: flex;
-    gap: .6rem;
-    padding: .9rem 1.25rem;
-    border-top: 2px solid var(--colorBorde);
-}
-
-.chat .redactar .form-control {
-    flex: 1;
-    min-width: 0;
-}
-
-@media (width >= 1024px) {
-    .panel .chat {
-        grid-template-columns: 17rem 1fr;
-    }
-
-    .chat .conversaciones {
-        display: grid;
-        align-content: start;
-        max-height: 30rem;
-        overflow-x: hidden;
-        overflow-y: auto;
-        border-right: 2px solid var(--colorBorde);
-        border-bottom: 0;
-    }
-
-    .chat .conversaciones .conversacion {
-        border-bottom: 0;
-        border-left: 3px solid transparent;
-    }
-
-    .chat .conversaciones .conversacion.activa {
-        border-left-color: var(--colorCoral);
-    }
-
-    .chat .conversaciones div span {
-        max-width: none;
-    }
-}
-
-/* Diálogo de Bootstrap 6 (cancelar clase) */
+/* ---------- Diálogo de Bootstrap 6: header blanco, sin borde y sin giro al abrir ---------- */
 .dialog {
     --bs-dialog-width: min(28rem, 92vw);
+    --bs-dialog-color: var(--colorTexto);
+    --bs-dialog-border-width: 0;
     --bs-dialog-border-radius: var(--radioGrande);
-    --bs-dialog-border-width: 2px;
-    --bs-dialog-border-color: var(--colorTinta);
-    --bs-dialog-box-shadow: 8px 8px 0 var(--colorTinta);
+    --bs-dialog-box-shadow: var(--sombraFlotante);
     --bs-dialog-backdrop-bg: rgba(17, 24, 39, .5);
-    --bs-dialog-backdrop-blur: 4px;
+    --bs-dialog-backdrop-blur: 0;
+    --bs-dialog-header-border-width: 0;
+}
+
+/* Bootstrap 6 deja .dialog en display: flex aunque esté cerrado: ocupaba lugar al final del main y agregaba blanco debajo del footer */
+.dialog:not([open]) {
+    display: none;
 }
 
 .dialog .dialog-title {
-    font-size: 1.25rem;
+    font: 600 1.375rem/1.25 var(--fuenteMarca);
 }
 
-.dialog .dialog-body p {
-    color: var(--colorTextoSuave);
+/* La cruz de cerrar (diálogos, drawers y avisos) mide 24px como mínimo */
+.btn-close {
+    --bs-btn-close-size: 1.5rem;
 }
 
 /* Pedir y reubicar una clase: día + grilla de horas (las arma crearSelectorHorario en site.js) */
@@ -3832,15 +1342,19 @@ tr.resaltada td {
 
 .tiraDias .flecha {
     width: 2.75rem;
-    border: 2px solid var(--colorTinta);
+    min-height: 2.75rem;
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     background-color: var(--colorSuperficie);
     color: var(--colorTinta);
     cursor: pointer;
 }
 
-.tiraDias .flecha:hover {
-    background-color: var(--colorCelesteSuave);
+@media (hover: hover) {
+    .tiraDias .flecha:hover {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
 .tiraDias .dias {
@@ -3861,21 +1375,52 @@ tr.resaltada td {
     color: var(--colorTextoSuave);
 }
 
+/* Días y franjas comparten estados: blanco en reposo y tinta con texto blanco cuando está elegido */
+.tiraDias .diaTira,
+.selectorHorario .franja {
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    font-family: var(--fuenteMarca);
+    color: var(--colorTinta);
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s, transform .15s var(--curvaSuave);
+}
+
+@media (hover: hover) {
+    .tiraDias .diaTira:hover:not(:disabled, [aria-pressed="true"]),
+    .selectorHorario .franja:hover:not(:disabled, [aria-pressed="true"]) {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+        transform: translateY(-2px);
+    }
+}
+
+.tiraDias .diaTira[aria-pressed="true"],
+.selectorHorario .franja[aria-pressed="true"] {
+    border-color: var(--colorTinta);
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+/* Sin horario (o bloqueado): punteado, tenue y tachado; el texto "sin horario" lo leen los lectores de pantalla */
+.tiraDias .diaTira:disabled,
+.selectorHorario .franja:disabled {
+    border-style: dashed;
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
 .tiraDias .diaTira {
     display: grid;
     flex: 0 0 3.6rem;
     justify-items: center;
     min-height: 4.25rem;
     padding: .4rem .2rem;
-    border: 2px solid var(--colorTinta);
-    border-radius: var(--radioChico);
-    background-color: var(--colorSuperficie);
-    font-family: var(--fuenteMarca);
-    color: var(--colorTinta);
     line-height: 1.15;
     scroll-snap-align: start;
-    cursor: pointer;
-    transition: background-color .15s, transform .15s var(--curvaRebote);
 }
 
 .tiraDias .diaTira strong {
@@ -3885,7 +1430,6 @@ tr.resaltada td {
 .tiraDias .diaTira .nombreDia {
     font-size: .72rem;
     font-weight: 600;
-    text-transform: uppercase;
 }
 
 .tiraDias .diaTira .mesDia {
@@ -3893,66 +1437,2925 @@ tr.resaltada td {
     color: var(--colorTextoSuave);
 }
 
-.tiraDias .diaTira:hover:not(:disabled) {
-    background-color: var(--colorCelesteSuave);
-    transform: translateY(-2px);
-}
-
-.tiraDias .diaTira[aria-pressed="true"] {
-    background-color: var(--colorCoral);
-    box-shadow: 2px 2px 0 var(--colorTinta);
-    color: #fff;
-}
-
 .tiraDias .diaTira[aria-pressed="true"] .mesDia {
     color: inherit;
-}
-
-/* Sin horario (o bloqueado): tenue y tachado; el texto "sin horario" lo leen los lectores de pantalla */
-.tiraDias .diaTira:disabled {
-    border-color: var(--colorBorde);
-    background-color: var(--colorFondo);
-    color: var(--colorTextoSuave);
-    text-decoration: line-through;
-    cursor: not-allowed;
 }
 
 .selectorHorario .franja {
     min-height: 2.75rem;
     padding: .45rem .25rem;
-    border: 2px solid var(--colorTinta);
-    border-radius: var(--radioChico);
-    background-color: var(--colorSuperficie);
-    font-family: var(--fuenteMarca);
     font-size: .9rem;
     font-weight: 600;
-    color: var(--colorTinta);
+}
+
+/* Diálogo "Dar reseña" (_dialogoDarResena) */
+.dialogoResena .dialog-body {
+    display: grid;
+    gap: 1rem;
+}
+
+.dialogoResena .estrellasResena {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.dialogoResena .estrellasResena legend {
+    margin-bottom: .4rem;
+    font-size: .95rem;
+    font-weight: 600;
+}
+
+.dialogoResena .filaEstrellas {
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+}
+
+/* Se pintan las estrellas hasta la elegida (o hasta la que está bajo el mouse); las vacías en #6B7280 llegan a 3:1 */
+.dialogoResena .filaEstrellas label {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--colorTextoSuave);
     cursor: pointer;
-    transition: background-color .15s, transform .15s var(--curvaRebote);
+    transition: color var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaSuave);
 }
 
-.selectorHorario .franja:hover:not(:disabled) {
-    background-color: var(--colorCelesteSuave);
-    transform: translateY(-2px);
+.dialogoResena .filaEstrellas:not(:has(label:hover)):has(input:checked) label,
+.dialogoResena .filaEstrellas:has(label:hover) label {
+    color: var(--colorCoral);
 }
 
-.selectorHorario .franja[aria-pressed="true"] {
+.dialogoResena .filaEstrellas:not(:has(label:hover)) label:has(input:checked) ~ label,
+.dialogoResena .filaEstrellas:has(label:hover) label:hover ~ label {
+    color: var(--colorTextoSuave);
+}
+
+.dialogoResena .filaEstrellas label:hover {
+    transform: scale(1.15);
+}
+
+/* El radio está oculto: el foco se dibuja en la estrella, con el mismo color que el foco global */
+.dialogoResena .filaEstrellas label:has(input:focus-visible) {
+    outline: 3px solid var(--colorFoco, var(--colorTinta));
+    outline-offset: 2px;
+    border-radius: var(--radioChico);
+}
+
+.dialogoResena .textoPuntuacion {
+    margin-left: .5rem;
+    font-family: var(--fuenteMarca);
+    font-weight: 600;
+    color: var(--colorMagenta);
+}
+
+.dialogoResena .form-field {
+    display: grid;
+    gap: .35rem;
+}
+
+.dialogoResena textarea {
+    resize: vertical;
+}
+
+.dialogoResena small {
+    justify-self: end;
+    color: var(--colorTextoSuave);
+}
+
+/* ---------- Snackbar (UI Kit): aviso corto abajo de la pantalla, entra subiendo sin girar ---------- */
+.snackbar {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    z-index: 1100;
+    max-width: min(30rem, calc(100vw - 2rem));
+    padding: .75rem 1.1rem;
+    translate: -50% 1rem;
+    opacity: 0;
+    border: 0;
+    border-radius: 999px;
+    background-color: var(--colorTinta);
+    box-shadow: var(--sombraFlotante);
+    color: #fff;
+    font-family: var(--fuenteMarca);
+    font-size: .92rem;
+    font-weight: 600;
+    text-align: center;
+    transition: opacity var(--duracionRapida) ease, translate var(--duracionRapida) var(--curvaSuave);
+}
+
+.snackbar.visible {
+    translate: -50% 0;
+    opacity: 1;
+}
+
+.snackbar[data-tipo="exito"] {
+    background-color: var(--colorExito);
+}
+
+.snackbar[data-tipo="error"] {
+    background-color: var(--colorMagenta);
+}
+
+/* ---------- Aviso "Cuenta no verificada" (Pop up del UI Kit, debajo del header) ---------- */
+.avisoVerificacion {
+    padding-block: .75rem;
+    background-color: var(--colorCeleste);
+}
+
+.avisoVerificacion .contenidoAviso {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem 1rem;
+}
+
+.avisoVerificacion .icono {
+    width: 2.25rem;
+    height: 2.25rem;
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
+}
+
+.avisoVerificacion p {
+    flex: 1 1 16rem;
+    font-size: .9rem;
+    color: var(--colorTinta);
+}
+
+.avisoVerificacion p strong {
+    margin-right: .25rem;
+}
+
+
+/* ---------- Animaciones reutilizables ---------- */
+@keyframes desplazarCinta {
+    from { transform: translateX(0); }
+    to { transform: translateX(-25%); }
+}
+
+@keyframes sacudirError {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+/* Íconos de "Cargando…" (Panel, chat, Perfil y sus diálogos) */
+@keyframes girarCarga {
+    to { transform: rotate(360deg); }
+}
+
+
+/* =========================================================
+   3) MAIN
+   ========================================================= */
+
+/* ---------- 3.1 Inicio: portada / buscador ---------- */
+/* Panel claro con el lavado; el padding lateral de la sección lo separa del borde en el celular */
+.portada {
+    padding: clamp(1rem, 2.5vw, 1.75rem) 1rem clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.portada > .container {
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+    border: 1.5px solid var(--colorBorde);
+    border-radius: 2.25rem;
+    background: var(--fondoLavado);
+    box-shadow: var(--sombraPanel);
+}
+
+.portada h1 {
+    margin-block: 0 1rem;
+    font-size: min(9.6vw, 4.5rem);
+}
+
+.portada h1 + p {
+    max-width: 34rem;
+    margin-inline: auto;
+    margin-bottom: 1.5rem;
+    font-size: clamp(1.05rem, .95rem + .4vw, 1.25rem);
+}
+
+.portada .buscador,
+.portada .buscador + .mensajeError {
+    margin-inline: auto;
+}
+
+.portada .acciones {
+    justify-content: center;
+    margin-top: 1.75rem;
+}
+
+/* En el celular el panel cede ancho para que el placeholder del buscador se lea entero */
+@media (width < 576px) {
+    .portada > .container {
+        padding-inline: .75rem;
+    }
+
+    .portada .buscador {
+        padding-left: 1rem;
+    }
+
+    .portada .buscador .boton {
+        width: 3rem;
+        padding-inline: 0;
+    }
+}
+
+/* Plancha: pegatinas superpuestas en todas las pantallas; en el celular quedan cuatro */
+.portada .plancha :is(.profe, .confirmada, .charla) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+    max-width: 100%;
+    padding: 1.1rem;
+}
+
+/* Tarjeta de profe */
+.portada .plancha .profe {
+    gap: .75rem;
+    width: 18rem;
+    font-family: var(--fuenteTexto);
+}
+
+/* El colegio baja entero de renglón ("Belgrano Day School" no deja "School" solo) */
+.portada .plancha .profe p {
+    font-size: .8rem;
+    color: var(--colorTextoSuave);
+    text-wrap: balance;
+}
+
+/* Clase confirmada */
+.portada .plancha .confirmada {
+    gap: .15rem;
+    width: 13.75rem;
+}
+
+.portada .plancha .confirmada strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.portada .plancha .confirmada p {
+    font: 600 .9rem var(--fuenteTexto);
+}
+
+/* Chat */
+.portada .plancha .charla {
+    width: 17rem;
+    font-family: var(--fuenteTexto);
+}
+
+/* I (corazón) MIP; el isotipo es la .pegatina.redonda */
+.portada .plancha .corazon {
+    border-radius: 999px;
+}
+
+.portada .plancha {
+    position: relative;
+    display: block;
+    min-height: 17rem;
+}
+
+.portada .plancha .pegatina {
+    position: absolute;
+}
+
+/* "Tutorías entre colegios" queda pegada en la esquina de la tarjeta de Sofía */
+.portada .plancha .tutorias {
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding: .4rem .9rem;
+    font-size: .875rem;
+}
+
+@media (width < 768px) {
+    .portada .plancha :is(.charla, .corazon) {
+        display: none;
+    }
+
+    .portada .plancha .profe {
+        top: 1.75rem;
+        left: 0;
+        width: 15.5rem;
+    }
+
+    .portada .plancha .confirmada {
+        top: 10.5rem;
+        right: 0;
+    }
+
+    .portada .plancha .isotipo {
+        top: 11.5rem;
+        left: .5rem;
+        width: 4.5rem;
+        height: 4.5rem;
+    }
+}
+
+@media (width >= 768px) {
+    .portada .plancha {
+        min-height: 29.5rem;
+    }
+
+    .portada .plancha .profe {
+        top: 1.75rem;
+        left: .6rem;
+    }
+
+    .portada .plancha .confirmada {
+        top: 9.5rem;
+        right: .5rem;
+    }
+
+    .portada .plancha .charla {
+        bottom: 1.25rem;
+        left: 2.5rem;
+    }
+
+    .portada .plancha .isotipo {
+        right: 2.5rem;
+        bottom: 1.9rem;
+    }
+
+    .portada .plancha .corazon {
+        top: 2.5rem;
+        right: 1.25rem;
+    }
+}
+
+/* Con la columna angosta (lg a xl) el isotipo tapaba la respuesta del chat: cada uno va a su borde */
+@media (1024px <= width < 1280px) {
+    .portada .plancha .charla {
+        left: .6rem;
+    }
+
+    .portada .plancha .isotipo {
+        right: .5rem;
+    }
+}
+
+@media (width >= 1024px) {
+    /* En dos columnas «El conocimiento» entra en un renglón (medido: 7,96 em de ancho) */
+    .portada h1 {
+        font-size: min(5vw, 4rem);
+    }
+
+    .portada .buscador,
+    .portada .buscador + .mensajeError,
+    .portada h1 + p {
+        margin-inline: 0;
+    }
+
+    .portada .acciones {
+        justify-content: flex-start;
+    }
+}
+
+/* ---------- 3.2 Inicio: cinta de palabras ---------- */
+.cinta {
+    overflow: hidden;
+    padding-block: .85rem;
     background-color: var(--colorCoral);
-    box-shadow: 2px 2px 0 var(--colorTinta);
+}
+
+.cinta > div {
+    display: flex;
+    width: max-content;
+    animation: desplazarCinta 35s linear infinite;
+}
+
+.cinta ul {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.cinta li {
+    display: flex;
+    align-items: center;
+    padding-inline: 1.25rem;
+    color: var(--colorTexto);
+    font-family: var(--fuenteMarca);
+    font-size: clamp(1.1rem, 1rem + .5vw, 1.375rem);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cinta li::after {
+    content: "";
+    width: .5rem;
+    height: .5rem;
+    margin-left: 2.5rem;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+/* ---------- 3.3 Inicio: cómo funciona (camino de tres números unidos por una línea punteada) ---------- */
+.pasos {
+    background-color: var(--colorSuperficie);
+}
+
+/* Desde acá las secciones del Inicio son blancas y seguidas: un solo espacio entre ellas */
+.pasos ~ section {
+    padding-top: 0;
+}
+
+.pasos ol {
+    display: grid;
+    gap: 2rem;
+}
+
+/* En el celular el camino baja: número a la izquierda, título y texto a la derecha */
+.pasos li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    align-content: start;
+    gap: .35rem 1.25rem;
+}
+
+/* Tramo punteado hasta el número siguiente (el mismo punteado que separa el precio en la tarjeta de profesor) */
+.pasos li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    height: calc(100% + 2rem);
+    border-left: 2px dashed var(--colorBorde);
+}
+
+/* Número: pegatina redonda con troquel, por encima de la línea */
+.pasos .numero {
+    position: relative;
+    z-index: 1;
+    grid-row: span 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: var(--colorCoral);
+    color: var(--colorTexto);
+    font-family: var(--fuenteMarca);
+    font-size: 1.75rem;
+    font-weight: 700;
+    box-shadow: var(--troquel);
+}
+
+.pasos li:nth-child(2) .numero {
+    background-color: var(--colorCeleste);
+}
+
+.pasos li:nth-child(3) .numero {
+    background-color: var(--colorTinta);
     color: #fff;
 }
 
-.selectorHorario .franja:disabled {
-    border-color: var(--colorBorde);
-    background-color: var(--colorFondo);
+.pasos li p {
+    max-width: 20rem;
+    font-size: .92rem;
     color: var(--colorTextoSuave);
-    text-decoration: line-through;
+}
+
+@media (width >= 768px) {
+    .pasos ol {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pasos li {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .pasos .numero {
+        grid-row: auto;
+        margin-bottom: .85rem;
+    }
+
+    .pasos li:not(:last-child)::after {
+        left: 50%;
+        width: calc(100% + 2rem);
+        height: 0;
+        border-left: 0;
+        border-top: 2px dashed var(--colorBorde);
+    }
+}
+
+/* ---------- 3.4 Inicio: perfiles alumno / profesor ---------- */
+.perfiles .card {
+    gap: 1rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+}
+
+.perfiles .card ul {
+    display: grid;
+    gap: .55rem;
+    margin-bottom: .5rem;
+}
+
+.perfiles .card li {
+    display: flex;
+    align-items: flex-start;
+    gap: .6rem;
+    font-size: .92rem;
+    font-weight: 600;
+}
+
+.perfiles .card li::before {
+    content: "✓";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background-color: #fff;
+    color: var(--colorTinta);
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.perfiles .card.oscura li::before,
+.perfiles .card.oscura .icono {
+    background-color: var(--colorCeleste);
+}
+
+/* El botón blanco sobre coral va sin el borde gris */
+.perfiles .card .boton {
+    border-color: transparent;
+}
+
+.perfiles .card .icono {
+    background-color: #fff;
+    color: var(--colorTinta);
+}
+
+/* ---------- 3.5 Inicio: frases (plancha del Miro: dos notas planas coral y celeste, desplazadas) ---------- */
+.frases ul {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 62rem;
+    margin-inline: auto;
+}
+
+.frases .pegatina {
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-radius: var(--radioGrande);
+    font: 700 clamp(1.25rem, 1rem + 1.2vw, 1.75rem)/1.25 var(--fuenteMarca);
+}
+
+.frases .pegatina.coral {
+    margin-right: 1.5rem;
+}
+
+.frases .pegatina.celeste {
+    margin-left: 1.5rem;
+}
+
+@media (width >= 768px) {
+    .frases ul {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+        gap: 2.5rem;
+    }
+
+    .frases .pegatina.celeste {
+        margin-top: 4rem;
+    }
+}
+
+/* ---------- 3.6 Inicio: profesores destacados ---------- */
+.destacados .colegios {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    margin-top: 1.5rem;
+}
+
+.destacados .colegios > span {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--colorTextoSuave);
+}
+
+.destacados .colegios .badge {
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border: 1.5px solid var(--colorBorde);
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
+    font-size: .9375rem;
+    box-shadow: 0 4px 10px -8px rgba(17, 24, 39, .3);
+    transition: border-color var(--duracionRapida) ease, translate var(--duracionRapida) var(--curvaSuave);
+}
+
+@media (hover: hover) {
+    .destacados .colegios .badge:hover {
+        border-color: var(--colorTinta);
+        translate: 0 -2px;
+    }
+}
+
+/* Tarjeta de profesor: .profesor es la vertical (Inicio) y .profesorFila la horizontal (Catálogo); comparten estos estilos */
+.profesor {
+    gap: .9rem;
+}
+
+.profesor header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+.profesor header > div {
+    flex: 1 1 8rem;
+    min-width: 0;
+}
+
+:is(.profesor, .profesorFila) h3 {
+    font-size: 1.05rem;
+}
+
+:is(.profesor, .profesorFila) h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+@media (hover: hover) {
+    :is(.profesor, .profesorFila) h3 a:hover {
+        text-decoration: underline;
+    }
+}
+
+.profesor header p {
+    font-size: .8rem;
+}
+
+:is(.profesor, .profesorFila) .etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.profesor > p {
+    flex-grow: 1;
+}
+
+:is(.profesor, .profesorFila) .datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--colorTexto);
+}
+
+:is(.profesor, .profesorFila) .datos .bi-star-fill {
+    color: var(--colorCoral);
+}
+
+:is(.profesor, .profesorFila) .datos .bi {
+    margin-right: .15rem;
+}
+
+.profesor footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding-top: .9rem;
+    border-top: 2px dashed var(--colorBorde);
+}
+
+.profesor footer p {
+    font-size: .8rem;
+}
+
+.profesor footer strong,
+.profesorFila .importe strong {
+    font-family: var(--fuenteMarca);
+    font-size: 1.3rem;
+    color: var(--colorTinta);
+}
+
+/* ---------- 3.8 Preguntas frecuentes (acordeón de Bootstrap 6: details/summary) ---------- */
+.preguntas {
+    background-color: var(--colorSuperficie);
+}
+
+.preguntas .accordion {
+    --bs-accordion-gap: .85rem;
+    display: grid;
+    gap: .85rem;
+}
+
+.preguntas .accordion-item {
+    overflow: hidden;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioGrande);
+    background-color: var(--colorSuperficie);
+    box-shadow: var(--sombraSuave);
+    transition: border-color var(--duracionRapida) var(--curvaSuave);
+}
+
+@media (hover: hover) {
+    .preguntas .accordion-item:hover {
+        border-color: var(--colorTinta);
+    }
+}
+
+.preguntas .accordion-item[open] > .accordion-header {
+    background-color: var(--colorCelesteSuave);
+}
+
+.preguntas .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 0;
+    background-color: transparent;
+    color: var(--colorTinta);
+    font-size: .98rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.preguntas .accordion-body {
+    padding: 0 1.25rem 1.25rem;
+    font-size: .92rem;
+    line-height: 1.7;
+    color: #374151;
+}
+
+.preguntas .accordion-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    stroke-width: 2.5;
+}
+
+/* ---------- 3.9 Llamado final (Inicio y Quiénes somos) ---------- */
+/* La sección es blanca: el panel tinta con el brillo coral queda separado del footer */
+.llamadoFinal {
+    padding: 0 1rem var(--espacioSeccion);
+}
+
+.llamadoFinal > .container {
+    padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 3rem);
+    border-radius: 2rem;
+    background: radial-gradient(36rem 24rem at 100% 50%, rgba(255, 87, 87, .45), transparent 65%), var(--colorTinta);
+    color: #fff;
+    box-shadow: 0 30px 56px -30px rgba(17, 24, 39, .6);
+}
+
+.llamadoFinal h2 {
+    color: #fff;
+}
+
+.llamadoFinal p {
+    max-width: 34rem;
+    margin: 1rem auto 0;
+    color: #D1D5DB;
+}
+
+.llamadoFinal .acciones {
+    justify-content: center;
+}
+
+@media (width >= 1024px) {
+    .llamadoFinal p {
+        margin-inline: 0;
+    }
+
+    .llamadoFinal .acciones {
+        justify-content: flex-end;
+    }
+}
+
+/* ---------- 3.10 Cabecera de página (Catálogo, Soporte y Privacidad; Quiénes somos usa .presentacion, en 3.15) ---------- */
+.cabecera {
+    overflow: hidden;
+    padding-block: clamp(2rem, 3.5vw, 3rem);
+    background: var(--fondoLavado);
+}
+
+.cabecera h1 {
+    margin-block: 1rem .75rem;
+}
+
+/* Sobre el lavado el gris no llega a 4,5:1 en el celular: el texto va en tinta */
+.cabecera p {
+    max-width: 38rem;
+}
+
+/* En el Catálogo la cabecera es más baja: se viene a buscar y el primer profesor tiene que verse sin scroll */
+.cabecera:has(+ .catalogo) {
+    padding-block: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.cabecera:has(+ .catalogo) h1 {
+    margin-top: 0;
+    font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3rem);
+}
+
+.cabecera .buscador {
+    margin-top: 1.75rem;
+}
+
+.cabecera .buscador .bi {
+    margin-right: .9rem;
+    font-size: 1.1rem;
+    color: var(--colorTextoSuave);
+}
+
+/* Plancha del Catálogo: tres pegatinas sueltas. La columna se oculta antes de md (d-none md:d-block en la vista) */
+.cabecera .plancha {
+    position: relative;
+    display: block;
+    min-height: 11rem;
+}
+
+.cabecera .plancha .pegatina {
+    position: absolute;
+    padding: .6rem 1.25rem;
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
+.cabecera .plancha .pegatina:nth-child(1) {
+    top: .5rem;
+    left: 1.5rem;
+}
+
+.cabecera .plancha .pegatina:nth-child(2) {
+    top: 4.25rem;
+    right: 1rem;
+}
+
+.cabecera .plancha .pegatina:nth-child(3) {
+    bottom: .5rem;
+    left: 4rem;
+}
+
+/* ---------- 3.11 Catálogo ---------- */
+.catalogo .cantidad {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--colorTextoSuave);
+}
+
+/* Filtros: drawer lateral antes de lg; desde lg Bootstrap lo deja en línea (lg:drawer) y
+   la tarjeta con borde la dibuja el formulario */
+.catalogo .filtros > .boton {
+    width: 100%;
+}
+
+.catalogo .lg\:drawer {
+    --bs-drawer-width: min(21rem, 90vw);
+    --bs-drawer-inset: 0;
+    --bs-drawer-border-radius: 0;
+    --bs-drawer-border-width: 0;
+    --bs-drawer-box-shadow: none;
+    --bs-drawer-backdrop-bg: rgba(17, 24, 39, .45);
+    --bs-drawer-backdrop-blur: 0;
+}
+
+.catalogo .drawer-title {
+    font-family: var(--fuenteMarca);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--colorTinta);
+}
+
+.catalogo .drawer-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+}
+
+.catalogo form {
+    display: grid;
+    align-content: start;
+    gap: 1.1rem;
+}
+
+.catalogo legend {
+    float: none;
+    margin-bottom: .1rem;
+}
+
+.catalogo form .boton.chico {
+    justify-self: start;
+}
+
+@media (width < 1024px) {
+    .catalogo .drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--colorBorde);
+    }
+}
+
+@media (width >= 1024px) {
+    .catalogo .filtros {
+        position: sticky;
+        top: calc(var(--alturaEncabezado) + 1.25rem);
+    }
+
+    .catalogo .filtros > .boton {
+        display: none;
+    }
+
+    .catalogo .drawer-body {
+        display: block;
+        padding: 0;
+    }
+
+    /* Misma tarjeta que los profesores. overflow visible: la lista de opciones de los selectores no se corta */
+    .catalogo :is(.lg\:drawer, .drawer-body) {
+        overflow: visible;
+    }
+
+    .catalogo form {
+        padding: 1.25rem;
+        border: 1.5px solid var(--colorBorde);
+        border-radius: var(--radioGrande);
+        background-color: var(--colorSuperficie);
+    }
+}
+
+.catalogo .sinResultados {
+    align-items: center;
+    height: auto;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.catalogo .sinResultados .boton {
+    align-self: center;
+}
+
+/* Lista del catálogo: una tarjeta horizontal por profesor (la arma catalogo.js) */
+.catalogo .listaProfesores {
+    display: grid;
+    gap: 1rem;
+}
+
+#listaProfesores[aria-busy="true"] {
+    opacity: .45;
+}
+
+.profesorFila {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem 1.25rem;
+    align-items: start;
+}
+
+.profesorFila .avatar {
+    --bs-avatar-size: 3.5rem;
+    --bs-avatar-border-radius: .9rem;
+    border-radius: .9rem;
+}
+
+.profesorFila .cuerpo {
+    display: grid;
+    gap: .55rem;
+    min-width: 0;
+}
+
+.profesorFila .nombre {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.profesorFila .colegios {
+    font-size: .8rem;
+    color: var(--colorTextoSuave);
+}
+
+.profesorFila .resumen {
+    font-size: .85rem;
+}
+
+/* En el celular la foto va al lado del nombre y del colegio; materias, resumen y datos usan todo el ancho */
+@media (width < 768px) {
+    .profesorFila {
+        gap: .6rem .9rem;
+    }
+
+    .profesorFila .avatar {
+        grid-row: span 2;
+    }
+
+    .profesorFila .cuerpo {
+        display: contents;
+    }
+
+    .profesorFila .cuerpo > :not(.nombre, .colegios) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Columna derecha: precio y botones */
+.profesorFila .lateral {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem .75rem;
+    align-items: center;
+    padding-top: .9rem;
+    border-top: 2px dashed var(--colorBorde);
+}
+
+.profesorFila .importe {
+    grid-column: 1 / -1;
+    font-size: .8rem;
+}
+
+@media (width >= 768px) {
+    .profesorFila {
+        grid-template-columns: auto 1fr 11rem;
+        align-items: start;
+    }
+
+    .profesorFila .lateral {
+        grid-column: auto;
+        grid-template-columns: 1fr;
+        justify-items: end;
+        padding: 0;
+        border-top: 0;
+        text-align: right;
+    }
+
+    .profesorFila .importe {
+        grid-column: auto;
+    }
+
+    .profesorFila .lateral .boton {
+        width: 100%;
+    }
+}
+
+/* Paginación del catálogo: flechas, número de página y tarjetas por página */
+/* Celular: números centrados arriba, Anterior y Siguiente en una fila, "Por página" centrado debajo.
+   Solo cambia el orden visual; en el DOM siguen Anterior, números, Siguiente */
+.catalogo .paginador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.catalogo .paginador[hidden] {
+    display: none;
+}
+
+.catalogo .paginador :is(.paginas, .porPagina) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .75rem;
+    font-weight: 700;
+}
+
+.catalogo .paginador .paginas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+}
+
+.catalogo .paginador .paginas > .boton:first-child {
+    justify-self: start;
+}
+
+.catalogo .paginador .paginas > .boton:last-child {
+    justify-self: end;
+}
+
+.catalogo .paginador .numerosPagina {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    grid-column: 1 / -1;
+    order: -1;
+    gap: .35rem;
+}
+
+@media (width >= 768px) {
+    .catalogo .paginador {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .catalogo .paginador .paginas {
+        display: flex;
+        width: auto;
+    }
+
+    .catalogo .paginador .numerosPagina {
+        order: 0;
+        flex-wrap: nowrap;
+    }
+
+    /* "Por página" va a la derecha también cuando baja de renglón (768 a 1279 con muchos números) */
+    .catalogo .paginador .porPagina {
+        margin-left: auto;
+    }
+}
+
+.catalogo .paginador .numero {
+    min-width: 2.75rem;
+    height: 2.75rem;
+    padding: 0 .5rem;
+    border: 2px solid var(--colorBorde);
+    border-radius: 999px;
+    background-color: var(--colorSuperficie);
+    font-family: var(--fuenteMarca);
+    font-weight: 600;
+    color: var(--colorTinta);
+}
+
+@media (hover: hover) {
+    .catalogo .paginador .numero:hover {
+        border-color: var(--colorTinta);
+    }
+}
+
+.catalogo .paginador .numero.activo {
+    border-color: var(--colorTinta);
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+.catalogo .paginador .puntos {
+    color: var(--colorTextoSuave);
+}
+
+.catalogo .paginador button:disabled {
+    opacity: .4;
     cursor: not-allowed;
 }
 
+.catalogo .paginador .porPagina label {
+    font-size: .85rem;
+    color: var(--colorTextoSuave);
+}
+
+.catalogo .paginador .porPagina select {
+    width: auto;
+}
+
+/* ---------- 3.12 Registro e inicio de sesión ---------- */
+.acceso {
+    padding-block: clamp(2rem, 3.5vw, 3rem);
+    background: var(--fondoLavado);
+}
+
+.acceso .card {
+    gap: 1.1rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+}
+
+.acceso form {
+    display: grid;
+    gap: 1rem;
+}
+
+/* El panel queda arriba, al lado del comienzo del formulario (el de registro es largo) */
+.acceso .row {
+    align-items: flex-start;
+}
+
+.acceso h1 {
+    font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+}
+
+.acceso .alternativa {
+    text-align: center;
+    font-size: .9rem;
+}
+
+/* Encabezado de las pantallas de acceso */
+.acceso .encabezadoAcceso {
+    display: grid;
+    gap: .6rem;
+}
+
+.acceso .encabezadoAcceso p {
+    color: var(--colorTextoSuave);
+}
+
+/* Campo con ícono a la izquierda (y botón de ver contraseña a la derecha) */
+.acceso .campoConIcono {
+    position: relative;
+}
+
+.acceso .campoConIcono > .bi {
+    position: absolute;
+    top: 50%;
+    left: .95rem;
+    transform: translateY(-50%);
+    font-size: 1.05rem;
+    color: var(--colorTextoSuave);
+    pointer-events: none;
+}
+
+.acceso .campoConIcono .form-control {
+    padding-left: 2.6rem;
+}
+
+.acceso .campoConIcono:focus-within > .bi {
+    color: var(--colorMagenta);
+}
+
+/* 44px de toque; el fondo del hover se dibuja solo adentro del padding para no tapar el borde del campo */
+.acceso .campoConIcono .verContrasena {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: .3rem;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: var(--radioChico);
+    background: transparent;
+    background-clip: content-box;
+    color: var(--colorTextoSuave);
+    cursor: pointer;
+}
+
+@media (hover: hover) {
+    .acceso .campoConIcono .verContrasena:hover {
+        background-color: var(--colorCelesteSuave);
+        color: var(--colorTinta);
+    }
+}
+
+.acceso .campoConIcono:has(.verContrasena) .form-control {
+    padding-right: 2.9rem;
+}
+
+/* Nombre y apellido lado a lado */
+.acceso .filaDoble {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+}
+
+@media (width < 480px) {
+    .acceso .filaDoble {
+        grid-template-columns: 1fr;
+    }
+}
+
+.acceso .paso {
+    display: grid;
+    gap: .75rem;
+}
+
+.acceso .datosCuenta {
+    gap: .9rem;
+}
+
+.acceso .datosCuenta .tituloPaso {
+    margin-bottom: 0;
+}
+
+/* Botón de ancho completo */
+.acceso .boton.completo {
+    width: 100%;
+    padding-block: .8rem;
+    font-size: 1.05rem;
+}
+
+/* Pasos numerados del registro */
+.acceso .tituloPaso {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-family: var(--fuenteMarca);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--colorTinta);
+}
+
+.acceso .numeroPaso {
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: var(--colorTinta);
+    color: #fff;
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.acceso .terminos {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.acceso .terminos label {
+    font-weight: 600;
+}
+
+/* Separador "¿Primera vez...?" y accesos al registro */
+.acceso .separador {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.acceso .separador::before,
+.acceso .separador::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background-color: var(--colorBorde);
+}
+
+/* Se apilan cuando "Soy profesor" (nowrap, ~11rem) no entra en media tarjeta */
+.acceso .opcionesRegistro {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr));
+    gap: .75rem;
+}
+
+/* Elección de rol: dos tarjetas grandes con el borde de los campos */
+.acceso .roles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+}
+
+.acceso .roles label {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: .2rem;
+    padding: 1.1rem .5rem;
+    border: 2px solid var(--colorTextoSuave);
+    border-radius: var(--radioMedio);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--duracionRapida) ease, background-color var(--duracionRapida) ease, box-shadow var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaSuave);
+}
+
+.acceso .roles input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.acceso .roles .bi {
+    font-size: 1.75rem;
+    color: var(--colorMagenta);
+}
+
+.acceso .roles strong {
+    font-family: var(--fuenteMarca);
+    font-size: 1rem;
+}
+
+.acceso .roles span {
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--colorTextoSuave);
+}
+
+@media (hover: hover) {
+    .acceso .roles label:hover {
+        border-color: var(--colorTinta);
+        transform: translateY(-2px);
+    }
+}
+
+/* El rol elegido es la única excepción a "lo elegido": borde tinta con fondo celeste suave */
+.acceso .roles label:has(input:checked) {
+    border-color: var(--colorTinta);
+    background-color: var(--colorCelesteSuave);
+}
+
+/* Tilde en la tarjeta elegida */
+.acceso .roles label:has(input:checked)::after {
+    content: "✓";
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    display: grid;
+    place-items: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background-color: var(--colorTinta);
+    font-size: .75rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.acceso .roles label:has(input:focus-visible) {
+    outline: 3px solid var(--colorTinta);
+    outline-offset: 3px;
+}
+
+/* Panel de color plano con pegatinas: coral con texto tinta; .oscura (profesor) en tinta con texto blanco.
+   Se oculta debajo de lg para ir directo al formulario */
+.acceso .ilustracion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: clamp(2rem, 1rem + 3vw, 3rem);
+    border-radius: 1.75rem;
+    background-color: var(--colorCoral);
+    color: var(--colorTexto);
+    box-shadow: var(--sombraCoral);
+}
+
+.acceso .ilustracion.oscura {
+    background-color: var(--colorTinta);
+    color: #fff;
+    box-shadow: var(--sombraTinta);
+}
+
+.acceso .ilustracion .pegatina.redonda {
+    width: 6.5rem;
+    height: 6.5rem;
+}
+
+/* El lema (o el título del rol) es una pegatina, pero en Eras como todo h2 */
+.acceso .ilustracion h2 {
+    max-width: 30rem;
+    padding: 1rem 1.5rem;
+    border-radius: 1.375rem;
+    font-family: var(--fuenteTitulos);
+    font-size: clamp(1.75rem, .9rem + 1.6vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+}
+
+/* La última pegatina (I ❤ MIP o el valor del Miro) cierra el panel a la derecha */
+.acceso .ilustracion > .pegatina:last-child {
+    align-self: flex-end;
+    max-width: 20rem;
+    padding: .75rem 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.3;
+}
+
+.acceso .ilustracion ul {
+    display: grid;
+    gap: .75rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.acceso .ilustracion li::before {
+    content: "✓";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-right: .6rem;
+    border-radius: 50%;
+    background-color: #fff;
+    color: var(--colorTinta);
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.acceso .ilustracion.oscura li::before {
+    background-color: var(--colorCeleste);
+}
+
+@media (width < 1024px) {
+    .acceso .ilustracion {
+        display: none;
+    }
+}
+
+/* ---------- 3.13 Soporte (resultado del buscador, accesos rápidos y contacto) y página de error ---------- */
+/* Cuántas preguntas encontró el buscador: es un dato, no un error */
+.cabecera .resultadoAyuda {
+    width: fit-content;
+    margin-top: 1rem;
+    border-radius: 999px;
+    color: var(--colorTinta);
+    font: 600 1rem var(--fuenteMarca);
+}
+
+.cabecera .resultadoAyuda:not(:empty) {
+    padding: .35rem 1rem;
+    background-color: var(--colorCelesteSuave);
+}
+
+.ayuda {
+    background-color: var(--colorSuperficie);
+}
+
+/* Preguntas y contacto siguen sobre blanco: un solo espacio entre las secciones */
+.ayuda ~ section {
+    padding-top: 0;
+}
+
+.ayuda a.card .enlace {
+    margin-top: auto;
+    font-weight: 700;
+    color: var(--colorMagenta);
+}
+
+.contacto {
+    background-color: var(--colorSuperficie);
+}
+
+.contacto form.card {
+    gap: 1.25rem;
+}
+
+.contacto .boton {
+    justify-self: start;
+}
+
+.contacto form.card .boton {
+    align-self: flex-start;
+}
+
+/* Página de error: lavado, centrada y con salidas a Inicio y a Soporte */
+.paginaError {
+    padding-block: clamp(3rem, 2rem + 5vw, 6rem);
+    background: var(--fondoLavado);
+    text-align: center;
+}
+
+.paginaError .container {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+}
+
+.paginaError .pegatina.redonda {
+    width: 7rem;
+    height: 7rem;
+    margin-bottom: .75rem;
+    font-size: 3.5rem;
+}
+
+.paginaError p {
+    max-width: 36rem;
+}
+
+/* El código baja entero de renglón y, si no entra (celular), se corta adentro de su caja */
+.paginaError code {
+    display: inline-block;
+    max-width: 100%;
+    padding: .2rem .8rem;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    color: var(--colorTinta);
+    font: 500 .9rem var(--fuenteMarca);
+    overflow-wrap: anywhere;
+}
+
+.paginaError .acciones {
+    justify-content: center;
+    margin-top: .75rem;
+}
+
+/* ---------- 3.14 Panel de control ---------- */
+/* Saludo: caja con el lavado, el avatar (sin troquel), el rol y los dos contadores como pegatinas */
+.bienvenida {
+    padding-block: 1.5rem 0;
+}
+
+.saludo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem 2rem;
+    padding: clamp(1.25rem, .8rem + 1.6vw, 1.875rem) clamp(1.25rem, .5rem + 2.6vw, 2.5rem);
+    border: 1.5px solid var(--colorBorde);
+    border-radius: 2rem;
+    background: var(--fondoLavado);
+    box-shadow: var(--sombraPanel);
+}
+
+.saludo .avatar {
+    --bs-avatar-size: clamp(4.5rem, 3.6rem + 2.6vw, 6.5rem);
+    rotate: -4deg;
+}
+
+.saludo .textoSaludo {
+    display: flex;
+    flex: 1 1 20rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+    min-width: 0;
+}
+
+.saludo .textoSaludo .pegatina {
+    padding: .25rem .875rem;
+    border-radius: 999px;
+    font-size: .9375rem;
+}
+
+.saludo h1 {
+    margin-top: .25rem;
+    font-size: clamp(2rem, 1.3rem + 2.4vw, 3.25rem);
+    line-height: 1;
+}
+
+.saludo p {
+    font-size: 1.125rem;
+    line-height: 1.5;
+}
+
+.saludo .plancha {
+    gap: 1.5rem;
+    padding: .5rem;
+}
+
+.saludo .contador {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .25rem;
+    min-width: 8rem;
+    padding: .875rem 1.25rem;
+}
+
+.saludo .contador strong {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.saludo .contador span {
+    font-size: .9375rem;
+}
+
+/* En el celular los dos contadores van lado a lado (apilados el saludo medía ~540px) */
+@media (width < 576px) {
+    .saludo .plancha {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .saludo .contador {
+        min-width: 0;
+        padding: .75rem 1rem;
+    }
+
+    .saludo .contador strong {
+        font-size: 2rem;
+    }
+
+    .saludo .contador span {
+        font-size: .8125rem;
+    }
+}
+
+/* Aviso "Configurá tu agenda" (solo profesores sin agenda): celeste plano */
+.avisoAgenda {
+    padding-block: 1.5rem 0;
+}
+
+.avisoAgenda .card {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1rem;
+    border-color: transparent;
+    background-color: var(--colorCeleste);
+}
+
+.avisoAgenda .card p {
+    flex: 1 1 16rem;
+    margin: 0;
+    color: var(--colorTexto);
+}
+
+/* Notificaciones: "Requiere tu acción" (banda magenta) y "Novedades" en dos columnas, cada una con su lista */
+.notificaciones {
+    padding-block: 1.5rem 0;
+}
+
+.columnasNotificaciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.notificaciones .card {
+    flex: 2 1 30rem;
+    gap: 0;
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.notificaciones .novedades {
+    flex: 1 1 18rem;
+}
+
+.notificaciones .card h2 {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: 1rem 1.25rem .25rem;
+    font: 600 1.25rem/1.2 var(--fuenteMarca);
+}
+
+.notificaciones .pendientes h2 {
+    padding-block: .875rem;
+    background-color: var(--colorMagenta);
+    color: #fff;
+}
+
+.notificaciones .pendientes h2 .badge {
+    background-color: #fff;
+    color: var(--colorTinta);
+    font-size: .9375rem;
+}
+
+.notificaciones .sinNotificaciones {
+    padding: 1rem 1.25rem 1.25rem;
+    color: var(--colorTextoSuave);
+}
+
+/* La lista se desvanece abajo (máscara, sin color nuevo): la fila cortada se lee como "hay más". El padding de abajo
+   es la zona que se desvanece, así al final del scroll la última fila se ve entera */
+.notificaciones .listaNotificaciones {
+    max-height: 26rem;
+    padding: .125rem 1.25rem 1.75rem;
+    overflow-y: auto;
+    mask-image: linear-gradient(var(--colorTinta) calc(100% - 1.75rem), transparent);
+}
+
+/* En pantallas grandes la lista se corta antes: así el calendario asoma en la primera pantalla */
+@media (width >= 1024px) {
+    .notificaciones .listaNotificaciones {
+        max-height: 15rem;
+    }
+}
+
+.notificaciones .notificacion {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    align-items: center;
+    gap: .75rem .875rem;
+    padding-block: .8rem;
+}
+
+.notificaciones .notificacion + .notificacion {
+    border-top: 1px solid var(--colorBorde);
+}
+
+.notificaciones .notificacion .icono {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.15rem;
+}
+
+.notificaciones .pendientes .notificacion > .boton,
+.notificaciones .accionesNotificacion {
+    grid-column: 1 / -1;
+    justify-self: start;
+}
+
+.notificaciones .accionesNotificacion {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+@media (width >= 768px) {
+    .notificaciones .pendientes .notificacion {
+        grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+    }
+
+    .notificaciones .pendientes .notificacion > .boton,
+    .notificaciones .accionesNotificacion {
+        grid-column: auto;
+        justify-self: end;
+    }
+}
+
+.notificaciones .textoNotificacion h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.notificaciones .textoNotificacion p {
+    margin-top: .2rem;
+    font-size: .9375rem;
+    line-height: 1.45;
+}
+
+.notificaciones .textoNotificacion a:not(.boton) {
+    white-space: nowrap;
+}
+
+.notificaciones .textoNotificacion small {
+    font-size: .8125rem;
+    white-space: nowrap;
+}
+
+/* Novedades: el botón va debajo del texto */
+.notificaciones .noticia {
+    align-items: start;
+}
+
+.notificaciones .noticia .boton {
+    margin-top: .625rem;
+}
+
+/* Pestañas: la base de .nav-pills (bloque 2) ya pone la barra blanca y la activa en tinta */
+.panel {
+    padding-top: 2rem;
+}
+
+/* Sin overflow: la sombra suave de la barra se ve entera (con overflow-x quedaba cortada en una línea recta).
+   Desde md las pestañas del profesor miden 563px en un contenedor de 696px */
+.panel nav {
+    margin-bottom: 1.5rem;
+}
+
+.panel .nav-pills {
+    flex-wrap: nowrap;
+}
+
+.panel .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .55rem 1.1rem;
+    white-space: nowrap;
+}
+
+/* En pantallas chicas las pestañas pasan a una grilla de 2 columnas (sin scroll horizontal) */
+@media (width < 768px) {
+    .panel .nav-pills {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-radius: 1.5rem;
+    }
+
+    .panel .nav-link {
+        justify-content: center;
+        padding-inline: .5rem;
+    }
+}
+
+/* Mis clases: lo que requiere acción, el calendario del mes y la agenda del día (los dibuja calendario.js).
+   Colores: azul = está bien (tinta), rojo = necesita tu acción (magenta), gris = terminó sin darse. El estado nunca va
+   solo en el color: siempre hay texto, y lo que espera al otro lleva línea punteada.
+   Desde lg el calendario va a la izquierda y, a la derecha, lo que requiere acción y la agenda del día elegido. */
+.misClases {
+    display: grid;
+    gap: 1.25rem;
+}
+
+@media (width >= 1024px) {
+    .misClases {
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "calendario requiere" "calendario agenda";
+        align-items: start;
+        gap: 1.25rem 1.5rem;
+    }
+
+    .misClases .requiereAccion {
+        grid-area: requiere;
+    }
+
+    .misClases .calendarioMes {
+        grid-area: calendario;
+    }
+
+    .misClases .agendaDia {
+        grid-area: agenda;
+    }
+}
+
+/* Coral suave, sin una segunda banda magenta (la de las notificaciones ya avisa) */
+.requiereAccion {
+    padding: 1rem 1.25rem 1.25rem;
+    border-radius: var(--radioGrande);
+    background-color: var(--colorCoralSuave);
+}
+
+.requiereAccion h3 {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0 0 .75rem;
+    font: 600 1.125rem/1.2 var(--fuenteMarca);
+}
+
+.requiereAccion h3 .bi {
+    color: var(--colorMagenta);
+}
+
+.requiereAccion ul {
+    display: grid;
+    gap: .6rem;
+}
+
+/* Al costado del calendario la lista no empuja la agenda del día fuera de la vista; se desvanece abajo como las
+   notificaciones */
+@media (width >= 1024px) {
+    .requiereAccion ul {
+        max-height: 22rem;
+        padding-bottom: 1.75rem;
+        overflow-y: auto;
+        mask-image: linear-gradient(var(--colorTinta) calc(100% - 1.75rem), transparent);
+    }
+}
+
+.pedidoPendiente {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem 1rem;
+    padding: .75rem 1rem;
+    border-radius: var(--radioMedio);
+    background-color: var(--colorSuperficie);
+}
+
+.pedidoPendiente .textoPedido {
+    flex: 1 1 14rem;
+    font-size: .9375rem;
+    line-height: 1.45;
+}
+
+.pedidoPendiente .textoPedido strong {
+    font: 600 1rem var(--fuenteMarca);
+}
+
+.pedidoPendiente .textoPedido span {
+    display: block;
+    color: var(--colorTextoSuave);
+}
+
+.botonesClase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+/* Calendario del mes: lunes a domingo, una línea por clase (máximo 3 y "+N") */
+.calendarioMes {
+    padding: .75rem;
+}
+
+@media (width >= 768px) {
+    .calendarioMes {
+        padding: 1.25rem;
+    }
+}
+
+.calendarioMes header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .875rem;
+}
+
+.calendarioMes header h3,
+.agendaDia > header h3 {
+    font: 600 clamp(1.25rem, 1.1rem + .5vw, 1.5rem)/1.2 var(--fuenteMarca);
+}
+
+.calendarioMes .controlesMes {
+    display: flex;
+    gap: .5rem;
+}
+
+.calendarioMes .controlesMes .boton {
+    min-width: 2.75rem;
+}
+
+.calendarioMes :is(.diasSemana, .diasMes) {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: .25rem;
+}
+
+@media (width >= 768px) {
+    .calendarioMes :is(.diasSemana, .diasMes) {
+        gap: .375rem;
+    }
+}
+
+.calendarioMes .diasSemana span {
+    padding-bottom: .375rem;
+    font: 600 .875rem var(--fuenteMarca);
+    text-align: center;
+    color: var(--colorTextoSuave);
+}
+
+.calendarioMes .diasMes :is(.cargandoHistorial, .mensajeErrorCalendario) {
+    grid-column: 1 / -1;
+}
+
+.diasMes .dia {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding: .25rem;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    background-color: var(--colorSuperficie);
+    font-family: var(--fuenteMarca);
+    text-align: left;
+    color: var(--colorTinta);
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s;
+}
+
+@media (width >= 768px) {
+    .diasMes .dia {
+        gap: .375rem;
+        min-height: 4.125rem;
+        padding: .375rem .45rem .5rem;
+    }
+}
+
+@media (hover: hover) {
+    .diasMes .dia:hover {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+    }
+}
+
+.diasMes .dia .numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 999px;
+    font-size: .8125rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* En el celular el día mide 44px y crece si tiene muchas clases: el número chico deja lugar a las líneas */
+@media (width >= 768px) {
+    .diasMes .dia .numero {
+        min-width: 1.625rem;
+        height: 1.625rem;
+        font-size: .875rem;
+    }
+}
+
+.diasMes .dia.hoy .numero {
+    background-color: var(--colorCoral);
+    color: var(--colorTinta);
+}
+
+.diasMes .dia.pasado {
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+}
+
+.diasMes .dia.otroMes .numero {
+    color: var(--colorTextoSuave);
+}
+
+@media (hover: hover) {
+    /* Sobre el celeste suave del hover el gris no llega a 4,5:1 */
+    .diasMes .dia.otroMes:not([aria-pressed="true"]):hover .numero {
+        color: var(--colorTinta);
+    }
+}
+
+/* Día elegido: como todo lo elegido, fondo tinta con texto blanco; las líneas tinta pasan a blanco */
+.diasMes .dia[aria-pressed="true"] {
+    border-color: var(--colorTinta);
+    background-color: var(--colorTinta);
+    color: #fff;
+}
+
+.diasMes .dia[aria-pressed="true"] :is(.numero, .mas) {
+    color: inherit;
+}
+
+.diasMes .dia.hoy[aria-pressed="true"] .numero {
+    color: var(--colorTinta);
+}
+
+.diasMes .dia[aria-pressed="true"] .linea.azul {
+    --colorLinea: #fff;
+}
+
+.diasMes .lineas {
+    display: grid;
+    gap: 3px;
+}
+
+.diasMes .lineas .mas {
+    font-size: .65rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--colorTextoSuave);
+}
+
+.linea {
+    --colorLinea: var(--colorTinta);
+    display: block;
+    height: 4px;
+    border-radius: 2px;
+    background-color: var(--colorLinea);
+}
+
+@media (width >= 768px) {
+    .diasMes .linea {
+        height: 6px;
+        border-radius: 3px;
+    }
+}
+
+.linea.rojo {
+    --colorLinea: var(--colorMagenta);
+}
+
+.linea.gris {
+    --colorLinea: var(--colorTextoSuave);
+}
+
+/* Esperando que responda el otro: rayada, para no depender solo del color */
+.linea.punteada {
+    background: linear-gradient(90deg, var(--colorLinea) 6px, transparent 0) 0 0 / 10px 100%;
+}
+
+.calendarioMes .leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.375rem;
+    margin: 1rem 0 0;
+    padding-top: .875rem;
+    border-top: 1px solid var(--colorBorde);
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.calendarioMes .leyenda li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.calendarioMes .leyenda .linea {
+    width: 1.625rem;
+    height: 6px;
+    border-radius: 3px;
+}
+
+/* Agenda del día elegido: una fila por clase, ordenada por hora (hora a la izquierda, tarjeta con el color del estado).
+   ">" porque cada .tarjetaTurno tiene su propio header */
+.agendaDia > header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .25rem .75rem;
+    margin-bottom: 1rem;
+}
+
+.agendaDia .cantidadDelDia {
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+.agendaDia .estadoVacio .boton {
+    margin-top: .75rem;
+}
+
+.turnos {
+    display: grid;
+    gap: .875rem;
+}
+
+.turno {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: .75rem;
+    align-items: start;
+}
+
+.turno .horaTurno {
+    display: grid;
+    gap: .125rem;
+    padding-top: .9rem;
+    font-family: var(--fuenteMarca);
+    line-height: 1.1;
+    text-align: right;
+}
+
+.turno .horaTurno time {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.turno .horaTurno span {
+    font-size: .8125rem;
+    color: var(--colorTextoSuave);
+}
+
+.turno .tarjetaTurno {
+    display: grid;
+    gap: .625rem;
+    min-width: 0;
+    padding: .875rem 1rem;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioMedio);
+    background-color: var(--colorSuperficie);
+    box-shadow: var(--sombraSuave);
+}
+
+/* Franjita del estado: la misma línea del calendario */
+.tarjetaTurno > .linea {
+    width: 2rem;
+}
+
+.tarjetaTurno header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .375rem .625rem;
+}
+
+.tarjetaTurno header h4 {
+    margin: 0;
+    font-size: 1.0625rem;
+}
+
+.tarjetaTurno header h4 a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--colorCoral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: .2em;
+}
+
+.tarjetaTurno .rolTurno {
+    font-size: .8125rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+/* Etiqueta plana y derecha (no es una pegatina) */
+.tarjetaTurno .etiquetaEstado {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    margin-left: auto;
+    padding: .25rem .75rem;
+    border-radius: 999px;
+    font: 600 .875rem var(--fuenteMarca);
+}
+
+.etiquetaEstado.azul {
+    background-color: var(--colorCeleste);
+    color: var(--colorTinta);
+}
+
+.etiquetaEstado.rojo {
+    background-color: var(--colorMagenta);
+    color: #fff;
+}
+
+.etiquetaEstado.gris {
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+}
+
+.tarjetaTurno .detalleTurno {
+    display: grid;
+    gap: .25rem;
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.tarjetaTurno .detalleTurno .bi {
+    margin-right: .4rem;
+    color: var(--colorMagenta);
+}
+
+/* La clase a la que lleva una notificación se resalta un momento */
+.turno.resaltada .tarjetaTurno,
+tr.resaltada td {
+    animation: resaltarClase 2.4s var(--curvaSuave) 2;
+}
+
+@keyframes resaltarClase {
+    50% {
+        background-color: var(--colorCelesteSuave);
+        box-shadow: var(--sombraFlotante);
+    }
+}
+
+/* Mi agenda (profesores): horario semanal y días bloqueados */
+.miAgenda .card h3 {
+    margin-bottom: .35rem;
+    font-size: 1.15rem;
+}
+
+.miAgenda .card > p {
+    font-size: .9rem;
+    color: var(--colorTextoSuave);
+}
+
+/* Celeste plano, como el aviso de arriba */
+.avisoSinAgenda {
+    margin-bottom: 1rem;
+    padding: .75rem 1rem;
+    border-radius: var(--radioMedio);
+    background-color: var(--colorCeleste);
+    font-weight: 600;
+}
+
+.diasDeAgenda {
+    display: grid;
+    gap: .6rem;
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+}
+
+.diaDeAgenda {
+    padding: .7rem .85rem;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioMedio);
+}
+
+.diaDeAgenda .encabezadoDia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem .6rem;
+}
+
+.diaDeAgenda .encabezadoDia strong {
+    min-width: 6.5rem;
+}
+
+.diaDeAgenda .encabezadoDia label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    cursor: pointer;
+}
+
+.diaDeAgenda .franjasDelDia {
+    display: grid;
+    justify-items: start;
+    gap: .6rem;
+    margin-top: .4rem;
+}
+
+.diaDeAgenda .franjaDeAgenda {
+    display: grid;
+    gap: .25rem;
+}
+
+.diaDeAgenda .selectoresDeFranja {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.diaDeAgenda .selectoresDeFranja .form-control {
+    width: auto;
+    min-width: 6.5rem;
+}
+
+.diaDeAgenda .selectoresDeFranja .boton {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    justify-content: center;
+}
+
+.diaDeAgenda .franjasDelDia > .boton {
+    min-height: 2.75rem;
+}
+
+.miAgenda .bloquearDia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: .75rem;
+}
+
+.miAgenda .bloquearDia .boton {
+    min-height: 2.75rem;
+}
+
+.listaBloqueados {
+    display: grid;
+    gap: .5rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.listaBloqueados li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem .75rem;
+    padding: .6rem .8rem;
+    border: 1.5px solid var(--colorBorde);
+    border-radius: var(--radioChico);
+    font-size: .9rem;
+}
+
+.listaBloqueados li small {
+    display: block;
+    font-weight: 600;
+    color: var(--colorMagenta);
+}
+
+.listaBloqueados .sinBloqueos {
+    border-style: dashed;
+    color: var(--colorTextoSuave);
+}
+
+.listaBloqueados .boton {
+    min-height: 2.75rem;
+}
+
+
+/* Historial: tabla (la dibuja historial.js en la pestaña del Panel y en el modal del Perfil);
+   en pantallas chicas cada fila se apila usando data-etiqueta */
+.card.tabla {
+    height: auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.tabla .table {
+    --bs-table-bg: transparent;
+    --bs-table-cell-padding-x: 1.1rem;
+    --bs-table-cell-padding-y: .85rem;
+    --bs-table-cell-vertical-align: middle;
+    margin: 0;
+    font-size: .9rem;
+}
+
+.tabla .table th {
+    border-bottom: 1.5px solid var(--colorBorde);
+    background-color: var(--colorFondo);
+    font-size: .72rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--colorTextoSuave);
+}
+
+@media (width < 768px) {
+    .tabla .table thead {
+        display: none;
+    }
+
+    .tabla .table tr {
+        display: grid;
+        gap: .35rem;
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid var(--colorBorde);
+    }
+
+    .tabla .table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+        border: 0;
+        text-align: right;
+    }
+
+    .tabla .table td::before {
+        content: attr(data-etiqueta);
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: var(--colorTextoSuave);
+    }
+}
+
+/* Puntuación: las estrellas de la última reseña que se dejó a esa persona */
+.tabla .estrellas {
+    display: inline-flex;
+    gap: .1rem;
+    color: var(--colorCoral);
+}
+
+.tabla .table td .boton {
+    white-space: nowrap;
+}
+
+/* El nombre lleva al perfil: 44px de toque sin agrandar la fila */
+.tabla .table td strong a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+}
+
+/* Debajo de la tabla: "Mostrando 20 de 143 clases" y el botón "Ver más" */
+.pieHistorial {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem 1rem;
+    margin-top: .75rem;
+}
+
+.notaHistorial {
+    margin: 0;
+    font-size: .82rem;
+    text-align: center;
+    color: var(--colorTextoSuave);
+}
+
+.pieHistorial .boton {
+    min-height: 2.75rem;
+}
+
+/* Motivo de una clase no concretada, debajo del día */
+.tabla .motivoHistorial {
+    display: block;
+    font-size: .75rem;
+    color: var(--colorTextoSuave);
+}
+
+/* "Cargando tu historial…" mientras llega el fetch */
+.cargandoHistorial {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding-block: 1.5rem;
+    font-weight: 600;
+    color: var(--colorTextoSuave);
+}
+
+/* Ícono de carga: gira */
+.cargandoHistorial .bi,
+.perfil .estadoPerfil .bi,
+.dialogoEdicion .estadoPerfil .bi,
+.dialogoHistorial .estadoHistorial.cargando .bi {
+    animation: girarCarga 1s linear infinite;
+}
+
+/* Chat directo */
+.panel .chat {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0;
+    overflow: hidden;
+}
+
+.chat .conversaciones {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    border-bottom: 1.5px solid var(--colorBorde);
+    background-color: var(--colorFondo);
+    list-style: none;
+}
+
+.chat .conversaciones li {
+    flex-shrink: 0;
+}
+
+.chat .conversaciones .conversacion {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    width: 100%;
+    padding: .9rem 1.1rem;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+@media (hover: hover) {
+    .chat .conversaciones .conversacion:hover {
+        background-color: var(--colorSuperficie);
+    }
+}
+
+.chat .conversaciones .conversacion.activa {
+    border-bottom-color: var(--colorTinta);
+    background-color: var(--colorCelesteSuave);
+}
+
+.chat .conversaciones .conversacion .badge {
+    margin-left: auto;
+}
+
+.chat .conversaciones div {
+    display: grid;
+    min-width: 0;
+    line-height: 1.3;
+}
+
+.chat .conversaciones div span {
+    max-width: 9.5rem; /* en celular la lista es horizontal: así asoma la conversación siguiente */
+    overflow: hidden;
+    font-size: .78rem;
+    color: var(--colorTextoSuave);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Sobre el celeste suave de la conversación abierta el gris no llega a 4,5:1 */
+.chat .conversaciones .conversacion.activa div span {
+    color: var(--colorTexto);
+}
+
+.chat .hilo {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 24rem;
+}
+
+.chat .hilo header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .9rem 1.25rem;
+    border-bottom: 1.5px solid var(--colorBorde);
+}
+
+.chat .hilo header div {
+    display: grid;
+    line-height: 1.3;
+}
+
+.chat .hilo header strong a {
+    color: inherit;
+}
+
+.chat .hilo header span:not(.avatar) {
+    font-size: .78rem;
+    color: var(--colorTextoSuave);
+}
+
+.chat .mensajes {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    min-height: 16rem;
+    padding: 1.25rem;
+    overflow-y: auto;
+    max-height: 22rem;
+}
+
+/* Avisos del chat: cargando, sin conversaciones, sin mensajes, error */
+.chat .avisoChat {
+    margin: auto 0;
+    padding: 1rem 1.1rem;
+    color: var(--colorTextoSuave);
+    font-size: .9rem;
+    text-align: center;
+}
+
+.chat .conversaciones .avisoChat {
+    flex: 1 1 auto;
+}
+
+.chat .avisoChat .bi-arrow-repeat {
+    display: inline-block;
+    animation: girarCarga 1s linear infinite;
+}
+
+/* Separador de día entre los mensajes ("Hoy", "Ayer", "Lunes 12 de octubre") */
+.chat .diaChat {
+    align-self: center;
+    margin: .4rem 0 0;
+    padding: .15rem .7rem;
+    border-radius: 999px;
+    background-color: var(--colorFondo);
+    color: var(--colorTextoSuave);
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.chat .burbuja {
+    overflow-wrap: anywhere;
+}
+
+/* Hora del mensaje y, en los propios, una tilde (enviado) o dos (visto); hereda el color porque el gris no se lee sobre coral.
+   Con opacidad .85 la tinta sobre coral queda a 4,8:1 (con .75 era 4,1:1) */
+.chat .burbuja .detalleMensaje {
+    display: block;
+    margin-top: .2rem;
+    color: inherit;
+    opacity: .85;
+    font-size: .68rem;
+    font-weight: 400;
+    text-align: right;
+}
+
+.chat .redactar {
+    display: flex;
+    gap: .6rem;
+    padding: .9rem 1.25rem;
+    border-top: 1.5px solid var(--colorBorde);
+}
+
+.chat .redactar .form-control {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (width >= 1024px) {
+    .panel .chat {
+        grid-template-columns: 17rem 1fr;
+    }
+
+    .chat .conversaciones {
+        display: grid;
+        align-content: start;
+        max-height: 30rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        border-right: 1.5px solid var(--colorBorde);
+        border-bottom: 0;
+    }
+
+    .chat .conversaciones .conversacion {
+        border-bottom: 0;
+        border-left: 3px solid transparent;
+    }
+
+    .chat .conversaciones .conversacion.activa {
+        border-left-color: var(--colorTinta);
+    }
+
+    .chat .conversaciones div span {
+        max-width: none;
+    }
+}
+
 /* ---------- 3.15 Quiénes somos ---------- */
-.mision {
-    background-color: var(--colorPapel);
+/* Presentación: lavado, texto a la izquierda y la plancha (el único momento animado) a la derecha */
+.presentacion {
+    background: var(--fondoLavado);
+}
+
+.presentacion h1 + p {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+    font-size: clamp(1.05rem, .95rem + .4vw, 1.3rem);
+}
+
+.presentacion ul {
+    display: grid;
+    gap: .85rem;
+    margin-top: 2rem;
+}
+
+.presentacion li {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    font-weight: 700;
+}
+
+.presentacion .plancha {
+    font-size: clamp(1.15rem, 1rem + .6vw, 1.6rem);
+}
+
+.presentacion .plancha .pegatina:not(.redonda) {
+    padding: .7rem 1.4rem;
+    border-radius: 999px;
+}
+
+.presentacion .pegatina.redonda {
+    width: 8.5rem;
+    height: 8.5rem;
+}
+
+/* Desde lg las pegatinas se reparten por la columna; antes van sueltas en fila */
+@media (width >= 1024px) {
+    .presentacion .plancha {
+        position: relative;
+        display: block;
+        min-height: 25rem;
+    }
+
+    .presentacion .plancha .pegatina {
+        position: absolute;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(1) {
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(2) {
+        top: 2.75rem;
+        right: 1.25rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(3) {
+        top: 10.5rem;
+        right: 2rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(4) {
+        top: 15rem;
+        left: 1.25rem;
+    }
+
+    .presentacion .plancha .pegatina:nth-child(5) {
+        bottom: 1.25rem;
+        right: 4rem;
+    }
+}
+
+/* Manifiesto: tarjeta blanca sobre coral plano */
+.manifiesto {
+    background-color: var(--colorCoral);
+}
+
+.manifiesto .card {
+    gap: 1.25rem;
+    max-width: 55rem;
+    margin-inline: auto;
+    padding: clamp(1.75rem, 1rem + 4vw, 3.5rem);
+    border-color: transparent;
+    box-shadow: var(--sombraFlotante);
+}
+
+.manifiesto .card p {
+    font-size: clamp(1rem, .95rem + .3vw, 1.2rem);
+}
+
+.manifiesto .card .remate {
+    padding-top: 1.5rem;
+    border-top: 1.5px dashed var(--colorBorde);
+    color: var(--colorTinta);
+    font-weight: 800;
+    line-height: 1.5;
 }
 
 .mision .card {
@@ -3960,42 +4363,55 @@ tr.resaltada td {
     padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
 }
 
-.mision .card.coral .icono,
-.mision .card.oscura .icono {
-    background-color: #fff;
+.mision .card p {
+    font-size: 1rem;
+}
+
+/* Cómo somos: celeste plano (el texto va en tinta) con los atributos en pegatinas quietas */
+.atributos {
+    background-color: var(--colorCeleste);
+}
+
+.atributos p {
+    margin-top: .75rem;
     color: var(--colorTinta);
 }
 
-.mision .valores ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .6rem;
+.atributos h3 {
+    font: 600 1.0625rem var(--fuenteMarca);
 }
 
-.mision .valores li {
-    display: inline-flex;
-    align-items: center;
-    gap: .45rem;
-    padding: .45rem .9rem;
-    border: var(--bordeMarcado);
+.atributos .plancha {
+    justify-content: flex-start;
+    margin-bottom: .75rem;
+    font-size: clamp(1.05rem, 1rem + .3vw, 1.3rem);
+}
+
+.atributos .pegatina {
+    padding: .65rem 1.3rem;
     border-radius: 999px;
-    background-color: var(--colorCelesteSuave);
-    font-weight: 700;
-    font-size: .88rem;
-    transition: transform var(--duracionRapida) var(--curvaRebote), background-color var(--duracionRapida) ease;
 }
 
-.mision .valores li:hover {
-    background-color: var(--colorCeleste);
-    transform: translateY(-3px) rotate(-2deg);
+/* Por qué nace: al pie de cada tarjeta, quién del equipo lo detectó */
+.problemas .card .detectado {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: auto;
+    padding-top: .9rem;
+    border-top: 1.5px dashed var(--colorBorde);
+    color: var(--colorTinta);
+    font-family: var(--fuenteMarca);
+    font-size: 1rem;
 }
 
-.problemas {
-    background-color: var(--colorSuperficie);
+.problemas .detectado strong {
+    font-weight: 600;
 }
 
-.equipo {
-    background-color: var(--colorFondo);
+/* Equipo sigue a Por qué nace sobre blanco: un solo espacio entre las dos */
+.problemas + .equipo {
+    padding-top: 0;
 }
 
 .equipo .card {
@@ -4003,118 +4419,20 @@ tr.resaltada td {
     text-align: center;
 }
 
+/* Avatares de iniciales sin troquel: aro interior y sombra suave */
 .equipo .avatar {
-    --bs-avatar-size: 5rem;
-    box-shadow: var(--sombraMarcada);
+    --bs-avatar-size: 5.5rem;
+    box-shadow: inset 0 0 0 .25rem var(--colorCeleste), var(--sombraAvatar);
 }
 
+.equipo .avatar.theme-accent {
+    box-shadow: inset 0 0 0 .25rem var(--colorCoral), var(--sombraAvatar);
+}
+
+/* Centrada como el resto de la tarjeta (.card > .badge la manda a la izquierda) */
 .equipo .badge {
+    align-self: center;
     margin-bottom: .25rem;
-}
-
-.identidad {
-    background-color: var(--colorPapel);
-}
-
-.identidad figure.card,
-.proceso figure.card {
-    gap: 1rem;
-    justify-content: space-between;
-}
-
-.identidad figure img,
-.proceso figure img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: contain;
-    border: 2px solid var(--colorBorde);
-    border-radius: var(--radioMedio);
-    background-color: #fff;
-}
-
-.identidad figcaption,
-.proceso figcaption {
-    font-size: .85rem;
-    line-height: 1.5;
-    color: var(--colorTextoSuave);
-}
-
-.identidad .paleta {
-    gap: 1rem;
-}
-
-.identidad .paleta ul {
-    display: grid;
-    gap: .6rem;
-}
-
-.identidad .paleta li {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    font-size: .9rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--colorTextoSuave);
-}
-
-.identidad .paleta li strong {
-    min-width: 4.5rem;
-    color: var(--colorTinta);
-}
-
-.identidad .paleta li span {
-    width: 2.25rem;
-    height: 2.25rem;
-    border: var(--bordeMarcado);
-    border-radius: 50%;
-    background-color: var(--muestra);
-    box-shadow: 2px 2px 0 var(--colorTinta);
-}
-
-.identidad .tipografias {
-    display: grid;
-    gap: .35rem;
-    padding-top: 1rem;
-    border-top: 2px dashed var(--colorBorde);
-    color: var(--colorTexto);
-}
-
-.identidad .tipografias .titulares {
-    font-family: var(--fuenteTitulos);
-    font-size: 1.6rem;
-    font-weight: 400;
-}
-
-.identidad .tipografias .cifras {
-    font-family: var(--fuenteMarca);
-    font-size: 1.15rem;
-    font-weight: 600;
-}
-
-.proceso {
-    background-color: var(--colorSuperficie);
-}
-
-/* El UI Kit son dos imágenes muy altas: se muestran lado a lado, recortadas desde arriba */
-.proceso .duo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .75rem;
-}
-
-.proceso .duo img {
-    height: clamp(11rem, 30vw, 17rem);
-    object-fit: cover;
-    object-position: top;
-}
-
-.proceso .enlacesExternos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2.5rem;
 }
 
 
@@ -4123,14 +4441,11 @@ tr.resaltada td {
     position: relative;
     padding-top: 0;
     background-color: var(--colorFondo);
-    background-image: radial-gradient(circle at 1px 1px, rgba(17, 24, 39, .06) 1px, transparent 0);
-    background-size: 24px 24px;
 }
 
 /* Franja de color arriba: la tarjeta del encabezado se monta encima */
 .perfil .portadaPerfil {
     height: clamp(6.5rem, 4rem + 8vw, 10rem);
-    border-bottom: var(--bordeMarcado);
     background-color: var(--colorCoral);
     background-image:
         radial-gradient(circle at 1px 1px, rgba(255, 255, 255, .28) 1.5px, transparent 0),
@@ -4153,19 +4468,9 @@ tr.resaltada td {
     color: var(--colorTextoSuave);
 }
 
-.perfil .estadoPerfil .bi {
-    animation: girarCarga 1s linear infinite;
-}
-
-@keyframes girarCarga {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* El primer estado ("Cargando…") queda sobre la franja de color */
+/* El primer estado ("Cargando…") queda sobre la franja de color: va en tinta, el blanco sobre coral no se lee */
 .perfil > .container > .estadoPerfil {
-    color: #fff;
+    color: var(--colorTinta);
 }
 
 .perfil .contenidoPerfil {
@@ -4192,9 +4497,8 @@ tr.resaltada td {
     grid-template-columns: auto 1fr;
     align-items: start;
     gap: .9rem 1rem;
-    border-color: var(--colorTinta);
     background-color: var(--colorAlertaSuave);
-    box-shadow: var(--sombraMarcada);
+    box-shadow: var(--sombraSuave);
 }
 
 .perfil .avisoPerfil .icono {
@@ -4249,11 +4553,11 @@ tr.resaltada td {
     font-weight: 700;
 }
 
-/* Encabezado del perfil: foto, nombre y acciones */
+/* Tarjeta del titular (foto, nombre, acciones y cifras): sin borde, flota sobre la franja */
 .perfil .cabeceraPerfil {
     gap: 1.25rem;
-    border-color: var(--colorTinta);
-    box-shadow: var(--sombraMarcadaElevada);
+    border: 0;
+    box-shadow: var(--sombraFlotante);
 }
 
 .perfil .filaCabecera {
@@ -4272,9 +4576,6 @@ tr.resaltada td {
 
 .perfil .cabeceraPerfil .avatar {
     --bs-avatar-size: clamp(5.5rem, 4.5rem + 3vw, 7.5rem);
-    --bs-avatar-font-size: clamp(1.8rem, 1.4rem + 1.4vw, 2.6rem);
-    border-width: 3px;
-    box-shadow: var(--sombraMarcada);
 }
 
 .perfil .titularPerfil {
@@ -4327,16 +4628,10 @@ tr.resaltada td {
         flex-basis: 100%;
     }
 
+    /* Los botones de ícono se quedan en 44 px, solos o con otra acción al lado */
     .perfil .accionesPerfil .boton.botonIcono {
-        flex: 1 1 2.75rem;
+        flex: 0 0 2.75rem;
     }
-}
-
-/* Botones solo con ícono (Me gusta, Reseña, Copiar enlace) */
-.boton.botonIcono {
-    width: 2.75rem;
-    padding-inline: 0;
-    justify-content: center;
 }
 
 /* Me gusta: corazón que salta, explosión de corazoncitos y contador que rebota (site.js: animarMeGusta) */
@@ -4346,9 +4641,9 @@ tr.resaltada td {
 }
 
 .boton.botonMeGusta.activo {
-    background-color: var(--colorCoral);
-    border-color: var(--colorTinta);
-    color: var(--colorSuperficie);
+    background-color: var(--colorMagenta);
+    border-color: transparent;
+    color: #fff;
 }
 
 .boton.botonMeGusta .saltoCorazon {
@@ -4384,13 +4679,6 @@ tr.resaltada td {
     40% { transform: translateY(-6px) scale(1.3); color: var(--colorCoral); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .boton.botonMeGusta .saltoCorazon,
-    .perfil .cifras strong.rebote {
-        animation: none;
-    }
-}
-
 /* Fila de cifras: las cifras a la izquierda y el botón Historial a la derecha */
 .perfil .filaCifras {
     display: flex;
@@ -4402,7 +4690,7 @@ tr.resaltada td {
     border-top: 2px dashed var(--colorBorde);
 }
 
-/* Cifras: calificación, me gusta y precio por hora */
+/* Cifras en fichas: calificación y me gusta en coral suave, amigos y precio en celeste suave */
 .perfil .cifras {
     display: flex;
     flex-wrap: wrap;
@@ -4414,27 +4702,40 @@ tr.resaltada td {
 
 .perfil .cifras li {
     display: flex;
-    align-items: baseline;
-    gap: .4rem;
-    padding: .55rem .9rem;
-    border: var(--bordeMarcado);
+    align-items: center;
+    gap: .6rem;
+    min-height: 3.25rem;
+    padding: 0 1.1rem;
     border-radius: var(--radioMedio);
-    background-color: var(--colorPapel);
+    background-color: var(--colorCoralSuave);
+    font-family: var(--fuenteMarca);
+}
+
+.perfil .cifras li:nth-child(n + 3) {
+    background-color: var(--colorCelesteSuave);
 }
 
 .perfil .cifras .bi {
-    align-self: center;
     color: var(--colorCoral);
 }
 
+.perfil .cifras .bi-heart-fill {
+    color: var(--colorMagenta);
+}
+
+.perfil .cifras li:nth-child(n + 3) .bi {
+    color: var(--colorTinta);
+}
+
 .perfil .cifras strong {
-    font-family: var(--fuenteMarca);
-    font-size: 1.15rem;
+    font-size: 1.375rem;
+    font-weight: 600;
 }
 
 .perfil .cifras span {
-    font-size: .82rem;
-    color: var(--colorTextoSuave);
+    font-size: .9375rem;
+    font-weight: 500;
+    color: var(--colorTexto);
 }
 
 /* La cifra de amigos es un botón que abre la lista */
@@ -4444,25 +4745,60 @@ tr.resaltada td {
 
 .perfil .cifras .botonCifra {
     display: flex;
-    align-items: baseline;
-    gap: .4rem;
-    padding: .55rem .9rem;
-    border: 0;
+    align-items: center;
+    gap: .6rem;
+    min-height: 3.25rem;
+    padding: 0 1.1rem;
+    border: 1.5px solid transparent;
     border-radius: inherit;
     background: none;
     color: inherit;
     font: inherit;
     cursor: pointer;
-    transition: background-color var(--duracionRapida) var(--curvaSuave);
+    transition: border-color var(--duracionRapida) var(--curvaSuave);
 }
 
-.perfil .cifras .botonCifra:hover {
-    background-color: var(--colorCelesteSuave);
+@media (hover: hover) {
+    .perfil .cifras .botonCifra:hover {
+        border-color: var(--colorTinta);
+    }
 }
 
-.perfil .cifras .botonCifra:focus-visible {
-    outline: 3px solid var(--colorCeleste);
-    outline-offset: 2px;
+/* En celulares las fichas van en 2 columnas, con el ícono al costado y el rótulo debajo del número */
+@media (width < 768px) {
+    .perfil .cifras {
+        flex: 1 1 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .perfil .cifras li:not(:has(.botonCifra)),
+    .perfil .cifras .botonCifra {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        column-gap: .6rem;
+        align-content: center;
+        padding-block: .5rem;
+        text-align: start;
+    }
+
+    .perfil .cifras li:has(.botonCifra) .botonCifra {
+        flex: 1;
+    }
+
+    .perfil .cifras .bi {
+        grid-row: 1 / 3;
+        align-self: center;
+    }
+
+    .perfil .cifras :is(strong, span) {
+        line-height: 1.15;
+    }
+
+    /* Si queda una ficha sola en la última fila, ocupa el ancho entero */
+    .perfil .cifras li:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
 }
 
 /* Tarjetas de contenido: Sobre mí, Reseñas y Datos */
@@ -4473,7 +4809,7 @@ tr.resaltada td {
     font-size: 1.25rem;
 }
 
-.perfil .card h2 .bi {
+.perfil :is(.card h2, .datosPerfil h3) .bi {
     color: var(--colorCoral);
 }
 
@@ -4495,8 +4831,7 @@ tr.resaltada td {
     color: inherit;
 }
 
-.perfil .descripcion ul,
-.perfil .descripcion ol {
+.perfil .descripcion :is(ul, ol) {
     padding-left: 1.4rem;
 }
 
@@ -4514,13 +4849,12 @@ tr.resaltada td {
 
 .perfil .descripcion blockquote {
     padding: .4rem .9rem;
-    border-left: 4px solid var(--colorCeleste);
     background-color: var(--colorCelesteSuave);
-    border-radius: 0 .5rem .5rem 0;
+    border-radius: .5rem;
 }
 
 .perfil .descripcion a {
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
     font-weight: 600;
 }
 
@@ -4537,7 +4871,7 @@ tr.resaltada td {
 
 .perfil .resena {
     padding: .9rem 1rem;
-    border: 2px solid var(--colorBorde);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioMedio);
 }
 
@@ -4554,14 +4888,16 @@ tr.resaltada td {
     color: var(--colorTinta);
 }
 
-.perfil .resena a:hover {
-    color: var(--colorCoralOscuro);
+@media (hover: hover) {
+    .perfil .resena a:hover {
+        color: var(--colorMagenta);
+    }
 }
 
 .perfil .estrellas {
     display: inline-flex;
     gap: .1rem;
-    color: #F59E0B;
+    color: var(--colorCoral);
 }
 
 .perfil .resena p {
@@ -4573,16 +4909,10 @@ tr.resaltada td {
     margin-top: 1rem;
 }
 
+/* Rótulos de Datos: Fredoka como las etiquetas, sin mayúsculas */
 .perfil .datosPerfil h3 {
     margin-bottom: .45rem;
-    font-size: .78rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--colorTextoSuave);
-}
-
-.perfil .datosPerfil h3 .bi {
-    color: var(--colorCoral);
+    font: 600 1.0625rem/1.3 var(--fuenteMarca);
 }
 
 .perfil .datosPerfil .etiquetas {
@@ -4592,13 +4922,19 @@ tr.resaltada td {
 }
 
 .perfil .reportarPerfil {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 2.75rem;
     align-self: center;
     font-size: .85rem;
     color: var(--colorTextoSuave);
 }
 
-.perfil .reportarPerfil:hover {
-    color: var(--colorCoralOscuro);
+@media (hover: hover) {
+    .perfil .reportarPerfil:hover {
+        color: var(--colorMagenta);
+    }
 }
 
 /* ---------- Modal "Editar perfil" ---------- */
@@ -4624,10 +4960,6 @@ tr.resaltada td {
     gap: .5rem;
     padding-block: 1.5rem;
     color: var(--colorTextoSuave);
-}
-
-.dialogoEdicion .estadoPerfil .bi {
-    animation: girarCarga 1s linear infinite;
 }
 
 .dialogoEdicion .contenidoEdicion {
@@ -4659,16 +4991,10 @@ tr.resaltada td {
     background-color: var(--colorExitoSuave);
 }
 
-/* Pestañas: Modificar perfil / Modificar cuenta */
+/* Pestañas: Modificar perfil / Modificar cuenta (los colores son los de .nav-pills) */
 .dialogoEdicion .pestanasEdicion {
-    --bs-nav-pills-bg: var(--colorSuperficie);
-    --bs-nav-pills-padding: .3rem;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .25rem;
-    border: var(--bordeMarcado);
-    border-radius: 999px;
-    box-shadow: 3px 3px 0 var(--colorTinta);
 }
 
 .dialogoEdicion .pestanasEdicion .nav-link {
@@ -4678,11 +5004,8 @@ tr.resaltada td {
     gap: .4rem;
     min-width: 0;
     padding: .55rem .5rem;
-    font-family: var(--fuenteMarca);
     font-size: clamp(.82rem, .75rem + .4vw, .95rem);
-    font-weight: 600;
     line-height: 1.2;
-    color: var(--colorTinta);
 }
 
 /* En celulares el ícono de la pestaña sobra: queda solo el texto */
@@ -4690,15 +5013,6 @@ tr.resaltada td {
     .dialogoEdicion .pestanasEdicion .nav-link .bi {
         display: none;
     }
-}
-
-.dialogoEdicion .pestanasEdicion .nav-link:hover {
-    background-color: var(--colorCelesteSuave);
-}
-
-.dialogoEdicion .pestanasEdicion .nav-link.active {
-    background-color: var(--colorCoral);
-    color: #fff;
 }
 
 /* Campos en vertical */
@@ -4719,22 +5033,57 @@ tr.resaltada td {
 
 .dialogoEdicion .form-field small.excedido {
     font-weight: 700;
-    color: var(--colorCoralOscuro);
+    color: var(--colorMagenta);
 }
 
 /* Editor de texto enriquecido (Quill) con el borde del sitio */
 .dialogoEdicion .ql-toolbar.ql-snow {
-    border: 2px solid #D1D5DB;
-    border-bottom: 0;
+    border: 1.5px solid var(--colorTextoSuave);
+    border-bottom-color: var(--colorBorde);
     border-radius: var(--radioChico) var(--radioChico) 0 0;
+    background-color: var(--colorFondo);
     font-family: var(--fuenteTexto);
 }
 
+/* Botones de la barra de 44px (quill.snow.css carga después: hace falta un selector más fuerte) */
+.dialogoEdicion .ql-toolbar.ql-snow button {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: .7rem;
+    border-radius: var(--radioChico);
+}
+
+/* Hover y foco en celeste oscuro, activo en tinta con ícono blanco (Quill los pinta de azul; con puntero táctil,
+   de gris: .dialog suma una clase para ganarle a esa regla) */
+.dialog.dialogoEdicion .ql-toolbar.ql-snow button:is(:hover, :focus) {
+    background-color: var(--colorCelesteSuave);
+    color: var(--colorCelesteOscuro);
+}
+
+.dialog.dialogoEdicion .ql-toolbar.ql-snow button.ql-active {
+    background-color: var(--colorTinta);
+    color: var(--colorSuperficie);
+}
+
+.dialog.dialogoEdicion .ql-toolbar.ql-snow button:is(:hover, :focus, .ql-active) :is(.ql-stroke, .ql-stroke-miter) {
+    stroke: currentColor;
+}
+
+.dialog.dialogoEdicion .ql-toolbar.ql-snow button:is(:hover, :focus, .ql-active) :is(.ql-fill, .ql-stroke.ql-fill) {
+    fill: currentColor;
+}
+
 .dialogoEdicion .ql-container.ql-snow {
-    border: 2px solid #D1D5DB;
+    border: 1.5px solid var(--colorTextoSuave);
+    border-top: 0;
     border-radius: 0 0 var(--radioChico) var(--radioChico);
     font-family: var(--fuenteTexto);
     font-size: .95rem;
+}
+
+/* Barra y editor son hijos de la grilla .form-field: se tapa su separación de .35rem para que el marco sea uno solo */
+.dialogoEdicion .ql-toolbar.ql-snow + .ql-container.ql-snow {
+    margin-top: -.35rem;
 }
 
 .dialogoEdicion .editorTexto .ql-editor {
@@ -4742,14 +5091,14 @@ tr.resaltada td {
     max-height: 18rem;
 }
 
-/* ".dialog .dialog-body p" pone gris los párrafos: el texto del editor queda oscuro */
-.dialogoEdicion .ql-editor p {
-    color: var(--colorTexto);
-}
-
+/* Foco como el de los campos: borde tinta y anillo celeste */
 .dialogoEdicion .editorTexto:focus-within,
 .dialogoEdicion .ql-toolbar.ql-snow:has(+ .editorTexto:focus-within) {
     border-color: var(--colorTinta);
+}
+
+.dialogoEdicion .editorTexto:focus-within {
+    box-shadow: var(--anilloFoco);
 }
 
 /* Foto de perfil: vista previa en círculo (componente "Change profile picture" del UI Kit) */
@@ -4761,9 +5110,6 @@ tr.resaltada td {
 
 .dialogoEdicion .vistaPreviaFoto .avatar {
     --bs-avatar-size: 5.5rem;
-    --bs-avatar-font-size: 1.8rem;
-    border-width: 3px;
-    box-shadow: var(--sombraMarcada);
 }
 
 .dialogoEdicion .vistaPreviaFoto > div {
@@ -4776,9 +5122,10 @@ tr.resaltada td {
     cursor: pointer;
 }
 
+/* El input está oculto: el foco se dibuja en el botón, en tinta como el foco global */
 .dialogoEdicion .vistaPreviaFoto:has(input:focus-visible) label.boton {
-    outline: 3px solid var(--colorCeleste);
-    outline-offset: 2px;
+    outline: 3px solid var(--colorFoco, var(--colorTinta));
+    outline-offset: 3px;
 }
 
 .dialogoEdicion .estadoFotoDni {
@@ -4807,7 +5154,7 @@ tr.resaltada td {
 .dialogoRecorte .areaRecorte {
     height: min(52vh, 22rem);
     overflow: hidden;
-    border: var(--bordeMarcado);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioMedio);
     background-color: var(--colorTinta);
 }
@@ -4821,7 +5168,6 @@ tr.resaltada td {
 /* Recuadro cuadrado con esquinas marcadas y borde celeste */
 .dialogoRecorte .cropper-view-box {
     outline: 2px solid var(--colorCeleste);
-    outline-color: var(--colorCeleste);
 }
 
 .dialogoRecorte .cropper-modal {
@@ -4829,8 +5175,7 @@ tr.resaltada td {
     opacity: .6;
 }
 
-.dialogoRecorte .cropper-line,
-.dialogoRecorte .cropper-point {
+.dialogoRecorte :is(.cropper-line, .cropper-point) {
     background-color: transparent;
 }
 
@@ -4838,10 +5183,7 @@ tr.resaltada td {
     display: none;
 }
 
-.dialogoRecorte .cropper-point.point-nw,
-.dialogoRecorte .cropper-point.point-ne,
-.dialogoRecorte .cropper-point.point-sw,
-.dialogoRecorte .cropper-point.point-se {
+.dialogoRecorte .cropper-point:is(.point-nw, .point-ne, .point-sw, .point-se) {
     display: block;
     width: 1.4rem;
     height: 1.4rem;
@@ -4870,10 +5212,9 @@ tr.resaltada td {
     width: 9rem;
     height: 9rem;
     overflow: hidden;
-    border: 3px solid var(--colorTinta);
     border-radius: 50%;
     background-color: var(--colorCelesteSuave);
-    box-shadow: 5px 5px 0 var(--colorCoral);
+    box-shadow: var(--sombraSuave);
 }
 
 .dialogoRecorte .controlesRecorte p {
@@ -4889,8 +5230,8 @@ tr.resaltada td {
 }
 
 .dialogoRecorte .botonesRecorte .boton {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2.75rem;
+    height: 2.75rem;
     padding: 0;
 }
 
@@ -4928,7 +5269,7 @@ tr.resaltada td {
     justify-content: space-between;
     gap: .5rem;
     padding: .45rem .5rem .45rem .8rem;
-    border: 2px solid var(--colorBorde);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     font-size: .9rem;
 }
@@ -4949,7 +5290,7 @@ tr.resaltada td {
     gap: .5rem;
     margin-top: .35rem;
     padding: .75rem .85rem;
-    border: 2px solid var(--colorBorde);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioChico);
     background-color: var(--colorFondo);
 }
@@ -5006,10 +5347,6 @@ tr.resaltada td {
     display: none;
 }
 
-.dialogoHistorial .estadoHistorial.cargando .bi {
-    animation: girarCarga 1s linear infinite;
-}
-
 .dialogoHistorial .card.tabla {
     box-shadow: none;
 }
@@ -5047,21 +5384,22 @@ tr.resaltada td {
     align-items: center;
     gap: .75rem;
     padding: .5rem .75rem;
-    border: 2px solid var(--colorBorde);
+    border: 1.5px solid var(--colorBorde);
     border-radius: var(--radioMedio);
     color: var(--colorTinta);
     text-decoration: none;
     transition: border-color var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) var(--curvaSuave);
 }
 
-.dialogoAmigos .listaAmigos a:hover {
-    border-color: var(--colorTinta);
-    background-color: var(--colorPapel);
+@media (hover: hover) {
+    .dialogoAmigos .listaAmigos a:hover {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
 .dialogoAmigos .listaAmigos .avatar {
     --bs-avatar-size: 2.5rem;
-    --bs-avatar-font-size: .9rem;
     flex-shrink: 0;
 }
 
@@ -5069,98 +5407,6 @@ tr.resaltada td {
     flex: 1;
     min-width: 0;
     overflow-wrap: anywhere;
-}
-
-/* ---------- Diálogo "Dar reseña" (_dialogoDarResena) ---------- */
-.dialogoResena .dialog-body {
-    display: grid;
-    gap: 1rem;
-}
-
-.dialogoResena .estrellasResena {
-    margin: 0;
-    padding: 0;
-    border: 0;
-}
-
-.dialogoResena .estrellasResena legend {
-    margin-bottom: .4rem;
-    font-size: .95rem;
-    font-weight: 600;
-}
-
-.dialogoResena .filaEstrellas {
-    display: flex;
-    align-items: center;
-    gap: .2rem;
-}
-
-/* Se pintan las estrellas hasta la elegida (o hasta la que está bajo el mouse) */
-.dialogoResena .filaEstrellas label {
-    padding: .1rem;
-    font-size: 2rem;
-    line-height: 1;
-    color: var(--colorBorde);
-    cursor: pointer;
-    transition: color var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaRebote);
-}
-
-.dialogoResena .filaEstrellas:not(:has(label:hover)):has(input:checked) label,
-.dialogoResena .filaEstrellas:has(label:hover) label {
-    color: #F59E0B;
-}
-
-.dialogoResena .filaEstrellas:not(:has(label:hover)) label:has(input:checked) ~ label,
-.dialogoResena .filaEstrellas:has(label:hover) label:hover ~ label {
-    color: var(--colorBorde);
-}
-
-.dialogoResena .filaEstrellas label:hover {
-    transform: scale(1.15);
-}
-
-.dialogoResena .filaEstrellas label:has(input:focus-visible) {
-    outline: 3px solid var(--colorCeleste);
-    outline-offset: 2px;
-    border-radius: var(--radioChico);
-}
-
-.dialogoResena .textoPuntuacion {
-    margin-left: .5rem;
-    font-family: var(--fuenteMarca);
-    font-weight: 600;
-    color: var(--colorCoralOscuro);
-}
-
-.dialogoResena .form-field {
-    display: grid;
-    gap: .35rem;
-}
-
-.dialogoResena textarea {
-    resize: vertical;
-}
-
-.dialogoResena small {
-    justify-self: end;
-    color: var(--colorTextoSuave);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .dialogoResena .filaEstrellas label {
-        transition: none;
-    }
-
-    .dialogoResena .filaEstrellas label:hover {
-        transform: none;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .cargandoHistorial .bi,
-    .dialogoHistorial .estadoHistorial.cargando .bi {
-        animation: none;
-    }
 }
 
 /* =========================================================
@@ -5204,6 +5450,10 @@ tr.resaltada td {
     font-size: .88rem;
 }
 
+.pie .marcaLogo > span {
+    color: #fff;
+}
+
 .pie .eslogan {
     font-family: var(--fuenteTitulos);
     font-size: 1.1rem;
@@ -5213,9 +5463,8 @@ tr.resaltada td {
 
 .pie h5 {
     margin-bottom: .65rem;
-    font-size: .75rem;
-    letter-spacing: .12em;
-    text-transform: uppercase;
+    font: 600 1.0625rem var(--fuenteMarca);
+    letter-spacing: normal;
     color: #fff;
 }
 
@@ -5230,9 +5479,11 @@ tr.resaltada td {
     transition: color var(--duracionRapida) ease, padding-left var(--duracionRapida) var(--curvaSuave);
 }
 
-.pie ul a:hover {
-    padding-left: .35rem;
-    color: var(--colorCeleste);
+@media (hover: hover) {
+    .pie ul a:hover {
+        padding-left: .35rem;
+        color: var(--colorCeleste);
+    }
 }
 
 .pie ul a.destacado {
@@ -5268,13 +5519,20 @@ tr.resaltada td {
     *::before,
     *::after {
         animation-duration: .01ms !important;
+        animation-delay: 0s !important;
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
         scroll-behavior: auto !important;
     }
 
-    .jsActivo .revelar:not(.visible) {
-        opacity: 1;
+    .boton.botonMeGusta .saltoCorazon,
+    .perfil .cifras strong.rebote,
+    .cargandoHistorial .bi,
+    .dialogoHistorial .estadoHistorial.cargando .bi {
+        animation: none;
+    }
+
+    .dialogoResena .filaEstrellas label:hover {
         transform: none;
     }
 }

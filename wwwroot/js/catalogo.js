@@ -210,15 +210,13 @@ function crearTarjetaProfesor(profesor) {
         : ` ${profesor.calificacion.toFixed(1).replace(".", ",")} (${profesor.cantidadResenas})`);
     const niveles = crearElemento("li");
     niveles.append(crearIcono("bi-mortarboard"), ` ${profesor.niveles.join(", ")}`);
-    datos.append(calificacion, niveles);
+    const modalidades = crearElemento("li");
+    modalidades.append(crearIcono("bi-laptop"), ` ${profesor.modalidades.join(" y ")}`);
+    datos.append(calificacion, modalidades, niveles);
     cuerpo.append(datos);
 
-    // Columna derecha: modalidad, precio y botones
+    // Columna derecha: precio y botones
     const lateral = crearElemento("div", "lateral");
-    lateral.append(crearElemento("span", "etiquetaModalidad", "Modalidad"));
-    const modalidades = crearElemento("div", "etiquetas modalidades");
-    profesor.modalidades.forEach(modalidad => modalidades.append(crearElemento("span", "badge badge-subtle theme-success", modalidad)));
-    lateral.append(modalidades);
 
     const importe = crearElemento("p", "importe");
     importe.append(crearElemento("strong", "", `$ ${profesor.precioHora.toLocaleString("es-AR")}`), " ", crearElemento("span", "", "/ hora"));

@@ -39,10 +39,8 @@
                     <div class="acciones">
                         <a class="boton secundario" asp-controller="Home" asp-action="PanelControl">
                             <i class="bi bi-bar-chart-line" aria-hidden="true"></i> Panel de Control
-                            @if (cantidadNotificaciones != "0")
-                            {
-                                <span class="badge theme-primary" aria-label="@cantidadNotificaciones notificaciones nuevas">@cantidadNotificaciones</span>
-                            }
+                            @* Siempre está en el HTML (oculta si no hay nada): site.js la actualiza con fetch a /Notificaciones/Contar *@
+                            <span class="badge theme-primary" id="insigniaNotificaciones" aria-label="@cantidadNotificaciones notificaciones" @(cantidadNotificaciones == "0" ? "hidden" : null)>@cantidadNotificaciones</span>
                         </a>
 
                         @* Nombre y foto llevan al perfil (ahí está el botón Cerrar sesión) *@
