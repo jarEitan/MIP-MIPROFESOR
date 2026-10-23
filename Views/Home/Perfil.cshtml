@@ -34,7 +34,7 @@
         </p>
 
         @* Se muestra si el ID de la URL no corresponde a ningún alumno o profesor *@
-        <div class="card estatica estadoVacio sinPerfil" id="perfilInexistente" hidden>
+        <div class="card estadoVacio sinPerfil" id="perfilInexistente" hidden>
             <span class="icono"><i class="bi bi-person-x" aria-hidden="true"></i></span>
             <h1>Este perfil no existe</h1>
             <p>Revisá que el enlace esté completo. Puede que la cuenta se haya dado de baja.</p>
@@ -45,7 +45,7 @@
             @if (esPerfilPropio)
             {
                 @* Aviso de cuenta no verificada (Pop up del UI Kit) con todo lo que falta *@
-                <div class="card estatica avisoPerfil" id="avisoVerificacionPerfil" hidden>
+                <div class="card avisoPerfil" id="avisoVerificacionPerfil" hidden>
                     <span class="icono"><i class="bi bi-shield-exclamation" aria-hidden="true"></i></span>
                     <div>
                         <h2>Tu cuenta todavía no está verificada</h2>
@@ -59,7 +59,7 @@
             }
 
             <!-- Encabezado: foto, nombre, tipo de usuario, acciones y cifras -->
-            <div class="card estatica cabeceraPerfil">
+            <div class="card cabeceraPerfil">
                 <div class="filaCabecera">
                     <span class="avatar theme-primary" id="avatarPerfil" aria-hidden="true"></span>
 
@@ -130,19 +130,19 @@
 
             <div class="row g-3 lg:g-4">
                 <div class="col-12 lg:col-8 d-flex flex-column gap-3 lg:gap-4">
-                    <article class="card estatica">
+                    <article class="card">
                         <h2><i class="bi bi-person-lines-fill" aria-hidden="true"></i> Sobre mí</h2>
                         <div class="descripcion" id="descripcionPerfil"></div>
                     </article>
 
-                    <article class="card estatica">
+                    <article class="card">
                         <h2><i class="bi bi-star" aria-hidden="true"></i> Reseñas</h2>
                         <div class="resenas" id="resenasPerfil"></div>
                     </article>
                 </div>
 
                 <div class="col-12 lg:col-4 d-flex flex-column gap-3 lg:gap-4">
-                    <aside class="card estatica datosPerfil">
+                    <aside class="card datosPerfil">
                         <h2><i class="bi bi-card-checklist" aria-hidden="true"></i> Datos</h2>
                         <div id="datosPerfil"></div>
                     </aside>

@@ -287,7 +287,7 @@ function dibujarAgendaDelDia() {
     contenedor.replaceChildren(encabezado);
 
     if (clases.length === 0) {
-        const vacio = crearElemento("div", "card estatica estadoVacio");
+        const vacio = crearElemento("div", "card estadoVacio");
         vacio.append(crearElemento("p", "", "No tenés clases este día."));
         if (document.getElementById("misClases").dataset.rol === "Alumno") {
             const buscar = crearElemento("a", "boton principal chico", "Buscar profesor");

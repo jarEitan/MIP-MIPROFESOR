@@ -106,7 +106,6 @@
 
     /* Movimiento */
     --curvaSuave: cubic-bezier(.2, .8, .2, 1);
-    --curvaRebote: cubic-bezier(.34, 1.56, .64, 1);
     --duracionRapida: .2s;
     --duracionMedia: .45s;
 
@@ -300,11 +299,13 @@ main {
     height: 2.5rem;
     border-radius: 50%;
     object-fit: cover;
-    transition: transform var(--duracionMedia) var(--curvaRebote);
+    transition: transform var(--duracionMedia) var(--curvaSuave);
 }
 
-.marcaLogo:hover img {
-    transform: rotate(-12deg) scale(1.08);
+@media (hover: hover) {
+    .marcaLogo:hover img {
+        transform: rotate(-12deg) scale(1.08);
+    }
 }
 
 /* "Mi" en tinta y "Profesor" en coral (el pie pone "Mi" en blanco) */
@@ -334,11 +335,13 @@ main {
     border-radius: 50%;
     background-color: var(--colorCeleste);
     color: var(--colorTinta);
-    transition: translate var(--duracionRapida) var(--curvaRebote);
+    transition: translate var(--duracionRapida) var(--curvaSuave);
 }
 
-.encabezado .navbar-toggler:hover {
-    translate: 0 -2px;
+@media (hover: hover) {
+    .encabezado .navbar-toggler:hover {
+        translate: 0 -2px;
+    }
 }
 
 .encabezado .navbar-toggler:active {
@@ -356,8 +359,10 @@ main {
     transition: background-color var(--duracionRapida) ease, color var(--duracionRapida) ease;
 }
 
-.encabezado .nav-link:hover {
-    background-color: var(--colorCelesteSuave);
+@media (hover: hover) {
+    .encabezado .nav-link:hover {
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
 /* Va después del hover: el hover (sin capa) le ganaría al .active de Bootstrap */
@@ -407,11 +412,13 @@ main {
 .encabezado .usuario .avatar {
     --bs-avatar-size: 2.5rem;
     cursor: pointer;
-    transition: transform var(--duracionRapida) var(--curvaRebote);
+    transition: transform var(--duracionRapida) var(--curvaSuave);
 }
 
-.encabezado .usuario .avatar:hover {
-    transform: scale(1.08) rotate(-4deg);
+@media (hover: hover) {
+    .encabezado .usuario .avatar:hover {
+        transform: scale(1.08) rotate(-4deg);
+    }
 }
 
 /* Antes de lg el menú es un drawer lateral.
@@ -644,12 +651,14 @@ mark {
     white-space: nowrap;
     cursor: pointer;
     box-shadow: 0 6px 14px -8px rgba(17, 24, 39, .35);
-    transition: translate .2s var(--curvaRebote), box-shadow .2s var(--curvaRebote);
+    transition: translate .2s var(--curvaSuave), box-shadow .2s var(--curvaSuave);
 }
 
-.boton:hover {
-    translate: 0 -3px;
-    box-shadow: 0 12px 22px -10px rgba(17, 24, 39, .45);
+@media (hover: hover) {
+    .boton:hover {
+        translate: 0 -3px;
+        box-shadow: 0 12px 22px -10px rgba(17, 24, 39, .45);
+    }
 }
 
 .boton:active {
@@ -711,7 +720,7 @@ mark {
     color: var(--colorTexto);
     text-decoration: none;
     box-shadow: var(--sombraSuave);
-    transition: translate .25s var(--curvaRebote), box-shadow .25s var(--curvaRebote), border-color .25s var(--curvaRebote);
+    transition: translate .25s var(--curvaSuave), box-shadow .25s var(--curvaSuave), border-color .25s var(--curvaSuave);
 }
 
 /* Dentro de una grilla (row > col > card) todas las tarjetas de la fila miden lo mismo */
@@ -719,11 +728,13 @@ mark {
     height: 100%;
 }
 
-/* La capa celeste plana es la única del sistema */
-.card:not(.estatica):hover {
-    translate: -4px -4px;
-    border-color: var(--colorTinta);
-    box-shadow: 6px 6px 0 var(--colorCeleste), 0 22px 36px -18px rgba(17, 24, 39, .3);
+@media (hover: hover) {
+    /* La capa celeste plana es la única del sistema */
+    .card:is(a, .profesor, .profesorFila):hover {
+        translate: -4px -4px;
+        border-color: var(--colorTinta);
+        box-shadow: 6px 6px 0 var(--colorCeleste), 0 22px 36px -18px rgba(17, 24, 39, .3);
+    }
 }
 
 .card h2,
@@ -799,7 +810,6 @@ mark {
     background-color: var(--colorCoralSuave);
     color: var(--colorMagenta);
     font-size: 1.25rem;
-    transition: rotate var(--duracionMedia) var(--curvaRebote);
 }
 
 .icono.celeste {
@@ -810,10 +820,6 @@ mark {
 .icono.oscuro {
     background-color: var(--colorTinta);
     color: #fff;
-}
-
-.card:hover .icono {
-    rotate: -8deg;
 }
 
 /* ---------- Pegatina: etiqueta troquelada y girada (--giro va inline) ---------- */
@@ -829,12 +835,6 @@ mark {
     font-weight: 600;
     box-shadow: var(--troquel);
     rotate: var(--giro, -3deg);
-    transition: rotate .3s var(--curvaRebote), translate .3s var(--curvaRebote);
-}
-
-.pegatina:hover {
-    rotate: 0deg;
-    translate: 0 -6px;
 }
 
 .pegatina.coral {
@@ -1037,8 +1037,13 @@ fieldset {
     outline: none;
 }
 
-/* El botón de adentro no se levanta */
-.buscador .boton:hover,
+@media (hover: hover) {
+    /* El botón de adentro no se levanta */
+    .buscador .boton:hover {
+        translate: none;
+    }
+}
+
 .buscador .boton:active {
     translate: none;
 }
@@ -1214,8 +1219,10 @@ fieldset {
     cursor: pointer;
 }
 
-.selectorBuscable .etiquetasElegidas button:hover {
-    background-color: rgba(255, 255, 255, .2);
+@media (hover: hover) {
+    .selectorBuscable .etiquetasElegidas button:hover {
+        background-color: rgba(255, 255, 255, .2);
+    }
 }
 
 /* El anillo va adentro de la etiqueta: afuera el celeste quedaría sobre blanco */
@@ -1245,8 +1252,10 @@ fieldset {
     color: var(--colorTexto);
 }
 
-.nav-pills .nav-link:hover {
-    background-color: var(--colorCelesteSuave);
+@media (hover: hover) {
+    .nav-pills .nav-link:hover {
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
 /* Va después del hover: el hover (sin capa) le ganaría al .active de Bootstrap */
@@ -1352,9 +1361,11 @@ fieldset {
     cursor: pointer;
 }
 
-.tiraDias .flecha:hover {
-    border-color: var(--colorTinta);
-    background-color: var(--colorCelesteSuave);
+@media (hover: hover) {
+    .tiraDias .flecha:hover {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
 .tiraDias .dias {
@@ -1384,14 +1395,16 @@ fieldset {
     font-family: var(--fuenteMarca);
     color: var(--colorTinta);
     cursor: pointer;
-    transition: background-color .15s, border-color .15s, transform .15s var(--curvaRebote);
+    transition: background-color .15s, border-color .15s, transform .15s var(--curvaSuave);
 }
 
-.tiraDias .diaTira:hover:not(:disabled, [aria-pressed="true"]),
-.selectorHorario .franja:hover:not(:disabled, [aria-pressed="true"]) {
-    border-color: var(--colorTinta);
-    background-color: var(--colorCelesteSuave);
-    transform: translateY(-2px);
+@media (hover: hover) {
+    .tiraDias .diaTira:hover:not(:disabled, [aria-pressed="true"]),
+    .selectorHorario .franja:hover:not(:disabled, [aria-pressed="true"]) {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+        transform: translateY(-2px);
+    }
 }
 
 .tiraDias .diaTira[aria-pressed="true"],
@@ -1480,7 +1493,7 @@ fieldset {
     line-height: 1;
     color: #6B7280;
     cursor: pointer;
-    transition: color var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaRebote);
+    transition: color var(--duracionRapida) var(--curvaSuave), transform var(--duracionRapida) var(--curvaSuave);
 }
 
 .dialogoResena .filaEstrellas:not(:has(label:hover)):has(input:checked) label,
@@ -1843,11 +1856,6 @@ fieldset {
     font-family: var(--fuenteMarca);
     font-size: 1.5rem;
     font-weight: 700;
-    transition: transform var(--duracionMedia) var(--curvaRebote);
-}
-
-.pasos .card:hover .numero {
-    transform: rotate(-10deg) scale(1.1);
 }
 
 .pasos li:nth-child(2) .numero {
@@ -1938,12 +1946,14 @@ fieldset {
     color: var(--colorTinta);
     font-size: .9375rem;
     box-shadow: 0 4px 10px -8px rgba(17, 24, 39, .3);
-    transition: border-color var(--duracionRapida) ease, translate var(--duracionRapida) var(--curvaRebote);
+    transition: border-color var(--duracionRapida) ease, translate var(--duracionRapida) var(--curvaSuave);
 }
 
-.destacados .colegios .badge:hover {
-    border-color: var(--colorTinta);
-    translate: 0 -2px;
+@media (hover: hover) {
+    .destacados .colegios .badge:hover {
+        border-color: var(--colorTinta);
+        translate: 0 -2px;
+    }
 }
 
 /* Tarjeta de profesor: .profesor es la vertical (Inicio) y .profesorFila la horizontal (Catálogo); comparten estos estilos */
@@ -1974,9 +1984,11 @@ fieldset {
     text-decoration: none;
 }
 
-.profesor h3 a:hover,
-.profesorFila h3 a:hover {
-    text-decoration: underline;
+@media (hover: hover) {
+    .profesor h3 a:hover,
+    .profesorFila h3 a:hover {
+        text-decoration: underline;
+    }
 }
 
 .profesor header p {
@@ -2054,8 +2066,10 @@ fieldset {
     transition: border-color var(--duracionRapida) var(--curvaSuave);
 }
 
-.preguntas .accordion-item:hover {
-    border-color: var(--colorTinta);
+@media (hover: hover) {
+    .preguntas .accordion-item:hover {
+        border-color: var(--colorTinta);
+    }
 }
 
 .preguntas .accordion-item[open] > .accordion-header {
@@ -2493,8 +2507,10 @@ fieldset {
     color: var(--colorTinta);
 }
 
-.catalogo .paginador .numero:hover {
-    border-color: var(--colorTinta);
+@media (hover: hover) {
+    .catalogo .paginador .numero:hover {
+        border-color: var(--colorTinta);
+    }
 }
 
 .catalogo .paginador .numero.activo {
@@ -2603,9 +2619,11 @@ fieldset {
     cursor: pointer;
 }
 
-.acceso .campoConIcono .verContrasena:hover {
-    background-color: var(--colorCelesteSuave);
-    color: var(--colorTinta);
+@media (hover: hover) {
+    .acceso .campoConIcono .verContrasena:hover {
+        background-color: var(--colorCelesteSuave);
+        color: var(--colorTinta);
+    }
 }
 
 .acceso .campoConIcono:has(.verContrasena) .form-control {
@@ -2745,9 +2763,11 @@ fieldset {
     color: var(--colorTextoSuave);
 }
 
-.acceso .roles label:hover {
-    border-color: var(--colorTinta);
-    transform: translateY(-2px);
+@media (hover: hover) {
+    .acceso .roles label:hover {
+        border-color: var(--colorTinta);
+        transform: translateY(-2px);
+    }
 }
 
 /* El rol elegido es la única excepción a "lo elegido": borde tinta con fondo celeste suave */
@@ -3420,9 +3440,11 @@ fieldset {
     }
 }
 
-.diasMes .dia:hover {
-    border-color: var(--colorTinta);
-    background-color: var(--colorCelesteSuave);
+@media (hover: hover) {
+    .diasMes .dia:hover {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
 .diasMes .dia .numero {
@@ -3462,9 +3484,11 @@ fieldset {
     color: var(--colorTextoSuave);
 }
 
-/* Sobre el celeste suave del hover el gris no llega a 4,5:1 */
-.diasMes .dia.otroMes:not([aria-pressed="true"]):hover .numero {
-    color: var(--colorTinta);
+@media (hover: hover) {
+    /* Sobre el celeste suave del hover el gris no llega a 4,5:1 */
+    .diasMes .dia.otroMes:not([aria-pressed="true"]):hover .numero {
+        color: var(--colorTinta);
+    }
 }
 
 /* Día elegido: como todo lo elegido, fondo tinta con texto blanco; las líneas tinta pasan a blanco */
@@ -3992,8 +4016,10 @@ tr.resaltada td {
     cursor: pointer;
 }
 
-.chat .conversaciones .conversacion:hover {
-    background-color: var(--colorSuperficie);
+@media (hover: hover) {
+    .chat .conversaciones .conversacion:hover {
+        background-color: var(--colorSuperficie);
+    }
 }
 
 .chat .conversaciones .conversacion.activa {
@@ -4658,8 +4684,10 @@ tr.resaltada td {
     transition: border-color var(--duracionRapida) var(--curvaSuave);
 }
 
-.perfil .cifras .botonCifra:hover {
-    border-color: var(--colorTinta);
+@media (hover: hover) {
+    .perfil .cifras .botonCifra:hover {
+        border-color: var(--colorTinta);
+    }
 }
 
 /* En celulares las fichas van en 2 columnas, con el ícono al costado y el rótulo debajo del número */
@@ -4789,8 +4817,10 @@ tr.resaltada td {
     color: var(--colorTinta);
 }
 
-.perfil .resena a:hover {
-    color: var(--colorMagenta);
+@media (hover: hover) {
+    .perfil .resena a:hover {
+        color: var(--colorMagenta);
+    }
 }
 
 .perfil .estrellas {
@@ -4834,8 +4864,10 @@ tr.resaltada td {
     color: var(--colorTextoSuave);
 }
 
-.perfil .reportarPerfil:hover {
-    color: var(--colorMagenta);
+@media (hover: hover) {
+    .perfil .reportarPerfil:hover {
+        color: var(--colorMagenta);
+    }
 }
 
 /* ---------- Modal "Editar perfil" ---------- */
@@ -5306,9 +5338,11 @@ tr.resaltada td {
     transition: border-color var(--duracionRapida) var(--curvaSuave), background-color var(--duracionRapida) var(--curvaSuave);
 }
 
-.dialogoAmigos .listaAmigos a:hover {
-    border-color: var(--colorTinta);
-    background-color: var(--colorCelesteSuave);
+@media (hover: hover) {
+    .dialogoAmigos .listaAmigos a:hover {
+        border-color: var(--colorTinta);
+        background-color: var(--colorCelesteSuave);
+    }
 }
 
 .dialogoAmigos .listaAmigos .avatar {
@@ -5393,9 +5427,11 @@ tr.resaltada td {
     transition: color var(--duracionRapida) ease, padding-left var(--duracionRapida) var(--curvaSuave);
 }
 
-.pie ul a:hover {
-    padding-left: .35rem;
-    color: var(--colorCeleste);
+@media (hover: hover) {
+    .pie ul a:hover {
+        padding-left: .35rem;
+        color: var(--colorCeleste);
+    }
 }
 
 .pie ul a.destacado {

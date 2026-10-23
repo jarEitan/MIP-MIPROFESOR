@@ -49,7 +49,7 @@ function dibujarHistorial(contenedor, resultado, opciones) {
     const tabla = crearElemento("table", "table");
     tabla.append(encabezado, cuerpo);
 
-    const tarjeta = crearElemento("div", "card estatica tabla");
+    const tarjeta = crearElemento("div", "card tabla");
     tarjeta.append(tabla);
     contenedor.append(tarjeta);
 
@@ -191,7 +191,7 @@ function crearIconoHistorial(nombreIcono) {
 }
 
 function crearEstadoVacioHistorial(titulo, texto) {
-    const tarjeta = crearElemento("div", "card estatica estadoVacio");
+    const tarjeta = crearElemento("div", "card estadoVacio");
     const icono = crearElemento("span", "icono celeste");
     icono.append(crearIconoHistorial("bi-clock-history"));
     tarjeta.append(icono, crearElemento("h3", "", titulo), crearElemento("p", "", texto));
@@ -210,7 +210,7 @@ function cargarHistorialPropio() {
         .then(resultado => dibujarHistorial(contenedor, resultado, { esPanel: true }))
         .catch(error => {
             console.error(error);
-            const errorCarga = crearElemento("div", "card estatica estadoVacio");
+            const errorCarga = crearElemento("div", "card estadoVacio");
             errorCarga.append(crearElemento("p", "", "No pudimos cargar tu historial. Probá de nuevo en unos minutos."));
             contenedor.replaceChildren(errorCarga);
         });

@@ -81,7 +81,7 @@
 {
     <section class="avisoAgenda" id="avisoSinAgenda">
         <div class="container">
-            <div class="card estatica">
+            <div class="card">
                 <span class="icono"><i class="bi bi-calendar-week" aria-hidden="true"></i></span>
                 <p><strong>Configurá tu agenda.</strong> Los alumnos pueden pedirte clases de 8 a 22 cualquier día. Elegí tus días y horarios para recibir solo pedidos que te sirvan.</p>
                 <a class="boton principal chico" href="#panelTabs" data-abrir-tab="tabAgenda">Configurar mi agenda</a>
@@ -95,7 +95,7 @@
 <section class="notificaciones" id="notificaciones" aria-labelledby="tituloNotificaciones">
     <div class="container">
         <div class="columnasNotificaciones">
-            <div class="card estatica pendientes">
+            <div class="card pendientes">
                 <h2 id="tituloNotificaciones">
                     <i class="bi bi-bell" aria-hidden="true"></i> Requiere tu acción
                     <span class="badge" id="cantidadNotificacionesPanel" hidden="@(acciones.Count == 0)">@acciones.Count</span>
@@ -165,7 +165,7 @@
             @* Novedades: noticias de los últimos 3 días. No cuentan en la insignia ni esperan respuesta. Sin noticias no se muestra la columna *@
             @if (!errorBD && noticias.Count > 0)
             {
-                <div class="card estatica novedades">
+                <div class="card novedades">
                     <h2 id="tituloNovedades"><i class="bi bi-megaphone" aria-hidden="true"></i> Novedades</h2>
                     <ul class="listaNotificaciones" aria-labelledby="tituloNovedades">
                         @foreach (var noticia in noticias)
@@ -222,7 +222,7 @@
                 <h2 class="visually-hidden">Mis clases</h2>
                 @if (errorBD)
                 {
-                    <div class="card estatica estadoVacio"><p>No pudimos cargar tus clases. Probá de nuevo en unos minutos.</p></div>
+                    <div class="card estadoVacio"><p>No pudimos cargar tus clases. Probá de nuevo en unos minutos.</p></div>
                 }
                 else
                 {
@@ -233,7 +233,7 @@
                             <ul id="listaRequiereAccion"></ul>
                         </section>
 
-                        <div class="card estatica calendarioMes">
+                        <div class="card calendarioMes">
                             <header>
                                 <h3 id="tituloMes" aria-live="polite"></h3>
                                 <div class="controlesMes">
@@ -270,7 +270,7 @@
 
                     <div class="row g-3 lg:g-4 miAgenda" id="miAgenda">
                         <div class="col-12 lg:col-7">
-                            <div class="card estatica">
+                            <div class="card">
                                 <h3>Horario semanal</h3>
                                 <p>Activá los días que das clases y elegí tus horarios. Cada clase dura 60 minutos.</p>
                                 <ul class="diasDeAgenda" id="listaDiasAgenda" aria-live="polite">
@@ -281,7 +281,7 @@
                             </div>
                         </div>
                         <div class="col-12 lg:col-5">
-                            <div class="card estatica">
+                            <div class="card">
                                 <h3>Días bloqueados</h3>
                                 <p>Vacaciones, exámenes: nadie puede pedirte clases ese día.</p>
                                 <form class="bloquearDia" id="formularioBloquearDia" novalidate>
@@ -304,7 +304,7 @@
                 <h2 class="visually-hidden">Chat directo</h2>
                 @* Todo con fetch (chat.js → MensajesController): la lista de conversaciones, el chat abierto (al abrirlo,
                    los mensajes que te mandaron pasan a Visto) y el envío. Mientras la pestaña está a la vista se actualiza sola. *@
-                <div class="card estatica chat" id="chat">
+                <div class="card chat" id="chat">
                     <ul class="conversaciones" id="conversacionesChat" aria-label="Conversaciones">
                         <li class="avisoChat"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cargando tus conversaciones…</li>
                     </ul>
