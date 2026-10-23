@@ -1868,7 +1868,7 @@ fieldset {
     background-color: #fff;
 }
 
-/* ---------- 3.3 Inicio: cómo funciona ---------- */
+/* ---------- 3.3 Inicio: cómo funciona (camino de tres números unidos por una línea punteada) ---------- */
 .pasos {
     background-color: var(--colorSuperficie);
 }
@@ -1878,18 +1878,47 @@ fieldset {
     padding-top: 0;
 }
 
+.pasos ol {
+    display: grid;
+    gap: 2rem;
+}
+
+/* En el celular el camino baja: número a la izquierda, título y texto a la derecha */
+.pasos li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    align-content: start;
+    gap: .35rem 1.25rem;
+}
+
+/* Tramo punteado hasta el número siguiente (el mismo punteado que separa el precio en la tarjeta de profesor) */
+.pasos li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    height: calc(100% + 2rem);
+    border-left: 2px dashed var(--colorBorde);
+}
+
+/* Número: pegatina redonda con troquel, por encima de la línea */
 .pasos .numero {
+    position: relative;
+    z-index: 1;
+    grid-row: span 2;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 3.25rem;
-    height: 3.25rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     background-color: var(--colorCoral);
     color: var(--colorTexto);
     font-family: var(--fuenteMarca);
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
+    box-shadow: var(--troquel);
 }
 
 .pasos li:nth-child(2) .numero {
@@ -1899,6 +1928,41 @@ fieldset {
 .pasos li:nth-child(3) .numero {
     background-color: var(--colorTinta);
     color: #fff;
+}
+
+.pasos h3 {
+    align-self: end;
+}
+
+.pasos li p {
+    max-width: 20rem;
+    font-size: .92rem;
+    color: var(--colorTextoSuave);
+}
+
+@media (width >= 768px) {
+    .pasos ol {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pasos li {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .pasos .numero {
+        grid-row: auto;
+        margin-bottom: .85rem;
+    }
+
+    .pasos li:not(:last-child)::after {
+        left: 50%;
+        width: calc(100% + 2rem);
+        height: 0;
+        border-left: 0;
+        border-top: 2px dashed var(--colorBorde);
+    }
 }
 
 /* ---------- 3.4 Inicio: perfiles alumno / profesor ---------- */
@@ -1951,9 +2015,38 @@ fieldset {
     color: var(--colorTinta);
 }
 
-/* ---------- 3.5 Inicio: funcionalidades ---------- */
-.funciones {
-    background-color: var(--colorSuperficie);
+/* ---------- 3.5 Inicio: frases (plancha del Miro: dos notas planas coral y celeste, desplazadas) ---------- */
+.frases ul {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 62rem;
+    margin-inline: auto;
+}
+
+.frases .pegatina {
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-radius: var(--radioGrande);
+    font: 700 clamp(1.25rem, 1rem + 1.2vw, 1.75rem)/1.25 var(--fuenteMarca);
+}
+
+.frases .pegatina.coral {
+    margin-right: 1.5rem;
+}
+
+.frases .pegatina.celeste {
+    margin-left: 1.5rem;
+}
+
+@media (width >= 768px) {
+    .frases ul {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+        gap: 2.5rem;
+    }
+
+    .frases .pegatina.celeste {
+        margin-top: 4rem;
+    }
 }
 
 /* ---------- 3.6 Inicio: profesores destacados ---------- */
